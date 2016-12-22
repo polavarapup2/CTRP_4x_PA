@@ -1,0 +1,36 @@
+# notask=-notest-noivy
+# notask=-notest
+
+application.base.path=${user.home}/apps/pa
+jboss.server.hostname=localhost
+jboss.server.jndi.port=31499
+jboss.server.port=39480
+accrual.jnp.url=jnp://${jboss.server.hostname}:${jboss.server.jndi.port}
+pa.jnp.url=jnp://${jboss.server.hostname}:${jboss.server.jndi.port}
+po.jnp.url=jnp://${jboss.server.hostname}:${po.port.number}
+database.user=pauser
+database.password=pauser
+database.hostname=localhost
+database.port=5432
+database.name=ctods_pa
+database.url=jdbc:postgresql://${database.hostname}:${database.port}/${database.name}
+jdbc.driver=org.postgresql.Driver
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+jboss.deploy.dir=${application.base.path}/paear/jboss-4.0.5.GA-jems-ejb3/server/paear/deploy
+gridServicePrincipal=Gr1DU5er
+gridServiceCredential=ltHZmZ1rqYq8j2uyHEABIQ==
+po.username=ejbclient
+po.pass=pass
+po.port.number=31099
+po.server.name=localhost
+application.url=http://${jboss.server.hostname}:${jboss.server.port}/registry
+selenium.server.port=4444
+
+accrual.batch.upload.filepath.relative.dir=accrual_batch
+accrual.batch.upload.filepath.loc=${application.base.path}/${accrual.batch.upload.filepath.relative.dir}
+wikiHelp.baseUrl.accrual=https://wiki.nci.nih.gov/x/yALTAg#NCICTRPAccrualHelpTopics-
+
+maven.username=uploaded
+maven.password=password
+tooltips.filepath.relative.dir=tooltips
+tooltips.filepath.loc=${application.base.path}/${tooltips.filepath.relative.dir}

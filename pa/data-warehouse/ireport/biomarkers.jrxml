@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="biomarkers" language="groovy" pageWidth="2136" pageHeight="842" columnWidth="2096" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="1454"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\Users\\ctrp\\code\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Biomarker_Name" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Intervention_Name" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Disease_Site" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Lead_Organization" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * FROM (
+SELECT sync.name AS name,
+       pm.assay_use_code AS use,
+       pm.assay_purpose_code AS purpose,
+       soi.extension AS nci_id,
+       ss1.local_sp_indentifier AS nct_id,
+       ss2.local_sp_indentifier AS lead_org_id,
+       sp.phase_code AS phase,
+       array_agg(DISTINCT sites.code) AS disease_site,
+       sp.official_title,
+       sos.status_code AS current_study_status,
+       dwf.status_code AS processing_status,
+       array_agg(DISTINCT intv.name) AS intervention_name,
+       array_agg(DISTINCT pact.subcategory_code) AS intervention_type
+FROM planned_marker pm
+JOIN planned_activity pa USING (identifier)
+JOIN planned_marker_sync_cadsr sync ON (pm.pm_sync_identifier = sync.identifier)
+JOIN study_protocol sp ON (sp.identifier = pa.study_protocol_identifier)
+JOIN study_otheridentifiers soi ON (sp.identifier = soi.study_protocol_id
+                                    AND soi.root = '2.16.840.1.113883.3.26.4.3')
+LEFT JOIN study_site ss1 ON (sp.identifier = ss1.study_protocol_identifier
+                             AND ss1.functional_code = 'IDENTIFIER_ASSIGNER'
+                             AND ss1.research_organization_identifier =
+                               (SELECT ro1.identifier
+                                FROM research_organization ro1
+                                JOIN organization org1 ON (ro1.organization_identifier = org1.identifier)
+                                WHERE org1.name = 'ClinicalTrials.gov'))
+JOIN study_site ss2 ON (sp.identifier = ss2.study_protocol_identifier
+                        AND ss2.functional_code = 'LEAD_ORGANIZATION')
+LEFT JOIN study_anatomic_site sas ON (sp.identifier = sas.study_protocol_identifier)
+LEFT JOIN anatomic_sites sites ON (sas.anatomic_sites_identifier = sites.identifier)
+JOIN document_workflow_status dwf
+         ON (dwf.study_protocol_identifier = sp.identifier
+             AND dwf.identifier IN (SELECT MAX(identifier)
+                                    FROM document_workflow_status
+                                    GROUP BY study_protocol_identifier))
+JOIN study_overall_status sos
+         ON (sos.study_protocol_identifier = sp.identifier
+             AND sos.identifier IN (select identifier from study_overall_status 
+             where study_protocol_identifier = sp.identifier and deleted=false 
+             order by status_date desc, identifier desc limit 1))
+LEFT JOIN planned_activity pact ON (sp.identifier = pact.study_protocol_identifier
+                                    AND pact.intervention_identifier IS NOT NULL)
+LEFT JOIN intervention intv ON (pact.intervention_identifier = intv.identifier)
+WHERE LOWER(sync.name) LIKE ('%' || LOWER($P{Biomarker_Name}) || '%')
+  AND sp.identifier IN
+(
+SELECT DISTINCT sp.identifier
+FROM planned_marker pm
+JOIN planned_activity pa USING (identifier)
+JOIN planned_marker_sync_cadsr sync ON (pm.pm_sync_identifier = sync.identifier)
+JOIN study_protocol sp ON (sp.identifier = pa.study_protocol_identifier)
+JOIN study_site ss2 ON (sp.identifier = ss2.study_protocol_identifier
+                        AND ss2.functional_code = 'LEAD_ORGANIZATION')
+JOIN research_organization ro ON (ro.identifier = ss2.research_organization_identifier)
+JOIN organization org ON (ro.organization_identifier = org.identifier)
+LEFT JOIN study_anatomic_site sas ON (sp.identifier = sas.study_protocol_identifier)
+LEFT JOIN anatomic_sites sites ON (sas.anatomic_sites_identifier = sites.identifier)
+JOIN document_workflow_status dwf
+         ON (dwf.study_protocol_identifier = sp.identifier
+             AND dwf.identifier IN (SELECT MAX(identifier)
+                                    FROM document_workflow_status
+                                    GROUP BY study_protocol_identifier))
+LEFT JOIN planned_activity pact ON (sp.identifier = pact.study_protocol_identifier
+                                    AND pact.intervention_identifier IS NOT NULL)
+LEFT JOIN intervention intv ON (pact.intervention_identifier = intv.identifier)
+WHERE sp.status_code = 'ACTIVE'
+  AND dwf.status_code NOT IN ('REJECTED','SUBMISSION_TERMINATED')
+  AND LOWER(intv.name) LIKE ('%' || LOWER($P{Intervention_Name}) || '%')
+  AND ($P{Disease_Site} IS NULL OR sites.code = $P{Disease_Site})
+  AND ($P{Lead_Organization} IS NULL OR org.name = $P{Lead_Organization})
+)
+GROUP BY sync.name, pm.assay_use_code, pm.assay_purpose_code,
+       soi.extension, ss1.local_sp_indentifier, ss2.local_sp_indentifier,
+       sp.phase_code, sp.official_title, sos.status_code, dwf.status_code
+) AS alias
+ORDER BY name, use, nci_id]]>
+	</queryString>
+	<field name="name" class="java.lang.String"/>
+	<field name="use" class="java.lang.String"/>
+	<field name="purpose" class="java.lang.String"/>
+	<field name="nci_id" class="java.lang.String"/>
+	<field name="nct_id" class="java.lang.String"/>
+	<field name="lead_org_id" class="java.lang.String"/>
+	<field name="phase" class="java.lang.String"/>
+	<field name="disease_site" class="java.sql.Array"/>
+	<field name="official_title" class="java.lang.String"/>
+	<field name="current_study_status" class="java.lang.String"/>
+	<field name="processing_status" class="java.lang.String"/>
+	<field name="intervention_name" class="java.sql.Array"/>
+	<field name="intervention_type" class="java.sql.Array"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[true]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="9c4f334c-4fb8-44a5-aa23-e3e8196c84ae" x="0" y="0" width="2096" height="802" forecolor="#FF9999"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="160" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Draft, NCI Confidential]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6" mode="Opaque" x="0" y="0" width="2096" height="37" backcolor="#A90101"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c40c7162-9eac-4604-80df-30028ea8b1aa" mode="Opaque" x="0" y="0" width="256" height="22" forecolor="#FFFFFF" backcolor="#475B82"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CTRP Biomarker Report"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42" mode="Opaque" x="608" y="0" width="1488" height="22" forecolor="#FFFFFF" backcolor="#475B82"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["As of: " + new SimpleDateFormat("MMM-dd-yy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a04fcef1-277b-4a58-bb06-defa1239e4ad" mode="Opaque" x="256" y="0" width="352" height="22" forecolor="#FFFFFF" backcolor="#475B82"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8d76c2a6-682f-445a-896f-d15e6298cfef" mode="Opaque" x="0" y="0" width="256" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Biomarker Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="815cb5bc-93f6-4009-9b20-f8bde88c743f" mode="Opaque" x="256" y="0" width="96" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Biomarker Use]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="91864f55-3b33-4438-998b-5a2dac3d2cac" mode="Opaque" x="352" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Biomarker Purpose]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6070af77-4581-470f-bfcc-7e8081119fc9" mode="Opaque" x="480" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[NCI ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3120e13f-4826-4e14-bf91-36793ec836ff" mode="Opaque" x="608" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[NCT ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20a2c584-cbec-4449-bffa-73a44766c046" mode="Opaque" x="736" y="0" width="164" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Lead Org ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="723a788c-9a71-4af4-9c7b-2406c582863a" mode="Opaque" x="900" y="0" width="48" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Phase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9db77bde-9835-4d48-9bfc-2af09227d430" mode="Opaque" x="948" y="0" width="144" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Disease Site]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ee9b28b1-2619-4614-a417-ecac65865478" mode="Opaque" x="1092" y="0" width="380" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Official Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e744c8ff-7923-49cb-919b-f1cd1b816e13" mode="Opaque" x="1472" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Current Trial Overall Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c784308-bdab-45c7-bcd7-4b42ee95c938" mode="Opaque" x="1600" y="0" width="144" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Processing Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3925df05-27dc-4d7c-a876-f9034ef26e3f" mode="Opaque" x="1744" y="0" width="224" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Intervention Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cfc5581-150d-493b-837d-b7d524cf9e03" mode="Opaque" x="1968" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Intervention Type]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="42">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6" x="0" y="0" width="256" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7d8cf61a-a486-4db7-b513-ab8bdbce5be1" x="256" y="0" width="96" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{use}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fda6abaa-cc0c-4b21-9ccc-ee2fe086334d" x="352" y="0" width="128" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{purpose}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9356dc40-26a7-412b-8222-c53708615c31" x="480" y="0" width="128" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nci_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a0d2d8a8-1e2e-4aea-9634-22b5dcc7899f" x="608" y="0" width="128" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nct_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9b81967b-8539-4f7d-b424-e2030b2776b5" x="736" y="0" width="164" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="cf490b8e-929c-4bd4-9097-ca1bf930123a" x="900" y="0" width="48" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{phase}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="dfc767c0-f178-4518-bdc9-10005bb70519" x="948" y="0" width="144" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((String) $F{disease_site})
+.replace("{","")
+.replace("}","")
+.replace("\"","")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3801d219-a7a2-4298-9c7d-2d99e761ab9a" x="1092" y="0" width="380" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{official_title}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="cd8e0d82-d83f-48ec-b0e3-926ff0fa2186" x="1472" y="0" width="128" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_study_status} == null ? "" :
+($F{current_study_status}.equals("IN_REVIEW") ? "In Review" :
+($F{current_study_status}.equals("APPROVED") ? "Approved" :
+($F{current_study_status}.equals("ACTIVE") ? "Active" :
+($F{current_study_status}.equals("ENROLLING_BY_INVITATION") ? "Enrolling by Invitation" :
+($F{current_study_status}.equals("CLOSED_TO_ACCRUAL") ? "Closed to Accrual" :
+($F{current_study_status}.equals("CLOSED_TO_ACCRUAL_AND_INTERVENTION") ? "Closed to Accrual and Intervention" :
+($F{current_study_status}.equals("TEMPORARILY_CLOSED_TO_ACCRUAL") ? "Temporarily Closed to Accrual" :
+($F{current_study_status}.equals("TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION") ? "Temporarily Closed to Accrual and Intervention" :
+($F{current_study_status}.equals("WITHDRAWN") ? "Withdrawn" :
+($F{current_study_status}.equals("ADMINISTRATIVELY_COMPLETE") ? "Administratively Complete" :
+($F{current_study_status}.equals("COMPLETE") ? "Complete" :
+($F{current_study_status}))))))))))))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="003af400-3f40-4077-9fb9-7638d033824a" x="1600" y="0" width="144" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{processing_status} == null ? "" :
+($F{processing_status}.equals("SUBMITTED") ? "Submitted" :
+($F{processing_status}.equals("AMENDMENT_SUBMITTED") ? "Amendment Submitted" :
+($F{processing_status}.equals("ACCEPTED") ? "Accepted" :
+($F{processing_status}.equals("ABSTRACTED") ? "Abstracted" :
+($F{processing_status}.equals("VERIFICATION_PENDING") ? "Verification Pending" :
+($F{processing_status}.equals("ABSTRACTION_VERIFIED_RESPONSE") ? "Abstraction Verified Response" :
+($F{processing_status}.equals("ABSTRACTION_VERIFIED_NORESPONSE") ? "Abstraction Verified No Response" :
+($F{processing_status}.equals("ON_HOLD") ? "On-Hold" :
+($F{processing_status})))))))))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="33015edb-2bb1-4b0f-9a04-d128750b0233" x="1968" y="0" width="128" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((String) $F{intervention_type})
+.replace("{","")
+.replace("}","")
+.replace("\"","")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="11377fc1-a3fd-44e8-a035-747260d3f32a" x="1744" y="0" width="224" height="42"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((String) $F{intervention_name})
+.replace("{","")
+.replace("}","")
+.replace("\"","")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

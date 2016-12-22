@@ -1,0 +1,2 @@
+INSERT INTO PA_PROPERTIES VALUES ((select max(identifier) + 1 from pa_properties),'reg.web.report.ext.link.url','https://trials.nci.nih.gov/reports/login.html');
+INSERT INTO PA_PROPERTIES VALUES ((select max(identifier) + 1 from pa_properties),'reg.web.report.ext.link.name','View Data Table 4 Report');

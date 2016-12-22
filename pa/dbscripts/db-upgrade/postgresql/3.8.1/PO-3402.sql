@@ -1,0 +1,1 @@
+alter table study_outcome_measure ADD COLUMN display_order integer;

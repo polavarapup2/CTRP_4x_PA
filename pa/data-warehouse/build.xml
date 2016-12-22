@@ -1,0 +1,452 @@
+<project name="data-warehouse" default="populate" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property file="${basedir}/build.properties"/>
+    <property name="bda-utils" value="${basedir}/../../target/pa/bda-utils" />
+    
+    <property name="datawarehouse.timeout" value="57600000" />
+
+    <path id="bda-utils.classpath">
+        <fileset dir="./lib">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="../../build-pa/common">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="bda-utils.classpath"/>
+    <taskdef classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath" name="groovy"/>
+
+    <target name="populate" description="Rename from staging to final tables, add indexes">   
+        <echoproperties/>
+        <parallel threadCount="1" timeout="${datawarehouse.timeout}" failonany="true">       
+          <sequential>      
+                <antcall target="gen"/>         
+                <stopwatch name="timer1"/>
+                <echo message = "Running miscellaneous tasks (add tree to study_disease...)"/>
+                <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}"
+                    userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+                    expandproperties="true" autocommit="true">
+                    <transaction src="${basedir}/sql/misc.sql"/>
+                    <classpath>
+                        <path refid="bda-utils.classpath"/>
+                    </classpath>
+                </sql>
+                <stopwatch name="timer1" action="total"/>
+                <stopwatch name="timer1"/>
+                <echo message = "Renaming stage tables"/>
+          	
+                <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}"
+                    userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+                    expandproperties="true" autocommit="true">
+                    <transaction src="${basedir}/sql/rename_all.sql"/>
+                    <classpath>
+                        <path refid="bda-utils.classpath"/>
+                    </classpath>
+                </sql>
+               
+                <stopwatch name="timer1" action="total"/>
+                <stopwatch name="timer1"/>
+                <echo message = "Adding indexes"/>
+                <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}"
+                    userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+                    expandproperties="true" autocommit="true">
+                    <transaction src="${basedir}/sql/add_indexes.sql"/>
+                    <classpath>
+                        <path refid="bda-utils.classpath"/>
+                    </classpath>
+                </sql> 
+            
+                <stopwatch name="timer1" action="total"/>
+                <stopwatch name="timer1"/>
+                <echo message = "Creating trial type tables.."/>
+                <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}"
+                    userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+                    expandproperties="true" autocommit="true">
+                    <transaction src="${basedir}/sql/trial_type.sql"/>
+                    <classpath>
+                        <path refid="bda-utils.classpath"/>
+                    </classpath>
+                </sql>
+                <stopwatch name="timer1" action="total"/> 
+          	
+                 <stopwatch name="timer1"/>
+          	        <echo message = "Loading history tables..."/>
+          	        <groovy src="groovy/load_history_tables.groovy"/>
+          	     <stopwatch name="timer1" action="total"/>
+          	
+
+                <echo message = "Granting SELECT privilege to copparead..."/>
+                <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}"
+                    userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+                    onerror="continue"
+                    expandproperties="true" autocommit="true">
+                    <transaction src="${basedir}/sql/grant_privileges.sql"/>
+                    <classpath>
+                        <path refid="bda-utils.classpath"/>
+                    </classpath>
+                </sql>
+            
+          </sequential>
+        </parallel>
+            
+    </target>
+
+    <target name="init-db" description="Initializes the data warehousing tables">
+        <stopwatch name="timer1"/>
+        <echo message = "Creating data warehouse stage tables"/>
+        <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}?tcpKeepAlive=true&amp;loginTimeout=60&amp;connectTimeout=60&amp;socketTimeout=600"
+            userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+            expandproperties="true" autocommit="true">
+            <transaction src="${basedir}/sql/prime.sql"/>
+            <transaction src="${basedir}/sql/study_accrual_count_audit.sql"/>
+            <transaction src="${basedir}/sql/organization.sql"/>
+            <transaction src="${basedir}/sql/organization_role.sql"/>
+            <transaction src="${basedir}/sql/person_role.sql"/>
+            <transaction src="${basedir}/sql/outcome_measure.sql"/>
+            <transaction src="${basedir}/sql/person_audit.sql"/>
+            <transaction src="${basedir}/sql/org_audit.sql"/>
+            <transaction src="${basedir}/sql/person.sql"/>
+            <transaction src="${basedir}/sql/study_audit.sql"/>
+            <transaction src="${basedir}/sql/arm_intervention.sql"/>
+            <transaction src="${basedir}/sql/subgroup.sql"/>
+            <transaction src="${basedir}/sql/record_owner.sql"/>
+            <transaction src="${basedir}/sql/collaborator.sql"/>
+            <transaction src="${basedir}/sql/overall_status.sql"/>
+            <transaction src="${basedir}/sql/eligibility_criteria.sql"/>
+            <transaction src="${basedir}/sql/other_id.sql"/>
+            <transaction src="${basedir}/sql/on_hold.sql"/>
+            <transaction src="${basedir}/sql/processing-status.sql"/>
+            <transaction src="${basedir}/sql/families.sql"/>
+            <transaction src="${basedir}/sql/generic_contact.sql"/>
+            <transaction src="${basedir}/sql/milestone.sql"/>
+            <transaction src="${basedir}/sql/study.sql"/>
+            <transaction src="${basedir}/sql/summary_4_funding.sql"/>
+            <transaction src="${basedir}/sql/amendment.sql"/>
+            <transaction src="${basedir}/sql/anatomic_site.sql"/>
+            <transaction src="${basedir}/sql/biomarker.sql"/>
+            <transaction src="${basedir}/sql/disease.sql"/>
+            <transaction src="${basedir}/sql/grant.sql"/>
+            <transaction src="${basedir}/sql/grants_i2e.sql"/>
+            <transaction src="${basedir}/sql/grants_p30.sql"/>
+            <transaction src="${basedir}/sql/indide.sql"/>
+            <transaction src="${basedir}/sql/participating-site.sql"/>
+            <transaction src="${basedir}/sql/participating_site_status.sql"/>
+            <transaction src="${basedir}/sql/participating_site_investigators.sql"/>
+            <transaction src="${basedir}/sql/affiliate_org.sql"/>
+            <transaction src="${basedir}/sql/user.sql"/>
+            <transaction src="${basedir}/sql/study_site_accrual_access.sql"/>
+            <transaction src="${basedir}/sql/study_accrual_count.sql"/>
+            <transaction src="${basedir}/sql/study_site_accrual_details.sql"/>
+            <transaction src="${basedir}/sql/accrual_batch_submission.sql"/>
+            <transaction src="${basedir}/sql/data_table_4.sql"/>
+            <transaction src="${basedir}/sql/study_association.sql"/>
+            <transaction src="${basedir}/sql/assay_type.sql"/>
+            <transaction src="${basedir}/sql/biomarker_purpose.sql"/>
+            <transaction src="${basedir}/sql/biomarker_use.sql"/>
+            <transaction src="${basedir}/sql/evaluation_type.sql"/>
+            <transaction src="${basedir}/sql/specimen_collection.sql"/>
+            <transaction src="${basedir}/sql/specimen_type.sql"/>
+            <transaction src="${basedir}/sql/study_secondary_purpose.sql"/>
+           <transaction src="${basedir}/sql/family_trial_data.sql"/>
+            <transaction src="${basedir}/sql/study_inbox.sql"/>
+            <transaction src="${basedir}/sql/failed_patient_accruals.sql"/>
+            <transaction src="${basedir}/sql/program_code.sql"/>
+            <transaction src="${basedir}/sql/study_family_program_code.sql"/>
+            <transaction src="${basedir}/sql/study_principal_investigator.sql"/>
+            <classpath>
+                <path refid="bda-utils.classpath"/>
+            </classpath>
+        </sql>
+    	  <echo message = "Alter history tables if needed"/>
+    	        <sql driver="${datawarehouse.pa.dest.jdbc.driver}" url="${datawarehouse.pa.dest.jdbc.url}?tcpKeepAlive=true&amp;loginTimeout=60&amp;connectTimeout=60&amp;socketTimeout=600"
+    	            userid="${datawarehouse.pa.dest.db.username}" password="${datawarehouse.pa.dest.db.password}"
+    	            expandproperties="true" autocommit="true" onerror="continue">
+    	        	<transaction src="${basedir}/sql/alter_history_tables.sql"/>
+    	        	 <classpath>
+    	        	     <path refid="bda-utils.classpath"/>
+    	        	  </classpath>
+      </sql>  	
+        <stopwatch name="timer1" action="total"/>
+    </target>
+
+    <target name="gen" depends="init-db" description="Populates the data warehousing tables using the given database">
+    	
+    
+    	
+    	
+        <stopwatch name="timer1"/>
+        <echo message = "Running disease"/>
+        <groovy src="groovy/disease.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+    	
+ 
+        
+     <stopwatch name="timer1"/>
+        <echo message = "Running Failed Patient Accruals"/>
+        <groovy src="groovy/failed_patient_accruals.groovy"/>
+        <stopwatch name="timer1" action="total"/> 
+        
+        <stopwatch name="timer1"/>
+        <echo message = "Running Accrual Count Audit"/>
+        <groovy src="groovy/study_accrual_count_audit.groovy"/>
+        <stopwatch name="timer1" action="total"/> 
+       
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running User"/>
+        <groovy src="groovy/user.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+      
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Organization Roles"/>
+        <groovy src="groovy/organization_role.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Organization"/>
+        <groovy src="groovy/organization.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Org_families"/>
+        <groovy src="groovy/org_families.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Arm / Interventions"/>
+        <groovy src="groovy/arm_intervention.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Eligibility Criteria"/>
+        <groovy src="groovy/eligibility_criteria.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Outcome Measure"/>
+        <groovy src="groovy/outcome_measure.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Affiliate Org"/>
+        <groovy src="groovy/affiliate_org.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Person"/>
+        <groovy src="groovy/person.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Person Role"/>
+        <groovy src="groovy/person_role.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Org Audit"/>
+        <groovy src="groovy/org_audit.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running generic_contact"/>
+        <groovy src="groovy/generic_contact.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running study"/>
+        <groovy src="groovy/study.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running summary 4"/>
+        <groovy src="groovy/summary_4_funding.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running milestones"/>
+        <groovy src="groovy/milestone.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Person Audit"/>
+        <groovy src="groovy/person_audit.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Record Owner"/>
+        <groovy src="groovy/record_owner.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Collaborator"/>
+        <groovy src="groovy/collaborator.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Overall Status"/>
+        <groovy src="groovy/overall_status.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Amendment"/>
+        <groovy src="groovy/amendment.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Other IdS"/>
+        <groovy src="groovy/other_id.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running On Hold Status"/>
+        <groovy src="groovy/on_hold.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Processing Status"/>
+        <groovy src="groovy/processing_status.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running anatomic_site"/>
+        <groovy src="groovy/anatomic_site.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running biomarker"/>
+        <groovy src="groovy/biomarker.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running grants"/>
+        <groovy src="groovy/grants.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running p30 grants"/>
+        <groovy src="groovy/grants_p30.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+    	
+    	
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running i2e grants"/>
+        <groovy src="groovy/grants_i2e.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+        
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running indide"/>
+        <groovy src="groovy/indide.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running participating_site"/>
+        <groovy src="groovy/participating_site.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+        <stopwatch name="timer1"/>
+        <echo message = "Running participating_site_status"/>
+        <groovy src="groovy/participating_site_status.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running participating_site_investigators"/>
+        <groovy src="groovy/participating_site_investigators.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running study_site_accrual_access"/>
+        <groovy src="groovy/study_site_accrual_access.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running study_accrual_count"/>
+        <groovy src="groovy/study_accrual_count.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running study_site_accrual_details"/>
+        <groovy src="groovy/study_site_accrual_details.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running accrual_batch_submission"/>
+        <groovy src="groovy/accrual_batch_submission.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running data_table_4"/>
+        <groovy src="groovy/data_table_4.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Study Associations"/>
+        <groovy src="groovy/study_association.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Assay Type"/>
+        <groovy src="groovy/assay_type.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Biomarker Purpose"/>
+        <groovy src="groovy/biomarker_purpose.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Biomarker Use"/>
+        <groovy src="groovy/biomarker_use.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Evaluation Type"/>
+        <groovy src="groovy/evaluation_type.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Specimen Collection"/>
+        <groovy src="groovy/specimen_collection.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Specimen Type"/>
+        <groovy src="groovy/specimen_type.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+
+        <stopwatch name="timer1"/>
+        <echo message = "Running Secondary Purpose"/>
+        <groovy src="groovy/secondary_purpose.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+         <stopwatch name="timer1"/>
+                <echo message = "Family Trial Data"/>
+                <groovy src="groovy/family_trial_data.groovy"/>
+                <stopwatch name="timer1" action="total"/>
+ 
+       <stopwatch name="timer1"/>
+        <echo message = "Running Study Inbox"/>
+        <groovy src="groovy/study_inbox.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+        <stopwatch name="timer1"/>
+        <echo message = "Running program code"/>
+        <groovy src="groovy/program_codes.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+        <stopwatch name="timer1"/>
+        <echo message = "Running Study family program codes"/>
+        <groovy src="groovy/study_family_program_code.groovy"/>
+        <stopwatch name="timer1" action="total"/>
+        
+        <stopwatch name="timer1"/>
+        <echo message = "Running Study PI"/>
+        <groovy src="groovy/study_principal_investigator.groovy"/>
+        <stopwatch name="timer1" action="total"/>  
+        
+   </target>
+
+</project>

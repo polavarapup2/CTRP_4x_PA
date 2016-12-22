@@ -1,0 +1,1 @@
+update study_protocol set official_title = replace(official_title,chr(160),' ') where position(chr(160) in official_title)>0;

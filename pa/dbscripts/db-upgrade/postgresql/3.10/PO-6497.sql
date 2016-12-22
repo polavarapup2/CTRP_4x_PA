@@ -1,0 +1,3 @@
+INSERT INTO pa_properties (identifier,name,value) VALUES ((select max(identifier) + 1 from pa_properties)
+    ,'ctgov.sync.fields_of_interest.key_to_label_mapping',
+    'studyProtocol.scientificDescription=Detailed Description\nstudyProtocol.keywordText=Keywords\neligibilityCriteria=Eligibility Criteria\nsponsor=Sponsor\ncollaborators=Collaborators\nstudyProtocol.studyResourcings.{? #this.summary4ReportedResourceIndicator==true}.{organizationIdentifier}=Summary 4 Sponsor');

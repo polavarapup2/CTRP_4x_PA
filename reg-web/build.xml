@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== -->
+<!-- reg-web ant script for COPPA PA                                         -->
+<!-- ====================================================================== -->
+
+<project name="reg-web" default="package" basedir=".">
+    <property name="tier" value="LOCAL"/>
+    <property file="${basedir}/../build-pa/tier-properties/build-lite-${tier}.properties"/>
+    <property file="${basedir}/../build-pa/build-lite.properties"/>
+    <property file="${basedir}/../build-pa/version.properties"/>
+    <property name="reg-web.coverage.line" value="77"/>
+    <property name="reg-web.coverage.branch" value="62"/>
+    <property name="reg-web.pmd.maxerrors" value="115"/>
+	<property name="reg-web.jshint.maxerrors" value="527"/>
+	<property name="software.dir" value="${basedir}/.."/>
+    <property name="pa.dir" value="${software.dir}/pa"/>
+    <property name="pa.report.dir" value="${software.dir}/target/pa/reports"/>
+    <property name="pa.ear.file" value="${software.dir}/pa/pa-ear/target/pa.ear"/>
+    <property name="jboss.deploy.directory" value="${application.base.path}/standalone/deployments"/>
+
+    <property name="pa.resourceDir" value="${basedir}/resources"/>
+
+    <property name="pa.pmd" value="${pa.resourceDir}/paRegPmd.xml"/>
+    <property name="pa.checkstyle.url" value="${pa.resourceDir}/checkstyle.xml"/>
+    <property name="java.major.version" value="1.7"/>
+    <property name="java.encoding" value="utf-8"/>
+
+    <property name="reg-web.build.finalName" value="reg-web"/>
+    <property name="reg-web.build.dir" value="${software.dir}/reg-web/target"/>
+    <property name="reg-web.build.outputDir" value="${reg-web.build.dir}/classes"/>
+    <property name="reg-web.build.javadoc" value="${reg-web.build.dir}/javadoc"/>
+    <property name="reg-web.build.srcDir.0" value="${software.dir}/reg-web/src/java"/>
+	<property name="reg-web.build.src.js" value="${software.dir}/reg-web/src/webapp/scripts"/>
+    <property name="reg-web.build.resourceDir.0" value="${software.dir}/reg-web/src/resources"/>
+    <property name="reg-web.build.testOutputDir" value="${reg-web.build.dir}/test-classes"/>
+    <property name="reg-web.build.testDir.0" value="${software.dir}/reg-web/test/java"/>
+	<property name="reg-web.build.testDir.js" value="${software.dir}/reg-web/test/js"/>
+    <property name="reg-web.build.integrationTestDir.0" value="${software.dir}/reg-web/test-integration/java"/>
+    <property name="reg-web.build.testResourceDir.0" value="${software.dir}/reg-web/test/resources"/>
+    <property name="reg-web.test.reports" value="${pa.report.dir}/reg-web/test-reports"/>
+    <property name="reg-web.coverage.reports" value="${pa.report.dir}/reg-web/coverage-reports"/>
+    <property name="reg-web.reporting.outputDirectory" value="${pa.report.dir}/reg-web/site"/>
+    <property name="reg-web.war" value="${reg-web.build.finalName}.war"/>
+    <property name="reg-web.build.coberturaOutputDir" value="${reg-web.build.dir}/generated-classes"/>
+
+    <property name="reg-web.ear.dir" value="${reg-web.build.dir}/pa"/>
+    <property name="reg-web.ear.file" value="${reg-web.ear.dir}.ear"/>
+
+    <property name="lib.dir" value="${software.dir}/target/pa/lib"/>
+    <property name="common.dir" value="${software.dir}/build-pa/common"/>
+
+	<property name="selenium.delay" value="50"/>
+	<property name="webdriver.class" value="org.openqa.selenium.firefox.FirefoxDriver"/>
+	<property name="phantomjs.binary.path" value="/local/home/cislave/phantomjs-1.9.7-linux-x86_64/bin/phantomjs"/>
+
+    <!-- ====================================================================== -->
+    <!-- Defining classpaths                                                    -->
+    <!-- ====================================================================== -->
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}/build">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <path id="common.package.classpath">
+        <fileset dir="${pa.dir}/commons/target">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}/reg-web">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/ear">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test.classpath">
+        <fileset dir="${lib.dir}/test">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/reg-web">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/ear">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+	
+    <path id="test-jshint.classpath">
+        <fileset dir="${basedir}/auxlib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+	
+    <path id="test-findbugs.classpath">
+        <fileset dir="${lib.dir}/test-findbugs">
+            <include name="*.jar"/>
+        </fileset>
+    </path>	
+
+    <path id="test-simian.classpath">
+        <fileset dir="${lib.dir}/test-simian">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-junit.classpath">
+        <fileset dir="${lib.dir}/test-junit">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="selenium.classpath">
+        <fileset dir="${lib.dir}/test-selenium">
+            <include name="*.jar"/>
+        </fileset>
+     </path>
+
+    <path id="test-cobertura.classpath">
+        <fileset dir="${lib.dir}/test-cobertura">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-checkstyle.classpath">
+        <fileset dir="${lib.dir}/test-checkstyle">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-pmd.classpath">
+        <fileset dir="${lib.dir}/test-pmd">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="ejb.package.classpath">
+         <fileset dir="${pa.dir}/pa-ejb/target">
+            <include name="*.jar"/>
+         </fileset>
+    </path>
+
+    <!-- ====================================================================== -->
+    <!-- Task definitions                                                       -->
+    <!-- ====================================================================== -->
+
+    <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="build.classpath"/>
+	<taskdef name="propertyregex" classname="net.sf.antcontrib.property.RegexTask" classpathref="build.classpath"/>
+
+    <!-- ====================================================================== -->
+    <!-- Cleaning up target                                                     -->
+    <!-- ====================================================================== -->
+
+    <target name="clean" description="Clean the output directory">
+        <delete dir="${reg-web.build.dir}"/>
+        <delete dir="${pa.report.dir}/reg-web"/>
+        <mkdir dir="${reg-web.build.dir}"/>
+        <mkdir dir="${pa.report.dir}/reg-web"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Compilation target                                                     -->
+    <!-- ====================================================================== -->
+
+    <target name="compile" description="Compile the code">
+        <mkdir dir="${reg-web.build.outputDir}"/>
+        <javac destdir="${reg-web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${reg-web.build.srcDir.0}"/>
+            </src>
+            <classpath>
+                <path refid="compile.classpath"/>
+                <path refid="ejb.package.classpath"/>
+                <path refid="common.package.classpath"/>
+            </classpath>
+        </javac>          	
+        <copy todir="${reg-web.build.outputDir}">
+            <filterset>
+                	<filter token="ldap.url" value="${ldap.url}"/>
+	                <filter token="ldap.user" value="${ldap.user}"/>
+	                <filter token="ldap.password" value="${ldap.password}"/>
+	                <filter token="ldap.security.authentication" value="${ldap.security.authentication}"/>
+	                <filter token="ldap.security.protocol" value="${ldap.security.protocol}"/>
+	                <filter token="ldap.timeouts.connect" value="${ldap.timeouts.connect}"/>
+	                <filter token="ldap.timeouts.read" value="${ldap.timeouts.read}"/>
+	                <filter token="ldap.context" value="${ldap.context}"/>
+	                <filter token="ldap.uid.attrname" value="${ldap.uid.attrname}"/>
+	                <filter token="ldap.migration.grouperToIdStringMap" value="${ldap.migration.grouperToIdStringMap}"/>
+	                <filter token="ldap.migration.excludes" value="${ldap.migration.excludes}"/>
+                    <filter token="database.driver" value="${jdbc.driver}" />
+	                <filter token="database.url" value="${jdbc.url}" />
+	                <filter token="database.user" value="${db.username}" />
+	                <filter token="database.password" value="${db.password}" />
+	                <filter token="database.dialect" value="${hibernate.dialect}" />	                
+            </filterset>
+            <fileset dir="${reg-web.build.resourceDir.0}"/>
+        </copy>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Configure test compilation target                                      -->
+    <!-- ====================================================================== -->
+
+    <target name="configure-tests">       
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Test-compilation target                                                -->
+    <!-- ====================================================================== -->
+    <target name="compile-tests" depends="compile,configure-tests" description="Compile the test code">
+        <mkdir dir="${reg-web.build.testOutputDir}"/>
+        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${reg-web.build.testDir.0}"/>                
+            </src>
+            <classpath>
+                <pathelement location="${reg-web.build.outputDir}"/>
+                <path refid="common.package.classpath"/>
+                <path refid="test.classpath"/>
+                <path refid="test-junit.classpath"/>                
+                <path refid="ejb.package.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${reg-web.build.testOutputDir}">
+            <fileset dir="${reg-web.build.testResourceDir.0}"/>
+        </copy>
+    </target>
+	
+	 <target name="compile-selenium-tests" depends="compile-tests" description="Compile the test code">
+           <ant target="jar-test" dir="${pa.dir}/pa-ejb" inheritAll="false">
+                 <property name="tier" value="${tier}"/>
+           </ant>
+           <ant target="compile-tests" dir="${pa.dir}/pa-web" inheritAll="false">
+                 <property name="tier" value="${tier}"/>
+           </ant>
+	        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+	               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+	            <src>	 
+	                <pathelement location="${reg-web.build.integrationTestDir.0}"/>
+	            </src>
+	            <classpath>
+	                <pathelement location="${reg-web.build.outputDir}"/>
+	                <path refid="common.package.classpath"/>
+	                <path refid="test.classpath"/>
+	                <path refid="test-junit.classpath"/>
+	                <path refid="selenium.classpath"/>
+	                <path refid="ejb.package.classpath"/>
+	            	<pathelement location="${pa.dir}/pa-web/target/test-classes"/>
+	            	<pathelement location="${pa.dir}/pa-web/target/classes"/>
+	            </classpath>
+	        </javac>
+	    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run Selenium Tests                                                       -->
+    <!-- ====================================================================== -->
+    <target name="run-selenium-tests" depends="compile-selenium-tests" description="Run integration tests">
+        <mkdir dir="${reg-web.test.reports}"/>
+        <junit maxmemory="1G" printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="yes" failureproperty="junit.failure">
+        	<jvmarg value="-XX:-UseSplitVerifier"/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath>
+            	<pathelement location="${pa.dir}/pa-web/target/test-classes"/>
+            	<pathelement location="${pa.dir}/pa-web/target/classes"/>
+            	<path refid="test-junit.classpath"/>
+                <path location="${reg-web.build.testOutputDir}"/>
+                <path refid="selenium.classpath"/>
+                <path refid="common.package.classpath"/>
+            	<path refid="test.classpath"/>   
+            </classpath>
+            <batchtest todir="${reg-web.test.reports}">
+                <fileset dir="${reg-web.build.integrationTestDir.0}">
+                    <include name="**/AllSeleniumTests.java"/>
+                </fileset>
+            </batchtest>
+         </junit>
+        <condition property="selenium.outcome" value="FAILED!!! See reports in ${reg-web.test.reports}" else="passed.">
+             <isset property="junit.failure"/>
+         </condition>
+         <echo>Selenium tests ${selenium.outcome}</echo>
+
+    </target>	
+	<target name="run-performance-tests" depends="compile-selenium-tests" description="Run performance tests">
+		    <property name="submitter.login" value=""/>
+		    <property name="submitter.password" value=""/>
+		    <property name="server.readonly" value=""/>
+		    <property name="no.duration.assertions" value=""/>
+	        <mkdir dir="${reg-web.test.reports}"/>
+	        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="yes" failureproperty="junit.failure">
+	            <jvmarg value="-XX:-UseSplitVerifier"/>
+	        	<jvmarg value="-Dserver.readonly=${server.readonly}"/>
+	        	<jvmarg value="-Dsubmitter.login=${submitter.login}"/>
+	        	<jvmarg value="-Dsubmitter.password=${submitter.password}"/>
+	        	<jvmarg value="-Dno.duration.assertions=${no.duration.assertions}"/>
+	            <formatter type="xml"/>
+	            <formatter type="plain" usefile="false"/>
+	            <classpath>
+	                <pathelement location="${pa.dir}/pa-web/target/test-classes"/>
+	                <pathelement location="${pa.dir}/pa-web/target/classes"/>
+	                <path refid="test-junit.classpath"/>
+	                <path location="${reg-web.build.testOutputDir}"/>
+	                <path refid="selenium.classpath"/>
+	                <path refid="common.package.classpath"/>
+	                <path refid="test.classpath"/>   
+	            </classpath>
+	            <batchtest todir="${reg-web.test.reports}">
+	                <fileset dir="${reg-web.build.integrationTestDir.0}">
+	                    <include name="**/AllPerformanceTests.java"/>
+	                </fileset>
+	            </batchtest>
+	         </junit>
+	         <fail if="junit.failure" message="Performance test(s) failed.  See reports in ${reg-web.test.reports}."/>
+	</target>
+	
+	<target name="test-integration" description="Runs integration tests against the automatically deploy application."
+	           depends="database.install,database.update,populate-test-db,pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-selenium-tests,stop-jboss-server">       
+	</target>
+	
+    <target name="test-performance" description="Runs performance tests against the automatically deployed application."
+               depends="pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-performance-tests,stop-jboss-server">       
+    </target>
+	
+	<target name="database.install">
+        <ant target="database.install" dir="../pa" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+	</target>
+	
+    <target name="database.update">
+        <ant target="database.update" dir="../pa" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    </target>
+	
+	<target name="populate-test-db">
+	        <ant target="populate-test-db" dir="../pa" inheritAll="false">
+	            <property name="tier" value="${tier}"/>
+	        </ant>
+	</target>
+	
+	<target name="pa-deploy-notest">
+            <ant target="deploy-notest" dir="../pa" inheritAll="false">
+                <property name="tier" value="${tier}"/>
+            </ant>
+	</target>
+	
+	<target name="jar-test">
+            <ant target="jar-test" dir="../pa" inheritAll="false">
+                <property name="tier" value="${tier}"/>
+            </ant>
+	</target>	
+	
+    <target name="start-jboss-server">
+        <ant target="start-jboss-server" dir="../pa" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    </target>
+	
+	<target name="stop-jboss-server">
+	        <ant target="stop-jboss-server" dir="../pa" inheritAll="false">
+	            <property name="tier" value="${tier}"/>
+	        </ant>
+	</target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run checkstyle                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="test-checkstyle">
+        <taskdef resource="checkstyletask.properties" classpathref="test-checkstyle.classpath"/>
+        <checkstyle config="${pa.checkstyle.url}" failOnViolation="true">
+            <classpath>
+                <path refid="ejb.package.classpath"/>
+                <path refid="compile.classpath"/>
+                <path refid="common.package.classpath"/>
+            </classpath>
+            <fileset dir="src" includes="**/*.java" />
+            <formatter type="plain"/>
+            <formatter type="plain" toFile="${pa.report.dir}/reg-web/checkstyle.txt"/>
+            <formatter type="xml"   toFile="${pa.report.dir}/reg-web/checkstyle.xml"/>
+        </checkstyle>
+    </target>
+	
+    <!-- ====================================================================== -->
+    <!-- Run JS Hint                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-jshint">
+        <taskdef name="jshint" classname="com.philmander.jshint.JsHintAntTask" classpathref="test-jshint.classpath"/>
+        <!-- Lint the code -->
+        <jshint dir="${reg-web.build.src.js}" fail="false" 
+            options="browser=true,devel=true,jquery=true,prototypejs=true,-W099=true,eqeqeq=false,strict=false">
+             <include name="**/*.js"/>
+             <exclude name="**/*.min.js"/>             
+             <exclude name="**/jquery*.js"/>
+        	 <exclude name="**/bootstrap*.js"/>
+             <exclude name="**/select2*.js"/>
+        	 <exclude name="**/*dataTables*.js"/>
+             <exclude name="**/prototype.js"/>             
+        	 <exclude name="**/popup.js"/>
+             <report type="jslint-xml" destFile="${pa.report.dir}/reg-web/jslint.xml" />
+             <report type="plain" destFile="${pa.report.dir}/reg-web/jshint.txt" />
+        </jshint>
+        <loadfile property="jshintReport"
+              srcFile="${pa.report.dir}/reg-web/jshint.txt"/>
+        <propertyregex property="jshintErrorCount"
+                      input="${jshintReport}"
+                      regexp="JSHint found (\d+) errors"
+                      select="\1"
+                      casesensitive="false" />
+        <condition property="jshintFailure">
+            <scriptcondition language="javascript"><![CDATA[                
+                self.setValue(project.getProperty("jshintErrorCount") > project.getProperty("reg-web.jshint.maxerrors"));
+                ]]>
+            </scriptcondition>
+        </condition>
+        <fail if="jshintFailure" message="${jshintErrorCount} JSHint errors exceed the limit of ${reg-web.jshint.maxerrors}! See ${pa.report.dir}/reg-web/jshint.txt for details."/>
+    </target>   
+	
+
+    <!-- ====================================================================== -->
+    <!-- Run PMD                                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-pmd">
+        <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pa.pmd}" maxRuleViolations="${reg-web.pmd.maxerrors}">
+            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toFile="${pa.report.dir}/reg-web/pmd.txt"/>
+            <formatter type="xml"  toFile="${pa.report.dir}/reg-web/pmd.xml"/>
+            <formatter type="html" toFile="${pa.report.dir}/reg-web/pmd.html"/>
+            <fileset dir="src">
+                <include name="**/*.java"/>
+            </fileset>
+         <sourceLanguage name="java" version="1.7"/></pmd>
+    </target>
+	
+    <!-- ====================================================================== -->
+    <!-- Run Find Bugs                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-findbugs">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="test-findbugs.classpath"/>
+        <findbugs reportLevel="high" failOnError="true" classpathref="test-findbugs.classpath"
+                      output="xml:withMessages" warningsProperty="bugsFound" maxrank="14" projectname="reg-web"
+                      outputFile="${pa.report.dir}/reg-web/findbugs.xml">
+          <auxClasspath>
+            <path refid="compile.classpath"/>
+            <path refid="ejb.package.classpath"/>
+            <path refid="common.package.classpath"/>
+          </auxClasspath>
+          <sourcePath path="${reg-web.build.srcDir.0}" />
+          <class location="${reg-web.build.outputDir}" />
+        </findbugs>
+        <fail if="bugsFound" message="Bugs found! See ${pa.report.dir}/reg-web/findbugs.xml for details."/>
+    </target>   	
+
+    <!-- ====================================================================== -->
+    <!-- Run Simian                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-simian">
+       <taskdef resource="simiantask.properties" classpathref="test-simian.classpath"/>
+       <simian>
+            <fileset dir="src" includes="**/*.java"/>
+            <formatter type="plain" toFile="${pa.report.dir}/reg-web/simian.txt"/>
+            <formatter type="xml" toFile="${pa.report.dir}/reg-web/simian.xml"/>
+            <formatter type="plain"/>
+        </simian>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run all tests                                                          -->
+    <!-- ====================================================================== -->
+
+    <target name="test-dynamic-analysis"
+            depends="compile,compile-tests,test-cobertura, test-jasmine"
+            description="Run dynamic analysis."/>
+
+    <target name="test-static-analysis"
+            depends="compile,test-checkstyle,test-pmd,test-simian,test-findbugs,test-jshint"
+            description="Run static analysis."/>
+
+    <target name="test-all"
+            depends="test-static-analysis,test-dynamic-analysis"
+            description="Run all tests"/>
+
+
+    <!-- ====================================================================== -->
+    <!-- Package target                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="war" depends="copy-tooltips, determine-build-version">
+        <mkdir dir="${reg-web.build.dir}/${reg-web.build.finalName}/WEB-INF/lib"/>
+        <copy todir="${reg-web.build.dir}/${reg-web.build.finalName}/WEB-INF/lib">
+            <fileset dir="${lib.dir}/reg-web"/>
+        </copy>
+
+        <copy todir="${reg-web.build.dir}/${reg-web.build.finalName}/WEB-INF" file="${software.dir}/reg-web/src/webapp/WEB-INF/web.xml"
+            filtering="true">
+            <filterset>
+                <filter token="project.version" value="${project.version}"/>
+                <filter token="project.revision" value="${project.revision}"/>
+            </filterset>
+        </copy>
+
+        <war destfile="${reg-web.build.dir}/${reg-web.war}"
+             compress="false" duplicate="fail"
+             webxml="${reg-web.build.dir}/${reg-web.build.finalName}/WEB-INF/web.xml">
+            <lib dir="${reg-web.build.dir}/${reg-web.build.finalName}/WEB-INF/lib"/>
+            <classes dir="${reg-web.build.outputDir}"/>
+            <fileset dir="${software.dir}/reg-web/src/webapp"/>
+        </war>
+    </target>
+
+    <target name="package-notest" depends="compile,war"
+            description="Package the application.  Do not run tests."/>
+
+    <target name="package" depends="clean,compile,test-all,war"
+            description="Package the application"/>
+
+    <!-- ====================================================================== -->
+    <!-- Deploy target                                                          -->
+    <!-- ====================================================================== -->
+
+    <target name="ear">
+        <ant target="ear" dir="${pa.dir}" inheritAll="false"/>
+    </target>
+
+    <target name="deploy-ear">
+        <available file="${jboss.deploy.directory}" type="dir" property="container.present"/>
+        <fail unless="container.present" message="Deploy directory ${jboss.deploy.directory} not available."/>
+        <copy todir="${jboss.deploy.directory}" file="${pa.ear.file}"/>
+    </target>
+
+    <target name="prepare-tooltips">
+        <available file="${tooltips.filepath.loc}/RegWebTooltips.properties" type="file"
+            property="tooltips.file.present" value="true"/>
+        <condition property="copy.tooltips.file" value="true">
+            <or>
+                <isfalse value="${tooltips.file.present}" />
+                <istrue value="${tooltips.file.overwrite}" />
+            </or>
+        </condition>
+    </target>
+
+    <target name="copy-tooltips-file" if="copy.tooltips.file"  unless="remote.build">
+        <echo message="Copying ${reg-web.build.resourceDir.0}/RegWebTooltips.properties to ${tooltips.filepath.loc}" />
+        <copy file="${reg-web.build.resourceDir.0}/RegWebTooltips.properties" todir="${tooltips.filepath.loc}" overwrite="true" />
+    </target>
+
+    <target name="copy-tooltips"  depends="prepare-tooltips, copy-tooltips-file"/>
+
+    <target name="deploy" depends="package,ear,deploy-ear"
+            description="Build test and deploy."/>
+    <target name="deploy-notest" depends="package-notest,ear,deploy-ear"
+            description="Build and deploy without testing or getting dependencies."/>
+
+
+    <!-- ====================================================================== -->
+    <!-- Help target                                                            -->
+    <!-- ====================================================================== -->
+
+    <target name="help">
+        <echo message="Please run: $ant -projecthelp"/>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Cobertura and JUnit                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="runTest" description="Runs the test you specify on the command line with -Dtest=" depends="compile-tests">
+        <mkdir dir="${reg-web.test.reports}"/>
+        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no" maxmemory="128m">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <sysproperty key="basedir" value="."/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${reg-web.build.outputDir}"/>
+            <classpath location="${reg-web.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="test-junit.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <classpath refid="compile.classpath"/>
+            <classpath refid="ejb.package.classpath"/>
+            <classpath refid="common.package.classpath"/>
+            <test if="test" name="${test}" haltonerror="false" haltonfailure="false"></test>
+            <batchtest todir="${reg-web.test.reports}" fork="yes" unless="test">
+                <fileset dir="${reg-web.build.testDir.0}">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/*Abstract*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+	
+    <target name="test-jasmine">
+        <first id="winexec">
+            <fileset dir="${lib.dir}/phantomjs" includes="**/phantomjs.exe" />
+        </first>
+        <first id="unixexec">
+            <fileset dir="${lib.dir}/phantomjs" includes="**/bin/phantomjs" />
+        </first>        
+        <echo message="${toString:winexec}" />      
+        <echo message="${toString:unixexec}" />
+        
+        <!-- Windows -->
+        <exec osfamily="windows" executable="${toString:winexec}" dir="${reg-web.build.testDir.js}" timeout="60000" failonerror="true">
+            <arg line="run-jasmine.js SpecRunner.html" />
+        </exec>      
+        
+        <!-- Linux -->
+        <exec executable="chmod" osfamily="unix" spawn="true">
+               <arg line="u=rwx ${toString:unixexec}" />
+        </exec>
+        <exec executable="${toString:unixexec}" osfamily="unix" dir="${reg-web.build.testDir.js}" timeout="60000" failonerror="true">
+            <arg line="run-jasmine.js SpecRunner.html" />
+        </exec>     
+
+    </target>
+	
+
+    <target name="test-cobertura" depends="compile-tests">
+        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
+        <delete file="${reg-web.build.dir}/cobertura.ser" />
+        <cobertura-instrument datafile="${reg-web.build.dir}/cobertura.ser" toDir="${reg-web.build.coberturaOutputDir}" ignoreTrivial="true">
+            <fileset dir="${reg-web.build.outputDir}">
+                <include name="**/*.class" />
+            </fileset>
+            <auxClasspath>            	 
+                  <path refid="ejb.package.classpath"/>
+                  <path refid="compile.classpath"/>
+                  <path refid="common.package.classpath"/>
+             </auxClasspath>
+        </cobertura-instrument>
+        <mkdir dir="${reg-web.test.reports}"/>
+        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure" maxmemory="256m">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <sysproperty key="basedir" value="."/>
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${reg-web.build.dir}/cobertura.ser" />
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${reg-web.build.coberturaOutputDir}"/>
+            <classpath location="${reg-web.build.outputDir}"/>
+            <classpath location="${reg-web.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="test-junit.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <classpath refid="compile.classpath"/>
+            <classpath refid="ejb.package.classpath"/>
+            <classpath refid="common.package.classpath"/>
+            <test if="test" name="${test}"></test>
+            <batchtest todir="${reg-web.test.reports}" unless="test">
+                <fileset dir="${reg-web.build.testDir.0}">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/*Abstract*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${reg-web.test.reports}">
+            <fileset dir="${reg-web.test.reports}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report todir="${reg-web.test.reports}" />
+        </junitreport>
+        <fail if="junit.failure" message="Unit test(s) failed.  See reports in ${reg-web.test.reports}."/>
+
+        <cobertura-report datafile="${reg-web.build.dir}/cobertura.ser"
+                          destdir="${reg-web.coverage.reports}"
+                          srcdir="${reg-web.build.srcDir.0}" />
+
+        <cobertura-report datafile="${reg-web.build.dir}/cobertura.ser"
+                          format="xml"
+                          destdir="${reg-web.coverage.reports}"
+                          srcdir="${reg-web.build.srcDir.0}" />
+
+        <cobertura-check datafile="${reg-web.build.dir}/cobertura.ser"
+                         totalbranchrate="${reg-web.coverage.branch}"
+                         totallinerate="${reg-web.coverage.line}"
+                         haltonfailure="true"/>
+     </target>
+
+    <!-- ====================================================================== -->
+    <!-- Generate Javadoc                                                       -->
+    <!-- ====================================================================== -->
+
+    <target name="generate-javadoc">
+        <javadoc destdir="${reg-web.build.javadoc}"
+            sourcepath="${reg-web.build.srcDir.0}"
+            windowtitle="CTRP Registry">
+            <doctitle><![CDATA[<h1>CTRP Trial Registration</h1>]]></doctitle>
+            <classpath>
+                <path refid="compile.classpath"/>
+                <path refid="common.package.classpath" />
+            </classpath>
+        </javadoc>
+        <mkdir dir="javadoc"/>
+        <zip destfile="javadoc/reg-web-javadoc.zip">
+            <fileset dir="${reg-web.build.javadoc}" />
+        </zip>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Determines build version and revision                                  -->
+    <!-- ====================================================================== -->
+    <target name="determine-build-version">
+        <property name="project.version" value="${pa.version}"/>
+        <tstamp>
+            <format property="now" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+        </tstamp>
+        <property name="project.revision" value="${now}"/>
+   </target>
+</project>

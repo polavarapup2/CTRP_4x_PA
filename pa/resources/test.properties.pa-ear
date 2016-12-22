@@ -1,0 +1,4 @@
+#
+# Properties for test cases.
+#
+test.java.naming.provider=@test.java.naming.provider@

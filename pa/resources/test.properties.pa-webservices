@@ -1,0 +1,10 @@
+server.hostname=@pa.server.name@
+server.port=@jboss.port@
+selenium.delay=@selenium.delay@
+webdriver.class=@webdriver.class@
+phantomjs.binary.path=@phantomjs.binary.path@
+
+test.db.connection.url = @jdbc.url@
+test.db.driver = @jdbc.driver@
+test.db.user = @db.username@
+test.db.password = @db.password@

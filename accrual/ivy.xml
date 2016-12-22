@@ -1,0 +1,171 @@
+<ivy-module version="1.0" xmlns:m="http://ant.apache.org/ivy/maven">
+  <info organisation="cbiit" module="accrual"/>
+  <configurations>
+    <conf name="build"/>
+    <conf name="compile"/>
+    <conf name="ear"/>
+    <conf name="web"/>
+    <conf name="webservices"/>
+    <conf name="test"/>
+    <conf name="test-checkstyle"/>
+    <conf name="test-cobertura"/>
+    <conf name="test-selenium"/>
+    <conf name="test-pmd"/>
+    <conf name="test-simian"/>
+    <conf name="test-findbugs"/>
+  </configurations>
+
+  <dependencies>
+    <dependency conf="build->master" org="ant-contrib" name="ant-contrib" rev="1.0b3"/>
+    <dependency conf="build->master" org="org.apache.maven" name="maven-ant-tasks" rev="2.1.3"/>
+    <dependency conf="build->master" org="com.sun.xml.bind" name="jaxb-impl" rev="2.2.6"/>
+    <dependency conf="build->master" org="com.sun.xml.bind" name="jaxb-xjc" rev="2.2.6"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-basics-ant" rev="0.6.0"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-basics-tools" rev="0.6.0"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-basics" rev="0.6.0"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-basics-runtime" rev="0.6.0"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-basics-annotate" rev="0.6.0"/>
+    <dependency conf="build->master" org="org.jvnet.jaxb2_commons" name="jaxb2-fluent-api" rev="3.0"/>
+    <dependency conf="build->master" org="org.codehaus.jackson" name="jackson-core-asl" rev="1.9.13"/>
+    <dependency conf="build->master" org="org.jvnet.annox" name="annox" rev="0.5.1"/>
+    <dependency conf="build->master" org="commons-logging" name="commons-logging" rev="1.1.3"/>
+    <dependency conf="build->master" org="commons-lang" name="commons-lang" rev="2.6"/>
+   
+    
+    <dependency conf="compile->master" org="com.google.code.findbugs" name="findbugs" rev="3.0.1" transitive="false"/>
+    <dependency conf="compile->master" org="cglib" name="cglib" rev="2.2"/>
+    <dependency conf="compile->master" org="commons-codec" name="commons-codec" rev="1.6"/>
+    <dependency conf="compile->master" org="csmapi" name="csmapi" rev="4.2"/>
+    <dependency conf="compile->master" org="gov.nih.nci.coppa.pa" name="csm-service" rev="1.3"/>
+    <dependency conf="compile->master" org="gov.nih.nci.coppa.pa" name="csm-stubs" rev="1.3"/>
+    <dependency conf="compile->master" org="gov.nih.nci.security" name="clm" rev="3.2"/>
+    <dependency conf="compile->master" org="org.hibernate" name="hibernate" rev="3.2.0.ga"/>
+    <dependency conf="compile->master" org="org.hibernate" name="hibernate-annotations" rev="3.2.0.ga"/>
+    <dependency conf="compile->master" org="org.hibernate" name="hibernate-commons-annotations" rev="3.3.0.ga"/>
+    <dependency conf="compile->master" org="org.hibernate" name="hibernate-validator" rev="3.0.0.ga"/>
+    <dependency conf="compile->master" org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.as" name="jboss-as-web" rev="7.2.0.Final"/>
+    <dependency conf="compile->master" org="org.jboss.ejb3" name="jboss-ejb3-ext-api" rev="2.1.0"/>
+    <dependency conf="compile->master" org="org.jboss.logmanager" name="jboss-logmanager" rev="1.5.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.logmanager" name="log4j-jboss-logmanager" rev="1.0.2.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.annotation" name="jboss-annotations-api_1.1_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.ejb" name="jboss-ejb-api_3.1_spec" rev="1.0.2.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.interceptor" name="jboss-interceptors-api_1.1_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.servlet" name="jboss-servlet-api_3.0_spec" rev="1.0.2.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.servlet.jsp" name="jboss-jsp-api_2.2_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.transaction" name="jboss-transaction-api_1.1_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.xml.rpc" name="jboss-jaxrpc-api_1.1_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.spec.javax.ws.rs" name="jboss-jaxrs-api_1.1_spec" rev="1.0.1.Final"/>
+    <dependency conf="compile->master" org="org.jboss.resteasy" name="resteasy-jaxrs" rev="2.3.7.Final"/>
+    <dependency conf="compile->master" org="org.jboss.resteasy" name="resteasy-jaxb-provider" rev="2.3.7.Final"/>
+    
+    <dependency conf="ear->master" org="javassist" name="javassist" rev="3.10.0.GA"/>
+    <dependency conf="ear->master" org="org.hibernate" name="hibernate" rev="3.2.0.ga"/>
+    <dependency conf="ear->master" org="org.hibernate" name="hibernate-annotations" rev="3.2.0.ga"/>
+    <dependency conf="ear->master" org="org.hibernate" name="hibernate-commons-annotations" rev="3.3.0.ga"/>
+    <dependency conf="ear->master" org="org.hibernate" name="hibernate-validator" rev="3.0.0.ga"/>    
+    <dependency conf="ear->master" org="asm" name="asm" rev="3.3"/>
+    <dependency conf="ear->master" org="asm" name="asm-commons" rev="3.3"/>
+    <dependency conf="ear->master" org="asm" name="asm-tree" rev="3.3"/>       
+    <dependency conf="ear->master" org="csmapi" name="csmapi" rev="4.2"/>
+    <dependency conf="ear->master" org="gov.nih.nci.security" name="clm" rev="3.2"/>    
+    <dependency conf="ear->master" org="cglib" name="cglib" rev="2.2"/>
+    <dependency conf="ear->master" org="c3p0" name="c3p0" rev="0.9.1.2"/>
+    <dependency conf="ear->master" org="antlr" name="antlr" rev="2.7.7"/>
+    <dependency conf="ear->master" org="commons-beanutils" name="commons-beanutils" rev="1.8.0"/>
+    <dependency conf="ear->master" org="commons-collections" name="commons-collections" rev="3.2.1"/>
+    <dependency conf="ear->master" org="commons-dbutils" name="commons-dbutils" rev="1.5"/>
+    <dependency conf="ear->master" org="commons-digester" name="commons-digester" rev="2.1"/>
+    <dependency conf="ear->master" org="commons-fileupload" name="commons-fileupload" rev="1.3"/>
+    <dependency conf="ear->master" org="commons-io" name="commons-io" rev="1.4"/>
+    <dependency conf="ear->master" org="commons-lang" name="commons-lang" rev="2.4"/>
+    <dependency conf="ear->master" org="commons-logging" name="commons-logging" rev="1.0.4"/>
+    <dependency conf="ear->master" org="commons-validator" name="commons-validator" rev="1.3.1"/>
+    <dependency conf="ear->master" org="de.jollyday" name="jollyday" rev="0.4.5"/>
+    <dependency conf="ear->master" org="dom4j" name="dom4j" rev="1.6.1"/>
+    <dependency conf="ear->master" org="org.apache.commons" name="commons-exec" rev="1.3"/>
+    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="coppa-commons" rev="1.3.18-SNAPSHOT"/>
+    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-core" rev="1.4.12"/>
+    <dependency conf="ear->master" org="gov.nih.nci.coppa.po" name="po-services" rev="1.0.1.IR6">
+          <artifact name="po-services" ext="jar" conf="*" m:classifier="client"/>
+    </dependency>
+    <dependency conf="ear->master" org="gov.nih.nci.iso-datatypes" name="iso-datatypes" rev="2.0.0-alpha1"/> 
+    <dependency conf="ear->master" org="joda-time" name="joda-time" rev="1.6.2"/>
+    <dependency conf="ear->master" org="net.sf.ehcache" name="ehcache" rev="1.2.4"/>
+    <dependency conf="ear->master" org="net.sf.opencsv" name="opencsv" rev="2.1"/> 
+    <dependency conf="ear->master" org="org.apache.poi" name="poi" rev="3.2-FINAL"/>
+    <dependency conf="ear->master" org="org.jdom" name="jdom" rev="1.1"/> 
+    <dependency conf="ear->master" org="org.springframework" name="spring-beans" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-context" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-expression" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-core" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-mock" rev="2.0.8"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-oxm" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework" name="spring-web" rev="3.2.2.RELEASE"/>
+    <dependency conf="ear->master" org="org.springframework.ws" name="spring-ws" rev="2.1.4.RELEASE"/>
+    <dependency conf="ear->master" org="org.apache.httpcomponents" name="httpclient" rev="4.3.4" />
+    <dependency conf="ear->master" org="org.apache.httpcomponents" name="httpcore" rev="4.3.2" />
+    <dependency conf="ear->master" org="org.codehaus.jackson" name="jackson-core-asl" rev="1.9.13"/>
+    <dependency conf="ear->master" org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.13"/>
+    <dependency conf="ear->master" org="commons-codec" name="commons-codec" rev="1.6"/>
+    
+    
+    <dependency conf="web->master" org="org.ajaxtags" name="ajaxtags" rev="1.3-beta-rc7"/> 
+    <dependency conf="web->master" org="displaytag" name="displaytag" rev="1.2"/>
+    <dependency conf="web->master" org="javassist" name="javassist" rev="3.11.0.GA"/>
+    <dependency conf="web->master" org="javax.servlet" name="jstl" rev="1.1.2"/>
+    <dependency conf="web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.12"/>
+    <dependency conf="web->master" org="net.htmlparser.jericho" name="jericho-html" rev="2.4"/>
+    <dependency conf="web->master" org="ognl" name="ognl" rev="3.0.6"/>    
+    <dependency conf="web->master" org="opensymphony" name="sitemesh" rev="2.3"/>
+    <dependency conf="web->master" org="org.ajaxtags" name="ajaxtags" rev="1.3-beta-rc7"/> 
+    <dependency conf="web->master" org="org.apache.commons" name="commons-lang3" rev="3.1"/>
+    <dependency conf="web->master" org="org.apache.struts" name="struts2-core" rev="2.3.16.3"/>
+    <dependency conf="web->master" org="org.apache.struts" name="struts2-json-plugin" rev="2.3.16.3"/>
+    <dependency conf="web->master" org="org.apache.struts.xwork" name="xwork-core" rev="2.3.16.3"/>
+    <dependency conf="web->master" org="org.freemarker" name="freemarker" rev="2.3.19"/>
+    <dependency conf="web->master" org="taglibs" name="standard" rev="1.1.2"/>
+    
+     <dependency conf="webservices->master" org="commons-io" name="commons-io" rev="2.4"/>
+
+    <!-- test -->
+    <dependency conf="test->master" org="org.hsqldb" name="hsqldb" rev="1.8.0.10"/>
+    <dependency conf="test->master" org="junit" name="junit" rev="4.8.2"/>
+    <dependency conf="test->master" org="org.mockito" name="mockito-all" rev="1.8.4"/> 
+    <dependency conf="test->master" org="org.mockftpserver" name="MockFtpServer" rev="2.4"/>
+    <dependency conf="test->master" org="com.mockrunner" name="mockrunner" rev="0.4.1"/>
+    <dependency conf="test->master" org="org.slf4j" name="slf4j-api" rev="1.6.0"/>
+    <dependency conf="test->master" org="org.slf4j" name="slf4j-log4j12" rev="1.6.0"/>
+    <dependency conf="test->master" org="gov.nih.nci.coppa" name="coppa-commons-test" rev="1.3.7"/>
+    <dependency conf="test->master" org="dumbster" name="dumbster" rev="1.6"/>
+    <dependency conf="test->master" org="javax.mail" name="mail" rev="1.4.5"/>
+
+    <!-- other test targets -->
+    <dependency conf="test-checkstyle->master,runtime" org="com.google.guava" name="guava" rev="19.0" force="true">
+        <artifact name="guava" type="jar" conf="*"/>
+    </dependency>
+    <dependency conf="test-checkstyle->master,runtime" org="com.puppycrawl.tools" name="checkstyle" rev="5.7"/>    
+    <dependency conf="test-cobertura->master,runtime" org="net.sourceforge.cobertura" name="cobertura" rev="2.1.1"/>
+    
+    <dependency conf="test-selenium->master" org="org.seleniumhq.selenium" name="selenium-java" rev="2.53.0"/>
+    <dependency conf="test-selenium->master" org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4"/>
+    <dependency conf="test-selenium->master" org="com.github.detro.ghostdriver" name="phantomjsdriver" rev="1.1.0" transitive="false"/>    
+    <dependency conf="test-selenium->compile,master" org="org.seleniumhq.selenium" name="selenium-server" rev="2.53.0"/>
+    <dependency conf="test-selenium->compile,master" org="com.google.guava" name="guava" rev="19.0" force="true">
+        <artifact name="guava" type="jar" conf="*"/>
+    </dependency>
+    
+    <dependency conf="test-pmd->master,runtime" org="net.sourceforge.pmd" name="pmd-java" rev="5.4.0"/>
+    <dependency conf="test-pmd->master,runtime" org="jaxen" name="jaxen" rev="1.1.6">
+        <artifact name="jaxen" type="jar" conf="*"/>
+    </dependency>
+
+    <dependency conf="test-simian->master,runtime" org="redhill" name="simian" rev="2.2.4"/>
+    
+    <dependency conf="test-findbugs->master,runtime" org="com.google.code.findbugs" name="findbugs" rev="3.0.1"/>
+    <dependency conf="test-findbugs->master,runtime" org="jaxen" name="jaxen" rev="1.1.6">
+        <artifact name="jaxen" type="jar" conf="*"/>
+    </dependency>
+    
+  </dependencies>
+</ivy-module>

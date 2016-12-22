@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="ctrp" default="dist" basedir=".">
+	<property name="tier" value="LOCAL" />
+	<property file="${basedir}/../build-pa/tier-properties/build-lite-${tier}.properties" />
+	<property file="${basedir}/../build-pa/build-lite.properties" />
+	<property file="${basedir}/../build-pa/version.properties" />
+	<property name="pa.dir" value="${basedir}/../pa" />
+	<property name="accrual.dir" value="${basedir}/../accrual" />
+	<property name="pa.target.dir" value="${basedir}/../target/pa" />
+	<property name="accrual.target.dir" value="${basedir}/../target/accrual" />
+
+	<target name="clean">
+        <delete dir="${pa.target.dir}"/>
+        <delete dir="${accrual.target.dir}"/>
+		<ant target="ivy-get" dir="${pa.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+	<target name="pa">
+		<ant target="package" dir="${pa.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+	<target name="accrual">
+		<ant target="ivy-get" dir="${accrual.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+		<ant target="build-notest" dir="${accrual.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+	<target name="copy-artifacts">
+		<copy file="${pa.dir}/pa-ear/target/pa.ear" todir="${pa.target.dir}/dist" />
+		<copy file="${basedir}/../reg-web/src/resources/RegWebTooltips.properties" todir="${pa.target.dir}/dist" />
+		<copy file="${accrual.dir}/ear/target/accrual.ear" todir="${accrual.target.dir}/dist" />
+		<copy file="${accrual.dir}/accrual-web/src/resources/AccrualWebTooltips.properties" todir="${accrual.target.dir}/dist" />
+		<copy todir="${pa.target.dir}/dist" overwrite="true">
+			<fileset dir="./server-config">
+				<exclude name="**/*.zip" />
+			</fileset>
+			<filterset>
+				<filter token="grid.security.jndi.principal" value="${grid.security.jndi.principal}" />
+				<filter token="grid.security.jndi.credentials" value="${grid.security.jndi.credentials}" />
+				<filter token="jdbc.url" value="${jdbc.url}" />
+				<filter token="db.server" value="${db.server}" />
+				<filter token="db.port" value="${db.port}" />
+				<filter token="db.name" value="${db.name}" />
+				<filter token="db.username" value="${db.username}" />
+				<filter token="db.password" value="${db.password}" />
+				<filter token="log.level" value="${log.level}" />
+				<filter token="jboss.port" value="${jboss.port}" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="install-database" depends="clean" description="Rebuild the database">
+		<ant target="database.install" dir="${pa.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+    <target name="update-database" depends="clean" description="Update the database">
+		<ant target="database.update" dir="${pa.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+	<target name="dist" depends="clean,pa,accrual,copy-artifacts" description="Build all artifacts">
+	</target>
+
+	<target name="test" depends="update-database,dist" description="Build all artifacts and run all tests">
+		<ant target="test" dir="${pa.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+		<ant target="test" dir="${accrual.dir}" inheritAll="false">
+			<property name="tier" value="${tier}" />
+		</ant>
+	</target>
+
+	<target name="install" depends="dist,install-jboss">
+	</target>
+
+	<target name="install-jboss">
+		<delete dir="${application.base.path}" failonerror="true" />
+		<mkdir dir="${application.base.path}" />
+		<unzip dest="${application.base.path}" src="${jboss.eap.file}" />
+		<unzip dest="${application.base.path}/modules" src="${jboss.eap.jdbc.module}" />
+		<replaceregexp file="${application.base.path}/bin/standalone.conf.bat" match="$" flags="s" replace="${line.separator}set &quot;JAVA_OPTS=%JAVA_OPTS% -Dctrp.env.ci=true -Dorg.apache.catalina.connector.URI_ENCODING=UTF-8&quot;" />
+		<replaceregexp file="${application.base.path}/bin/standalone.conf" match="$" flags="s" replace="${line.separator}JAVA_OPTS=&quot;$JAVA_OPTS -Dctrp.env.ci=true -Dorg.apache.catalina.connector.URI_ENCODING=UTF-8&quot;" />
+		<copy tofile="${application.base.path}/standalone/configuration/standalone.xml" file="${pa.target.dir}/dist/standalone.xml" overwrite="true" failonerror="true" verbose="true" />
+		<copy todir="${application.base.path}/standalone/deployments" file="${pa.target.dir}/dist/pa.ear" overwrite="true" failonerror="true" verbose="true" />
+		<copy todir="${application.base.path}/standalone/deployments" file="${accrual.target.dir}/dist/accrual.ear" overwrite="true" failonerror="true" verbose="true" />
+		
+		<mkdir dir="${tooltips.filepath.loc}" />
+		<mkdir dir="${doc.upload.filepath.loc}" />
+		<mkdir dir="${batch.upload.filepath.loc}" />
+		<mkdir dir="${accrual.batch.upload.filepath.loc}" />
+		<mkdir dir="${pdq.upload.filepath.loc}" />
+		
+		<copy todir="${tooltips.filepath.loc}" overwrite="true" failonerror="true" verbose="true">
+			<fileset dir="${accrual.target.dir}/dist">
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${pa.target.dir}/dist">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+        <exec executable="chmod" osfamily="unix" dir="${application.base.path}/bin">
+            <arg line="a=rwx standalone.sh jboss-cli.sh run.sh" />
+        </exec>
+	</target>
+
+	<target name="run" depends="install">
+		<exec executable="nohup" osfamily="unix" dir="${application.base.path}/bin" spawn="true">
+			<env key="NOPAUSE" value="true" />
+			<env key="JBOSS_HOME" value="" />
+			<arg line="./standalone.sh" />
+		</exec>
+		<exec osfamily="windows" executable="psexec.exe" dir="${application.base.path}/bin" spawn="true">
+			<env key="NOPAUSE" value="true" />
+			<env key="JBOSS_HOME" value="" />
+			<arg line="-d -i -w ${application.base.path}/bin ${application.base.path}/bin/standalone.bat" />
+		</exec>
+		<sleep seconds="120" />
+	</target>
+</project>

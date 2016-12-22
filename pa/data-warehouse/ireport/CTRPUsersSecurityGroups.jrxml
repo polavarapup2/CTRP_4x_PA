@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ctrpUserSecurityGroup" language="groovy" pageWidth="1800" pageHeight="842" columnWidth="1760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="8"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select cu.login_name as user_name, CASE WHEN NULLIF (r.email_address,'') is not null THEN  r.email_address ELSE cu.email_id END as email,
+        array_to_string(array_agg(cg.group_name),', ') as security_group
+	from csm_user cu left outer join registry_user r on r.csm_user_id=cu.user_id
+	join csm_user_group cug on cug.user_id=cu.user_id
+	join csm_group cg on cg.group_id=cug.group_id
+	where cu.login_name !~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'
+    and cu.login_name not like  '%OU=caGrid%' and cu.login_name !~*'[A-Za-z0-9]+_[0-9]+$'  group by cu.login_name,r.email_address,cu.email_id order by cu.login_name]]>
+	</queryString>
+	<field name="user_name" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="security_group" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="0" y="0" width="1760" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="560" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CTRP Users"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="560" y="0" width="1200" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MMM-yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="408" height="32" backcolor="#D6D6FF" uuid="753e9bff-8028-449e-bac2-81ba41ee815a"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[User Name (LDAP Account)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="408" y="0" width="350" height="32" backcolor="#D6D6FF" uuid="91864f55-3b33-4438-998b-5a2dac3d2cac"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Email Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="758" y="0" width="350" height="32" backcolor="#D6D6FF" uuid="9fabf800-0091-4c13-8fbd-29bb32063f7f"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Security Group]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="408" y="0" width="350" height="21" uuid="fda6abaa-cc0c-4b21-9ccc-ee2fe086334d"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="408" height="21" isPrintWhenDetailOverflows="true" uuid="9356dc40-26a7-412b-8222-c53708615c31"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="758" y="0" width="350" height="21" uuid="310c5fc1-b9eb-4489-9e99-259bfce92170"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{security_group}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

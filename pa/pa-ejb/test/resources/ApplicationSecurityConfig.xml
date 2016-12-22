@@ -1,0 +1,35 @@
+<security-config>
+    <upt-context-name>
+        pa
+    </upt-context-name>
+    <application-list>
+        <application>
+            <context-name>
+                pa
+            </context-name>
+            <authentication>
+                <lockout-time>
+                    100000
+                </lockout-time>
+                <allowed-login-time>
+                    300000
+                </allowed-login-time>
+                <allowed-attempts>
+                    1000
+                </allowed-attempts>
+                <authentication-provider-class>
+                    <!-- Fully qualified class name-->
+                </authentication-provider-class>
+            </authentication>
+            <authorization>
+                <authorization-provider-class>
+                    <!-- Fully qualified class name-->
+                </authorization-provider-class>
+                <hibernate-config-file>
+                    <!-- Fully qualified file path -->
+                    csm.hibernate.cfg.xml
+                </hibernate-config-file>
+            </authorization>
+        </application>
+    </application-list>
+</security-config>

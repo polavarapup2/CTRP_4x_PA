@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pa"/>
+	<classpathentry kind="src" path="services/src/java"/>
+	<classpathentry kind="src" path="accrual-web/test/resources"/>
+	<classpathentry kind="src" path="webservices/target/generated-src"/>
+	<classpathentry kind="src" path="webservices/src/java"/>
+	<classpathentry kind="src" path="webservices/test-integration/java"/>
+	<classpathentry kind="src" path="webservices/test/java"/>
+	<classpathentry kind="src" path="webservices/test/resources"/>
+	<classpathentry kind="src" path="webservices/src/resources"/>
+	<classpathentry kind="src" path="services/test/resources"/>
+	<classpathentry kind="src" path="accrual-web/test-integration/java"/>
+	<classpathentry kind="src" path="accrual-web/src/java"/>
+	<classpathentry kind="src" path="services/test/java"/>
+	<classpathentry kind="src" path="accrual-web/test/java"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/antlr-2.7.7.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-dbutils-1.5.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-digester-2.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-fileupload-1.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-io-1.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-lang-2.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/coppa-commons-1.3.18-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/dom4j-1.6.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/ehcache-1.2.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/iso-datatypes-2.0.0-alpha1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/nci-commons-ctrp-core-1.4.12.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/opencsv-2.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/po-services-1.0.1.IR6-client.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/findbugs-3.0.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/cglib-2.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/commons-codec-1.6.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/hibernate-3.2.0.ga.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/hibernate-annotations-3.2.0.ga.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/hibernate-commons-annotations-3.3.0.ga.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/hibernate-validator-3.0.0.ga.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-annotations-api_1.1_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-as-web-7.2.0.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-ejb-api_3.1_spec-1.0.2.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-ejb3-ext-api-2.1.0.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-interceptors-api_1.1_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/coppa-commons-test-1.3.7.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/hsqldb-1.8.0.10.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/MockFtpServer-2.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/mockrunner-0.4.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/slf4j-api-1.6.0.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/slf4j-log4j12-1.6.0.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/dumbster-1.6.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/commons-lang3-3.1.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/displaytag-1.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/freemarker-2.3.19.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/nci-commons-ctrp-struts2-1.4.12.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/ear/poi-3.2-FINAL.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/sitemesh-2.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/struts2-core-2.3.16.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/struts2-json-plugin-2.3.16.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/xwork-core-2.3.16.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/log4j-jboss-logmanager-1.0.2.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/clm-3.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/csm-service-1.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/csm-stubs-1.3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/csmapi-4.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/mockito-all-1.8.4.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/junit-4.8.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/test/pa-commons-test.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-jaxrpc-api_1.1_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-logmanager-1.5.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-transaction-api_1.1_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/jboss-jaxrs-api_1.1_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/resteasy-jaxb-provider-2.3.7.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/compile/resteasy-jaxrs-2.3.7.Final.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/javassist-3.11.0.GA.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/jstl-1.1.2.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/ognl-3.0.6.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB/web/standard-1.1.2.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-server-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-java-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-leg-rc-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-support-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-safari-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-ie-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-firefox-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-edge-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-chrome-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-remote-driver-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/selenium-api-2.53.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/guava-19.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jetty-repacked-9.2.13.v20150730.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/httpclient-4.5.1.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/httpcore-4.4.3.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jcommander-1.48.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/gson-2.3.1.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/commons-codec-1.10.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/commons-exec-1.3.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jetty-rc-repacked-5.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/commons-logging-1.2.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jna-platform-4.1.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jna-4.1.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/phantomjsdriver-1.1.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/postgresql-9.2-1003-jdbc4.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/javax.servlet-api-3.1.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/bcpkix-jdk15on-1.48.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/bcprov-jdk15on-1.48.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/commons-io-2.4.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/snakeyaml-1.8.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/jcip-annotations-1.0.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/mx4j-tools-3.0.1.jar"/>
+<classpathentry kind="var" path="ACCRUAL_LIB/test-selenium/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="var" path="ACCRUAL_LIB"/>
+	<classpathentry kind="output" path="eclipse-out"/>
+</classpath>

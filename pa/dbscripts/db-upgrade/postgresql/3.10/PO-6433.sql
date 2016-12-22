@@ -1,0 +1,1 @@
+alter table study_protocol add column final_accrual_num int4;

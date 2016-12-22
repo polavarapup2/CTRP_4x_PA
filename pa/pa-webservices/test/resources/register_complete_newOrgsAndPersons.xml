@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:CompleteTrialRegistration xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">
+	
+	<tns:clinicalTrialsDotGovXmlRequired>true</tns:clinicalTrialsDotGovXmlRequired>
+	<tns:leadOrgTrialID>REST00001</tns:leadOrgTrialID>
+	<tns:clinicalTrialsDotGovTrialID>NCT1111111111</tns:clinicalTrialsDotGovTrialID>
+	<tns:otherTrialID>OTHER00000000001</tns:otherTrialID>
+	<tns:title>REST Trial Test</tns:title>
+	<tns:phase>I</tns:phase>
+	<tns:pilot>false</tns:pilot>
+	<tns:accrualDiseaseTerminology>SDC</tns:accrualDiseaseTerminology>
+	<tns:primaryPurpose>Other</tns:primaryPurpose>
+	<tns:primaryPurposeOtherDescription>PP Other Description</tns:primaryPurposeOtherDescription>
+	<tns:interventionalDesign>
+		<tns:secondaryPurpose>Other</tns:secondaryPurpose>
+		<tns:secondaryPurposeOtherDescription>Secondary Other Descr</tns:secondaryPurposeOtherDescription>
+	</tns:interventionalDesign>
+	<tns:leadOrganization>
+		<tns:newOrganization>			
+			<tns1:name>Mayo</tns1:name>
+			<tns1:address>
+				<tns1:line1>1029 N Stuart St</tns1:line1>
+				<tns1:line2> Apt 99999</tns1:line2>
+				<tns1:city>Vienna</tns1:city>
+				<tns1:stateOrProvince>VA</tns1:stateOrProvince>
+				<tns1:country>USA</tns1:country>
+				<tns1:postalcode>22201</tns1:postalcode>
+			</tns1:address>
+			<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+			<tns1:contact type="FAX">555-555-5555</tns1:contact>
+			<tns1:contact type="PHONE">555-555-5555</tns1:contact>
+			<tns1:contact type="TTY">555-555-5555</tns1:contact>
+			<tns1:contact type="URL">http://example.com</tns1:contact>
+		</tns:newOrganization>
+	</tns:leadOrganization>
+	<tns:pi>
+		<tns:newPerson>		
+			<tns1:prefix>Mr.</tns1:prefix>
+			<tns1:firstName>John</tns1:firstName>			
+			<tns1:lastName>Doe</tns1:lastName>
+			<tns1:suffix>Sr.</tns1:suffix>
+			<tns1:address>
+				<tns1:line1>1029 N Stuart St</tns1:line1>
+				<tns1:line2> Apt 99999</tns1:line2>
+				<tns1:city>Vienna</tns1:city>
+				<tns1:stateOrProvince>VA</tns1:stateOrProvince>
+				<tns1:country>USA</tns1:country>
+				<tns1:postalcode>22201</tns1:postalcode>
+			</tns1:address>
+			<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+			<tns1:contact type="FAX">555-555-5551</tns1:contact>
+			<tns1:contact type="PHONE">555-555-5552</tns1:contact>
+			<tns1:contact type="TTY">555-555-5553</tns1:contact>
+			<tns1:contact type="URL">http://example.com</tns1:contact>
+		</tns:newPerson>
+	</tns:pi>
+	<tns:sponsor>
+		<tns:newOrganization>			
+			<tns1:name>Duke</tns1:name>
+			<tns1:address>
+				<tns1:line1>1029 N Stuart St</tns1:line1>
+				<tns1:line2> Apt 99999</tns1:line2>
+				<tns1:city>Vienna</tns1:city>
+				<tns1:stateOrProvince>VA</tns1:stateOrProvince>
+				<tns1:country>USA</tns1:country>
+				<tns1:postalcode>22201</tns1:postalcode>
+			</tns1:address>
+			<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+			<tns1:contact type="FAX">555-555-5555</tns1:contact>
+			<tns1:contact type="PHONE">555-555-5555</tns1:contact>
+			<tns1:contact type="TTY">555-555-5555</tns1:contact>
+			<tns1:contact type="URL">http://example.com</tns1:contact>
+		</tns:newOrganization>
+	</tns:sponsor>
+	<tns:responsibleParty>
+		<tns:type>Sponsor</tns:type>
+	</tns:responsibleParty>
+	<tns:summary4FundingSponsor>
+		<tns:newOrganization>			
+			<tns1:name>City of Hope</tns1:name>
+			<tns1:address>
+				<tns1:line1>1029 N Stuart St</tns1:line1>
+				<tns1:line2> Apt 99999</tns1:line2>
+				<tns1:city>Vienna</tns1:city>
+				<tns1:stateOrProvince>VA</tns1:stateOrProvince>
+				<tns1:country>USA</tns1:country>
+				<tns1:postalcode>22201</tns1:postalcode>
+			</tns1:address>
+			<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+			<tns1:contact type="FAX">555-555-5555</tns1:contact>
+			<tns1:contact type="PHONE">555-555-5555</tns1:contact>
+			<tns1:contact type="TTY">555-555-5555</tns1:contact>
+			<tns1:contact type="URL">http://example.com</tns1:contact>
+		</tns:newOrganization>
+	</tns:summary4FundingSponsor>
+	<tns:programCode>REST_PG01</tns:programCode>
+	<tns:fundedByNciGrant>false</tns:fundedByNciGrant>
+	<tns:grant>
+		<tns:fundingMechanism>B01</tns:fundingMechanism>
+		<tns:nihInstitutionCode>AA</tns:nihInstitutionCode>
+		<tns:serialNumber>111111</tns:serialNumber>
+		<tns:nciDivisionProgramCode>CCR</tns:nciDivisionProgramCode>
+		<tns:fundingPercentage>100.0</tns:fundingPercentage>
+	</tns:grant>
+	<tns:trialStatus>In Review</tns:trialStatus>
+	<tns:whyStopped>tns:whyStopped</tns:whyStopped>
+	<tns:trialStatusDate>2014-07-15</tns:trialStatusDate>
+	<tns:trialStartDate type="Actual">2014-07-15</tns:trialStartDate>
+	<tns:primaryCompletionDate type="Anticipated">2018-07-15</tns:primaryCompletionDate>
+	<tns:completionDate type="Anticipated">2018-07-15</tns:completionDate>
+	<tns:ind>
+		<tns:number>111111</tns:number>
+		<tns:grantor>CDER</tns:grantor>
+		<tns:holderType>NIH</tns:holderType>
+		<tns:nihInstitution>NEI</tns:nihInstitution>
+		<tns:expandedAccess>true</tns:expandedAccess>
+		<tns:expandedAccessType>Available</tns:expandedAccessType>
+		<tns:exempt>true</tns:exempt>
+	</tns:ind>
+	<tns:ide>
+		<tns:number>222222</tns:number>
+		<tns:grantor>CDRH</tns:grantor>
+		<tns:holderType>NCI</tns:holderType>
+		<tns:nciDivisionProgramCode>CCR</tns:nciDivisionProgramCode>
+		<tns:expandedAccess>true</tns:expandedAccess>
+		<tns:expandedAccessType>Available</tns:expandedAccessType>
+		<tns:exempt>true</tns:exempt>
+	</tns:ide>
+	<tns:regulatoryInformation>
+		<tns:country>USA</tns:country>
+		<tns:authorityName>Federal Government</tns:authorityName>
+		<tns:fdaRegulated>true</tns:fdaRegulated>
+		<tns:section801>true</tns:section801>
+		<tns:delayedPosting>true</tns:delayedPosting>
+		<tns:dataMonitoringCommitteeAppointed>true</tns:dataMonitoringCommitteeAppointed>
+	</tns:regulatoryInformation>
+	<tns:protocolDocument filename="protocol.pdf">dGVzdA==</tns:protocolDocument>
+	<tns:irbApprovalDocument filename="irb.pdf">dGVzdA==</tns:irbApprovalDocument>
+	<tns:participatingSitesDocument
+		filename="sites.pdf">dGVzdA==</tns:participatingSitesDocument>
+	<tns:informedConsentDocument filename="consent.pdf">dGVzdA==</tns:informedConsentDocument>
+	<tns:otherDocument filename="other.pdf">dGVzdA==</tns:otherDocument>
+	<tns:category>Externally Peer-Reviewed</tns:category>
+	<tns:trialOwner>denis.krylov@semanticbits.com</tns:trialOwner>
+</tns:CompleteTrialRegistration>

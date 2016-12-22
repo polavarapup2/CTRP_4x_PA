@@ -1,0 +1,4 @@
+FILE DELETED
+------------
+
+The NIH Central Email Service Virus Scanner removed the original file "mock-ups.zip->favicon.ico" because it matched the FILE FILTER= unnamed: *.ico attachment file filter.

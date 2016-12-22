@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+$Id: install.xml 4757 2008-05-15 20:43:31Z zengje $
+$HeadURL: http://gforge.nci.nih.gov/svnroot/pa-ear/trunk/software/install.xml $
+-->
+<project name="pa-installer" default="upgrade" basedir="."
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    >
+    <description>
+        Used to install and configure the pre-built distributions for the various applications subsystems or components
+    </description>
+
+    <!-- Properties file related properties and tasks -->
+    <property environment="env" />
+    <condition property="env.HOSTNAME" value="${env.COMPUTERNAME}">
+        <os family="windows" />
+    </condition>
+    <property file="local.properties" />
+    <property file="project.properties"/>
+    <property name="properties.file" value="${basedir}/install.properties"/>
+    <echo message="Using properties file of ${properties.file}."/>
+    <available file="${properties.file}" property="properties.file.exists" />
+    <fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
+    <replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+    <replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+    <property file="${properties.file}" />
+
+    <!-- Generic properties -->
+    <property name="project.name" value="pa"/>
+    <property name="env.name" value="local"/>
+    <property name="log.dir" value="${basedir}/logs" />
+    <property name="working.dir" value="${basedir}/working" />
+    <property name="temp.dir" value="${working.dir}/temp" />
+
+    <!--OS Temp dir -->
+    <condition property="os.temp.dir" value="/tmp">
+           <or>
+                <os family="unix" />
+                <os family="mac" />
+           </or>
+    </condition>
+
+    <condition property="os.temp.dir" value="c:/temp">
+           <os family="windows" />
+    </condition>
+
+    <!-- Install Time properties -->
+    <!-- Source and target directories -->
+    <property name="bda-utils.dir" value="bda-utils" />
+    <property name="pa-container-jar.dist.dir" value="${basedir}/${pa-container-jar.dist.relative.dir}" />
+    <property name="tools.dir" value="${basedir}/${tools.dist.relative.dir}" />
+    <property name="common.dir.src" value="${basedir}/${common.dist.relative.dir}" />
+    <property name="common.dir.dest" value="${working.dir}/${common.dist.relative.dir}" />
+    <property name="jboss-conf.dir.dest" value="${working.dir}/${jboss-conf.dist.relative.dir}" />
+    <property name="db.dir.src" value="${basedir}/${db.dist.relative.dir}" />
+    <property name="db.dir.dest" value="${working.dir}/${db.dist.relative.dir}" />
+    <property name="db-install.dir.dest" value="${working.dir}/${db-install.dist.relative.dir}" />
+    <property name="db-upgrade.dir.dest" value="${working.dir}/${db-upgrade.dist.relative.dir}" />
+    <property name="jboss-conf.dir.src" value="${basedir}/${jboss-conf.dist.relative.dir}" />
+    <property name="jboss-conf.dir.dest" location="${working.dir}/${jboss-conf.dist.relative.dir}" />
+
+    <!-- added for updated secure grid ssaksa 090826 -->
+    <property name="sync-gts.dir" location="${basedir}/${sync-gts.dist.relative.dir}"/>
+    <property name="sync-gts.build.dir" location="${sync-gts.dir}/syncgts"/>
+    <property name="cagrid-target.dir" location="${basedir}/cagrid-target"/>
+    <property name="grid.dir.dest.jboss" value="wsrf.war" />
+    <property name="grid.dir.dest" value="wsrf.war" />
+
+    <!-- *-ds.xml and WAR -->
+    <property name="pa-ear.dir.dist" value="${basedir}/${pa-ear.dist.relative.dir}" />
+    <property name="pa-ear.ds.file" value="pa-ds.xml" />
+    <property name="pa-ear.ear.file" value="pa.ear" />
+    <property name="accrual-ear.dir.dist" value="${basedir}/${pa-ear.dist.relative.dir}" />
+    <property name="accrual-ear.ear.file" value="accrual.ear" />
+
+    <!-- Default to false, properties can override -->
+    <property name="grid.secure.enable" value="false"/>
+    <property name="jboss.ssl.enable" value="false"/>
+    <property name="tomcat.ssl.enable" value="false"/>
+
+    <property name="grid.resource.dir" value="${working.dir}/${grid.dist.relative.dir}" />
+    <property name="grid.application.dir" value="${working.dir}/grid-application" />
+    <property name="grid.resource.dir.src" value="${basedir}/${grid.dist.relative.dir}" />
+    <property name="resource.file.jboss-globus-lib" value="jboss-globus-libs-cagrid1_1.zip" />
+    <property name="resource.file.jboss-globus-war" value="jboss-globus-wsrf-war-cagrid1_1.zip" />
+
+    <property name="pa-grid-3.4.dir.dist" value="${basedir}/${pa-grid-3.4.dist.relative.dir}" />
+    <property name="pa-grid-3.4.dir.src" value="${basedir}/${pa-grid-3.4.dist.relative.dir}" />
+    <property name="pa-grid-3.4.dir.target" value="wsrf.war" />
+    <property name="pa-grid-3.4.introduce.skeleton.service.name" value="PAServices"/>
+
+    <property name="pa-grid-3.3.dir.dist" value="${basedir}/${pa-grid-3.3.dist.relative.dir}" />
+    <property name="pa-grid-3.3.dir.src" value="${basedir}/${pa-grid-3.3.dist.relative.dir}" />
+    <property name="pa-grid-3.3.dir.target" value="wsrf.war" />
+    <property name="pa-grid-3.3.introduce.skeleton.service.name" value="PAServices"/>
+
+    <property name="pa-grid-3.2.dir.dist" value="${basedir}/${pa-grid-3.2.dist.relative.dir}" />
+    <property name="pa-grid-3.2.dir.src" value="${basedir}/${pa-grid-3.2.dist.relative.dir}" />
+    <property name="pa-grid-3.2.dir.target" value="wsrf.war" />
+    <property name="pa-grid-3.2.introduce.skeleton.service.name" value="PAServices"/>
+
+    <!-- Paths -->
+    <path id="bda-utils.classpath">
+        <fileset dir="${bda-utils.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    <!-- Task definitions -->
+    <taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml" classpathref="bda-utils.classpath"/>
+    <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath"/>
+    <taskdef resource="liquibasetasks.properties" classpathref="bda-utils.classpath"/>
+    <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath"/>
+
+    <!-- Includes-->
+    <import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
+    <import file="install-paear.xml"/>
+    <import file="install-pagrid-3.4.xml"/>
+    <import file="install-pagrid-3.3.xml"/>
+    <import file="install-pagrid-3.2.xml"/>
+
+    <macrodef name="configure-grid-log4j">
+        <attribute name="log.level" default="INFO"/>
+        <attribute name="log.level.default" default="WARN"/>
+        <attribute name="log.level.hibernate" default="WARN"/>
+        <attribute name="config.dir" default=""/>
+        <sequential>
+            <copy file="${common.resources.dist.relative.dir}/log4j.xml" todir="@{config.dir}" overwrite="true" filtering="true">
+                <filterset>
+                    <filter token="LOG_LEVEL" value="@{log.level}"/>
+                    <filter token="LOG_LEVEL_DEFAULT" value="@{log.level.default}"/>
+                    <filter token="LOG_LEVEL_HIBERNATE" value="@{log.level.hibernate}"/>
+                </filterset>
+            </copy>
+       </sequential>
+   </macrodef>
+
+    <!-- Start logging -->
+    <mkdir dir="${log.dir}" />
+    <tstamp>
+        <format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+    </tstamp>
+    <record name="${log.dir}/install-${install.time}.log" action="start"/>
+
+
+    <!-- Installer section -->
+    <target name="diag">
+        <echoproperties/>
+    </target>
+
+    <!-- Clean up destination directory -->
+    <target name="install:common:clean" description="Removes all files from the local filesystem"
+            depends="install:pa-ear-jboss:clean, install:pa-grid-3.3-jboss:clean, install:pa-grid-3.2-jboss:clean, install:pa-grid-3.4-jboss:clean"/>
+
+    <target name="pa-grid-retired:clean" if="retired.grid.dir.exist" depends="pa-grid-retired:exist">
+        <echo message="Deleting retired grid service containers ${pagrid-3.0.dir} and ${pagrid-3.1.dir}."/>
+        <sleep seconds="5" />
+        <delete dir="${pagrid-3.0.dir}"/>
+        <delete dir="${pagrid-3.1.dir}"/>
+    </target>
+
+    <target name="pa-grid-retired:exist">
+        <echo message="Checking if retired grid service containers ${pagrid-3.0.dir} and ${pagrid-3.1.dir} exist."/>
+        <available file="${pagrid-3.0.dir}" type="dir" property="retired.grid.dir.exist"/>
+        <available file="${pagrid-3.1.dir}" type="dir" property="retired.grid.dir.exist"/>
+    </target>
+
+    <target name="common:init:pre">
+        <!-- Set application.base.path based on platform -->
+        <condition property="application.base.path" value="${application.base.path.linux}">
+            <or>
+                <os family="unix" />
+                <os family="mac" />
+            </or>
+        </condition>
+
+        <condition property="application.base.path" value="${application.base.path.windows}">
+            <os family="windows" />
+        </condition>
+        <echo message="application.base.path=${application.base.path}"/>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <property name="pagrid-3.0.dir" value="${application.base.path}/pagrid-3.0"/>
+        <property name="pagrid-3.1.dir" value="${application.base.path}/pagrid-3.1"/>
+        <jboss-version
+            />
+        <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        <tomcat-version
+            />
+    </target>
+
+    <target name="common:init" depends="common:init:pre, pa-grid-retired:clean">
+        <!-- bda-blueprints-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
+        <echoproperties  prefix="database"> <propertyset negate="yes" > <propertyref regex="passw" /> </propertyset> </echoproperties>
+        <switch value="${database.type}">
+            <case value="postgresql">
+                <property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+                <property name="database.driver.file" value="${bda-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
+                <property name="database.driver" value="org.postgresql.Driver"/>
+                <property name="database.schema" value="public"/>
+                <property name="database.xa.driver" value="org.postgresql.xa.PGXADataSource"/>
+                <property name="db-upgrade.list.file" value="${db-upgrade.postgresql.list.file}"/>
+                <property name="db-upgrade.conf.file" value="${db-upgrade.postgresql.conf.file}"/>
+            </case>
+            <default>
+                <fail message="Invalid database type ${database.type}"/>
+            </default>
+        </switch>
+
+        <path id="jdbc.driver.classpath">
+            <pathelement location="${database.driver.file}"/>
+        </path>
+
+        <property name="properties.template.file" value="${basedir}/properties.template" />
+        <property file="${basedir}/cagrid-target/${grid.target}/service_urls.properties"/>
+        <set-grid-auth-service />
+        <property name="grid.index.url" value="${cagrid.master.index.service.url}"/>
+        <filterset id="embedded.filterset">
+            <filter token="application.base.path" value="${application.base.path}"/>
+            <filter token="application.url" value="${application.url}"/>
+            <!-- start paear.properties props -->
+            <filter token="register.mail.body.url" value="${register.mail.body.url}"/>
+            <filter token="csm.submitter.group" value="${csm.submitter.group}"/>
+            <filter token="jboss.server.jndi.port" value="${jboss.server.jndi.port}"/>
+            <filter token="doc.upload.filepath.loc" value="${doc.upload.filepath.loc}"/>
+            <filter token="pdq.upload.filepath.loc" value="${pdq.upload.filepath.loc}"/>
+            <filter token="accrual.batch.upload.filepath.loc" value="${accrual.batch.upload.filepath.loc}"/>
+            <filter token="batch.upload.filepath.loc" value="${batch.upload.filepath.loc}"/>
+            <filter token="tooltips.filepath.loc" value="${tooltips.filepath.loc}"/>
+            <filter token="nci.ldap.prefix" value="${nci.ldap.prefix}"/>
+            <filter token="po.server.name" value="${po.server.name}"/>
+            <filter token="po.port.number" value="${po.port.number}"/>
+            <filter token="po.topic.serverName" value="${po.topic.serverName}"/>
+            <filter token="po.topic.port" value="${po.topic.port}"/>
+            <filter token="po.topic.userName" value="${po.topic.userName}"/>
+            <filter token="po.topic.password" value="${po.topic.password}"/>
+            <filter token="po.topic.clientId" value="${po.topic.clientId}"/>
+            <filter token="gridgrouper.url" value="${cagrid.master.gridgrouper.service.url}"/>
+            <filter token="gridgrouper.submitter.group" value="${gridgrouper.submitter.group}"/>
+            <filter token="gridgrouper.admin.user" value="${gridgrouper.admin.user}"/>
+            <filter token="gridgrouper.admin.password" value="${gridgrouper.admin.password}"/>
+            <filter token="idps.allow.password.editing" value="${idps.allow.password.editing}"/>
+            <filter token="default.user.name" value="${default.user.name}"/>
+            <filter token="mock.po" value="${mock.po}"/>
+            <filter token="wikiHelp.baseUrl.pa" value="${wikiHelp.baseUrl.pa}" />
+            <filter token="wikiHelp.baseUrl.registry" value="${wikiHelp.baseUrl.registry}" />
+            <filter token="wikiHelp.baseUrl.accrual" value="${wikiHelp.baseUrl.accrual}" />
+            <filter token="wikiHelp.baseUrl.viewer" value="${wikiHelp.baseUrl.viewer}" />
+            <filter token="wikiHelp.baseUrl.trialStatusRules" value="${wikiHelp.baseUrl.trialStatusRules}" />
+            <filter token="ctgov.ftp.url" value="${ctgov.ftp.url}" />
+            <!-- end paear.properties -->
+            <filter token="database.url" value="${database.url}"/>
+            <filter token="database.user" value="${database.user}"/>
+            <filter token="database.password" value="${database.password}"/>
+            <filter token="database.system.url" value="${database.system.url}"/>
+            <!-- added internal properties that may be used in a filtered copy -->
+            <filter token="database.driver" value="${database.driver}"/>
+            <!-- added for liquibase -->
+            <filter token="db-upgrade.run.dir" value="${db-upgrade.dir.dest}/${database.type}"/>
+            <filter token="jboss.home" value="${jboss.home}"/>
+            <filter token="tomcat.home" value="${tomcat.home}"/>
+            <filter token="database.dialect" value="${database.dialect}"/>
+            <!--<filter token="db-upgrade.run.dir" value="${db-upgrade.dir.dest}"/>-->
+            <filter token="hibernate.cfg.file.path" value="${hibernate.cfg.file.path}"/>
+            <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
+            <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
+            <filter token="project.name" value="project.name"/>
+            <filter token="grid" value="${hibernate.cfg.file.path}"/>
+            <filter token="gridServicePrincipal" value="${grid.security.jndi.principal}"/>
+            <filter token="gridServiceCredential" value="${grid.security.jndi.credentials.encrypted}"/>
+            <filter token="project.name" value="${project.name}"/>
+            <filter token="grid.dorian.name" value="${grid.dorian.name}"/>
+            <filter token="grid.dorian.url" value="${cagrid.master.dorian.service.url}"/>
+            <filter token="grid.auth.service.url" value="${grid.auth.service.url}"/>
+            <filter token="grid.auth.service.name" value="${grid.auth.service.name}"/>
+            <!--CSM Properties -->
+            <filter token="csm.remote.group.db.creation.policy" value="${csm.remote.group.db.creation.policy}"/>
+            <filter token="csm.remote.group.sync.seconds" value="${csm.remote.group.sync.seconds}"/>
+            <filter token="cteprss.user" value="${cteprss.user}"/>
+            <filter token="pasystem.user" value="${pasystem.user}"/>
+            <filter token="pasystem.password" value="${pasystem.password}"/>
+        </filterset>
+
+        <!--OS Temp dir -->
+        <condition property="os.temp.dir" value="/tmp/${project.name}">
+            <or>
+                <os family="unix" />
+                <os family="mac" />
+            </or>
+        </condition>
+
+        <condition property="os.temp.dir" value="c:/temp/${project.name}">
+            <os family="windows" />
+        </condition>
+        <echo message="os.temp.dir - ${os.temp.dir}"/>
+        <!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
+        <copy todir="${common.dir.dest}" filtering="true">
+            <fileset dir="${common.dir.src}">
+                <include name="**/*"/>
+            </fileset>
+            <filterset refid="embedded.filterset"/>
+            <filterset>
+                <filtersfile file="${properties.file}"/>
+                <filtersfile file="project.properties"/>
+            </filterset>
+        </copy>
+    </target>
+
+
+    <target name="install:database:prep" description="Copies db files with filtering" unless="exclude.database" depends="common:init">
+        <property name="db.dir.temp" value="${working.dir}/tmp"/>
+        <mkdir dir="${db.dir.temp}"/>
+        <copy todir="${db.dir.dest}" filtering="true">
+            <fileset dir="${db.dir.src}">
+                <include name="**/*"/>
+            </fileset>
+            <filterset refid="embedded.filterset"/>
+            <filterset>
+                <filtersfile file="${properties.file}"/>
+                <filtersfile file="project.properties"/>
+            </filterset>
+        </copy>
+        <if>
+            <and>
+                <equals arg1="${database.re-create}" arg2="true"/>
+                <equals arg1="${database.drop-schema}" arg2="true"/>
+            </and>
+            <then>
+                <fail message="You cannot set both database.re-create and database.drop-schema at the same time.  database.re-create is used in local installs.  database.drop-schema is used in remote installs.  Either one can be set for external (Cancer Center) installs."/>
+            </then>
+        </if>
+    <mkdir dir="${os.temp.dir}/${project.name}"/>
+    <copy todir="${os.temp.dir}/${project.name}" filtering="true" flatten="true" overwrite="true">
+        <fileset dir="${db.dir.dest}">
+            <include name="**/db-upgrade.xml"/>
+        </fileset>
+    </copy>
+    </target>
+
+    <target name="install:database" description="Runs datbase creation scripts then calls uprade database." unless="exclude.database"
+            depends="
+        common:init,
+        install:database:prep,
+        install:database:validation:pre-install
+            ">
+        <!-- Drop all schema objects or re-create the db -->
+        <echo>preparing to run database clean</echo>
+        <database-clean/>
+
+        <!-- Run baseline scripts stored in db.install.create.${database.type}.file.list variable -->
+        <switch value="${database.type}">
+            <case value="postgresql">
+                <database-install
+                    db.install.create.file.list="${db.install.create.postgresql.file.list}"
+                    sql.delimiter="/"
+                    sql.delimitertype="row"/>
+            </case>
+        </switch>
+
+        <database-upgrade/>
+        <database-tag/>
+    </target>
+
+    <target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
+        <validate-pre-install-common
+            ant.check.version="${ant.minimum.version}"
+            java.check.version.major="${java.major.version}"
+            java.check.version.minor="${java.minor.version}"
+            />
+    </target>
+    <target name="install:database:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+        depends="
+        common:init,
+        install:common:validation:pre-install
+        ">
+        <validate-pre-install-database
+            database.version="${mysql.minimum.version}"
+            />
+    </target>
+    <target name="install:common:validation:post-install" description="Run post-install checks from bda-utils"
+        depends="
+        common:init
+        ">
+        <validate-post-common />
+    </target>
+
+    <target name="install" description="Installs and configures JBOSS, creates database, and deploys application"
+        depends="
+        install:pa-ear-jboss:init,
+        install:pa-grid-3.3-jboss:init,
+        install:pa-grid-3.2-jboss:init,
+        install:pa-grid-3.4-jboss:init,
+        common:pa-ear-jboss:init,
+        common:pa-grid-3.3-jboss:init,
+        common:pa-grid-3.2-jboss:init,
+        common:pa-grid-3.4-jboss:init,
+        common:init,
+        install:common:validation:pre-install,
+        install:pa-ear-jboss:validation:pre-install,
+        install:pa-grid-3.3-jboss:validation:pre-install,
+        install:pa-grid-3.2-jboss:validation:pre-install,
+        install:pa-grid-3.4-jboss:validation:pre-install,
+        install:database:validation:pre-install,
+        install:pa-ear-jboss:stop,
+        install:pa-grid-3.3-jboss:stop,
+        install:pa-grid-3.2-jboss:stop,
+        install:pa-grid-3.4-jboss:stop,
+        install:pa-ear-jboss:validation:pre-install:ports,
+        install:pa-grid-3.3-jboss:validation:pre-install:ports,
+        install:pa-grid-3.2-jboss:validation:pre-install:ports,
+        install:pa-grid-3.4-jboss:validation:pre-install:ports,
+        install:common:clean,
+        install:database,
+        install:pa-ear-jboss,
+        install:pa-grid-3.3-jboss,
+        install:pa-grid-3.2-jboss,
+        install:pa-grid-3.4-jboss,
+        install:common:post,
+        install:pa-ear-jboss:start,
+        install:pa-grid-3.3-jboss:start,
+        install:pa-grid-3.2-jboss:start,
+        install:pa-grid-3.4-jboss:start,
+        install:common:validation:post-install
+        ">
+    </target>
+
+    <target name="upgrade" description="Upgrades JBoss and Database" depends="upgrade-dac">
+    </target>
+
+    <target name="upgrade-dac" description="Installs and configures JBOSS, creates database, and deploys application"
+        depends="
+        upgrade:common:init,
+        common:pa-ear-jboss:init,
+        common:pa-grid-3.3-jboss:init,
+        common:pa-grid-3.2-jboss:init,
+        common:pa-grid-3.4-jboss:init,
+        common:init,
+        install:pa-ear-jboss:init,
+        install:pa-grid-3.3-jboss:init,
+        install:pa-grid-3.2-jboss:init,
+        install:pa-grid-3.4-jboss:init,
+        install:common:validation:pre-install,
+        install:pa-ear-jboss:validation:pre-install,
+        install:pa-grid-3.3-jboss:validation:pre-install,
+        install:pa-grid-3.2-jboss:validation:pre-install,
+        install:pa-grid-3.4-jboss:validation:pre-install,
+        install:database:validation:pre-install,
+        install:pa-ear-jboss:stop,
+        install:pa-grid-3.3-jboss:stop,
+        install:pa-grid-3.2-jboss:stop,
+        install:pa-grid-3.4-jboss:stop,
+        install:pa-ear-jboss:validation:pre-install:ports,
+        install:pa-grid-3.3-jboss:validation:pre-install:ports,
+        install:pa-grid-3.2-jboss:validation:pre-install:ports,
+        install:pa-grid-3.4-jboss:validation:pre-install:ports,
+        install:common:clean,
+        upgrade:database,
+        upgrade-dac:pa-ear-jboss,
+        upgrade-dac:pa-grid-3.3-jboss,
+        upgrade-dac:pa-grid-3.2-jboss,
+        upgrade-dac:pa-grid-3.4-jboss,
+        upgrade:common:post,
+        install:common:post,
+        install:pa-ear-jboss:start,
+        install:pa-grid-3.3-jboss:start,
+        install:pa-grid-3.2-jboss:start,
+        install:pa-grid-3.4-jboss:start,
+        install:common:validation:post-install
+        ">
+    </target>
+
+    <target name="upgrade-cm" description="Installs and configures JBOSS, creates database, and deploys application"
+        depends="
+        upgrade:common:init,
+        common:pa-ear-jboss:init,
+        common:pa-grid-3.3-jboss:init,
+        common:pa-grid-3.2-jboss:init,
+        common:pa-grid-3.4-jboss:init,
+        common:init,
+        install:pa-ear-jboss:init,
+        install:pa-grid-3.3-jboss:init,
+        install:pa-grid-3.2-jboss:init,
+        install:pa-grid-3.4-jboss:init,
+        install:common:validation:pre-install,
+        install:pa-ear-jboss:validation:pre-install,
+        install:pa-grid-3.3-jboss:validation:pre-install,
+        install:pa-grid-3.2-jboss:validation:pre-install,
+        install:pa-grid-3.4-jboss:validation:pre-install,
+        install:database:validation:pre-install,
+        install:pa-ear-jboss:stop,
+        install:pa-grid-3.3-jboss:stop,
+        install:pa-grid-3.2-jboss:stop,
+        install:pa-grid-3.4-jboss:stop,
+        install:pa-ear-jboss:validation:pre-install:ports,
+        install:pa-grid-3.3-jboss:validation:pre-install:ports,
+        install:pa-grid-3.2-jboss:validation:pre-install:ports,
+        install:pa-grid-3.4-jboss:validation:pre-install:ports,
+        upgrade:database,
+        upgrade-cm:pa-ear-jboss,
+        upgrade-cm:pa-grid-3.3-jboss,
+        upgrade-cm:pa-grid-3.2-jboss,
+        upgrade-cm:pa-grid-3.4-jboss,
+        upgrade:common:post,
+        install:common:post,
+        install:pa-ear-jboss:start,
+        install:pa-grid-3.3-jboss:start,
+        install:pa-grid-3.2-jboss:start,
+        install:pa-grid-3.4-jboss:start,
+        install:common:validation:post-install
+        ">
+    </target>
+
+    <target name="upgrade-ncm" description="Installs and configures JBOSS, creates database, and deploys application"
+        depends="
+        upgrade:common:init,
+        common:pa-ear-jboss:init,
+        common:pa-grid-3.3-jboss:init,
+        common:pa-grid-3.2-jboss:init,
+        common:pa-grid-3.4-jboss:init,
+        common:init,
+        install:pa-ear-jboss:init,
+        install:pa-grid-3.3-jboss:init,
+        install:pa-grid-3.2-jboss:init,
+        install:pa-grid-3.4-jboss:init,
+        install:common:validation:pre-install,
+        install:pa-ear-jboss:validation:pre-install,
+        install:pa-grid-3.3-jboss:validation:pre-install,
+        install:pa-grid-3.2-jboss:validation:pre-install,
+        install:pa-grid-3.4-jboss:validation:pre-install,
+        install:database:validation:pre-install,
+        install:pa-ear-jboss:stop,
+        install:pa-grid-3.3-jboss:stop,
+        install:pa-grid-3.2-jboss:stop,
+        install:pa-grid-3.4-jboss:stop,
+        install:pa-ear-jboss:validation:pre-install:ports,
+        install:pa-grid-3.3-jboss:validation:pre-install:ports,
+        install:pa-grid-3.2-jboss:validation:pre-install:ports,
+        install:pa-grid-3.4-jboss:validation:pre-install:ports,
+        upgrade:database,
+        upgrade-ncm:pa-ear-jboss,
+        upgrade-ncm:pa-grid-3.3-jboss,
+        upgrade-ncm:pa-grid-3.2-jboss,
+        upgrade-ncm:pa-grid-3.4-jboss,
+        upgrade:common:post,
+        install:common:post,
+        install:pa-ear-jboss:start,
+        install:pa-grid-3.3-jboss:start,
+        install:pa-grid-3.2-jboss:start,
+        install:pa-grid-3.4-jboss:start,
+        install:common:validation:post-install
+        ">
+    </target>
+
+    <target name="upgrade:database" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+            depends="
+        upgrade:database:init,
+        common:init,
+        install:database:prep,
+        install:database:validation:pre-install
+            ">
+        <database-upgrade/>
+        <database-tag/>
+    </target>
+
+    <target name="upgrade:database:tag" description="Tags current state of database with a tag to allow for rollback of database to previous versions." unless="exclude.database"
+            depends="
+        upgrade:database:init,
+        common:init,
+        install:database:prep,
+        install:database:validation:pre-install
+            ">
+        <database-tag/>
+    </target>
+
+    <target name="upgrade:database:rollback" description="Rolls back database to previous tagged version using rollback scripts." unless="exclude.database"
+            depends="
+        upgrade:database:init,
+        common:init,
+        install:database:prep,
+        install:database:validation:pre-install
+            ">
+        <database-rollback/>
+    </target>
+
+    <target name="install:common:post" depends="install:pa-ear-jboss:post,install:pa-grid-3.3-jboss:post,install:pa-grid-3.2-jboss:post,install:pa-grid-3.4-jboss:post"/>
+
+    <target name="upgrade:common:init" depends="upgrade:pa-ear-jboss:init,upgrade:pa-grid-3.3-jboss:init,upgrade:pa-grid-3.2-jboss:init,upgrade:pa-grid-3.4-jboss:init" >
+    </target>
+
+    <target name="upgrade:database:init"
+        depends="
+        upgrade:pa-ear-jboss:init:prep,
+        upgrade:database:readers:bda,
+        upgrade:database:readers:custom
+        ">
+        <!-- You need to either depend on jboss or tomcat so that you can read the db properties from it's configs.  BDA only has macros to read database properties from jboss. -->
+    </target>
+    <target name="upgrade:common:init:prep">
+        <if>
+            <not>
+                <isset property="application.base.path"/>
+            </not>
+            <then>
+                <!-- Set application.base.path based on platform -->
+                <condition property="application.base.path" value="${application.base.path.linux}">
+                    <or>
+                        <os family="unix" />
+                        <os family="mac" />
+                    </or>
+                </condition>
+
+                <condition property="application.base.path" value="${application.base.path.windows}">
+                    <os family="windows" />
+                </condition>
+                <echo message="application.base.path=${application.base.path}"/>
+            </then>
+        </if>
+        <properties-print
+            properties.list="application.base.path,jboss.home,tomcat.home,jboss.server.name"
+            />
+        <var name="read.properties.list" value=""/>
+    </target>
+
+    <target name="upgrade:database:readers:custom">
+        <!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
+    </target>
+
+    <target name="upgrade:database:readers:bda" depends="upgrade:pa-ear-jboss:init:prep" if="jboss.exists">
+
+        <!-- Make sure the ${properties.file} has at least the following props -->
+        <properties-exist
+            properties.list="application.base.path,jboss.home,jboss.server.name"
+            />
+        <jboss-read-dbconfig
+            jboss.home="${read.jboss.home}"
+            jboss.ds-xml.file="bda-blueprints-ds.xml"
+            />
+    </target>
+
+    <target name="upgrade:common:post" depends="upgrade:pa-ear-jboss:post,upgrade:pa-grid-3.3-jboss:post,upgrade:pa-grid-3.2-jboss:post,upgrade:pa-grid-3.4-jboss:post">
+    </target>
+
+    <macrodef name="jboss-configure-cgmm">
+        <attribute name="jboss.home" default="${jboss.home}"/>
+        <attribute name="jboss.server.name" default="${jboss.server.name}"/>
+        <attribute name="jboss.tomcat.dir" default="@{jboss.home}/server/@{jboss.server.name}/deploy/jbossweb-tomcat55.sar"/>
+        <attribute name="jboss.lib.dir" default="@{jboss.home}/server/@{jboss.server.name}/lib"/>
+        <attribute name="cgmm.conf.dest.dir" default="@{jboss.home}/server/@{jboss.server.name}/cgmm_config"/>
+        <attribute name="cgmm.conf.src.dir" default="${jboss-conf.dir.dest}/cgmm"/>
+        <attribute name="cgmm.jars.base.dir" default="${basedir}/cgmm-libs"/>
+        <attribute name="cgmm.version" default="0.7.0"/>
+        <attribute name="cagrid-target.dir" default="${basedir}/cagrid-target"/>
+        <attribute name="grid.target" default="${grid.target}"/>
+        <attribute name="login-config.policy.file" default="@{cgmm.conf.dest.dir}/login-config.cgmm-block.xml"/>
+        <sequential>
+            <mkdir dir="@{cgmm.conf.dest.dir}"/>
+            <copy todir="@{jboss.tomcat.dir}" overwrite="true">
+                <fileset dir="@{cgmm.jars.base.dir}/jbossweb-tomcat55-sar-jars">
+                    <include name="*.jar"/>
+                    <exclude name="catalina-5.0.jar"/>
+                </fileset>
+            </copy>
+            <copy file="@{cgmm.jars.base.dir}/cgmm/cgmmapi-@{cgmm.version}.jar" todir="@{jboss.tomcat.dir}" overwrite="true"/>
+            <copy file="@{jboss.tomcat.dir}/catalina.jar" tofile="@{jboss.tomcat.dir}/catalina.jar.orig" overwrite="true"/>
+            <move file="@{cgmm.jars.base.dir}/jbossweb-tomcat55-sar-jars/catalina-5.0.jar" tofile="@{jboss.tomcat.dir}/catalina.jar"/>
+            <copy todir="@{jboss.lib.dir}" overwrite="true">
+                <fileset dir="@{cgmm.jars.base.dir}/jboss-default-lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </copy>
+            <copy todir="@{cgmm.conf.dest.dir}" overwrite="true">
+                <fileset dir="@{cgmm.conf.src.dir}">
+                    <include name="*"/>
+                </fileset>
+            </copy>
+            <if>
+                <equals arg1="@{grid.target}" arg2="training-1.3"/>
+                <then>
+                    <echo message="Training grid selected using alternate cgmm-properties.xml."/>
+                    <copy file="@{cgmm.conf.dest.dir}/cgmm-properties.xml" tofile="@{cgmm.conf.dest.dir}/cgmm-properties.xml-orig" overwrite="true"/>
+                    <copy file="@{cgmm.conf.dest.dir}/alt-cgmm-properties.xml" tofile="@{cgmm.conf.dest.dir}/cgmm-properties.xml" overwrite="true"/>
+                </then>
+            </if>
+            <copy file="@{cagrid-target.dir}/@{grid.target}/sync-description.xml" todir="@{cgmm.conf.dest.dir}" overwrite="true"/>
+            <var name="property.block" value="gov.nih.nci.security.cgmm.syncgts.file=@{cgmm.conf.dest.dir}/sync-description.xml${line.separator}
+gov.nih.nci.security.cgmm.properties.file=@{cgmm.conf.dest.dir}/cgmm-properties.xml${line.separator}
+gov.nih.nci.security.configFile=@{cgmm.conf.dest.dir}/ApplicationSecurityConfig.xml${line.separator}
+gov.nih.nci.security.cgmm.login.config.file=@{cgmm.conf.dest.dir}/cgmm.login.config${line.separator}"/>
+
+            <jboss-update-properties-service
+                property.block="${property.block}"
+                />
+            <xmltask preservetype="true" source="@{jboss.home}/server/@{jboss.server.name}/conf/login-config.xml"
+                dest="@{jboss.home}/server/@{jboss.server.name}/conf/login-config.xml">
+                <xmlcatalog refid="bda.xml.catalog"/>
+                <remove path="//policy/application-policy[@name='@{application.context.name}']"/>
+            </xmltask>
+            <xmltask preservetype="true" failWithoutMatch="true" source="@{jboss.home}/server/@{jboss.server.name}/conf/login-config.xml"
+                dest="@{jboss.home}/server/@{jboss.server.name}/conf/login-config.xml">
+                <xmlcatalog refid="bda.xml.catalog"/>
+                <insert path="//policy" file="@{login-config.policy.file}"/>
+            </xmltask>
+        </sequential>
+    </macrodef>
+    <macrodef name="set-grid-auth-service">
+        <attribute name="grid.target" default="${grid.target}"/>
+        <attribute name="grid.auth.service.url.property.name" default="grid.auth.service.url"/>
+        <attribute name="grid.auth.service.name.property.name" default="grid.auth.service.name"/>
+        <attribute name="grid.dorian.name.property.name" default="grid.dorian.name"/>
+
+        <sequential>
+            <var name="{grid.auth.service.url.property.name}" unset="true"/>
+            <switch value="@{grid.target}">
+                <case value="nci_prod-1.3">
+                    <property name="@{grid.auth.service.url.property.name}" value="https://cagrid-auth.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
+                    <property name="@{grid.auth.service.name.property.name}" value="National Cancer Institute"/>
+                    <property name="@{grid.dorian.name.property.name}" value="caBIG"/>
+                </case>
+                <case value="nci_stage-1.3">
+                    <property name="@{grid.auth.service.url.property.name}" value="https://cagrid-auth-stage.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
+                    <property name="@{grid.auth.service.name.property.name}" value="National Cancer Institute"/>
+                    <property name="@{grid.dorian.name.property.name}" value="Stage"/>
+                </case>
+                <case value="nci_qa-1.3">
+                    <property name="@{grid.auth.service.url.property.name}" value="https://cagrid-auth-qa.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
+                    <property name="@{grid.auth.service.name.property.name}" value="National Cancer Institute"/>
+                    <property name="@{grid.dorian.name.property.name}" value="QA"/>
+                </case>
+                <case value="training-1.3">
+                    <property name="@{grid.auth.service.url.property.name}" value="https://cagrid-auth.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
+                    <property name="@{grid.auth.service.name.property.name}" value="National Cancer Institute"/>
+                    <property name="@{grid.dorian.name.property.name}" value="Training"/>
+                </case>
+                <default>
+                    <fail message="grid.target=@{grid.target} is an invalid option, please use a valid name (nci_prod-1.3 nci_stage-1.3 nci_qa-1.3 training-1.3)"/>
+                </default>
+            </switch>
+        </sequential>
+    </macrodef>
+</project>

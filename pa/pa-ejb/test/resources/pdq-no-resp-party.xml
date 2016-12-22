@@ -1,0 +1,518 @@
+<clinical_study nct-id="NCT00031681" ctep-id="5582" dcp-id="">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000069215</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000069215</org_study_id>
+    <secondary_id>UVACC-SCC-0102</secondary_id>
+    <secondary_id>WUSM-SCC-0102</secondary_id>
+    <secondary_id>NCI-5582</secondary_id>
+  </id_info>
+  <is_fda_regulated>yes</is_fda_regulated>
+  <is_section_801>no</is_section_801>
+  <is_ind_study>yes</is_ind_study>
+  <ind_info>
+    <ind_grantor>CDER</ind_grantor>
+    <ind_number>49169</ind_number>
+    <ind_serial_number></ind_serial_number>
+  </ind_info>
+  <brief_title>UCN-01 and Irinotecan in Treating Patients With Metastatic or Unresectable Solid Tumors or Triple-Negative Breast Cancer (Currently accruing only triple-negative breast cancer patients since 6/8/2007)</brief_title>
+  <official_title>A Phase I Study Of UCN-01 In Combination With Irinotecan In Resistant Solid Tumor Malignancies (Part I) and in Triple Negative (ER-negative, PgR-negative, HER-2 not amplified) Recurrent Breast Cancers (Part II)</official_title>
+<lead_org ctep-id="VA009">University of Virginia Cancer Center</lead_org>
+  <sponsors>
+    <lead_sponsor>
+      <agency>University of Virginia Cancer Center</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+    <collaborator>
+      <agency>Siteman Cancer Center at Barnes-Jewish Hospital - Saint Louis</agency>
+    </collaborator>
+  </sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Drugs used in chemotherapy use different ways to stop tumor cells from dividing so they stop growing or die. Giving UCN-01 together with irinotecan may help kill more cancer cells by making tumor cells more sensitive to the drug.
+
+PURPOSE: This phase I trial is studying the side effects and best dose of giving UCN-01 together with irinotecan in treating patients with metastatic or unresectable solid tumors, including triple-negative breast cancer (currently enrolling only patients with triple-negative breast cancer since 6/8/2007).</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: Primary Determine the maximum tolerated dose of UCN-01 and irinotecan in patients with resistant solid tumors. (Part I [closed to accrual as of 6/8/2007])
+ Determine the dose-limiting toxicity of this regimen in these patients.
+(Part I [closed to accrual as of 6/8/2007]) Determine the types of toxic effects of this regimen in these patients. (Part I [closed to accrual as of 6/8/2007])
+Determine the anti-tumor activity in terms of overall response rate (partial response [PR] and complete response [CR]), clinical benefit rate (PR, CR,  and stable disease), and time to disease progression in patients with estrogen receptor-negative, progesterone receptor-negative, and HER-2 not amplified (triple negative) locally recurrent or metastatic  breast cancer treated with this regimen. (Part II)Determine the side effect profile of this regimen in patients with triple negative recurrent breast cancer. (Part II)Secondary Determine any anti-tumor activity of this regimen in these patients. (Part I [closed to accrual as of 6/8/2007])
+ Determine the pharmacokinetics of this regimen in these patients.
+ (Part I [closed to accrual as of 6/8/2007])Determine the activity of the serum α-acid glycoprotein and correlate this level with free UCN-01 concentrations. (Part I [closed to accrual as of 6/8/2007])Determine the in vivo mechanisms of UCN-01 activity in these patients.
+OUTLINE: Part I (treatment of resistant solid tumors  [closed to accrual as of 6/8/2007]):This is a dose-escalation study.
+            Patients receive irinotecan IV over 90 minutes on days 1, 8, 15, and 22 
+and UCN-01 IV over 3 hours on days 2 and 23.  Courses repeat every 42 days in 
+the absence of disease progression or unacceptable toxicity.
+            Cohorts of 3-6 patients receive escalating doses of irinotecan and 
+UCN-01 until the maximum tolerated dose (MTD) is determined.  The MTD is 
+defined as the dose preceding that at which 2 of 3 or 2 of 6 patients 
+experience dose-limiting toxicity.
+            Blood samples are collected  periodically during study treatment.
+          Part II (treatment of triple negative recurrent breast cancer):Patients receive irinotecan IV and UCN-01 IV as in part I at the MTD and undergo blood sample collection. 
+          
+PROJECTED ACCRUAL: A total of 41 patients (21 part I [closed to accrual as of 6/8/2007] and 20 part II) will be accrued for this study.</textblock>
+  </detailed_description>
+  <overall_status>Recruiting</overall_status>
+    <lead_org_status status_date='2007-03-30'>Active</lead_org_status>
+
+  <start_date date_type="Actual">2001-12-12</start_date>
+  <primary_compl_date>2012-07-10</primary_compl_date>
+  <primary_compl_date_type>Anticipated</primary_compl_date_type>
+  <phase>1</phase>
+  <study_design>
+    <study_type>interventional</study_type>
+    <interventional_design>
+      <interventional_subtype>Treatment</interventional_subtype>
+      <allocation/>
+      <masking/>
+      <control/>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms/>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Anti-tumor activity (overall response rate [partial response and complete response], clinical benefit rate [partial response, complete response, and stable disease], and time to disease progression)</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <outcome_measure>Side effect profile</outcome_measure>
+    <outcome_safety_issue>yes</outcome_safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <outcome_measure>In vivo mechanisms</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+<enrollment>41</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000038760">stage IV colon cancer</condition>
+  <condition cdr-id="CDR0000039108">stage IV breast cancer</condition>
+  <condition cdr-id="CDR0000039738">recurrent breast cancer</condition>
+  <condition cdr-id="CDR0000040504">stage IV gastric cancer</condition>
+  <condition cdr-id="CDR0000040814">recurrent gastric cancer</condition>
+  <condition cdr-id="CDR0000042347">recurrent non-small cell lung cancer</condition>
+  <condition cdr-id="CDR0000042949">recurrent pancreatic cancer</condition>
+  <condition cdr-id="CDR0000043422">stage IV rectal cancer</condition>
+  <condition cdr-id="CDR0000043425">recurrent colon cancer</condition>
+  <condition cdr-id="CDR0000043429">recurrent rectal cancer</condition>
+  <condition cdr-id="CDR0000043438">stage IV anal cancer</condition>
+  <condition cdr-id="CDR0000043482">recurrent anal cancer</condition>
+  <condition cdr-id="CDR0000043692">stage IV esophageal cancer</condition>
+  <condition cdr-id="CDR0000043721">recurrent esophageal cancer</condition>
+  <condition cdr-id="CDR0000038290">recurrent cervical cancer</condition>
+  <condition cdr-id="CDR0000038654">stage IVB cervical cancer</condition>
+  <condition cdr-id="CDR0000038770">stage IVA cervical cancer</condition>
+  <condition cdr-id="CDR0000043705">stage IV ovarian epithelial cancer</condition>
+  <condition cdr-id="CDR0000043706">recurrent ovarian epithelial cancer</condition>
+  <condition cdr-id="CDR0000037829">extensive stage small cell lung cancer</condition>
+  <condition cdr-id="CDR0000037831">recurrent small cell lung cancer</condition>
+  <condition cdr-id="CDR0000038117">metastatic gastrointestinal carcinoid tumor</condition>
+  <condition cdr-id="CDR0000038130">recurrent gastrointestinal carcinoid tumor</condition>
+  <condition cdr-id="CDR0000038631">advanced adult primary liver cancer</condition>
+  <condition cdr-id="CDR0000038637">recurrent adult primary liver cancer</condition>
+  <condition cdr-id="CDR0000038742">stage IV endometrial carcinoma</condition>
+  <condition cdr-id="CDR0000038743">recurrent endometrial carcinoma</condition>
+  <condition cdr-id="CDR0000038744">small intestine adenocarcinoma</condition>
+  <condition cdr-id="CDR0000038745">small intestine lymphoma</condition>
+  <condition cdr-id="CDR0000038746">small intestine leiomyosarcoma</condition>
+  <condition cdr-id="CDR0000038749">unresectable gallbladder cancer</condition>
+  <condition cdr-id="CDR0000038751">recurrent gallbladder cancer</condition>
+  <condition cdr-id="CDR0000038754">unresectable extrahepatic bile duct cancer</condition>
+  <condition cdr-id="CDR0000038755">recurrent extrahepatic bile duct cancer</condition>
+  <condition cdr-id="CDR0000038757">recurrent small intestine cancer</condition>
+  <condition cdr-id="CDR0000038786">stage IV prostate cancer</condition>
+  <condition cdr-id="CDR0000038787">recurrent prostate cancer</condition>
+  <condition cdr-id="CDR0000038942">stage IV non-small cell lung cancer</condition>
+  <condition cdr-id="CDR0000038974">unspecified adult solid tumor, protocol specific</condition>
+  <condition cdr-id="CDR0000039088">untreated metastatic squamous neck cancer with occult primary</condition>
+  <condition cdr-id="CDR0000039089">recurrent metastatic squamous neck cancer with occult primary</condition>
+  <condition cdr-id="CDR0000040148">ovarian stromal cancer</condition>
+  <condition cdr-id="CDR0000040291">stage IV ovarian germ cell tumor</condition>
+  <condition cdr-id="CDR0000040292">recurrent ovarian germ cell tumor</condition>
+  <condition cdr-id="CDR0000040710">stage IV squamous cell carcinoma of the lip and oral cavity</condition>
+  <condition cdr-id="CDR0000040711">stage IV basal cell carcinoma of the lip</condition>
+  <condition cdr-id="CDR0000040712">stage IV verrucous carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040713">stage IV mucoepidermoid carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040714">stage IV adenoid cystic carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040715">recurrent squamous cell carcinoma of the lip and oral cavity</condition>
+  <condition cdr-id="CDR0000040716">recurrent basal cell carcinoma of the lip</condition>
+  <condition cdr-id="CDR0000040717">recurrent verrucous carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040718">recurrent mucoepidermoid carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040719">recurrent adenoid cystic carcinoma of the oral cavity</condition>
+  <condition cdr-id="CDR0000040727">stage IV squamous cell carcinoma of the oropharynx</condition>
+  <condition cdr-id="CDR0000040728">stage IV lymphoepithelioma of the oropharynx</condition>
+  <condition cdr-id="CDR0000040729">recurrent squamous cell carcinoma of the oropharynx</condition>
+  <condition cdr-id="CDR0000040730">recurrent lymphoepithelioma of the oropharynx</condition>
+  <condition cdr-id="CDR0000040737">stage IV squamous cell carcinoma of the nasopharynx</condition>
+  <condition cdr-id="CDR0000040738">stage IV lymphoepithelioma of the nasopharynx</condition>
+  <condition cdr-id="CDR0000040739">recurrent squamous cell carcinoma of the nasopharynx</condition>
+  <condition cdr-id="CDR0000040740">recurrent lymphoepithelioma of the nasopharynx</condition>
+  <condition cdr-id="CDR0000040744">stage IV squamous cell carcinoma of the hypopharynx</condition>
+  <condition cdr-id="CDR0000040745">recurrent squamous cell carcinoma of the hypopharynx</condition>
+  <condition cdr-id="CDR0000040753">stage IV squamous cell carcinoma of the larynx</condition>
+  <condition cdr-id="CDR0000040754">stage IV verrucous carcinoma of the larynx</condition>
+  <condition cdr-id="CDR0000040755">recurrent squamous cell carcinoma of the larynx</condition>
+  <condition cdr-id="CDR0000040756">recurrent verrucous carcinoma of the larynx</condition>
+  <condition cdr-id="CDR0000040769">stage IV squamous cell carcinoma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040770">stage IV inverted papilloma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040771">stage IV midline lethal granuloma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040772">stage IV esthesioneuroblastoma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040773">recurrent squamous cell carcinoma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040774">recurrent inverted papilloma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040775">recurrent midline lethal granuloma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040776">recurrent esthesioneuroblastoma of the paranasal sinus and nasal cavity</condition>
+  <condition cdr-id="CDR0000040914">carcinoma of the appendix</condition>
+  <condition cdr-id="CDR0000041147">ovarian sarcoma</condition>
+  <condition cdr-id="CDR0000038161">gastrointestinal stromal tumor</condition>
+  <condition cdr-id="CDR0000038951">recurrent salivary gland cancer</condition>
+  <condition cdr-id="CDR0000038950">stage IV salivary gland cancer</condition>
+  <condition cdr-id="CDR0000042547">stage IV pancreatic cancer</condition>
+  <condition cdr-id="CDR0000562757">stage IV borderline ovarian surface epithelial-stromal tumor</condition>
+  <condition cdr-id="CDR0000562763">recurrent borderline ovarian surface epithelial-stromal tumor</condition>
+  <condition cdr-id="CDR0000637876">estrogen receptor-negative breast cancer</condition>
+  <condition cdr-id="CDR0000637896">HER2-negative breast cancer</condition>
+  <condition cdr-id="CDR0000637878">progesterone receptor-negative breast cancer</condition>
+  <condition cdr-id="CDR0000637899">triple-negative breast cancer</condition>  <intervention cdr-id='CDR0000042305'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>7-hydroxystaurosporine</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000041714'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>irinotecan hydrochloride</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000042832'>
+    <intervention_type>Other</intervention_type>
+    <intervention_name>laboratory biomarker analysis</intervention_name>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        <EntryCriteria>
+        <DiseaseCharacteristics>
+          <ItemizedList Compact="No" Style="bullet" id="_35">
+              <ListItem>Part I (closed to accrual as of 6/8/2007)<ItemizedList Style="dash" id="_53">
+                  <ListItem>Histologically confirmed solid tumor that is metastatic or unresectable 
+for
+which standard curative measures do not exist or are no longer effective,
+including the following:<ItemizedList Style="bullet" id="_36">
+                      <ListItem>Gastrointestinal tract cancer</ListItem>
+                      <ListItem>Lung cancer</ListItem>
+                      <ListItem>Breast cancer</ListItem>
+                      <ListItem>Ovarian cancer</ListItem>
+                      <ListItem>Endometrial cancer</ListItem>
+                      <ListItem> Cervical cancer</ListItem>
+                      <ListItem> Prostate cancer</ListItem>
+                      <ListItem>Head and neck cancer</ListItem>
+                    </ItemizedList>
+                </ListItem>
+                  <ListItem>Patients with or without measurable or evaluable disease allowed  <ItemizedList Style="bullet" id="_44">
+                      <ListItem>Measurable disease, defined as ≥ 1 unidimensionally measurable lesion &gt; 20 mm by conventional techniques or ≥ 10 mm with spiral CT scan<ItemizedList Style="dash" id="_45">
+                          <ListItem>Tumor markers allowed for evaluable disease</ListItem>
+                          <ListItem>Positive bone scan, osteoblastic metastases, and pleural or peritoneal effusions are not considered measurable or evaluable disease</ListItem>
+                        </ItemizedList>
+                    </ListItem>
+                    </ItemizedList>
+                </ListItem>
+                  <ListItem>No known brain metastases </ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>Part II<ItemizedList Style="dash" id="_54">
+                  <ListItem>Histologically confirmed (either primary or the recurrent site) locally recurrent or metastatic breast cancer not amendable to surgery <ItemizedList Style="bullet" id="_46">
+                      <ListItem>Measurable disease<ItemizedList Style="dash" id="_47">
+                          <ListItem>For skin lesions, documentation by color photography and  estimation of lesion size with a ruler are required</ListItem>
+                        </ItemizedList>
+                    </ListItem>
+                    </ItemizedList>
+                </ListItem>
+                  <ListItem>Must have undergone prior therapy with an anthracycline and a taxane either in the adjuvant or metastatic setting </ListItem>
+                  <ListItem>CNS metastasis allowed provided stable disease (i.e., no evidence of local progression) ≥ 3 months after local therapy </ListItem>
+                  <ListItem>Hormone receptor status:<ItemizedList Style="bullet" id="_37">
+                      <ListItem>Estrogen receptor negative </ListItem>
+                      <ListItem>Progesterone receptor negative </ListItem>
+                      <ListItem>HER-2 not amplified by fluorescence in situ hybridization </ListItem>
+                    </ItemizedList>
+                </ListItem>
+                </ItemizedList>
+            </ListItem>
+            </ItemizedList>
+        </DiseaseCharacteristics>
+        <PatientCharacteristics>
+          <ItemizedList Style="bullet" id="_12">
+              <ListTitle>Age:</ListTitle>
+              <ListItem>18 and over</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_13">
+              <ListTitle>Sex:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_14">
+              <ListTitle>Menopausal status:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_15">
+              <ListTitle>Performance status:</ListTitle>
+              <ListItem>ECOG 0-2 <Para id="_38">OR</Para>
+            </ListItem>
+              <ListItem>Karnofsky 60-100%</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_16">
+              <ListTitle>Life expectancy:</ListTitle>
+              <ListItem>More than 12 weeks</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_17">
+              <ListTitle>Hematopoietic:</ListTitle>
+              <ListItem>WBC at least 3,000/mm^3</ListItem>
+              <ListItem>Absolute neutrophil count at least 1,500/mm^3</ListItem>
+              <ListItem>Platelet count at least 100,000/mm^3</ListItem>
+              <ListItem>Hemoglobin ≥ 10 g/dL</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_18">
+              <ListTitle>Hepatic:</ListTitle>
+              <ListItem>Bilirubin normal</ListItem>
+              <ListItem>AST/ALT no greater than 3 times upper limit of 
+normal (ULN)</ListItem>
+              <ListItem>No Gilbert's disease</ListItem>
+              <ListItem>No chronic unconjugated hyperbilirubinemia</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_19">
+              <ListTitle>Renal:</ListTitle>
+              <ListItem>Creatinine no greater than 1.5 times ULN <Para id="_39">OR</Para>
+            </ListItem>
+              <ListItem>Creatinine clearance at least 60 mL/min</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_20">
+              <ListTitle>Cardiovascular:</ListTitle>
+              <ListItem>No symptomatic cardiac dysfunction</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_21">
+              <ListTitle>Pulmonary:</ListTitle>
+              <ListItem>No symptomatic pulmonary dysfunction</ListItem>
+              <ListItem>Oxygen saturation at least 90% by pulse oximetry on room air at rest and after walking 6 minutes</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_22">
+              <ListTitle>Other:</ListTitle>
+              <ListItem>No insulin-dependent diabetes mellitus</ListItem>
+              <ListItem>No other uncontrolled concurrent illness</ListItem>
+              <ListItem>No active or ongoing infection</ListItem>
+              <ListItem>No psychiatric illness or social situation that would preclude 
+study entry</ListItem>
+              <ListItem>No prior allergic reactions attributed to compounds of similar 
+chemical or  biological composition to UCN-01 or irinotecan</ListItem>
+              <ListItem>Not pregnant or nursing</ListItem>
+              <ListItem>Negative pregnancy test</ListItem>
+              <ListItem>Fertile patients must use effective contraception</ListItem>
+            </ItemizedList>
+        </PatientCharacteristics>
+        <PriorConcurrentTherapy>
+          <ItemizedList Style="bullet" id="_23">
+              <ListTitle>Biologic therapy:</ListTitle>
+              <ListItem>No concurrent granulocyte colony-stimulating factors 
+(filgrastim [G-CSF] or  sargramostim [GM-CSF]) during the first course of 
+study</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_24">
+              <ListTitle>Chemotherapy:</ListTitle>
+              <ListItem>See Disease Characteristics (Part II)</ListItem>
+              <ListItem>More than 4 weeks since prior chemotherapy (6 weeks for 
+nitrosoureas or  mitomycin) and recovered</ListItem>
+              <ListItem>Prior irinotecan allowed</ListItem>
+              <ListItem>Less than 4 prior chemotherapy regimens in the adjuvant and/or  metastatic setting (Part II)</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_25">
+              <ListTitle>Endocrine therapy:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_26">
+              <ListTitle>Radiotherapy:</ListTitle>
+              <ListItem>More than 4 weeks since prior radiotherapy and 
+recovered</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_27">
+              <ListTitle>Surgery:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_28">
+              <ListTitle>Other:</ListTitle>
+              <ListItem>Concurrent warfarin allowed</ListItem>
+              <ListItem>Concurrent subcutaneous heparin allowed</ListItem>
+              <ListItem>No other concurrent investigational agents</ListItem>
+              <ListItem>No concurrent anticonvulsants (e.g., carbamazepine, 
+phenobarbital, or  phenytoin)</ListItem>
+              <ListItem>No concurrent combination antiretroviral therapy for 
+HIV-positive patients</ListItem>
+            </ItemizedList>
+        </PriorConcurrentTherapy>
+      </EntryCriteria>
+      </textblock>
+    </criteria>
+    <healthy_volunteers>no</healthy_volunteers>
+    <expected_enrollment>41</expected_enrollment>
+    <gender>Both</gender>
+    <minimum_age>18</minimum_age>
+    <maximum_age>120</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="">
+    <first_name>Paula</first_name>
+    <middle_name>M.</middle_name>
+    <last_name>Fracasso</last_name>
+    <degrees>MD, PhD</degrees>
+    <role>Study Chair</role>
+    <affiliation>University of Virginia Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="38559">
+    <first_name>Cynthia</first_name>
+    <middle_name>X.</middle_name>
+    <last_name>Ma</last_name>
+    <degrees>MD, PhD</degrees>
+    <role>Principal Investigator</role>
+    <affiliation>Siteman Cancer Center at Barnes-Jewish Hospital - Saint Louis</affiliation>
+  </overall_official>
+  <location>
+    <facility ctep-id="MO011">
+      <name>Siteman Cancer Center at Barnes-Jewish Hospital - Saint Louis</name>
+      <address>
+        <city>Saint Louis</city>
+        <state>Missouri</state>
+        <zip>63110</zip>
+        <country>U.S.A.</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact ctep-id="" role="Contact person">
+      <first_name>Tibu</first_name>
+      <middle_name>N.</middle_name>
+      <last_name>Mwandoro</last_name>
+      <degrees>CCRC</degrees>
+      <phone>314-747-5376</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="VA009">
+      <name>University of Virginia Cancer Center</name>
+      <address>
+        <city>Charlottesville</city>
+        <state>Virginia</state>
+        <zip>22908</zip>
+        <country>U.S.A.</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact ctep-id="" role="Study coordinator">
+      <first_name>Mary</first_name>
+      <last_name>Oliveri</last_name>
+      <phone>434-924-9496</phone>
+    </contact>
+    <contact ctep-id="" role="Study coordinator">
+      <first_name>Meredith</first_name>
+      <last_name>Gross</last_name>
+      <phone>434-924-0436</phone>
+    </contact>
+  </location>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/UVACC-SCC-0102</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <keyword cdr-id="CDR0000038760">stage IV colon cancer</keyword>
+  <keyword cdr-id="CDR0000039108">stage IV breast cancer</keyword>
+  <keyword cdr-id="CDR0000039738">recurrent breast cancer</keyword>
+  <keyword cdr-id="CDR0000040504">stage IV gastric cancer</keyword>
+  <keyword cdr-id="CDR0000040814">recurrent gastric cancer</keyword>
+  <keyword cdr-id="CDR0000042347">recurrent non-small cell lung cancer</keyword>
+  <keyword cdr-id="CDR0000042949">recurrent pancreatic cancer</keyword>
+  <keyword cdr-id="CDR0000043422">stage IV rectal cancer</keyword>
+  <keyword cdr-id="CDR0000043425">recurrent colon cancer</keyword>
+  <keyword cdr-id="CDR0000043429">recurrent rectal cancer</keyword>
+  <keyword cdr-id="CDR0000043438">stage IV anal cancer</keyword>
+  <keyword cdr-id="CDR0000043482">recurrent anal cancer</keyword>
+  <keyword cdr-id="CDR0000043692">stage IV esophageal cancer</keyword>
+  <keyword cdr-id="CDR0000043721">recurrent esophageal cancer</keyword>
+  <keyword cdr-id="CDR0000038290">recurrent cervical cancer</keyword>
+  <keyword cdr-id="CDR0000038654">stage IVB cervical cancer</keyword>
+  <keyword cdr-id="CDR0000038770">stage IVA cervical cancer</keyword>
+  <keyword cdr-id="CDR0000043705">stage IV ovarian epithelial cancer</keyword>
+  <keyword cdr-id="CDR0000043706">recurrent ovarian epithelial cancer</keyword>
+  <keyword cdr-id="CDR0000037829">extensive stage small cell lung cancer</keyword>
+  <keyword cdr-id="CDR0000037831">recurrent small cell lung cancer</keyword>
+  <keyword cdr-id="CDR0000038117">metastatic gastrointestinal carcinoid tumor</keyword>
+  <keyword cdr-id="CDR0000038130">recurrent gastrointestinal carcinoid tumor</keyword>
+  <keyword cdr-id="CDR0000038631">advanced adult primary liver cancer</keyword>
+  <keyword cdr-id="CDR0000038637">recurrent adult primary liver cancer</keyword>
+  <keyword cdr-id="CDR0000038742">stage IV endometrial carcinoma</keyword>
+  <keyword cdr-id="CDR0000038743">recurrent endometrial carcinoma</keyword>
+  <keyword cdr-id="CDR0000038744">small intestine adenocarcinoma</keyword>
+  <keyword cdr-id="CDR0000038745">small intestine lymphoma</keyword>
+  <keyword cdr-id="CDR0000038746">small intestine leiomyosarcoma</keyword>
+  <keyword cdr-id="CDR0000038749">unresectable gallbladder cancer</keyword>
+  <keyword cdr-id="CDR0000038751">recurrent gallbladder cancer</keyword>
+  <keyword cdr-id="CDR0000038754">unresectable extrahepatic bile duct cancer</keyword>
+  <keyword cdr-id="CDR0000038755">recurrent extrahepatic bile duct cancer</keyword>
+  <keyword cdr-id="CDR0000038757">recurrent small intestine cancer</keyword>
+  <keyword cdr-id="CDR0000038786">stage IV prostate cancer</keyword>
+  <keyword cdr-id="CDR0000038787">recurrent prostate cancer</keyword>
+  <keyword cdr-id="CDR0000038942">stage IV non-small cell lung cancer</keyword>
+  <keyword cdr-id="CDR0000038974">unspecified adult solid tumor, protocol specific</keyword>
+  <keyword cdr-id="CDR0000039088">untreated metastatic squamous neck cancer with occult primary</keyword>
+  <keyword cdr-id="CDR0000039089">recurrent metastatic squamous neck cancer with occult primary</keyword>
+  <keyword cdr-id="CDR0000040148">ovarian stromal cancer</keyword>
+  <keyword cdr-id="CDR0000040291">stage IV ovarian germ cell tumor</keyword>
+  <keyword cdr-id="CDR0000040292">recurrent ovarian germ cell tumor</keyword>
+  <keyword cdr-id="CDR0000040710">stage IV squamous cell carcinoma of the lip and oral cavity</keyword>
+  <keyword cdr-id="CDR0000040711">stage IV basal cell carcinoma of the lip</keyword>
+  <keyword cdr-id="CDR0000040712">stage IV verrucous carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040713">stage IV mucoepidermoid carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040714">stage IV adenoid cystic carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040715">recurrent squamous cell carcinoma of the lip and oral cavity</keyword>
+  <keyword cdr-id="CDR0000040716">recurrent basal cell carcinoma of the lip</keyword>
+  <keyword cdr-id="CDR0000040717">recurrent verrucous carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040718">recurrent mucoepidermoid carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040719">recurrent adenoid cystic carcinoma of the oral cavity</keyword>
+  <keyword cdr-id="CDR0000040727">stage IV squamous cell carcinoma of the oropharynx</keyword>
+  <keyword cdr-id="CDR0000040728">stage IV lymphoepithelioma of the oropharynx</keyword>
+  <keyword cdr-id="CDR0000040729">recurrent squamous cell carcinoma of the oropharynx</keyword>
+  <keyword cdr-id="CDR0000040730">recurrent lymphoepithelioma of the oropharynx</keyword>
+  <keyword cdr-id="CDR0000040737">stage IV squamous cell carcinoma of the nasopharynx</keyword>
+  <keyword cdr-id="CDR0000040738">stage IV lymphoepithelioma of the nasopharynx</keyword>
+  <keyword cdr-id="CDR0000040739">recurrent squamous cell carcinoma of the nasopharynx</keyword>
+  <keyword cdr-id="CDR0000040740">recurrent lymphoepithelioma of the nasopharynx</keyword>
+  <keyword cdr-id="CDR0000040744">stage IV squamous cell carcinoma of the hypopharynx</keyword>
+  <keyword cdr-id="CDR0000040745">recurrent squamous cell carcinoma of the hypopharynx</keyword>
+  <keyword cdr-id="CDR0000040753">stage IV squamous cell carcinoma of the larynx</keyword>
+  <keyword cdr-id="CDR0000040754">stage IV verrucous carcinoma of the larynx</keyword>
+  <keyword cdr-id="CDR0000040755">recurrent squamous cell carcinoma of the larynx</keyword>
+  <keyword cdr-id="CDR0000040756">recurrent verrucous carcinoma of the larynx</keyword>
+  <keyword cdr-id="CDR0000040769">stage IV squamous cell carcinoma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040770">stage IV inverted papilloma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040771">stage IV midline lethal granuloma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040772">stage IV esthesioneuroblastoma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040773">recurrent squamous cell carcinoma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040774">recurrent inverted papilloma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040775">recurrent midline lethal granuloma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040776">recurrent esthesioneuroblastoma of the paranasal sinus and nasal cavity</keyword>
+  <keyword cdr-id="CDR0000040914">carcinoma of the appendix</keyword>
+  <keyword cdr-id="CDR0000041147">ovarian sarcoma</keyword>
+  <keyword cdr-id="CDR0000038161">gastrointestinal stromal tumor</keyword>
+  <keyword cdr-id="CDR0000038951">recurrent salivary gland cancer</keyword>
+  <keyword cdr-id="CDR0000038950">stage IV salivary gland cancer</keyword>
+  <keyword cdr-id="CDR0000042547">stage IV pancreatic cancer</keyword>
+  <keyword cdr-id="CDR0000562757">stage IV borderline ovarian surface epithelial-stromal tumor</keyword>
+  <keyword cdr-id="CDR0000562763">recurrent borderline ovarian surface epithelial-stromal tumor</keyword>
+  <keyword cdr-id="CDR0000637876">estrogen receptor-negative breast cancer</keyword>
+  <keyword cdr-id="CDR0000637896">HER2-negative breast cancer</keyword>
+  <keyword cdr-id="CDR0000637878">progesterone receptor-negative breast cancer</keyword>
+  <keyword cdr-id="CDR0000637899">triple-negative breast cancer</keyword>
+  <verification_date>2009-08-26</verification_date>
+</clinical_study>

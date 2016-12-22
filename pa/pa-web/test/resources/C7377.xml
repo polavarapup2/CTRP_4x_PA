@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDescriptionMsg xmlns="http://www.omg.org/spec/CTS2/1.1/Entity"
+    xmlns:core="http://www.omg.org/spec/CTS2/1.1/Core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/CTS2/1.1/Entity http://informatics.mayo.edu/cts2/spec/CTS2/1.1/entity/Entity.xsd">
+    <core:heading>
+        <core:resourceRoot>http://lexevs62cts2.nci.nih.gov/lexevscts2/</core:resourceRoot>
+        <core:resourceURI>codesystem/NCI_Thesaurus/version/NCI_Thesaurus-15.02d/entity/C7377</core:resourceURI>
+        <core:accessDate>2015-03-23T16:01:06.599-04:00</core:accessDate>
+    </core:heading>
+    <EntityDescription>
+        <namedEntity
+            about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C7377" entryState="ACTIVE">
+            <entityID>
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C7377</core:name>
+            </entityID>
+            <describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </describingCodeSystemVersion>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Lung Neoplasm</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Lung Tumor</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Neoplasm of Lung</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Neoplasm of the Lung</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Tumor of Lung</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Tumor of the Lung</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="PREFERRED">
+                <core:value>Malignant Lung Neoplasm</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE">
+                <core:value>Malignant Lung Neoplasm</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <definition definitionRole="NORMATIVE">
+                <core:value>A primary or metastatic malignant neoplasm involving the lung.</core:value>
+            </definition>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Legacy_Concept_Name">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Legacy_Concept_Name</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Malignant_Lung_Neoplasm</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Neoplastic_Status">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Neoplastic_Status</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Malignant</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Semantic_Type">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Semantic_Type</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Neoplastic Process</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#UMLS_CUI">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>UMLS_CUI</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>C0242379</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#code">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>code</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>C7377</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#primitive">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>primitive</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>false</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <subjectOf>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C7377/subjectof</subjectOf>
+            <targetOf>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C7377/targetof</targetOf>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222474_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222474_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222474_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222475_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222475_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222475_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222476_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222476_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222476_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222477_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222477_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222477_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222478_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222478_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222478_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222479_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222479_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222479_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A222480_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A222480_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A222480_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3200" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3200">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C3200</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4571" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4571">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C4571</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3576" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3576">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C3576</core:name>
+            </parent>
+            <children>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C7377/children</children>
+            <entityType uri="http://www.w3.org/2002/07/owl#Class">
+                <core:namespace>owl</core:namespace>
+                <core:name>Class</core:name>
+            </entityType>
+        </namedEntity>
+    </EntityDescription>
+</EntityDescriptionMsg>

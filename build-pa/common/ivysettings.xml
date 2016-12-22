@@ -1,0 +1,11 @@
+<ivysettings>
+    <property name="ivy.resolve.default.type.filter" value="jar,xsd" />
+    <settings defaultResolver="nci-chain" />
+    <caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
+    <resolvers>
+        <chain name="nci-chain" changingPattern=".*SNAPSHOT" checkmodified="true">
+            <ibiblio name="central" m2compatible="true" root="https://ncimvn.nci.nih.gov/nexus/content/groups/public" 
+            pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+        </chain>
+    </resolvers>
+</ivysettings>

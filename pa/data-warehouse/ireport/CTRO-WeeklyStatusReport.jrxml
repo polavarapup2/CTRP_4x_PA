@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CTRO-WeeklyStatusReport" language="groovy" pageWidth="2300" pageHeight="842" columnWidth="2260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="1262"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct a.nci_id as "NCI_ID",
+a.nct_id as "NCT_ID",
+Case When a.ctep_id IS NOT NULL Then a.ctep_id Else '/'||a.dcp_id End as "CTEP/DCP_ID",
+a.lead_org as "Lead_Organization",
+a.section_801_indicator as "Section_801_Indicator",
+a.current_trial_status as "Current_Trial_Status",
+a.current_trial_status_date as "Current_Trial_Status_Date",
+a.primary_completion_date as "Primary_Completion_Date",
+a.primary_completion_date_type_code "Primary_Completion_Date_Type",
+(select g.date from dw_study_milestone g
+where a.nci_id=g.nci_id
+and lower(g.name) like 'trial summary report date'
+and internal_system_id in (select max(h.internal_system_id) from dw_study_milestone h
+where a.nci_id=h.nci_id
+and lower(h.name) like 'trial summary report date' ))
+as "Trial_Summary_Report_Sent_Date"
+from dw_study a, dw_study_milestone b
+where a.nci_id=b.nci_id
+and lower(a.sponsor) in ('national cancer institute')
+Order By 1]]>
+	</queryString>
+	<field name="NCI_ID" class="java.lang.String"/>
+	<field name="CTEP/DCP_ID" class="java.lang.String"/>
+	<field name="NCT_ID" class="java.lang.String"/>
+	<field name="Lead_Organization" class="java.lang.String"/>
+	<field name="Current_trial_status" class="java.lang.String"/>
+	<field name="Primary_Completion_Date" class="java.lang.String"/>
+	<field name="Section_801_Indicator" class="java.lang.String"/>
+	<field name="Current_Trial_Status" class="java.lang.String"/>
+	<field name="Current_Trial_Status_Date" class="java.lang.String"/>
+	<field name="Primary_Completion_Date_Type" class="java.lang.String"/>
+	<field name="Trial_Summary_Report_Sent_Date" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="0" y="0" width="2260" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="2260" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CTRO-Weekly Status Report"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="129" y="0" width="111" height="69" backcolor="#D6D6FF" uuid="75448bf4-555a-4b2c-98fa-345f10f72965"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCT ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="240" y="0" width="169" height="69" backcolor="#D6D6FF" uuid="d4c9c6e0-2c14-4f3c-8d3b-4adbdff748ad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CTEP / DCP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="409" y="0" width="409" height="69" backcolor="#D6D6FF" uuid="907efa5a-142b-493b-9e11-019ca0c6e9df"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lead Organization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="818" y="0" width="123" height="69" backcolor="#D6D6FF" uuid="c7df0492-70a0-4446-8923-b789d9c1a8b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Section 801 Indicator]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="941" y="0" width="298" height="69" backcolor="#D6D6FF" uuid="40ffd780-21a6-455c-987b-89a2791c3de3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current Trial Status ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1239" y="0" width="209" height="69" backcolor="#D6D6FF" uuid="825622ec-1d22-428f-822f-0a0a5b6dc32e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current Trial Status Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1448" y="0" width="193" height="69" backcolor="#D6D6FF" uuid="89921936-02ac-4541-b1fc-5b12fc399c8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Primary Completion Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1641" y="0" width="298" height="69" backcolor="#D6D6FF" uuid="49ede0c4-61bb-47b6-b723-6bfb8e9333d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Primary Completion Date Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1939" y="0" width="321" height="69" backcolor="#D6D6FF" uuid="29052769-78a6-4c7c-8012-2c05c8294b4e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Trial Summary Report Sent  Date ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="129" height="69" backcolor="#D6D6FF" uuid="9cb38b69-041e-402b-b6f0-6212862afd1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCI ID]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="129" height="27" uuid="c9754712-74e4-4e6d-aa83-fc25671b2c94"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCI_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="129" y="0" width="111" height="27" uuid="b31c8da4-4cf5-4e59-8aa7-6e1fb93df042">
+					<printWhenExpression><![CDATA[!$F{NCT_ID}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCT_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="240" y="0" width="169" height="27" uuid="a111200c-83ad-4591-885b-9d6b6d9a9f67">
+					<printWhenExpression><![CDATA[!$F{CTEP/DCP_ID}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CTEP/DCP_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="409" y="0" width="409" height="27" isPrintWhenDetailOverflows="true" uuid="162b5fc1-d32c-4b52-8539-f0098209350f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Lead_Organization}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="818" y="0" width="123" height="27" isPrintWhenDetailOverflows="true" uuid="4b88502d-da84-4b02-8df9-96c24cd20615"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Section_801_Indicator}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="941" y="0" width="298" height="27" uuid="7af74298-83f5-4c45-844d-b5cacaae837c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Current_Trial_Status}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1239" y="0" width="209" height="27" isPrintWhenDetailOverflows="true" uuid="f2ff375c-2fcd-4245-9e52-089883817b85">
+					<printWhenExpression><![CDATA[!$F{Current_Trial_Status_Date}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Current_Trial_Status_Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1448" y="0" width="193" height="27" isPrintWhenDetailOverflows="true" uuid="7e8fafeb-47ff-46dd-b22c-7080e7770a41">
+					<printWhenExpression><![CDATA[!$F{Primary_Completion_Date}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Primary_Completion_Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1641" y="0" width="298" height="27" isPrintWhenDetailOverflows="true" uuid="9464b5ab-4751-4548-94b1-3efe771222f3">
+					<printWhenExpression><![CDATA[!$F{Primary_Completion_Date_Type}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Primary_Completion_Date_Type}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1939" y="0" width="321" height="27" isPrintWhenDetailOverflows="true" uuid="bb504287-a489-4ab8-b179-2618958ee933">
+					<printWhenExpression><![CDATA[!$F{Trial_Summary_Report_Sent_Date}.equals(null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Trial_Summary_Report_Sent_Date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

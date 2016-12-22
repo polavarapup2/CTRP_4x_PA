@@ -1,0 +1,56 @@
+<ivy-module version="1.0" xmlns:m="http://ant.apache.org/ivy/maven">
+    <info organisation="cbiit" module="ctrp-cgmm"/>
+
+    <configurations>
+        <conf name="jboss"/>
+        <conf name="tomcat"/>
+    </configurations>
+
+    <dependencies>
+        <!-- jboss -->
+        <dependency org="c3p0" name="c3p0" rev="0.9.0" conf="jboss->default"/>
+        <dependency org="globus" name="jcog" rev="1.2" conf="jboss->default"/>
+
+        <!-- tomcat -->
+        <dependency org="org.acegisecurity" name="acegi-security" rev="1.0.3" transitive="false" conf="tomcat->default"/>
+        <dependency org="c3p0" name="c3p0" rev="0.9.0" conf="tomcat->default"/>
+        <dependency org="gov.nih.nci.cagrid" name="cagrid-bulkdatahandler-client" rev="1.3" conf="tomcat->default"/>
+        <dependency org="gov.nih.nci.cagrid" name="cagrid-bulkdatahandler-common" rev="1.3" conf="tomcat->default"/>
+        <dependency org="gov.nih.nci.cagrid" name="cagrid-bulkdatahandler-stubs" rev="1.3" conf="tomcat->default"/>
+        <dependency org="caGrid" name="caGrid-dorian-client" rev="1.3" conf="tomcat->default"/>
+        <dependency org="caGrid" name="caGrid-dorian-common" rev="1.3" conf="tomcat->default"/>
+        <dependency org="cagrid" name="cagrid-gaards-core" rev="1.3nci" conf="tomcat->default"/>
+        <dependency org="gov.nih.nci.security" name="clm" rev="4.2.beta" conf="tomcat->default"/>
+        <dependency org="commons-codec" name="commons-codec" rev="1.3" conf="tomcat->default"/>
+        <dependency org="commons-discovery" name="commons-discovery" rev="0.5" conf="tomcat->default"/>
+        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.0" conf="tomcat->default"/>
+        <dependency org="commons-lang" name="commons-lang" rev="2.4" force="true" conf="tomcat->default"/>
+        <dependency org="commons-logging" name="commons-logging" rev="1.0.4" force="true" conf="tomcat->default"/>
+        <dependency org="commons-validator" name="commons-validator" rev="1.3.1" transitive="false" conf="tomcat->default"/>
+        <dependency org="globus" name="cryptix32" rev="4.0.3" conf="tomcat->default"/>
+        <dependency org="globus" name="cryptix-asn1" rev="4.0.3" conf="tomcat->default"/>
+        <dependency org="csmapi" name="csmapi" rev="4.2" conf="tomcat->default"/>
+        <dependency org="net.sf.ehcache" name="ehcache" rev="1.2.4" conf="tomcat->default"/>
+        <dependency org="org.hibernate" name="ejb3-persistence" rev="1.0.1.GA" conf="tomcat->default"/>
+        <dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" transitive="false" conf="tomcat->default"/>
+        <dependency org="org.hibernate" name="hibernate-annotations" rev="3.2.0.ga" transitive="false" conf="tomcat->default"/>
+        <dependency org="jasciidammit" name="jasciidammit" rev="1.1" conf="tomcat->default"/>
+        <dependency org="jaxen" name="jaxen" rev="1.0-FCS" conf="tomcat->default"/>
+        <dependency org="jdom" name="jdom" rev="1.0" conf="tomcat->default"/>
+        <dependency org="javax.transaction" name="jta" rev="1.1" conf="tomcat->default"/>
+        <dependency org="junit" name="junit" rev="3.8.1" conf="tomcat->default"/>
+        <dependency org="javax.mail" name="mail" rev="1.4" transitive="false" conf="tomcat->default"/>
+        <dependency org="mobius" name="mobius_common_client" rev="1.1" conf="tomcat->default"/>
+        <dependency org="mobius" name="mobius_tools" rev="1.1" conf="tomcat->default"/>
+        <dependency org="globus" name="puretls" rev="4.0.3" conf="tomcat->default"/>
+        <dependency org="saxpath" name="saxpath" rev="1.0-FCS" conf="tomcat->default"/>
+        <dependency org="javax.servlet" name="servlet-api" rev="2.3" conf="tomcat->default"/>
+        <dependency org="org.springframework" name="spring" rev="1.2.8" transitive="false" conf="tomcat->default"/>
+        <dependency org="struts" name="struts" rev="1.1" transitive="false" conf="tomcat->default"/>
+        <dependency org="globus" name="ws-addressing" rev="1.0" transitive="false" conf="tomcat->default"/>
+        <dependency org="globus" name="ws-core-client" rev="4.0.3" conf="tomcat->default"/>
+        <dependency org="globus" name="ws-enumeration" rev="4.0.3" conf="tomcat->default"/>
+        <dependency org="wss4j" name="wss4j" rev="1.0nci" conf="tomcat->default"/>
+        <dependency org="xml-security" name="xmlsec" rev="1.2.1" conf="tomcat->default"/>
+  </dependencies>
+</ivy-module>

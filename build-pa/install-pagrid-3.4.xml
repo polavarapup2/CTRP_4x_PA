@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+$Id: install.xml 4757 2008-05-15 20:43:31Z zengje $
+$HeadURL: http://gforge.nci.nih.gov/svnroot/po-ear/trunk/software/install.xml $
+-->
+<project name="pa-grid-3.4-installer" default="upgrade" basedir="."
+  xmlns:ivy="antlib:org.apache.ivy.ant"
+  >
+  <description>
+    This build file is part of the COPPA-PA project. This is the master install file for the COPPA-PA project. This script is copied into the distribution and executed from the extracted distribution.  It is run by typing "ant" from the master project build.xml or from command line. This script has two flows install and upgrade.
+    Install will do the following
+    * Install binaries
+    * Configure binaries
+    * Install application
+    * Configure application
+    * Re-create database
+    * Upgrade database
+    Upgrade will do the following
+    * Install application
+    * Configure application
+    * Upgrade database
+    The script includes target that may not be used by all projects, but are included in here becaue it is a template. This script has targets to deal with the following, you can delete targets you don't want to work with
+    Application servers (option for grid services also)
+    * JBoss
+    Databases
+    * PostgreSQL
+    This script requires java and ant to run. Every thing else it needs is included in the distribution.
+  </description>
+
+    <property name="grid.resource.dir" value="${working.dir}/${grid.dist.relative.dir}" />
+    <property name="grid.application.dir" value="${working.dir}/grid-application" />
+    <property name="grid.resource.dir.src" value="${basedir}/${grid.dist.relative.dir}" />
+
+    <property name="resource.file.jboss-globus-lib" value="jboss-globus-libs-cagrid1_1.zip" />
+    <property name="resource.file.jboss-globus-war" value="jboss-globus-wsrf-war-cagrid1_1.zip" />
+
+    <property name="pa-grid-3.4.dir.dist" value="${basedir}/${pa-grid-3.4.dist.relative.dir}" />
+    <property name="pa-grid-3.4.dir.src" value="${basedir}/${pa-grid-3.4.dist.relative.dir}" />
+    <property name="pa-grid-3.4.dir.target" value="wsrf.war" />
+    <property name="pa-grid-3.4.introduce.skeleton.service.name" value="CoreServices"/>
+
+  <target name="install:pa-grid-3.4-jboss:clean"  unless="exclude.pa-grid-3.4">
+    <sleep seconds="5" />
+    <property name="backup.count" value="5"/>
+
+    <if>
+      <not>
+        <equals arg1="${exclude.pa-grid-3.4-jboss.backup}" arg2="true"/>
+      </not>
+      <then>
+        <!-- Jboss backup, do not compress until install is finished -->
+        <property name="backup.pa-grid-3.4-jboss.base.dir" location="${application.base.path}/backup/pa-grid-3.4"/>
+        <!-- So these directories won't be included in the backup, they are not needed to use jboss -->
+        <delete dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/work"/>
+        <delete dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/tmp"/>
+
+        <backup-dir
+          src.dir="${pa-grid-3.4-jboss.home}"
+          backup.base.dir="${backup.pa-grid-3.4-jboss.base.dir}"
+          backup.count="${backup.count}"
+          />
+      </then>
+    </if>
+    <delete dir="${pa-grid-3.4-jboss.home}"/>
+  </target>
+
+  <target name="install:pa-grid-3.4-jboss:init" depends="common:init:pre, install:pa-ear-jboss:init" unless="exclude.pa-grid-3.4">
+      <!-- determine if port configurations or port lists are being called -->
+      <if>
+          <isset property="pa-grid-3.4-jboss.ncicb-standard.port-config"/>
+          <then>
+              <!-- Read some port properties from standard bindings file -->
+              <echo message="Using JBoss NCICB Standard port configurations"/>
+              <if>
+                  <equals arg1="${jboss.major.version}" arg2="4"/>
+                  <then>
+                      <property name="pa-grid-3.4-jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+                      <jboss-read-ports
+                          jboss.server.ports.name="${pa-grid-3.4-jboss.server.ports.name}"
+                          jboss.server.bindingfile.location="${pa-grid-3.4-jboss.server.binding.template.location}"
+                          jboss.server.jndi.port.property.name="pa-grid-3.4-jboss.server.jndi.port"
+                          jboss.server.port.property.name="pa-grid-3.4-jboss.server.port"
+                          jboss.ejbinvoker.port.property.name="pa-grid-3.4-jboss.ejbinvoker.port"
+                          jboss.server.rmi.port.property.name="pa-grid-3.4-jboss.server.rmi.port"
+                          jboss.web.service.port.property.name="pa-grid-3.4-jboss.web.service.port"
+                          jboss.service.rmiobject.port.property.name="pa-grid-3.4-jboss.service.rmiobject.port"
+                          jboss.server.bind.port.property.name="pa-grid-3.4-jboss.server.bind.port"
+                          jboss.hajndi.port.property.name="pa-grid-3.4-jboss.hajndi.port"
+                          jboss.hajrmi.port.property.name="pa-grid-3.4-jboss.hajrmi.port"
+                          jboss.cobraorb.port.property.name="pa-grid-3.4-jboss.cobraorb.port"
+                          jboss.jmx-rmi.port.property.name="pa-grid-3.4-jboss.jmx-rmi.port"
+                          jboss.snmp-trapd.port.property.name="pa-grid-3.4-jboss.snmp-trapd.port"
+                          jboss.snmp.port.property.name="pa-grid-3.4-jboss.snmp.port"
+                          jboss.jms.port.property.name="pa-grid-3.4-jboss.jms.port"
+                          jboss.remoting.port.property.name="pa-grid-3.4-jboss.remoting.port"
+                          jboss.messaging.port.property.name="pa-grid-3.4-jboss.messaging.port"
+
+                          />
+                      <jboss-bindings-validate
+                          jboss.server.ports.name="${pa-grid-3.4-jboss.server.ports.name}"
+                          jboss.server.bindingfile.location="${pa-grid-3.4-jboss.server.binding.template.location}"
+                          />
+                  </then>
+                  <elseif>
+                      <equals arg1="${jboss.major.version}" arg2="5"/>
+                      <then>
+                          <property name="pa-grid-3.4-jboss.server.bindingfile.location" value="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"/>
+                          <property name="temp.bindings.file" value="${temp.dir}/unmodified-bindings-jboss-beans.xml"/>
+                          <copy tofile="${temp.bindings.file}" file="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/unmodified-bindings-jboss-beans.xml"/>
+                            <property name="temp.ejb.file" value="${temp.dir}/ejb3-connectors-jboss-beans.xml"/>
+                            <copy tofile="${temp.ejb.file}" file="${bda-utils.dir}/resource/jboss-5.1.0.GA/ejb3-connectors-jboss-beans.xml"/>
+                            <jboss51-bindings-nci
+                              jboss.server.bindingfile.location="${temp.bindings.file}"
+                              />
+                          <jboss51-read-ports-nci
+                              jboss.server.bindingfile.location="${temp.bindings.file}"
+                                jboss.server.ejbfile.location="${temp.ejb.file}"
+                              />
+                      </then>
+                  </elseif>
+              </if>
+              <echo message="http -${pa-grid-3.4-jboss.server.port} "/>
+              <echo message="http -${pa-grid-3.4-jboss.server.jndi.port} "/>
+              <properties-exist
+                  properties.list="pa-grid-3.4-jboss.server.jndi.port,pa-grid-3.4-jboss.server.port,pa-grid-3.4-jboss.server.ports.name"
+                  />
+          </then>
+          <else>
+              <!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+              <echo message="Using custom JBoss port configurations"/>
+              <property name="pa-grid-3.4-jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+              <properties-exist
+                  properties.list="pa-grid-3.4-jboss.server.jndi.port,pa-grid-3.4-jboss.server.port,pa-grid-3.4-jboss.cobraorb.port,pa-grid-3.4-jboss.hajndi.port,pa-grid-3.4-jboss.hajrmi.port,pa-grid-3.4-jboss.jmx-rmi.port,pa-grid-3.4-jboss.messaging.port,pa-grid-3.4-jboss.pooledha.port,pa-grid-3.4-jboss.server.bind.port,pa-grid-3.4-jboss.server.rmi.port,pa-grid-3.4-jboss.service.rmiobject.port,pa-grid-3.4-jboss.snmp.port,pa-grid-3.4-jboss.snmp-trapd.port,pa-grid-3.4-jboss.web.service.port,pa-grid-3.4-jboss.unifiedinvoker.port,pa-grid-3.4-jboss.hajndi.auto.port,pa-grid-3.4-jboss.ssl.port,pa-grid-3.4-jboss.jms2.netty.port,pa-grid-3.4-jboss.jms2.netty-ssl.port,pa-grid-3.4-jboss.transaction.recovery.port,pa-grid-3.4-jboss.transaction.status.port,pa-grid-3.4-jboss.transaction.processid.port"
+                  />
+          </else>
+      </if>
+  </target>
+  <target name="common:pa-grid-3.4-jboss:init" depends="common:init:pre"  unless="exclude.pa-grid-3.4">
+      <property name="pa-grid-3.4-jboss.ssl.enable" value="false"/>
+      <property name="pa-grid-3.4-jboss.home" value="${application.base.path}/${pa-grid-3.4-jboss.relative.path}"/>
+      <jboss-version
+          />
+      <if>
+          <equals arg1="${pa-grid-3.4-jboss.http-connector.remove}" arg2="true"/>
+          <then>
+              <property name="pa-grid-3.4-jboss.application.url" value="https://${pa-grid-3.4-jboss.server.hostname}:${pa-grid-3.4-jboss.grid.secure.port}/wsrf/services/cagrid/PAServices"/>
+          </then>
+          <else>
+              <property name="pa-grid-3.4-jboss.application.url" value="http://${pa-grid-3.4-jboss.server.hostname}:${pa-grid-3.4-jboss.server.port}/wsrf/services/cagrid/PAServices"/>
+          </else>
+      </if>
+      <available file="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/conf/jboss-service.xml" property="pa-grid-3.4-jboss.exists"/>
+      <basename file="${pa-grid-3.4-jboss.ssl.keystore.location}" property="pa-grid-3.4-jboss.ssl.keystore.file"/>
+      <dirname file="${pa-grid-3.4-jboss.ssl.keystore.location}" property="pa-grid-3.4-jboss.ssl.keystore.dir"/>
+      <basename file="${pa-grid-3.4-jboss.grid.secure.cert.location}" property="pa-grid-3.4-jboss.grid.secure.cert.file"/>
+      <dirname file="${pa-grid-3.4-jboss.grid.secure.cert.location}" property="pa-grid-3.4-jboss.grid.secure.dir"/>
+      <basename file="${pa-grid-3.4-jboss.grid.secure.key.location}" property="pa-grid-3.4-jboss.grid.secure.key.file"/>
+      <property name="pa-grid-3.4-jboss.socket.ports" value="${pa-grid-3.4-jboss.server.port},${pa-grid-3.4-jboss.server.rmi.port},${pa-grid-3.4-jboss.server.jndi.port},${pa-grid-3.4-jboss.service.rmiobject.port},${pa-grid-3.4-jboss.jms.port},${pa-grid-3.4-jboss.web.service.port}"/>
+  </target>
+
+  <target name="install:pa-grid-3.4-jboss:binaries" unless="exclude.pa-grid-3.4">
+      <jboss-install-binaries
+          application.base.path="${application.base.path}"
+          jems.install.option="default"
+          jboss.home="${pa-grid-3.4-jboss.home}"
+          jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+          />
+      <jboss-nci-customizations
+          application.base.path="${application.base.path}"
+          jboss.home="${pa-grid-3.4-jboss.home}"
+          jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+          jboss.server.jndi.port="${pa-grid-3.4-jboss.server.jndi.port}"
+          jboss.java.opts="${pa-grid-3.4-jboss.java.opts}"
+          />
+  </target>
+
+    <!-- Installs the pa-grid-3.4 application to JBOSS -->
+    <target name="install:pa-grid-3.4-jboss:grid" description="Deploy Coppa PO Grid application to JBOSS" unless="exclude.pa-grid-3.4">
+        <echo message="Entirely removing existing wsrf.war deployment"/>
+        <delete dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/${pa-grid-3.4.dir.target}"/>
+        <mkdir dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/${pa-grid-3.4.dir.target}"/>
+
+        <unzip dest="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/lib" src="${grid.resource.dir.src}/${resource.file.jboss-globus-lib}" />
+        <unzip dest="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/${pa-grid-3.4.dir.target}" src="${grid.resource.dir.src}/${resource.file.jboss-globus-war}" />
+
+        <unzip dest="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/${pa-grid-3.4.dir.target}" src="${pa-grid-3.4.dir.src}/${pa-grid-3.4.artifact.file}" />
+    </target>
+
+
+    <!-- Configures installed pa-grid-3.4 application -->
+    <target name="install:pa-grid-3.4-jboss:grid:configure" description="Configure pa-grid-3.4 service based on properties" unless="exclude.pa-grid-3.4">
+
+        <echoproperties prefix="pa-grid-3.4-jboss"/>
+        <jboss-configure-grid
+            jboss.home="${pa-grid-3.4-jboss.home}"
+            jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+            jboss.port.http="${pa-grid-3.4-jboss.server.port}"
+            jboss.port.ssl="${pa-grid-3.4-jboss.ssl.port}"
+            jboss.hostname="${pa-grid-3.4-jboss.server.hostname}"
+            jboss.external.http.host="${pa-grid-3.4-jboss.external.http.host}"
+            jboss.external.http.port="${pa-grid-3.4-jboss.external.http.port}"
+            jboss.external.grid.secure.host="${pa-grid-3.4-jboss.external.grid.secure.host}"
+            jboss.external.grid.secure.port="${pa-grid-3.4-jboss.external.grid.secure.port}"
+            jboss.grid.secure.enable="${pa-grid-3.4-jboss.grid.secure.enable}"
+            jboss.grid.secure.dir="${pa-grid-3.4-jboss.grid.secure.dir}"
+            jboss.grid.secure.port="${pa-grid-3.4-jboss.grid.secure.port}"
+            jboss.grid.secure.key.file="${pa-grid-3.4-jboss.grid.secure.key.file}"
+            jboss.grid.secure.cert.file="${pa-grid-3.4-jboss.grid.secure.cert.file}"
+            grid.application.name="${pa-grid-3.4.introduce.skeleton.service.name}"
+            />
+        <configure-grid-log4j log.level="${app.log.level}" log.level.default="${app.log.level.default}" config.dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/conf"/>
+    	
+    	<replace file="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/${pa-grid-3.4.dir.target}/WEB-INF/web.xml" summary="true">
+    	             <replacetoken><![CDATA[<servlet>]]></replacetoken>
+    	             <replacevalue><![CDATA[
+    	                
+    	                <filter>
+    	                    <filter-name>
+    	                      filter
+    	                    </filter-name>
+    	                    <filter-class>
+    	             	gov.nih.nci.coppa.services.pa.grid.remote.InterceptingFilter
+    	                    </filter-class>
+    	                  </filter>
+
+    	                  <filter-mapping>
+    	                    <filter-name>
+    	                        filter
+    	                    </filter-name>
+    	                    <url-pattern>
+    	                      /*
+    	                    </url-pattern>
+    	                  </filter-mapping>
+    	                
+    	                <servlet>]]></replacevalue>         
+    	        </replace>    	
+    	
+    </target>
+
+  <target name="install:pa-grid-3.4-jboss:configure" unless="exclude.pa-grid-3.4">
+    <!-- Use below if you are defining all the ports in your install.xml not the NCICB port configuraitons-->
+
+    <if>
+        <equals arg1="${jboss.major.version}" arg2="4"/>
+        <then>
+            <jboss-configure
+                      jboss.home="${pa-grid-3.4-jboss.home}"
+                      jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+                      jboss.server.ports.name="${pa-grid-3.4-jboss.server.ports.name}"
+                      jboss.server.bindingfile.location="${pa-grid-3.4-jboss.home}/bindings/bindings.xml"
+                      jboss.server.binding.template.location="${pa-grid-3.4-jboss.server.binding.template.location}"
+
+                      jboss.server.jndi.port="${pa-grid-3.4-jboss.server.jndi.port}"
+                      jboss.server.port="${pa-grid-3.4-jboss.server.port}"
+                      jboss.cobraorb.port="${pa-grid-3.4-jboss.cobraorb.port}"
+                      jboss.ejbinvoker.port="${pa-grid-3.4-jboss.ejbinvoker.port}"
+                      jboss.hajndi.port="${pa-grid-3.4-jboss.hajndi.port}"
+                      jboss.hajrmi.port="${pa-grid-3.4-jboss.hajrmi.port}"
+                      jboss.jms.port="${pa-grid-3.4-jboss.jms.port}"
+                      jboss.jmx-rmi.port="${pa-grid-3.4-jboss.jmx-rmi.port}"
+                      jboss.messaging.port="${pa-grid-3.4-jboss.messaging.port}"
+                      jboss.pooledha.port="${pa-grid-3.4-jboss.pooledha.port}"
+                      jboss.remoting.port="${pa-grid-3.4-jboss.remoting.port}"
+                      jboss.server.bind.port="${pa-grid-3.4-jboss.server.bind.port}"
+                      jboss.server.rmi.port="${pa-grid-3.4-jboss.server.rmi.port}"
+                      jboss.service.rmiobject.port="${pa-grid-3.4-jboss.service.rmiobject.port}"
+                      jboss.snmp.port="${pa-grid-3.4-jboss.snmp.port}"
+                      jboss.snmp-trapd.port="${pa-grid-3.4-jboss.snmp-trapd.port}"
+                      jboss.web.service.port="${pa-grid-3.4-jboss.web.service.port}"
+                      jboss.unifiedinvoker.port="${pa-grid-3.4-jboss.unifiedinvoker.port}"
+                      jboss.hajndi.auto.port="${pa-grid-3.4-jboss.hajndi.auto.port}"
+                      jboss.ssl.port="${pa-grid-3.4-jboss.ssl.port}"
+                      jboss.jms2.netty.port="${pa-grid-3.4-jboss.jms2.netty.port}"
+                      jboss.jms2.netty-ssl.port="${pa-grid-3.4-jboss.jms2.netty-ssl.port}"
+                      jboss.transaction.recovery.port="${pa-grid-3.4-jboss.transaction.recovery.port}"
+                      jboss.transaction.status.port="${pa-grid-3.4-jboss.transaction.status.port}"
+                      jboss.transaction.processid.port="${pa-grid-3.4-jboss.transaction.processid.port}"
+                      jboss.conf.dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/conf"
+                      jboss.server-xml.file="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+                      jboss.ssl.enable="${pa-grid-3.4-jboss.ssl.enable}"
+                      jboss.ssl.keystore.file="${pa-grid-3.4-jboss.ssl.keystore.file}"
+                      jboss.ssl.keystore.dir="${pa-grid-3.4-jboss.ssl.keystore.dir}"
+                      jboss.ssl.keystore.pass="${pa-grid-3.4-jboss.ssl.keystore.pass}"
+                      jboss.ssl.keystore.alias="${pa-grid-3.4-jboss.ssl.keystore.alias}"
+                      jboss.ssl.fullyqualified.hostname="${pa-grid-3.4-jboss.ssl.fullyqualified.hostname}"
+                      jboss.external.ssl.host="${pa-grid-3.4-jboss.external.ssl.host}"
+                      jboss.external.ssl.port="${pa-grid-3.4-jboss.external.ssl.port}"
+                      jboss.external.http.host="${pa-grid-3.4-jboss.external.http.host}"
+                      jboss.external.http.port="${pa-grid-3.4-jboss.external.http.port}"
+                      jboss.external.grid.secure.host="${pa-grid-3.4-jboss.external.grid.secure.host}"
+                      jboss.external.grid.secure.port="${pa-grid-3.4-jboss.external.grid.secure.port}"
+                      jboss.server.hostname="${pa-grid-3.4-jboss.server.hostname}"
+                      jboss.grid.configure="true"
+                      jboss.grid.secure.dir="${pa-grid-3.4-jboss.grid.secure.dir}"
+                      jboss.grid.secure.enable="${pa-grid-3.4-jboss.grid.secure.enable}"
+                      jboss.grid.secure.port="${pa-grid-3.4-jboss.grid.secure.port}"
+                      jboss.grid.secure.key.file="${pa-grid-3.4-jboss.grid.secure.key.file}"
+                      jboss.grid.secure.cert.file="${pa-grid-3.4-jboss.grid.secure.cert.file}"
+                      jboss.java.opts="${pa-grid-3.4-jboss.java.opts}"
+                      jboss.logs.dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/log"
+                      jboss.http-connector.remove="${pa-grid-3.4-jboss.http-connector.remove}"
+                      />
+        </then>
+    </if>
+    <if>
+        <equals arg1="${jboss.major.version}" arg2="5"/>
+        <then>
+            <jboss-configure
+                                  jboss.home="${pa-grid-3.4-jboss.home}"
+                                  jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+                                  jboss.server.ports.name="${pa-grid-3.4-jboss.server.ports.name}"
+                                  jboss.server.bindingfile.location="${pa-grid-3.4-jboss.home}/bindings/bindings.xml"
+                                  jboss.server.binding.template.location="${pa-grid-3.4-jboss.server.binding.template.location}"
+
+                                  jboss.server.jndi.port="${pa-grid-3.4-jboss.server.jndi.port}"
+                                  jboss.server.port="${pa-grid-3.4-jboss.server.port}"
+                                  jboss.cobraorb.port="${pa-grid-3.4-jboss.cobraorb.port}"
+                                  jboss.ejbinvoker.port="${pa-grid-3.4-jboss.ejbinvoker.port}"
+                                  jboss.hajndi.port="${pa-grid-3.4-jboss.hajndi.port}"
+                                  jboss.hajrmi.port="${pa-grid-3.4-jboss.hajrmi.port}"
+                                  jboss.jms.port="${pa-grid-3.4-jboss.jms.port}"
+                                  jboss.jmx-rmi.port="${pa-grid-3.4-jboss.jmx-rmi.port}"
+                                  jboss.messaging.port="${pa-grid-3.4-jboss.messaging.port}"
+                                  jboss.pooledha.port="${pa-grid-3.4-jboss.pooledha.port}"
+                                  jboss.remoting.port="${pa-grid-3.4-jboss.remoting.port}"
+                                  jboss.server.bind.port="${pa-grid-3.4-jboss.server.bind.port}"
+                                  jboss.server.rmi.port="${pa-grid-3.4-jboss.server.rmi.port}"
+                                  jboss.service.rmiobject.port="${pa-grid-3.4-jboss.service.rmiobject.port}"
+                                  jboss.snmp.port="${pa-grid-3.4-jboss.snmp.port}"
+                                  jboss.snmp-trapd.port="${pa-grid-3.4-jboss.snmp-trapd.port}"
+                                  jboss.web.service.port="${pa-grid-3.4-jboss.web.service.port}"
+                                  jboss.unifiedinvoker.port="${pa-grid-3.4-jboss.unifiedinvoker.port}"
+                                  jboss.hajndi.auto.port="${pa-grid-3.4-jboss.hajndi.auto.port}"
+                                  jboss.ssl.port="${pa-grid-3.4-jboss.ssl.port}"
+                                  jboss.jms2.netty.port="${pa-grid-3.4-jboss.jms2.netty.port}"
+                                  jboss.jms2.netty-ssl.port="${pa-grid-3.4-jboss.jms2.netty-ssl.port}"
+                                  jboss.transaction.recovery.port="${pa-grid-3.4-jboss.transaction.recovery.port}"
+                                  jboss.transaction.status.port="${pa-grid-3.4-jboss.transaction.status.port}"
+                                  jboss.transaction.processid.port="${pa-grid-3.4-jboss.transaction.processid.port}"
+                                  jboss.conf.dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/conf"
+                                  jboss.server-xml.file="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+                                  jboss.ssl.enable="${pa-grid-3.4-jboss.ssl.enable}"
+                                  jboss.ssl.keystore.file="${pa-grid-3.4-jboss.ssl.keystore.file}"
+                                  jboss.ssl.keystore.dir="${pa-grid-3.4-jboss.ssl.keystore.dir}"
+                                  jboss.ssl.keystore.pass="${pa-grid-3.4-jboss.ssl.keystore.pass}"
+                                  jboss.ssl.keystore.alias="${pa-grid-3.4-jboss.ssl.keystore.alias}"
+                                  jboss.ssl.fullyqualified.hostname="${pa-grid-3.4-jboss.ssl.fullyqualified.hostname}"
+                                  jboss.external.ssl.host="${pa-grid-3.4-jboss.external.ssl.host}"
+                                  jboss.external.ssl.port="${pa-grid-3.4-jboss.external.ssl.port}"
+                                  jboss.external.http.host="${pa-grid-3.4-jboss.external.http.host}"
+                                  jboss.external.http.port="${pa-grid-3.4-jboss.external.http.port}"
+                                  jboss.external.grid.secure.host="${pa-grid-3.4-jboss.external.grid.secure.host}"
+                                  jboss.external.grid.secure.port="${pa-grid-3.4-jboss.external.grid.secure.port}"
+                                  jboss.server.hostname="${pa-grid-3.4-jboss.server.hostname}"
+                                  jboss.grid.configure="true"
+                                  jboss.grid.secure.dir="${pa-grid-3.4-jboss.grid.secure.dir}"
+                                  jboss.grid.secure.enable="${pa-grid-3.4-jboss.grid.secure.enable}"
+                                  jboss.grid.secure.port="${pa-grid-3.4-jboss.grid.secure.port}"
+                                  jboss.grid.secure.key.file="${pa-grid-3.4-jboss.grid.secure.key.file}"
+                                  jboss.grid.secure.cert.file="${pa-grid-3.4-jboss.grid.secure.cert.file}"
+                                  jboss.java.opts="${pa-grid-3.4-jboss.java.opts}"
+                                  jboss.logs.dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/log"
+                                  jboss.http-connector.remove="${pa-grid-3.4-jboss.http-connector.remove}"
+                                  />
+            <jboss51-encrypt-messaging-passwd
+                />
+        </then>
+    </if>
+
+  </target>
+
+  <target name="install:pa-grid-3.4-jboss:stop" unless="exclude.pa-grid-3.4">
+    <jboss-stop-jboss jboss.server.hostname="${pa-grid-3.4-jboss.server.hostname}" jboss.server.jndi.port="${pa-grid-3.4-jboss.server.jndi.port}" jboss.server.name="${pa-grid-3.4-jboss.server.name}" sleep.time="15"/>
+  </target>
+
+    <target name="install:pa-grid-3.4-jboss:start" unless="exclude.pa-grid-3.4">
+    <if>
+      <not>
+        <isset property="exclude.start.servers"/>
+      </not>
+      <then>
+          <jboss-start-jboss
+              jboss.home="${pa-grid-3.4-jboss.home}"
+              jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+              />
+      </then>
+    </if>
+    </target>
+
+    <target name="install:pa-grid-3.4-jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+        depends="
+        common:pa-grid-3.4-jboss:init,common:init,
+        install:common:validation:pre-install
+        " unless="exclude.pa-grid-3.4">
+        <validate-pre-install-jboss
+            jboss.ssl.enable="${pa-grid-3.4-jboss.ssl.enable}"
+            jboss.ssl.keystore.file="${pa-grid-3.4-jboss.ssl.keystore.file}"
+            jboss.ssl.keystore.dir="${pa-grid-3.4-jboss.ssl.keystore.dir}"
+            jboss.ssl.keystore.pass="${pa-grid-3.4-jboss.ssl.keystore.pass}"
+            jboss.ssl.keystore.alias="${pa-grid-3.4-jboss.ssl.keystore.alias}"
+            jboss.ssl.fullyqualified.hostname="${pa-grid-3.4-jboss.ssl.fullyqualified.hostname}"
+            />
+    </target>
+    <target name="install:pa-grid-3.4-jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop"
+        unless="exclude.pa-grid-3.4" depends="
+        common:init,
+        install:pa-grid-3.4-jboss:stop
+        ">
+        <validate-pre-jboss-ports
+            jboss.socket.ports="${pa-grid-3.4-jboss.socket.ports}"
+            hostname="${pa-grid-3.4-jboss.server.hostname}"
+            />
+    </target>
+    <target name="install:pa-grid-3.4-jboss:validation:post-install" description="Run post-install checks from bda-utils"
+        depends="
+        common:pa-grid-3.4-jboss:init,
+        common:init,
+        install:pa-grid-3.4-jboss:start
+        " unless="exclude.pa-grid-3.4">
+        <if>
+            <not>
+                <isset property="exclude.start.servers"/>
+            </not>
+            <then>
+                <validate-post-jboss
+                    jboss.socket.list="${pa-grid-3.4-jboss.socket.ports}"
+                    jboss.home="${pa-grid-3.4-jboss.home}"
+                    jboss.hostname="${pa-grid-3.4-jboss.server.hostname}"
+                    jboss.application.url="${pa-grid-3.4-jboss.application.url}"
+                    />
+            </then>
+        </if>
+    </target>
+
+  <target name="install:pa-grid-3.4-jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.pa-grid-3.4"
+      depends="
+      common:pa-grid-3.4-jboss:init,
+      common:init,
+      install:pa-grid-3.4-jboss:init,
+      install:pa-grid-3.4-jboss:validation:pre-install,
+      install:common:validation:pre-install,
+      install:pa-grid-3.4-jboss:stop,
+      install:pa-grid-3.4-jboss:validation:pre-install:ports,
+      install:pa-grid-3.4-jboss:clean,
+      install:pa-grid-3.4-jboss:binaries,
+      install:pa-grid-3.4-jboss:configure,
+      install:pa-grid-3.4-jboss:re-configure,
+      install:pa-grid-3.4-jboss:grid,
+      install:pa-grid-3.4-jboss:grid:configure,
+      install:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:start,
+      install:pa-grid-3.4-jboss:validation:post-install
+      " >
+  </target>
+
+  <target name="install:pa-grid-3.4-jboss:re-configure" unless="exclude.pa-grid-3.4">
+      <mkdir dir="${temp.dir}/${pa-grid-3.4.dist.relative.dir}"/>
+      <unzip src="${pa-grid-3.4.dir.dist}/${pa-grid-3.4.artifact.file}" dest="${temp.dir}/${pa-grid-3.4.dist.relative.dir}"/>
+      <unzip src="${temp.dir}/${pa-grid-3.4.dist.relative.dir}/WEB-INF/lib/${pa-grid-3.4.introduce.skeleton.service.name}-common.jar" dest="${temp.dir}/${pa-grid-3.4.introduce.skeleton.service.name}-common"/>
+      <!-- Filter contents of the files below to be based on install time properties. Paths below are paths witin the ear. -->
+      <var name="file.list"
+          value="${pa-grid-3.4.introduce.skeleton.service.name}-common/jndi.properties"/>
+
+      <for list="${file.list}" param="file.relative.name">
+          <sequential>
+              <propertyregex property="file.name"
+                  input="@{file.relative.name}"
+                  regexp="^.*\/(.*)"
+                  select="\1"
+                  override="true"
+                  />
+              <propertyregex property="relative.dir"
+                  input="@{file.relative.name}"
+                  regexp="^(.*)\/.*"
+                  select="\1"
+                  override="true"
+                  />
+              <echo message="relative.dir=${relative.dir} file.name=${file.name}"/>
+              <replace file="${temp.dir}/${relative.dir}/${file.name}" token="%%" value="@"/>
+              <copy todir="${temp.dir}" file="${temp.dir}/${relative.dir}/${file.name}" filtering="true" overwrite="true">
+                  <filterset>
+                  	  <filter token="jboss.server.hostname" value="${jboss.server.hostname}"/>
+                      <filter token="jboss.server.jndi.port" value="${jboss.server.jndi.port}"/>
+                      <filter token="grid.security.jndi.principal" value="${grid.security.jndi.principal}"/>
+                      <filter token="grid.security.jndi.credentials" value="${grid.security.jndi.credentials}"/>
+                  </filterset>
+              </copy>
+              <copy todir="${temp.dir}/${relative.dir}" file="${temp.dir}/${file.name}" overwrite="true"/>
+          </sequential>
+      </for>
+      <move file="${pa-grid-3.4.dir.dist}/${pa-grid-3.4.artifact.file}" tofile="${pa-grid-3.4.dir.dist}/${pa-grid-3.4.artifact.file}.orig"/>
+      <jar destfile="${temp.dir}/${pa-grid-3.4.dist.relative.dir}/WEB-INF/lib/${pa-grid-3.4.introduce.skeleton.service.name}-common.jar"
+          basedir="${temp.dir}/${pa-grid-3.4.introduce.skeleton.service.name}-common" compress="false"/>
+
+      <zip basedir="${temp.dir}/${pa-grid-3.4.dist.relative.dir}" compress="true" file="${pa-grid-3.4.dir.dist}/${pa-grid-3.4.artifact.file}" update="false"/>
+  </target>
+
+  <target name="upgrade-dac:pa-grid-3.4-jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.pa-grid-3.4"
+      depends="
+      upgrade:pa-grid-3.4-jboss:init,
+      common:pa-grid-3.4-jboss:init,
+      common:init,
+      install:pa-grid-3.4-jboss:init,
+      install:pa-grid-3.4-jboss:validation:pre-install,
+      install:common:validation:pre-install,
+      install:pa-grid-3.4-jboss:stop,
+      install:pa-grid-3.4-jboss:validation:pre-install:ports,
+      install:pa-grid-3.4-jboss:clean,
+      install:pa-grid-3.4-jboss:binaries,
+      install:pa-grid-3.4-jboss:configure,
+      install:pa-grid-3.4-jboss:re-configure,
+      install:pa-grid-3.4-jboss:grid,
+      install:pa-grid-3.4-jboss:grid:configure,
+      upgrade:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:start,
+      install:pa-grid-3.4-jboss:validation:post-install
+      " >
+  </target>
+
+  <target name="upgrade-cm:pa-grid-3.4-jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.pa-grid-3.4"
+      depends="
+      upgrade:pa-grid-3.4-jboss:init,
+      common:pa-grid-3.4-jboss:init,
+      common:init,
+      install:pa-grid-3.4-jboss:init,
+      install:pa-grid-3.4-jboss:validation:pre-install,
+      install:common:validation:pre-install,
+      install:pa-grid-3.4-jboss:stop,
+      install:pa-grid-3.4-jboss:validation:pre-install:ports,
+      install:pa-grid-3.4-jboss:configure,
+      install:pa-grid-3.4-jboss:re-configure,
+      install:pa-grid-3.4-jboss:grid,
+      install:pa-grid-3.4-jboss:grid:configure,
+      upgrade:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:start,
+      install:pa-grid-3.4-jboss:validation:post-install
+      " >
+  </target>
+
+  <target name="upgrade-ncm:pa-grid-3.4-jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.pa-grid-3.4"
+      depends="
+      upgrade:pa-grid-3.4-jboss:init,
+      common:pa-grid-3.4-jboss:init,
+      common:init,
+      install:pa-grid-3.4-jboss:init,
+      install:pa-grid-3.4-jboss:validation:pre-install,
+      install:common:validation:pre-install,
+      install:pa-grid-3.4-jboss:stop,
+      install:pa-grid-3.4-jboss:validation:pre-install:ports,
+      install:pa-grid-3.4-jboss:re-configure,
+      install:pa-grid-3.4-jboss:grid,
+      install:pa-grid-3.4-jboss:grid:configure,
+      upgrade:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:post,
+      install:pa-grid-3.4-jboss:start,
+      install:pa-grid-3.4-jboss:validation:post-install
+      " >
+  </target>
+
+  <target name="install:pa-grid-3.4-jboss:post" unless="exclude.pa-grid-3.4">
+    <if>
+      <not>
+        <equals arg1="${exclude.pa-grid-3.4-jboss.backup}" arg2="true"/>
+      </not>
+      <then>
+        <property name="changelogFile-pa-grid-3.4" location="${log.dir}/changeLog-${install.time}.txt"/>
+        <property name="compare1-pa-grid-3.4.dir" location="${backup.pa-grid-3.4-jboss.base.dir}/backup/${jboss.binaries.relative.dir}"/>
+        <property name="compare2-pa-grid-3.4.dir" location="${pa-grid-3.4-jboss.home}"/>
+        <report-dir-diff
+          dir1="${compare1-pa-grid-3.4.dir}"
+          dir2="${compare2-pa-grid-3.4.dir}"
+          reportFile="${changelogFile-pa-grid-3.4}"
+          />
+        <!-- Copy app server logs -->
+        <mkdir dir="${pa-grid-3.4-jboss.home}/server/${pa-grid-3.4-jboss.server.name}/log"/>
+        <mkdir dir="${backup.pa-grid-3.4-jboss.base.dir}/backup/${pa-grid-3.4-jboss.jboss.relative.path}/server/${pa-grid-3.4-jboss.server.name}/log"/>
+        <!-- so the logs wont be included in the zip -->
+        <move todir="${pa-grid-3.4-jboss.home}/server/${jboss.server.name}/log">
+          <fileset dir="${backup.pa-grid-3.4-jboss.base.dir}/backup/${pa-grid-3.4-jboss.jboss.relative.path}/server/${pa-grid-3.4-jboss.server.name}/log">
+            <include name="*"/>
+          </fileset>
+        </move>
+
+        <!-- Compress backup and cleanup -->
+        <mkdir dir="${backup.pa-grid-3.4-jboss.base.dir}/backup1"/>
+        <zip destfile="${backup.pa-grid-3.4-jboss.base.dir}/backup1/${jboss.binaries.relative.dir}.zip" basedir="${backup.pa-grid-3.4-jboss.base.dir}/backup" />
+        <delete dir="${backup.pa-grid-3.4-jboss.base.dir}/backup"/>
+      </then>
+    </if>
+  </target>
+
+  <target name="upgrade:pa-grid-3.4-jboss:init"
+      depends="
+      upgrade:pa-grid-3.4-jboss:init:prep,
+      upgrade:pa-grid-3.4-jboss:readers:bda,
+      upgrade:pa-grid-3.4-jboss:readers:custom
+      " unless="exclude.pa-grid-3.4">
+      <properties-print
+          properties.list="${read.properties.list}"
+          />
+      <properties-exist
+          properties.list="${read.properties.list}"
+          />
+      <properties-write
+          properties.list="${read.properties.list}"
+          />
+  </target>
+
+  <target name="upgrade:pa-grid-3.4-jboss:init:prep" depends="upgrade:common:init:prep" unless="exclude.pa-grid-3.4">
+      <property name="pa-grid-3.4-jboss.home" value="${application.base.path}/${pa-grid-3.4-jboss.relative.path}"/>
+      <echo>xyzzy pa-grid-3.4-jboss.home = ${pa-grid-3.4-jboss.home}</echo>
+      <jboss-version
+          />
+      <if>
+          <equals arg1="${pa-grid-3.4-jboss.ncicb-standard.port-config}" arg2="true"/>
+          <then>
+              <property name="pa-grid-3.4-jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+          </then>
+          <else>
+              <property name="pa-grid-3.4-jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+          </else>
+      </if>
+
+      <!-- Upgrades always use port configs
+      <property name="pa-grid-3.4-jboss.ncicb-standard.port-config" value="true"/>
+      -->
+      <available file="${pa-grid-3.4-jboss.home}" property="pa-grid-3.4-jboss.exists"/>
+      <property name="read.pa-grid-3.4-jboss.home" value="${pa-grid-3.4-jboss.home}"/>
+      <echo message="pa-grid-3.4-jboss.exists - ${pa-grid-3.4-jboss.exists}"/>
+  </target>
+
+  <target name="upgrade:pa-grid-3.4-jboss:readers:custom">
+      <!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
+  </target>
+
+  <target name="upgrade:pa-grid-3.4-jboss:readers:bda" if="jboss.exists" unless="exclude.pa-grid-3.4">
+
+      <if>
+          <equals arg1="${jboss.major.version}" arg2="4"/>
+          <then>
+              <jboss-read-bindings-file-location
+                  jboss.home="${read.pa-grid-3.4-jboss.home}"
+                  jboss.server.name="${pa-grid-3.4-jboss.server.name}"
+                  jboss.server.ports.name.property.name="pa-grid-3.4-jboss-server.ports.name"
+                  jboss.bindings.file.location.property.name="pa-grid-3.4-jboss.server.bindingfile.location"
+                  />
+              <jboss-read-ports
+                  jboss.server.ports.name="${pa-grid-3.4-jboss.server.ports.name}"
+                  jboss.server.bindingfile.location="${pa-grid-3.4-jboss.server.bindingfile.location}"
+                  jboss.server.jndi.port.property.name="pa-grid-3.4-jboss.server.jndi.port"
+                  jboss.server.port.property.name="pa-grid-3.4-jboss.server.port"
+                  jboss.ejbinvoker.port.property.name="pa-grid-3.4-jboss.ejbinvoker.port"
+                  jboss.server.rmi.port.property.name="pa-grid-3.4-jboss.server.rmi.port"
+                  jboss.web.service.port.property.name="pa-grid-3.4-jboss.web.service.port"
+                  jboss.service.rmiobject.port.property.name="pa-grid-3.4-jboss.service.rmiobject.port"
+                  jboss.server.bind.port.property.name="pa-grid-3.4-jboss.server.bind.port"
+                  jboss.hajndi.port.property.name="pa-grid-3.4-jboss.hajndi.port"
+                  jboss.hajrmi.port.property.name="pa-grid-3.4-jboss.hajrmi.port"
+                  jboss.pooledha.port.property.name="pa-grid-3.4-jboss.pooledha.port"
+                  jboss.cobraorb.port.property.name="pa-grid-3.4-jboss.cobraorb.port"
+                  jboss.jmx-rmi.port.property.name="pa-grid-3.4-jboss.jmx-rmi.port"
+                  jboss.snmp-trapd.port.property.name="pa-grid-3.4-jboss.snmp-trapd.port"
+                  jboss.snmp.port.property.name="pa-grid-3.4-jboss.snmp.port"
+                  jboss.jms.port.property.name="pa-grid-3.4-jboss.jms.port"
+                  jboss.remoting.port.property.name="pa-grid-3.4-jboss.remoting.port"
+                  jboss.messaging.port.property.name="pa-grid-3.4-jboss.messaging.port"
+                  />
+          </then>
+      </if>
+
+  </target>
+
+  <target name="upgrade:pa-grid-3.4-jboss:post" unless="exclude.pa-grid-3.4">
+  </target>
+</project>

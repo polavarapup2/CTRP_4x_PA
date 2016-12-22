@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== -->
+<!-- ant script for Accrual Web                                             -->
+<!-- ====================================================================== -->
+
+<project name="accrual.accrual-web" default="war-notest" basedir=".">
+    <property name="tier" value="LOCAL"/>
+    <property file="${basedir}/../../build-pa/tier-properties/build-lite-${tier}.properties"/>
+    <property file="${basedir}/../../build-pa/build-lite.properties"/>
+    <property file="${basedir}/../../build-pa/version.properties"/>
+    <property name="software.dir" value="${basedir}/../.."/>
+    <property name="common.dir" value="${basedir}/../../build-pa/common"/>
+    <property name="resource.dir" value="${basedir}/../resources"/>
+    <property name="pmdFile" value="${resource.dir}/accrualPmd.xml"/>
+    <property name="checkstyle.url" value="${resource.dir}/checkstyle.xml"/>
+    <property name="java.major.version" value="1.7"/>
+    <property name="java.encoding" value="utf-8"/>
+
+	<property name="webservices.dir" value="${software.dir}/accrual/webservices"/>
+    <property name="pa.dir" value="${software.dir}/pa"/>
+    <property name="lib.dir" value="${software.dir}/target/accrual/lib"/>
+    <property name="web.report.dir" value="${software.dir}/target/accrual/reports/accrual-web"/>
+    <property name="web.build.finalName" value="accrual"/>
+    <property name="web.build.dir" value="${basedir}/target"/>
+    <property name="web.build.outputDir" value="${web.build.dir}/classes"/>
+    <property name="web.build.webappDir" value="${web.build.dir}/webapp"/>
+    <property name="web.build.srcDir" value="${basedir}/src/java"/>
+	<property name="web.build.src.js" value="${basedir}/src/webapp/scripts"/>
+    <property name="web.build.utilDir" value="${web.build.srcDir}/gov/nih/nci/pa/util"/>
+    <property name="web.build.javadoc" value="${basedir}/javadoc"/>
+    <property name="web.build.resourceDir" value="${basedir}/src/resources"/>
+    <property name="web.war" value="accrual.war"/>
+    <property name="web.build.testSrcDir" value="${basedir}/test/java"/>
+    <property name="web.build.integrationTestSrcDir" value="${basedir}/test-integration/java"/>
+    <property name="web.build.testOutputDir" value="${web.build.dir}/test-classes"/>
+    <property name="web.build.testResourceDir" value="${basedir}/test/resources"/>
+    <property name="web.build.coberturaOutputDir" value="${web.build.dir}/generated-classes"/>
+    <property name="web.test.reports" value="${web.report.dir}/test-reports"/>
+    <property name="web.coverage.reports" value="${web.report.dir}/coverage-reports"/>
+    <property name="web.coverage.line" value="90"/>
+    <property name="web.coverage.branch" value="83"/>
+    <property name="web.pmd.maxerrors" value="2"/>
+	<property name="web.jshint.maxerrors" value="568"/>
+
+    <property name="selenium.delay" value="10"/>
+
+
+    <!-- ====================================================================== -->
+    <!-- Defining classpaths                                                    -->
+    <!-- ====================================================================== -->
+
+	<path id="test-jshint.classpath">
+        <fileset dir="${basedir}/auxlib">
+            <include name="*.jar"/>
+        </fileset>
+	</path>
+	
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}/build"/>
+    </path>
+
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}/web"/>
+        <fileset dir="${lib.dir}/ear"/>
+        <fileset dir="${software.dir}/accrual/services/target">
+           <include name="accrual-services.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile"/>
+     </path>
+
+    <path id="test.classpath">
+        <fileset dir="${lib.dir}/test"/>
+        <fileset dir="${lib.dir}/web"/>
+        <fileset dir="${lib.dir}/ear"/>
+        <fileset dir="${software.dir}/accrual/services/target">
+           <include name="accrual-services.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile"/>
+    </path>
+
+    <path id="test-simian.classpath">
+        <fileset dir="${lib.dir}/test-simian"/>
+    </path>
+	
+    <path id="test-findbugs.classpath">
+        <fileset dir="${lib.dir}/test-findbugs">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+		
+    <path id="test-cobertura.classpath">
+        <fileset dir="${lib.dir}/test-cobertura"/>
+    </path>
+
+    <path id="test-checkstyle.classpath">
+        <fileset dir="${lib.dir}/test-checkstyle"/>
+    </path>
+
+    <path id="test-pmd.classpath">
+        <fileset dir="${lib.dir}/test-pmd"/>
+    </path>
+
+    <path id="selenium.classpath">
+        <fileset dir="${lib.dir}/test-selenium"/>
+    </path>
+
+    <!-- ====================================================================== -->
+    <!-- Task definitions                                                       -->
+    <!-- ====================================================================== -->
+
+    <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="build.classpath"/>
+	<taskdef name="propertyregex" classname="net.sf.antcontrib.property.RegexTask" classpathref="build.classpath"/>
+
+    <!-- ====================================================================== -->
+    <!-- Cleaning up target                                                     -->
+    <!-- ====================================================================== -->
+
+    <target name="clean" description="Clean the output directory">
+        <delete dir="${web.build.dir}"/>
+        <delete dir="${web.report.dir}"/>
+        <mkdir dir="${web.report.dir}"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Compile target                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="compile"  depends="determine-build-version" description="Compiles the subproject">
+        <mkdir dir="${web.build.outputDir}"/>
+        <javac destdir="${web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${web.build.srcDir}"/>
+            </src>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${web.build.outputDir}">
+            <filterset>
+                <filter token="ldap.url" value="${ldap.url}"/>
+                <filter token="ldap.user" value="${ldap.user}"/>
+                <filter token="ldap.password" value="${ldap.password}"/>
+                <filter token="ldap.security.authentication" value="${ldap.security.authentication}"/>
+                <filter token="ldap.security.protocol" value="${ldap.security.protocol}"/>
+                <filter token="ldap.timeouts.connect" value="${ldap.timeouts.connect}"/>
+                <filter token="ldap.timeouts.read" value="${ldap.timeouts.read}"/>
+                <filter token="ldap.context" value="${ldap.context}"/>
+                <filter token="ldap.uid.attrname" value="${ldap.uid.attrname}"/>
+                <filter token="ldap.migration.grouperToIdStringMap" value="${ldap.migration.grouperToIdStringMap}"/>
+                <filter token="ldap.migration.excludes" value="${ldap.migration.excludes}"/>
+            	
+                <filter token="database.driver" value="${jdbc.driver}" />
+                <filter token="database.url" value="${jdbc.url}" />
+                <filter token="database.user" value="${db.username}" />
+                <filter token="database.password" value="${db.password}" />
+                <filter token="database.dialect" value="${hibernate.dialect}" />
+            	
+            </filterset>
+            <fileset dir="${web.build.resourceDir}"/>
+        </copy>
+        <copy todir="${web.build.webappDir}">
+            <fileset dir="${basedir}/src/webapp">
+                <exclude name="**/web.xml"/>
+            </fileset>
+        </copy>
+        <copy todir="${web.build.webappDir}/WEB-INF" filtering="true">
+            <fileset dir="${basedir}/src/webapp/WEB-INF">
+                <include name="**/web.xml"/>
+            </fileset>
+            <filterset>
+                <filter token="project.version" value="${project.version}"/>
+                <filter token="project.revision" value="${project.revision}"/>
+            </filterset>
+        </copy>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Test-compilation target                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="compile-tests" depends="compile,configure-tests" description="Compile the test code">
+        <mkdir dir="${web.build.testOutputDir}"/>
+        <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${web.build.testSrcDir}"/>               
+            </src>
+            <classpath>
+                <pathelement location="${web.build.outputDir}"/>
+                <path refid="compile.classpath"/>
+                <path refid="test.classpath"/>               
+            </classpath>
+        </javac>
+        <copy todir="${web.build.testOutputDir}">
+            <fileset dir="${web.build.testResourceDir}"/>
+        </copy>
+    </target>
+	
+	<target name="compile-selenium-tests" depends="compile-tests" description="Compile the test code">
+	        <ant target="jar-test" dir="${pa.dir}/pa-ejb" inheritAll="false">
+	              <property name="tier" value="${tier}"/>
+	        </ant>
+	        <ant target="compile-tests" dir="${pa.dir}/pa-webservices" inheritAll="false">
+	              <property name="tier" value="${tier}"/>
+	        </ant>
+            <ant target="compile" dir="${webservices.dir}" inheritAll="false">
+                  <property name="tier" value="${tier}"/>
+            </ant>		
+		    <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+		               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+	            <src>                
+	            	 <pathelement location="${web.build.integrationTestSrcDir}"/>
+	            </src>
+	            <classpath>
+	                <pathelement location="${web.build.outputDir}"/>
+	                <path refid="compile.classpath"/>
+	                <path refid="test.classpath"/>
+	                <path refid="selenium.classpath"/>
+	                <pathelement location="${pa.dir}/pa-webservices/target/test-classes"/>
+	                <pathelement location="${pa.dir}/pa-webservices/target/classes"/>
+	            	<pathelement location="${webservices.dir}/target/classes"/>
+	            </classpath>
+	        </javac>       
+	</target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Cobertura and JUnit                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-cobertura" depends="compile-tests">
+        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties"/>
+        <delete file="${web.build.dir}/cobertura.ser"/>
+        <cobertura-instrument datafile="${web.build.dir}/cobertura.ser" toDir="${web.build.coberturaOutputDir}">
+            <fileset dir="${web.build.outputDir}">
+                <include name="**/*.class"/>
+                <exclude name="**/EJBInvokerJob.class"/>
+            </fileset>
+            <auxClasspath>            
+                 <path refid="compile.classpath"/>                
+            </auxClasspath>        	
+        </cobertura-instrument>
+
+        <mkdir dir="${web.test.reports}"/>
+        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <sysproperty key="basedir" value="."/>
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${web.build.dir}/cobertura.ser"/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${web.build.coberturaOutputDir}"/>
+            <classpath location="${web.build.outputDir}"/>
+            <classpath location="${web.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <batchtest todir="${web.test.reports}">
+                <fileset dir="${web.build.testSrcDir}">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/*Abstract*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${web.test.reports}">
+            <fileset dir="${web.test.reports}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report todir="${web.test.reports}" />
+        </junitreport>
+        <fail if="junit.failure" message="Unit test(s) failed.  See reports at ${web.test.reports}/index.html."/>
+
+        <cobertura-report datafile="${web.build.dir}/cobertura.ser"
+                          destdir="${web.coverage.reports}"
+                          srcdir="${web.build.srcDir}"/>
+
+        <cobertura-report datafile="${web.build.dir}/cobertura.ser"
+                          format="xml"
+                          destdir="${web.coverage.reports}"
+                          srcdir="${web.build.srcDir}"/>
+
+        <cobertura-check datafile="${web.build.dir}/cobertura.ser"
+                         totalbranchrate="${web.coverage.branch}"
+                         totallinerate="${web.coverage.line}"
+                         haltonfailure="true"/>
+     </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Configure tests target                                                 -->
+    <!-- ====================================================================== -->
+    <target name="configure-tests">       
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run JUnit Integration Tests                                            -->
+    <!-- ====================================================================== -->
+    <target name="run-selenium-tests" depends="compile-selenium-tests" description="Run integration tests">
+        <mkdir dir="${web.build.testOutputDir}"/>
+        <mkdir dir="${web.test.reports}"/>
+        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="yes" failureproperty="junit.failure">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath>
+            	<path location="${web.build.outputDir}"/>
+                <path location="${web.build.testOutputDir}"/>
+                <path refid="selenium.classpath"/>
+                <path refid="compile.classpath"/>
+                <path refid="test.classpath"/>            	
+                <path location="${pa.dir}/pa-webservices/target/test-classes"/>
+                <path location="${pa.dir}/pa-webservices/target/classes"/>
+            	<path location="${webservices.dir}/target/classes"/>
+            </classpath>
+            <batchtest todir="${web.test.reports}">
+            	 <fileset dir="${web.build.integrationTestSrcDir}">
+            	                      <include name="**/*.java"/>
+            	                      <exclude name="**/Abstract*Test.java"/>
+            	 </fileset>
+            </batchtest>
+        </junit>
+        <condition property="selenium.outcome" value="FAILED!!! See reports in ${web.test.reports}" else="passed.">
+             <isset property="junit.failure"/>
+         </condition>
+         <echo>Selenium tests ${selenium.outcome}</echo>
+
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Checkstyle                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="test-checkstyle">
+        <taskdef resource="checkstyletask.properties" classpathref="test-checkstyle.classpath"/>
+        <checkstyle config="${checkstyle.url}" failOnViolation="true">
+            <!-- Checkstyle sometimes has a problem finding custom exceptions without explicitly providing a classpath
+               containing those exceptions - see http://jira.codehaus.org/secure/ViewIssue.jspa?key=MPCHECKSTYLE-20 -->
+            <classpath refid="compile.classpath"/>
+            <fileset dir="src" includes="**/*.java"/>
+            <formatter type="plain"/>
+            <formatter type="plain" toFile="${web.report.dir}/checkstyle.txt"/>
+            <formatter type="xml"   toFile="${web.report.dir}/checkstyle.xml"/>
+        </checkstyle>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run PMD                                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-pmd">
+        <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pmdFile}" maxruleviolations="${web.pmd.maxerrors}">
+            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toFile="${web.report.dir}/pmd.txt"/>
+            <formatter type="xml"  toFile="${web.report.dir}/pmd.xml"/>
+            <formatter type="html" toFile="${web.report.dir}/pmd.html"/>
+            <fileset dir="src">
+                <include name="**/*.java"/>
+            </fileset>
+         <sourceLanguage name="java" version="1.7"/></pmd>
+    </target>
+	
+    <!-- ====================================================================== -->
+    <!-- Run JS Hint                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-jshint">
+        <taskdef name="jshint" classname="com.philmander.jshint.JsHintAntTask" classpathref="test-jshint.classpath"/>
+        <!-- Lint the code -->
+        <jshint dir="${web.build.src.js}" fail="false" 
+            options="browser=true,devel=true,jquery=true,prototypejs=true,-W099=true,eqeqeq=false,strict=false">
+             <include name="**/*.js"/>
+             <exclude name="**/*.min.js"/>
+             <exclude name="**/DataTables*/**/*.js"/>
+             <exclude name="**/jquery*.js"/>
+             <exclude name="**/select2*.js"/>
+             <exclude name="**/prototype.js"/>
+             <exclude name="**/popup.js"/>
+             <report type="jslint-xml" destFile="${web.report.dir}/jslint.xml" />
+             <report type="plain" destFile="${web.report.dir}/jshint.txt" />
+        </jshint>
+        <loadfile property="jshintReport"
+              srcFile="${web.report.dir}/jshint.txt"/>
+        <propertyregex property="jshintErrorCount"
+                      input="${jshintReport}"
+                      regexp="JSHint found (\d+) errors"
+                      select="\1"
+                      casesensitive="false" />
+        <condition property="jshintFailure">
+            <scriptcondition language="javascript"><![CDATA[                
+                self.setValue(project.getProperty("jshintErrorCount") > project.getProperty("web.jshint.maxerrors"));
+                ]]>
+            </scriptcondition>
+        </condition>
+        <fail if="jshintFailure" message="${jshintErrorCount} JSHint errors exceed the limit of ${web.jshint.maxerrors}! See ${web.report.dir}/jshint.txt for details."/>
+    </target>   
+	
+	
+    <!-- ====================================================================== -->
+    <!-- Run Find Bugs                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-findbugs">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="test-findbugs.classpath"/>
+        <findbugs reportLevel="high" failOnError="true" classpathref="test-findbugs.classpath"
+                      output="xml:withMessages" warningsProperty="bugsFound" maxrank="14" projectname="accrual-web"
+                      outputFile="${web.report.dir}/findbugs.xml">
+          <auxClasspath>
+            <path refid="compile.classpath"/>
+          </auxClasspath>
+          <sourcePath path="${web.build.srcDir}" />
+          <class location="${web.build.outputDir}" />
+        </findbugs>
+        <fail if="bugsFound" message="Bugs found! See ${web.report.dir}/findbugs.xml for details."/>
+    </target> 	
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Simian                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-simian">
+       <taskdef resource="simiantask.properties" classpathref="test-simian.classpath"/>
+       <simian>
+            <fileset dir="src" includes="**/*.java"/>
+            <formatter type="plain" toFile="${web.report.dir}/simian.txt"/>
+            <formatter type="xml" toFile="${web.report.dir}/simian.xml"/>
+            <formatter type="plain"/>
+        </simian>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Static analysis target                                                 -->
+    <!-- ====================================================================== -->
+
+    <target name="inspect" depends="compile,test-checkstyle,test-pmd,test-simian, test-findbugs, test-jshint"
+            description="Runs various static analysis tools such as PMD, Checkstyle, Simian">
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- JUnit/Cobertura target                                                 -->
+    <!-- ====================================================================== -->
+
+    <target name="test" depends="test-cobertura"
+            description="Runs various tests in the subproject">
+    </target>
+
+    <target name="test-dynamic-analysis" depends="inspect, test"
+        description="Runs full analysis and test">
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Package target                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="create-war">
+        <mkdir dir="${web.build.dir}/${web.build.finalName}/WEB-INF/lib"/>
+        <copy todir="${web.build.dir}/${web.build.finalName}/WEB-INF/lib">
+            <fileset dir="${lib.dir}/web"/>
+        </copy>
+        <war destfile="${web.build.dir}/${web.war}"
+             compress="false" duplicate="fail"
+             webxml="${web.build.webappDir}/WEB-INF/web.xml">
+            <lib dir="${web.build.dir}/${web.build.finalName}/WEB-INF/lib"/>
+            <classes dir="${web.build.outputDir}"/>
+            <fileset dir="${web.build.webappDir}"/>
+        </war>
+    </target>
+
+    <target name="war" depends="compile, test-dynamic-analysis, create-war"/>
+
+    <target name="war-notest" depends="compile, create-war"
+            description="Package the application.  Do not run tests."/>
+
+    <!-- ====================================================================== -->
+    <!-- Generate Javadoc                                                       -->
+    <!-- ====================================================================== -->
+
+    <target name="generate-javadoc">
+        <javadoc destdir="${web.build.javadoc}"
+            sourcepath="${web.build.srcDir}"
+            windowtitle="CTRP Accrual Web">
+            <doctitle><![CDATA[<h1>CTRP Accrual Web Layer</h1>]]></doctitle>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javadoc>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Determines build version and revision                                  -->
+    <!-- ====================================================================== -->
+    <target name="determine-build-version">
+        <property name="project.version" value="${pa.version}"/>
+        <tstamp>
+            <format property="now" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+        </tstamp>
+        <property name="project.revision" value="${now}"/>
+    </target>
+</project>
+

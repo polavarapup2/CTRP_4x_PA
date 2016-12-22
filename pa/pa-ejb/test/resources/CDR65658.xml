@@ -1,0 +1,633 @@
+<clinical_study nct-id="NCT00004031" ctep-id="S9704" dcp-id="">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000065658</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000065658</org_study_id>
+    <secondary_id>SWOG-S9704</secondary_id>
+    <secondary_id>CAN-NCIC-LY11</secondary_id>
+    <secondary_id>CALGB-59903</secondary_id>
+    <secondary_id>ECOG-S9704</secondary_id>
+  </id_info>
+  <is_fda_regulated>yes</is_fda_regulated>
+  <is_section_801>yes</is_section_801>
+  <delayed_posting>no</delayed_posting>
+  <is_ind_study>none</is_ind_study>
+  <brief_title>Chemoradiotherapy and Peripheral Stem Cell Transplantation Compared With Combination Chemotherapy in Treating Patients With Non-Hodgkin's Lymphoma</brief_title>
+  <official_title>A Randomized Phase III Trial Comparing Early High Dose Chemoradiotherapy and an Autologous Stem Cell Transplant to Conventional Dose CHOP Chemotherapy Plus Rituximab for CD20+ B Cell Lymphomas (with possible Late Autologous Stem Cell Transplant) for Patients with Diffuse Aggressive Non-Hodgkin's Lymphoma in the High-Intermediate and High Risk International Classification Prognostic Groups</official_title>
+<lead_org ctep-id="">Southwest Oncology Group</lead_org>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Southwest Oncology Group</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+    <collaborator>
+      <agency>Cancer and Leukemia Group B</agency>
+    </collaborator>
+    <collaborator>
+      <agency>Eastern Cooperative Oncology Group</agency>
+    </collaborator>
+    <collaborator>
+      <agency>NCIC-Clinical Trials Group</agency>
+    </collaborator>
+    <resp_party ctep-id='4655' party-type='person'>
+   <name_title>Laurence H. Baker</name_title>
+   <organization>Southwest Oncology Group
+ - Group Chair's Office</organization>
+   <phone>734-998-7130</phone>
+   <email>bakerl@umich.edu</email>
+  </resp_party>
+</sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Drugs used in chemotherapy use different ways to stop cancer cells from dividing so they stop growing or die. Radiation therapy uses high-energy x-rays to damage cancer cells. Peripheral stem cell transplantation may allow the doctor to give higher doses of chemotherapy and radiation and kill more cancer cells. It is not yet known whether chemoradiotherapy plus peripheral stem cell transplantation is more effective than combination chemotherapy alone in treating non-Hodgkin's lymphoma.
+
+PURPOSE: This randomized phase III trial is studying chemoradiotherapy and peripheral stem cell transplantation to see how well they work compared to combination chemotherapy in treating patients with stage II, stage III, or stage IV non-Hodgkin's lymphoma.</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: Compare the overall survival and progression-free survival of patients with intermediate- or high-grade non-Hodgkin's lymphoma treated with high-dose chemoradiotherapy and autologous peripheral blood stem cell transplantation (APBSCT) vs conventional dose cyclophosphamide, doxorubicin, vincristine, and prednisone (CHOP) (or CHOP plus rituximab for CD20+ disease) with possible late APBSCT.
+Compare the toxic effects of these regimens in this patient population.
+
+OUTLINE: This is a randomized study.  Patients are stratified according to 
+disease risk (intermediate-high vs high).Patients receive CHOP chemotherapy comprising cyclophosphamide IV over 15 minutes, doxorubicin IV, 
+and vincristine IV on day 1 and oral prednisone on days 1-5.  Patients with CD20-positive disease also receive rituximab IV on day 1 (or day 0 during course 1 only).  Treatment 
+repeats every 3 weeks for 5 courses in the absence of disease progression or 
+unacceptable toxicity.  Within 35 days of completing the fifth course, patients with partial or 
+complete response are randomized to one of two treatment arms.Arm I: Patients receive CHOP (or CHOP plus rituximab [CHOP-R]) as above.  Treatment repeats every 3 weeks 
+for 3 additional courses.  After completion of chemotherapy, patients are 
+encouraged to undergo harvest of peripheral blood stem cells (PBSC) for 
+possible use at time of relapse.  After completion of 8 courses, patients 
+receive no additional therapy until disease progression or biopsy-proven 
+disease.Arm II:  Patients receive one additional course of CHOP/CHOP-R followed by 
+filgrastim (G-CSF), sargramostim (GM-CSF), or other colony-stimulating factors 
+used  singly or in combination according to center preference.  PBSC are 
+harvested and selected for CD34+ cells.  Patients under age 61 receive one of 
+two preparative regimens: a total body irradiation (TBI)-based regimen 
+comprising irradiation administered twice daily on days -8 to -5, etoposide IV 
+over 4 hours on day -4, and cyclophosphamide IV over 1 hour on day -2 OR 
+carmustine IV over 2 hours on days -6 to -4 and etoposide and cyclophosphamide 
+as in the TBI-based regimen.  Patients age 61 to 65 receive the augmented 
+regimen comprising carmustine, etoposide, and cyclophosphamide as above.  
+Patients receive involved field radiotherapy prior to the preparative regimen 
+only if there is biopsy-proven residual bulk disease and at the discretion of 
+the center.  PBSC are reinfused 36-48 hours after completion of 
+cyclophosphamide.  If both bone marrow and PBSC are harvested, bone marrow is 
+reinfused on day 0 and then PBSC are reinfused either the same day or the 
+following day.Patients are followed every 6 months for 2 years and then annually 
+thereafter.
+PROJECTED ACCRUAL: Approximately 360 patients (at least 135 per treatment arm) will be accrued for this 
+study within 5 years.</textblock>
+  </detailed_description>
+  <overall_status>Recruiting</overall_status>
+    <lead_org_status status_date='2007-12-15'>Closed</lead_org_status>
+
+  <start_date date_type="Actual">1997-07-17</start_date>
+  <primary_compl_date>2007-12-15</primary_compl_date>
+  <primary_compl_date_type>Actual</primary_compl_date_type>
+  <phase>3</phase>
+  <study_design>
+    <study_type>interventional</study_type>
+    <interventional_design>
+      <interventional_subtype>Treatment</interventional_subtype>
+      <allocation>Randomized</allocation>
+      <masking/>
+      <control>Active Control</control>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms/>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Survival</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <outcome_measure>Progression-free survival</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+<enrollment>360</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000040528">stage III grade 3 follicular lymphoma</condition>
+  <condition cdr-id="CDR0000040529">stage III adult diffuse small cleaved cell lymphoma</condition>
+  <condition cdr-id="CDR0000040530">stage III adult diffuse mixed cell lymphoma</condition>
+  <condition cdr-id="CDR0000040531">stage III adult diffuse large cell lymphoma</condition>
+  <condition cdr-id="CDR0000040533">stage III adult immunoblastic large cell lymphoma</condition>
+  <condition cdr-id="CDR0000040535">stage III adult Burkitt lymphoma</condition>
+  <condition cdr-id="CDR0000040541">stage IV grade 3 follicular lymphoma</condition>
+  <condition cdr-id="CDR0000040542">stage IV adult diffuse small cleaved cell lymphoma</condition>
+  <condition cdr-id="CDR0000040543">stage IV adult diffuse mixed cell lymphoma</condition>
+  <condition cdr-id="CDR0000040544">stage IV adult diffuse large cell lymphoma</condition>
+  <condition cdr-id="CDR0000040546">stage IV adult immunoblastic large cell lymphoma</condition>
+  <condition cdr-id="CDR0000040548">stage IV adult Burkitt lymphoma</condition>
+  <condition cdr-id="CDR0000042719">contiguous stage II grade 3 follicular lymphoma</condition>
+  <condition cdr-id="CDR0000042720">contiguous stage II adult diffuse small cleaved cell lymphoma</condition>
+  <condition cdr-id="CDR0000042723">contiguous stage II adult diffuse mixed cell lymphoma</condition>
+  <condition cdr-id="CDR0000042724">contiguous stage II adult immunoblastic large cell lymphoma</condition>
+  <condition cdr-id="CDR0000042725">contiguous stage II adult diffuse large cell lymphoma</condition>
+  <condition cdr-id="CDR0000042726">contiguous stage II adult Burkitt lymphoma</condition>
+  <condition cdr-id="CDR0000042733">noncontiguous stage II grade 3 follicular lymphoma</condition>
+  <condition cdr-id="CDR0000042734">noncontiguous stage II adult diffuse small cleaved cell lymphoma</condition>
+  <condition cdr-id="CDR0000042737">noncontiguous stage II adult diffuse mixed cell lymphoma</condition>
+  <condition cdr-id="CDR0000042738">noncontiguous stage II adult immunoblastic large cell lymphoma</condition>
+  <condition cdr-id="CDR0000042739">noncontiguous stage II adult diffuse large cell lymphoma</condition>
+  <condition cdr-id="CDR0000042740">noncontiguous stage II adult Burkitt lymphoma</condition>  <intervention cdr-id='CDR0000041057'>
+    <intervention_type>Biological/Vaccine</intervention_type>
+    <intervention_name>filgrastim</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000042613'>
+    <intervention_type>Biological/Vaccine</intervention_type>
+    <intervention_name>rituximab</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000040566'>
+    <intervention_type>Biological/Vaccine</intervention_type>
+    <intervention_name>sargramostim</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000040931'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>CHOP regimen</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000043027'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>carmustine</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000039748'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>cyclophosphamide</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000038860'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>doxorubicin hydrochloride</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000039207'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>etoposide</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000042487'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>prednisone</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000042251'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>vincristine sulfate</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000042072'>
+    <intervention_type>Procedure/Surgery</intervention_type>
+    <intervention_name>bone marrow ablation with stem cell support</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000041174'>
+    <intervention_type>Procedure/Surgery</intervention_type>
+    <intervention_name>peripheral blood stem cell transplantation</intervention_name>
+  </intervention>
+  <intervention cdr-id='CDR0000038085'>
+    <intervention_type>Radiation</intervention_type>
+    <intervention_name>radiation therapy</intervention_name>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        <EntryCriteria>
+        <DiseaseCharacteristics>
+          <ItemizedList Compact="No" Style="bullet" id="_48">
+              <ListItem>Histologically proven intermediate- or high-grade non-Hodgkin's lymphoma 
+</ListItem>
+              <ListItem>Ann Arbor classification of "bulky" stage II, III, or IV
+</ListItem>
+              <ListItem>Must be classified as high-intermediate or high-risk according to
+International Age Adjusted Index 
+</ListItem>
+              <ListItem>Bidimensionally measurable disease
+</ListItem>
+              <ListItem>No lymphoblastic, transformed, or mantle cell lymphomas
+</ListItem>
+              <ListItem>No CNS involvement
+by lymphoma</ListItem>
+              <ListItem>CD20 status confirmed by immunocytochemistry or flow cytometry</ListItem>
+              <ListItem>Must have either bilateral or unilateral bone marrow aspiration and 
+biopsy
+≥ 42 days before first course of cyclophosphamide, doxorubicin, 
+vincristine,
+and prednisone (CHOP) therapy (or CHOP plus rituximab [CHOP-R] for CD20+ disease) OR within 42 days prior to registration if 
+CHOP/CHOP-R
+therapy has not begun
+</ListItem>
+              <ListItem>Must have bilateral bone marrow aspiration and biopsy within 28 days of
+randomization
+<ItemizedList Style="dash" id="_21">
+                  <ListItem> Bone marrow involvement with lymphoma is allowed, 
+provided there is an improvement of at least 50% if used as an evaluable 
+site of disease
+
+</ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>No prior lymphoma, Hodgkin's lymphoma, myelodysplastic syndromes, or 
+leukemia</ListItem>
+            </ItemizedList>
+          <Para id="_50">NOTE: A new classification scheme for adult non-Hodgkin's lymphoma has been 
+adopted
+by PDQ.  The terminology of "indolent" or "aggressive" lymphoma will 
+replace the former terminology of "low", "intermediate", or "high" grade 
+lymphoma. However, this protocol uses the former terminology.
+</Para>
+        </DiseaseCharacteristics>
+        <PatientCharacteristics>
+          <ItemizedList Style="bullet" id="_28">
+              <ListTitle>Age:</ListTitle>
+              <ListItem>15 to 65  </ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_29">
+              <ListTitle>Performance status:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_30">
+              <ListTitle>Life expectancy:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_31">
+              <ListTitle>Hematopoietic:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_32">
+              <ListTitle>Hepatic:</ListTitle>
+              <ListItem>Bilirubin no greater than 1.5 times upper limit of normal 
+(ULN)</ListItem>
+              <ListItem>No nonlymphoma-related hepatic dysfunction</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_33">
+              <ListTitle>Renal:</ListTitle>
+              <ListItem>Creatinine no greater than 2 times ULN</ListItem>
+              <ListItem>Creatinine clearance at least 60 mL/min</ListItem>
+              <ListItem>No nonlymphoma-related renal dysfunction</ListItem>
+              <ListItem>No history of grade 3 hemorrhagic cystitis due to 
+cyclophosphamide</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_34">
+              <ListTitle>Cardiovascular:</ListTitle>
+              <ListItem>No coronary artery disease, cardiomyopathy, congestive heart 
+failure, or dysrhythmia requiring therapy</ListItem>
+              <ListItem>MUGA scan or 2-D echocardiogram required if patient's history 
+is questionable</ListItem>
+              <ListItem>Ejection fraction normal</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_35">
+              <ListTitle>Pulmonary:</ListTitle>
+              <ListItem>DLCO or FEV_1 at least 60% of predicted </ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_36">
+              <ListTitle>Other:</ListTitle>
+              <ListItem>Not pregnant or nursing</ListItem>
+              <ListItem>Fertile patients must use effective contraception</ListItem>
+              <ListItem>HIV negative</ListItem>
+              <ListItem>No other malignancy within the past 5 years except basal cell or 
+squamous cell skin cancer or carcinoma in situ of the cervix</ListItem>
+              <ListItem>No allergy to etoposide</ListItem>
+              <ListItem>No active bacterial, fungal, or viral infection </ListItem>
+            </ItemizedList>
+        </PatientCharacteristics>
+        <PriorConcurrentTherapy>
+          <ItemizedList Style="bullet" id="_37">
+              <ListTitle>Biologic therapy:</ListTitle>
+              <ListItem>No prior monoclonal antibody therapy for lymphoma except if included in  a single course of CHOP/CHOP-R</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_38">
+              <ListTitle>Chemotherapy:</ListTitle>
+              <ListItem>No prior chemotherapy for lymphoma except for a single course 
+of CHOP/CHOP-R*</ListItem>
+            </ItemizedList>
+          <Para id="_51">NOTE: *Prednisone or other corticosteroids not considered prior chemotherapy</Para>
+          <ItemizedList Style="bullet" id="_39">
+              <ListTitle>Endocrine therapy:</ListTitle>
+              <ListItem>See Chemotherapy</ListItem>
+              <ListItem>Prior corticosteroids allowed</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_40">
+              <ListTitle>Radiotherapy:</ListTitle>
+              <ListItem>No prior radiotherapy for lymphoma</ListItem>
+              <ListItem>No prior thoracic radiotherapy or radiotherapy greater than 2,000 cGy to any 
+other site</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_41">
+              <ListTitle>Surgery:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+        </PriorConcurrentTherapy>
+      </EntryCriteria>
+      </textblock>
+    </criteria>
+    <healthy_volunteers>no</healthy_volunteers>
+    <expected_enrollment>360</expected_enrollment>
+    <gender>Both</gender>
+    <minimum_age>15</minimum_age>
+    <maximum_age>65</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="11201">
+    <first_name>Patrick</first_name>
+    <middle_name>J.</middle_name>
+    <last_name>Stiff</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Cardinal Bernardin Cancer Center at Loyola University Medical Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="14717">
+    <first_name>Thomas</first_name>
+    <middle_name>C.</middle_name>
+    <last_name>Shea</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Lineberger Comprehensive Cancer Center at University of North Carolina - Chapel Hill</affiliation>
+  </overall_official>
+  <overall_official ctep-id="">
+    <first_name>David</first_name>
+    <middle_name>P.</middle_name>
+    <last_name>Schenkein</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Tufts-NEMC Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="">
+    <first_name>Stephen</first_name>
+    <last_name>Couban</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Cancer Care Nova Scotia</affiliation>
+  </overall_official>
+  <location>
+    <facility ctep-id="11138">
+      <name>CancerCare Manitoba</name>
+      <address>
+        <city>Winnipeg</city>
+        <state>Manitoba</state>
+        <zip>R3E 0V9</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Morel</first_name>
+      <last_name>Rubinger</last_name>
+      <phone>204-787-2113</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11074">
+      <name>Centre Hospitalier Universitaire de Quebec</name>
+      <address>
+        <city>Quebec City</city>
+        <state>Quebec</state>
+        <zip>G1R 2J6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Marc</first_name>
+      <last_name>Lalancette</last_name>
+      <phone>418-691-5225</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11132">
+      <name>Cross Cancer Institute at University of Alberta</name>
+      <address>
+        <city>Edmonton</city>
+        <state>Alberta</state>
+        <zip>T6G 1Z2</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>A. Robert</first_name>
+      <last_name>Turner</last_name>
+      <phone>780-432-8514</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11210">
+      <name>Doctor H. Bliss Murphy Cancer Centre</name>
+      <address>
+        <city>St. John's</city>
+        <state>Newfoundland and Labrador</state>
+        <zip>AIB 3V6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Kirsty A.</first_name>
+      <last_name>Tompkins</last_name>
+      <phone>709-777-8062</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11118">
+      <name>Edmond Odette Cancer Centre at Sunnybrook</name>
+      <address>
+        <city>Toronto</city>
+        <state>Ontario</state>
+        <zip>M4N 3M5</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Rena</first_name>
+      <last_name>Buckstein</last_name>
+      <phone>416-480-5000</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11017">
+      <name>Hopital Du Sacre-Coeur de Montreal</name>
+      <address>
+        <city>Montreal</city>
+        <state>Quebec</state>
+        <zip>H4J 1C5</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Guylaine</first_name>
+      <last_name>Gaudet</last_name>
+      <phone>514-338-2050</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11110">
+      <name>Hopital du Saint-Sacrement - Quebec</name>
+      <address>
+        <city>Quebec City</city>
+        <state>Quebec</state>
+        <zip>G1S 4L8</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Guy</first_name>
+      <last_name>Cantin</last_name>
+      <phone>418-682-7511</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11127">
+      <name>Hopital Notre-Dame du CHUM</name>
+      <address>
+        <city>Montreal</city>
+        <state>Quebec</state>
+        <zip>H2L 4M1</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Danielle</first_name>
+      <last_name>Charpentier</last_name>
+      <phone>514-890-8200</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11137">
+      <name>London Regional Cancer Program at London Health Sciences Centre</name>
+      <address>
+        <city>London</city>
+        <state>Ontario</state>
+        <zip>N6A 4L6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Kang</first_name>
+      <last_name>Howson-Jan</last_name>
+      <phone>519-685-5194</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11183">
+      <name>Margaret and Charles Juravinski Cancer Centre</name>
+      <address>
+        <city>Hamilton</city>
+        <state>Ontario</state>
+        <zip>L8V 5C2</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Deborah</first_name>
+      <last_name>Marcellus</last_name>
+      <phone>905-575-9827</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11043">
+      <name>Moncton Hospital</name>
+      <address>
+        <city>Moncton</city>
+        <state>New Brunswick</state>
+        <zip>E1C 6Z8</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Sheldon</first_name>
+      <last_name>Rubin</last_name>
+      <phone>506-857-2881</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11008">
+      <name>Nova Scotia Cancer Centre</name>
+      <address>
+        <city>Halifax</city>
+        <state>Nova Scotia</state>
+        <zip>B3H 1V7</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Stephen</first_name>
+      <last_name>Couban</last_name>
+      <phone>902-473-7005</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11120">
+      <name>Saskatoon Cancer Centre at the University of Saskatchewan</name>
+      <address>
+        <city>Saskatoon</city>
+        <state>Saskatchewan</state>
+        <zip>S7N 4H4</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Michael</first_name>
+      <last_name>Voralia</last_name>
+      <phone>306-655-2925</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11134">
+      <name>Tom Baker Cancer Centre - Calgary</name>
+      <address>
+        <city>Calgary</city>
+        <state>Alberta</state>
+        <zip>T2N 4N2</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact role="Principal investigator">
+      <first_name>Douglas A.</first_name>
+      <last_name>Stewart</last_name>
+      <phone>403-521-3347</phone>
+    </contact>
+  </location>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/SWOG-S9704</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <keyword cdr-id="CDR0000040528">stage III grade 3 follicular lymphoma</keyword>
+  <keyword cdr-id="CDR0000040529">stage III adult diffuse small cleaved cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040530">stage III adult diffuse mixed cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040531">stage III adult diffuse large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040533">stage III adult immunoblastic large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040535">stage III adult Burkitt lymphoma</keyword>
+  <keyword cdr-id="CDR0000040541">stage IV grade 3 follicular lymphoma</keyword>
+  <keyword cdr-id="CDR0000040542">stage IV adult diffuse small cleaved cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040543">stage IV adult diffuse mixed cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040544">stage IV adult diffuse large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040546">stage IV adult immunoblastic large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000040548">stage IV adult Burkitt lymphoma</keyword>
+  <keyword cdr-id="CDR0000042719">contiguous stage II grade 3 follicular lymphoma</keyword>
+  <keyword cdr-id="CDR0000042720">contiguous stage II adult diffuse small cleaved cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042723">contiguous stage II adult diffuse mixed cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042724">contiguous stage II adult immunoblastic large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042725">contiguous stage II adult diffuse large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042726">contiguous stage II adult Burkitt lymphoma</keyword>
+  <keyword cdr-id="CDR0000042733">noncontiguous stage II grade 3 follicular lymphoma</keyword>
+  <keyword cdr-id="CDR0000042734">noncontiguous stage II adult diffuse small cleaved cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042737">noncontiguous stage II adult diffuse mixed cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042738">noncontiguous stage II adult immunoblastic large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042739">noncontiguous stage II adult diffuse large cell lymphoma</keyword>
+  <keyword cdr-id="CDR0000042740">noncontiguous stage II adult Burkitt lymphoma</keyword>
+  <verification_date>2009-02-24</verification_date>
+</clinical_study>

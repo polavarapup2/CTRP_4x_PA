@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDescriptionMsg xmlns="http://www.omg.org/spec/CTS2/1.1/Entity"
+    xmlns:core="http://www.omg.org/spec/CTS2/1.1/Core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/CTS2/1.1/Entity http://informatics.mayo.edu/cts2/spec/CTS2/1.1/entity/Entity.xsd">
+    <core:heading>
+        <core:resourceRoot>http://lexevs62cts2.nci.nih.gov/lexevscts2/</core:resourceRoot>
+        <core:resourceURI>codesystem/NCI_Thesaurus/version/NCI_Thesaurus-15.02d/entity/C2916</core:resourceURI>
+        <core:accessDate>2015-03-23T15:57:04.533-04:00</core:accessDate>
+    </core:heading>
+    <EntityDescription>
+        <namedEntity
+            about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C2916" entryState="ACTIVE">
+            <entityID>
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C2916</core:name>
+            </entityID>
+            <describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </describingCodeSystemVersion>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>CARCINOMA, MALIGNANT</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CTEP">
+                <core:value>Carcinoma, NOS</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>Epithelial Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Epithelial Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>Epithelioma Malignant</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>Malignant Epithelial Neoplasm</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Epithelial Neoplasm</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>Malignant Epithelial Tumor</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Epithelial Tumor</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="CDISC">
+                <core:value>Malignant Epithelioma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI">
+                <core:value>Malignant Epithelioma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI-GLOSS">
+                <core:value>carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE" assertedInCodeSystemVersion="NCI-GLOSS">
+                <core:value>epithelial carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="PREFERRED">
+                <core:value>Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <designation designationRole="ALTERNATIVE">
+                <core:value>Carcinoma</core:value>
+                <core:language>en</core:language>
+            </designation>
+            <definition definitionRole="NORMATIVE">
+                <core:value>A malignant epithelial neoplasm.</core:value>
+            </definition>
+            <definition definitionRole="NORMATIVE">
+                <core:value>Cancer that begins in the skin or in tissues that line or cover internal organs.</core:value>
+            </definition>
+            <definition definitionRole="NORMATIVE">
+                <core:value>A malignant tumor arising from epithelial cells. Carcinomas that arise from glandular epithelium are called adenocarcinomas, those that arise from squamous epithelium are called squamous cell carcinomas, and those that arise from transitional epithelium are called transitional cell carcinomas. Morphologically, the malignant epithelial cells may display abnormal mitotic figures, anaplasia, and necrosis. Carcinomas are graded by the degree of cellular differentiation as well, moderately, or poorly differentiated. Carcinomas invade the surrounding tissues and tend to metastasize to other anatomic sites. Lung carcinoma, skin carcinoma, breast carcinoma, colon carcinoma, and prostate carcinoma are the most frequently seen carcinomas.</core:value>
+            </definition>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Contributing_Source">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Contributing_Source</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>CDISC</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Contributing_Source">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Contributing_Source</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>CTEP</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#ICD-O-3_Code">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>ICD-O-3_Code</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>8010/3</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#ICD-O-3_Code">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>ICD-O-3_Code</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>8011/3</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Legacy_Concept_Name">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Legacy_Concept_Name</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Carcinoma</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Neoplastic_Status">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Neoplastic_Status</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Malignant</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Semantic_Type">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>Semantic_Type</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>Neoplastic Process</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#UMLS_CUI">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>UMLS_CUI</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>C0007097</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#code">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>code</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>C2916</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <property>
+                <core:predicate uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#primitive">
+                    <core:namespace>NCI_Thesaurus</core:namespace>
+                    <core:name>primitive</core:name>
+                </core:predicate>
+                <core:value>
+                    <core:literal>
+                        <core:value>false</core:value>
+                    </core:literal>
+                </core:value>
+            </property>
+            <subjectOf>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2916/subjectof</subjectOf>
+            <targetOf>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2916/targetof</targetOf>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68850_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68850_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68850_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68851_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68851_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68851_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68852_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68852_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68852_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68853_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68853_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68853_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68854_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68854_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68854_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68855_2838be3f_6492_4256_8765_d7509da77e63" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68855_2838be3f_6492_4256_8765_d7509da77e63">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>@A68855_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+            </parent>
+            <parent
+                uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3709" href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3709">
+                <core:namespace>NCI_Thesaurus</core:namespace>
+                <core:name>C3709</core:name>
+            </parent>
+            <children>http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2916/children</children>
+            <entityType uri="http://www.w3.org/2002/07/owl#Class">
+                <core:namespace>owl</core:namespace>
+                <core:name>Class</core:name>
+            </entityType>
+        </namedEntity>
+    </EntityDescription>
+</EntityDescriptionMsg>

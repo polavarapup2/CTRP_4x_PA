@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dataTable4" language="groovy" pageWidth="2150" pageHeight="842" orientation="Landscape" columnWidth="2110" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Key" uuid="2f988a2f-b072-49c1-b4cc-e5e23a1c9311">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="220"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ctrp_local_dev_pa"/>
+	<parameter name="Center" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="Start_Date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new Date(2009 - 1900, 0, 1)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="End_Date" class="java.util.Date">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\Projects\\CTRP\\trunk\\code\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Use_Start_Date" class="java.lang.Boolean">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Calculated_Start_Date" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{Use_Start_Date} == true
+? $P{Start_Date}
+: org.apache.commons.lang.time.DateUtils.addDays(
+org.apache.commons.lang.time.DateUtils.addYears($P{End_Date}, -1)
+, 1)]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[-- WITH all filters applied
+WITH FAM_ORGS AS (
+	SELECT organization_id FROM dw_family_organization WHERE family_name = $P{Center}
+),
+
+FAM_TRIALS AS (
+	SELECT DISTINCT nci_id FROM dw_study_participating_site WHERE org_org_family =$P{Center} ORDER BY nci_id
+),
+
+ALL_FLTRS AS
+( SELECT dt4.*, fltrd_trials_w_ps.clsd_dt, fltrd_trials_w_ps.study_site_id, fltrd_trials_w_ps.tgt_acc, fltrd_trials_w_ps.fam_org_type
+FROM "dw_data_table_4" dt4
+JOIN dw_study std ON (dt4.nci_id = std.nci_id) 
+JOIN (
+	select distinct trials_fb_sd.nci_id, trials_fb_sd.clsd_dt, ps_fb_actv_sd.study_site_id, ps_fb_actv_sd.tgt_acc, ps_fb_actv_sd.ss_actv_sd, ps_fb_actv_sd.fam_org_type from 
+		-- all trials which were active during the RP 
+		(select nci_id, ass as max_actv_sts, asd as max_actv_dt, COALESCE(min(bsd), now()) as clsd_dt from 
+			(select A.nci_id, A.status as ass, B.status as bss, A.status_date as asd, B.status_date as bsd, A.id, B.id as bid from 
+				(select sos.nci_id, status, status_date, internal_system_id as id, rank() over 
+				(partition by sos.nci_id order by status_date desc, internal_system_id desc) as rnk 
+				from dw_study_overall_status sos
+				where 1=1 
+				and exists (select * from FAM_TRIALS where nci_id=sos.nci_id)
+				and status_date <= $P{End_Date}
+				and status in ('APPROVED','ACTIVE','ENROLLING_BY_INVITATION','TEMPORARILY_CLOSED_TO_ACCRUAL','TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION')) as A
+			left outer join
+				(select sos.nci_id, status, status_date, internal_system_id as id 
+				from dw_study_overall_status sos
+				where 1=1 
+				and exists (select * from FAM_TRIALS where nci_id=sos.nci_id)
+				and status in ('CLOSED_TO_ACCRUAL', 'CLOSED_TO_ACCRUAL_AND_INTERVENTION', 'ADMINISTRATIVELY_COMPLETE','COMPLETE')) as B	
+			on A.nci_id=B.nci_id and B.status_date >= A.status_date and B.id > A.id
+			where A.rnk=1 and (B.status_date is null or B.status_date>=$P{Calculated_Start_Date})
+			) as c group by nci_id, ass, asd
+			union 
+			select std.nci_id, null as max_actv_sts, null as max_actv_dt, now() as clsd_dt
+			from dw_study std, "dw_data_table_4" dt4
+			where exists(select * from FAM_TRIALS where nci_id=dt4.nci_id)
+			and std.nci_id=dt4.nci_id AND std.current_trial_status IS NULL AND dt4.is_industrial=true
+		) as trials_fb_sd,
+		(
+		select nci_id, study_site_id, tgt_acc, ass as max_actv_sts, asd as ss_actv_sd, min(bsd) as min_clsd_dt, fam_org_type from
+			(select A.nci_id, A.study_site_id, A.tgt_acc, A.status as ass, B.status as bss, A.status_date as asd, B.status_date as bsd, A.id, B.id as bid, A.fam_org_type from 
+				(select sps.nci_id, sps.target_accrual as tgt_acc, spsaa.study_site_id, spsaa.status, spsaa.status_date, spsaa.internal_system_id as id, fo.functionaltype as fam_org_type,
+				rank() over (partition by spsaa.study_site_id order by spsaa.status_date desc, spsaa.internal_system_id desc) as rnk 
+				from dw_study_participating_site_accrual_status spsaa
+				join dw_study_participating_site sps on sps.internal_system_id=spsaa.study_site_id
+				left join dw_family_organization fo on sps.org_po_id =fo.organization_id and fo.family_name = $P{Center}
+				where 1=1 
+				and exists (select * from FAM_TRIALS where nci_id=sps.nci_id)
+				and spsaa.status_date <= $P{End_Date}
+				and spsaa.status in ('APPROVED','ACTIVE','ENROLLING_BY_INVITATION','TEMPORARILY_CLOSED_TO_ACCRUAL','TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION')) as A
+			left outer join
+			(select spsaa.study_site_id, spsaa.status, spsaa.status_date, spsaa.internal_system_id as id 
+				from dw_study_participating_site_accrual_status spsaa
+				join dw_study_participating_site sps on sps.internal_system_id=spsaa.study_site_id 
+				where 1=1 
+				and exists (select * from FAM_TRIALS where nci_id=sps.nci_id)
+				and spsaa.status in ('CLOSED_TO_ACCRUAL', 'CLOSED_TO_ACCRUAL_AND_INTERVENTION', 'ADMINISTRATIVELY_COMPLETE','COMPLETED')) as B	
+			on A.study_site_id=B.study_site_id
+			and B.status_date >= A.status_date
+			and B.id > A.id
+			where 1=1 and A.rnk=1 and (B.status_date is null or B.status_date>=$P{Calculated_Start_Date})
+			) as c group by nci_id, study_site_id, tgt_acc, ass, asd, fam_org_type
+		) as ps_fb_actv_sd
+		where
+		trials_fb_sd.nci_id = ps_fb_actv_sd.nci_id
+		and ps_fb_actv_sd.ss_actv_sd <= trials_fb_sd.clsd_dt
+) as fltrd_trials_w_ps
+ON dt4.nci_id=fltrd_trials_w_ps.nci_id
+WHERE std.start_date <= $P{End_Date}
+  AND NOT (std.completion_date IS NOT NULL
+           AND std.completion_date_type_code IS NOT NULL
+           AND (std.completion_date < $P{Calculated_Start_Date}
+                AND std.completion_date_type_code = 'ACTUAL'))
+  AND NOT (std.primary_completion_date IS NOT NULL
+           AND std.primary_completion_date_type_code IS NOT NULL
+           AND (std.primary_completion_date < $P{Calculated_Start_Date}
+                AND std.primary_completion_date_type_code = 'ACTUAL'))
+  AND ((std.current_trial_status IS NULL AND dt4.is_industrial=true)
+		OR std.current_trial_status != 'Withdrawn')
+  AND NOT (std.current_trial_status_date < $P{Calculated_Start_Date} 
+		AND std.current_trial_status IN ('Administratively Complete', 'Complete', 'Closed to Accrual',
+				'Closed to Accrual and Intervention', 'In Review'))
+  AND dt4.nci_id NOT IN
+    (SELECT nci_id FROM dw_study_processing_status
+     WHERE (nci_id, date) IN (SELECT nci_id, max(date) FROM dw_study_processing_status GROUP BY nci_id)
+	AND status IN ('Rejected', 'Submission Terminated'))
+) 
+--FOR summary_level_accrual = TRUE 
+select acc_dtls_sum.*,
+(dt4.lead_org_po_id IN
+          (SELECT organization_id
+           FROM dw_family_organization
+           WHERE family_name = $P{Center})) AS isLead,
+
+(SELECT serial_number
+   FROM dw_grants_p30
+   WHERE family_name = $P{Center}) AS p30Grant,
+
+ftd.program_codes,
+dt4.*
+from (select acc_dtls.nci_id as ad_nci_id, sum(acc_dtls.tgt_acc) as your_center_total, sum(ctrp) as center_total_rp, sum(ct) as center_total, sum(aftrp) as affiliate_total_rp, sum(aft) as affiliate_total, sum(naftrp) as non_affiliate_total_rp, sum(naft) as non_affiliate_total
+from (select
+AF.nci_id, AF.tgt_acc,
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, createddate, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate)  BETWEEN  $P{Calculated_Start_Date} AND $P{End_Date}
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+   WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type = 'ORGANIZATIONAL'
+	) AS ctrp,
+
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate) <= now()
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+   WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type = 'ORGANIZATIONAL'
+	) AS ct,
+
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate)  BETWEEN  $P{Calculated_Start_Date} AND $P{End_Date}
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+   WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type != 'ORGANIZATIONAL' and AF.fam_org_type is not null
+	) AS aftrp,
+
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate) <= now()
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+   WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type != 'ORGANIZATIONAL' and AF.fam_org_type is not null
+	) AS aft,
+
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate)  BETWEEN  $P{Calculated_Start_Date} AND $P{End_Date}
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+   	WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type is NULL
+        AND EXISTS (SELECT * FROM FAM_ORGS WHERE organization_id=AF.lead_org_po_id)
+	) AS naftrp,
+
+(SELECT SUM(saca1.accrual_count)
+   FROM
+     (SELECT study_site_id, accrual_count
+      FROM dw_study_accrual_count_audit
+      WHERE (study_site_id,createddate) IN
+		( SELECT study_site_id,MAX(createddate)
+           FROM dw_study_accrual_count_audit
+           WHERE date_trunc('day', createddate) <= now()
+           AND date_trunc('day', createddate) <= AF.clsd_dt
+           GROUP BY study_site_id ) ) AS saca1
+        WHERE saca1.study_site_id=AF.study_site_id
+	AND AF.fam_org_type is NULL
+        AND EXISTS (SELECT * FROM FAM_ORGS WHERE organization_id=AF.lead_org_po_id)
+         ) AS naft
+       	
+FROM ALL_FLTRS AF
+where AF.summary_level_accrual = TRUE) 
+as acc_dtls group by acc_dtls.nci_id) as acc_dtls_sum
+INNER JOIN dw_data_table_4 dt4 ON acc_dtls_sum.ad_nci_id = dt4.nci_id
+LEFT JOIN dw_family_trial_data ftd ON (dt4.nci_id = ftd.nci_id AND ftd.family_name = $P{Center})
+UNION
+-- FOR summary_level_accrual = FALSE
+select acc_dtls_sum.*,
+(dt4.lead_org_po_id IN
+          (SELECT organization_id
+           FROM dw_family_organization
+           WHERE family_name = $P{Center})) AS isLead,
+
+(SELECT serial_number
+   FROM dw_grants_p30
+   WHERE family_name = $P{Center}) AS p30Grant,
+
+ftd.program_codes,
+dt4.*
+from (select acc_dtls.nci_id, sum(acc_dtls.tgt_acc) as your_center_total, sum(ctrp) as center_total_rp, sum(ct) as center_total, sum(aftrp) as affiliate_total_rp, sum(aft) as affiliate_total, sum(naftrp) as non_affiliate_total_rp, sum(naft) as non_affiliate_total
+from (select
+AF.nci_id, AF.tgt_acc,
+(SELECT count(*)
+   FROM dw_study_site_accrual_details ssad
+   WHERE ssad.nci_id = AF.nci_id
+     AND ssad.status = 'ACTIVE'
+     AND ssad.registration_date BETWEEN $P{Calculated_Start_Date} AND $P{End_Date}
+     AND ssad.registration_date <= AF.clsd_dt
+     AND ssad.site_id = AF.study_site_id
+     AND AF.fam_org_type = 'ORGANIZATIONAL'
+       ) AS ctrp,
+
+(SELECT count(*)
+   FROM dw_study_site_accrual_details ssad
+   WHERE ssad.nci_id = AF.nci_id
+     AND ssad.status = 'ACTIVE'
+     AND ssad.registration_date <= now()
+     AND ssad.registration_date <= AF.clsd_dt
+     AND ssad.site_id = AF.study_site_id
+     AND AF.fam_org_type = 'ORGANIZATIONAL'
+       ) AS ct,
+
+(SELECT count(*)
+   FROM dw_study_site_accrual_details ssad
+   WHERE ssad.nci_id = AF.nci_id
+     AND ssad.status = 'ACTIVE'
+     AND ssad.registration_date BETWEEN $P{Calculated_Start_Date} AND $P{End_Date}
+     AND ssad.registration_date <= AF.clsd_dt
+     AND ssad.site_id = AF.study_site_id
+     AND AF.fam_org_type != 'ORGANIZATIONAL'
+       ) AS aftrp,
+
+(SELECT count(*)
+   FROM dw_study_site_accrual_details ssad
+   WHERE ssad.nci_id = AF.nci_id
+     AND ssad.status = 'ACTIVE'
+     AND ssad.registration_date <= now()
+     AND ssad.registration_date <= AF.clsd_dt
+     AND ssad.site_id = AF.study_site_id
+     AND AF.fam_org_type != 'ORGANIZATIONAL'
+       ) AS aft,       
+    
+(SELECT count(*)
+         FROM dw_study_site_accrual_details ssad
+         WHERE ssad.nci_id = AF.nci_id AND ssad.status = 'ACTIVE'
+           AND ssad.registration_date BETWEEN $P{Calculated_Start_Date} AND $P{End_Date}
+           AND ssad.site_id=AF.study_site_id
+	   AND AF.fam_org_type is NULL
+           AND EXISTS (SELECT * FROM FAM_ORGS WHERE organization_id=AF.lead_org_po_id)
+       ) AS naftrp,
+
+(SELECT count(*)
+         FROM dw_study_site_accrual_details ssad
+         WHERE ssad.nci_id = AF.nci_id AND ssad.status = 'ACTIVE'
+           AND ssad.registration_date < now()
+           AND ssad.site_id=AF.study_site_id
+	   AND AF.fam_org_type is NULL
+           AND EXISTS (SELECT * FROM FAM_ORGS WHERE organization_id=AF.lead_org_po_id)
+       ) AS naft
+        
+FROM ALL_FLTRS AF      
+where AF.summary_level_accrual = FALSE) 
+as acc_dtls group by acc_dtls.nci_id) 
+as acc_dtls_sum
+INNER JOIN dw_data_table_4 dt4 ON acc_dtls_sum.nci_id = dt4.nci_id
+LEFT JOIN dw_family_trial_data ftd ON (dt4.nci_id = ftd.nci_id AND ftd.family_name = $P{Center})
+
+ORDER BY clinical_research_cat, nci_id]]>
+	</queryString>
+	<field name="center_total_rp" class="java.lang.Long"/>
+	<field name="center_total" class="java.lang.Long"/>
+	<field name="affiliate_total_rp" class="java.lang.Long"/>
+	<field name="affiliate_total" class="java.lang.Long"/>
+	<field name="non_affiliate_total_rp" class="java.lang.Long"/>
+	<field name="non_affiliate_total" class="java.lang.Long"/>
+	<field name="islead" class="java.lang.Boolean"/>
+	<field name="p30grant" class="java.lang.String"/>
+	<field name="program_codes" class="java.lang.String"/>
+	<field name="clinical_research_cat" class="java.lang.String"/>
+	<field name="study_source" class="java.lang.String"/>
+	<field name="specific_funding_source" class="java.lang.String"/>
+	<field name="is_multiinstitutional" class="java.lang.String"/>
+	<field name="site" class="java.lang.String"/>
+	<field name="nci_id" class="java.lang.String"/>
+	<field name="nct_id" class="java.lang.String"/>
+	<field name="ctep_dcp_id" class="java.lang.String"/>
+	<field name="lead_org_id" class="java.lang.String"/>
+	<field name="other_ids" class="java.lang.String"/>
+	<field name="pi_last_name" class="java.lang.String"/>
+	<field name="pi_first_name" class="java.lang.String"/>
+	<field name="pi_middle_initial" class="java.lang.String"/>
+	<field name="prog_code" class="java.lang.String"/>
+	<field name="open_date" class="java.sql.Date"/>
+	<field name="close_date" class="java.sql.Date"/>
+	<field name="phase" class="java.lang.String"/>
+	<field name="primary_purpose" class="java.lang.String"/>
+	<field name="official_title" class="java.lang.String"/>
+	<field name="entire_study" class="java.lang.Long"/>
+	<field name="sp_id" class="java.lang.Integer"/>
+	<field name="lead_org_po_id" class="java.lang.Integer"/>
+	<field name="is_industrial" class="java.lang.Boolean"/>
+	<field name="summary_level_accrual" class="java.lang.Boolean"/>
+	<field name="consortia_trial_category" class="java.lang.String"/>
+	<field name="your_center_total" class="java.lang.Long"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[true]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="2110" height="802" forecolor="#FF9999" uuid="b398d703-6436-473b-b367-8e0baa33b7b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="160" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Draft, NCI Confidential]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="-6" y="0" width="2130" height="37" backcolor="#A90101" uuid="2f78fcd1-a8c7-488d-8503-2354c5873ad5"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="181" height="26" forecolor="#FFFFFF" backcolor="#475B82" uuid="5085a20d-066a-4e2c-bf6a-b0d3dcbb60bc"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Data Table 4 Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="181" y="0" width="545" height="26" forecolor="#FFFFFF" backcolor="#475B82" uuid="a5adabcb-76fa-4dd3-84eb-32a0f8198e32"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cancer Center:  " + $P{Center}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="726" y="0" width="802" height="26" forecolor="#FFFFFF" backcolor="#475B82" uuid="dac7ee3e-5085-447f-9a36-49fde25c8dd8"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Range:  "
++ new SimpleDateFormat("dd-MMM-yyyy").format($P{Calculated_Start_Date})
++ "  to  " +
+new SimpleDateFormat("dd-MMM-yyyy").format($P{End_Date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="1522" y="0" width="602" height="26" backcolor="#475B82" uuid="08117de8-1e8a-4a80-ae9a-35f0106aad2d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="406" y="0" width="128" height="26" isPrintWhenDetailOverflows="true" backcolor="#D6D6FF" uuid="f4e3a9f4-4e6c-484c-9f27-1683e8b3f48e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Protocol ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="32a00ab8-523d-4323-8e76-b42fc0a5d2ca"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[P30 Grant Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="64" y="0" width="81" height="26" backcolor="#D6D6FF" uuid="2630117c-7b35-440b-8e73-b40b39901ee6"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Clinical Research Cat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="181" y="0" width="124" height="26" backcolor="#D6D6FF" uuid="ee98a638-5404-49ec-b649-2b572a9567d1"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Specific Funding Source]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="305" y="0" width="101" height="26" backcolor="#D6D6FF" uuid="d2d5bd32-aad8-4b7c-815e-0612a7247dc2"/>
+				<textElement>
+					<font size="10" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Primary Site]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="662" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="c63375e1-ddd9-44a9-a7b8-55a3b86788c5"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Is Multi Institutional?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="726" y="0" width="96" height="26" backcolor="#D6D6FF" uuid="e5ea0879-dfef-4dce-8f67-ba949914f0d0"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[PI - Last Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="920" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="ccef0731-0289-4bf3-a087-5bebc4ff88d4"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Prog Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="984" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="4db1f386-5722-4ef4-9ccd-9392a7b385c9"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Open Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1240" y="0" width="288" height="26" backcolor="#D6D6FF" uuid="693ad12d-3f80-433b-ad16-ca8c94d9627d"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Official Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="145" y="0" width="36" height="26" backcolor="#D6D6FF" uuid="867cfc6d-7303-4302-abfd-803e38fb7428"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Study Source]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1112" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="d2397a6e-6c71-46c0-a134-7964aba556a3"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Phase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1048" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="09e7e315-ee01-47b2-b1d3-d6ec9ea122d9"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Close Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="822" y="0" width="74" height="26" backcolor="#D6D6FF" uuid="c2cea4e9-1c5c-4884-92fe-d401849f7d70"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[PI - First Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1176" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="67cbe269-d00b-4b1c-8cb4-80505a633dcf"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Primary Purpose]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="896" y="0" width="24" height="26" backcolor="#D6D6FF" uuid="b3a7d9f0-4ef3-485f-8b23-fbb5e3420b37"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[PI - MI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1528" y="0" width="64" height="26" backcolor="#D6D6FF" uuid="8e611350-a538-4d7a-bd2a-1de684b9b7f5"/>
+				<text><![CDATA[Entire Study]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="534" y="0" width="128" height="26" isPrintWhenDetailOverflows="true" backcolor="#D6D6FF" uuid="fd81eddc-7307-47a1-91be-956f584cb63d"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Other Protocol IDs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1592" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="46c59f96-fec2-460d-bba1-6e4286e53df5"/>
+				<text><![CDATA[Your Center Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="1668" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="29bc7dee-c181-49b4-9a00-4b77d189e780">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{Use_Start_Date} == true ? "Center" : "Center 12 Months"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="1744" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="e3af9438-cc66-4871-ac76-5dc9fb6360bf">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<text><![CDATA[Center to Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="1820" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="0f8f648f-3ad6-4e73-82f5-00bddfb08897">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{Use_Start_Date} == true ? "Affiliates" : "Affiliates 12 Months"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="1896" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="cb0170a5-df7c-4850-87a9-fa1fcf692bcf">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<text><![CDATA[Affiliates to Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="1972" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="2e572d41-28ba-4d36-8444-156b456e1d8e">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{Use_Start_Date} == true ? "Non-affiliates" : "Non-affiliates 12 Months"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="2048" y="0" width="76" height="26" backcolor="#D6D6FF" uuid="8eca810b-9449-40aa-ba6a-92e4fe04a6fb">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<text><![CDATA[Non-affiliates to Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="120" splitType="Prevent">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="534" y="0" width="128" height="80" uuid="fe01c855-ed42-4fd4-a7ff-102fcc64e56a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nci_id}
++ ($F{ctep_dcp_id} == null ? "" : "\n" + $F{ctep_dcp_id})
++ ($F{nct_id} == null ? "" : "\n" + $F{nct_id})
++ ($F{other_ids} == null ? "" : "\n" + $F{other_ids})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="406" y="0" width="128" height="80" uuid="c6f818bb-2cd4-4646-8c66-d7052fe759c0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="64" height="80" uuid="f6d53030-d9d8-4192-8563-bc6213c17432"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{p30grant} == null ? null
+: String.format("CA%06d", Integer.parseInt($F{p30grant}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="64" y="0" width="81" height="80" uuid="cea1ac01-ebf8-4644-bea9-a11ad5cc8929"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clinical_research_cat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="145" y="0" width="36" height="80" uuid="bdb9491d-303b-4731-9902-9267cd12ef79"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_source}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="181" y="0" width="124" height="80" uuid="b2a3ef9b-6fed-4de2-b850-7c56e07ebe77"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{specific_funding_source}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="305" y="0" width="101" height="80" uuid="3b35a4b5-37ac-490f-91e5-fff1ce7a7a2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{site}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="662" y="0" width="64" height="80" uuid="f6b2e672-6e52-4ecb-a042-b64dbc7b39a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{is_multiinstitutional}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="726" y="0" width="96" height="80" uuid="ba84a8d6-a284-4f02-b149-48a44ca5f41b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pi_last_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="822" y="0" width="74" height="80" uuid="71dcab5c-f266-4f88-bff5-34450f427daa"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pi_first_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="920" y="0" width="64" height="80" isPrintWhenDetailOverflows="true" uuid="cf3cd19c-922a-4b30-b0ab-259e9590ba83"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{program_codes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="984" y="0" width="64" height="80" uuid="dcb81fc3-0361-4a84-b100-0e25970286d4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{open_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="1048" y="0" width="64" height="80" uuid="811a5e31-e36d-4a87-a115-67f93f58327b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{close_date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1112" y="0" width="64" height="80" uuid="7f816c48-2f0c-43c5-a8bc-5393438b8650"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{phase}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1240" y="0" width="288" height="80" uuid="f5a66df2-68f5-4d4d-acee-3e7634a24929"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{official_title}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1668" y="0" width="76" height="80" uuid="5cb5c50d-1587-44ab-9003-633e1ca37684"/>
+				<textFieldExpression><![CDATA[($F{center_total_rp} == null ?
+           0 : $F{center_total_rp})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1820" y="0" width="76" height="80" uuid="a38e765d-ed07-4171-ad50-281228db586e"/>
+				<textFieldExpression><![CDATA[($F{affiliate_total_rp} == null ?
+           0 : $F{affiliate_total_rp})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1972" y="0" width="76" height="80" uuid="12667873-9352-4be5-8e12-8c7df756d25f"/>
+				<textFieldExpression><![CDATA[($F{non_affiliate_total_rp} == null ?
+           0 : $F{non_affiliate_total_rp})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1176" y="0" width="64" height="80" isPrintWhenDetailOverflows="true" uuid="d5140988-d90b-456d-8cdb-b2afc254e148"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primary_purpose}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="896" y="0" width="24" height="80" uuid="bc9b7c66-0094-4bb6-9555-9283da30816f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pi_middle_initial}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1744" y="0" width="76" height="80" uuid="4da399fa-b03b-4016-aa88-a4c205ec1ce1"/>
+				<textFieldExpression><![CDATA[$F{center_total} == null ? 0 : $F{center_total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1896" y="0" width="76" height="80" uuid="baccba20-b7e4-4d11-b494-f327c429c1de"/>
+				<textFieldExpression><![CDATA[$F{affiliate_total} == null ? 0 : $F{affiliate_total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2048" y="0" width="76" height="80" uuid="c9be91fc-7771-4546-94df-a4b888d7b7a2"/>
+				<textFieldExpression><![CDATA[$F{non_affiliate_total} == null ? 0 : $F{non_affiliate_total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1528" y="0" width="64" height="80" uuid="0b2e8afd-5314-4da8-857f-e1938905f596"/>
+				<textFieldExpression><![CDATA[$F{islead} == true ? $F{entire_study} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1592" y="0" width="76" height="80" uuid="dc922f85-9619-4efa-bb2c-0b8b255dbd87"/>
+				<textFieldExpression><![CDATA[($F{your_center_total} == null ?
+           0 : $F{your_center_total})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="8" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>

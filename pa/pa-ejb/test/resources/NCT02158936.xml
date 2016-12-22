@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clinical_study rank="1">
+  <!-- This xml conforms to an XML Schema at:
+    http://clinicaltrials.gov/ct2/html/images/info/public.xsd
+ and an XML DTD at:
+    http://clinicaltrials.gov/ct2/html/images/info/public.dtd -->
+  <required_header>
+    <download_date>ClinicalTrials.gov processed this data on January 25, 2015</download_date>
+    <link_text>Link to the current ClinicalTrials.gov record.</link_text>
+    <url>http://clinicaltrials.gov/show/NCT02158936</url>
+  </required_header>
+  <id_info>
+    <org_study_id>112121</org_study_id>
+    <nct_id>NCT02158936</nct_id>
+  </id_info>
+  <brief_title>A Study of Eltrombopag or Placebo in Combination With Azacitidine in Subjects With International Prognostic Scoring System (IPSS) Intermediate-1, Intermediate-2 or High-risk Myelodysplastic Syndromes (MDS)</brief_title>
+  <official_title>A Randomized, Double-blind, Placebo-controlled, Phase III, Multi-centre Study of Eltrombopag or Placebo in Combination With Azacitidine in Subjects With IPSS Intermediate-1, Intermediate 2 and High-risk Myelodysplastic Syndromes (MDS) SUPPORT: A StUdy of eltromboPag in myelodysPlastic SyndrOmes Receiving azaciTidine</official_title>
+  <sponsors>
+    <lead_sponsor>
+      <agency>GlaxoSmithKline</agency>
+      <agency_class>Industry</agency_class>
+    </lead_sponsor>
+  </sponsors>
+  <source>GlaxoSmithKline</source>
+  <oversight_info>
+    <authority>IDMC</authority>
+    <authority>Europe: European Medicines Agency</authority>
+    <authority>Food and Drug Administration</authority>
+    <has_dmc>Yes</has_dmc>
+  </oversight_info>
+  <brief_summary>
+    <textblock>
+      Eltrombopag olamine (SB-497115-GR) is an orally bioavailable, small molecule thrombopoietin
+      receptor agonist that may be beneficial in medical disorders associated with
+      thrombocytopenia.  Eltrombopag has been shown to increase platelet counts in patients with
+      thrombocytopenia from various etiologies (Idiopathic thrombocytopenic purpura [ITP], liver
+      disease, aplastic anemia and chemotherapy induced thrombocytopenia). This study proposes to
+      enroll 350 subjects with intermediate-1, intermediate-2 or high risk MDS by IPSS, and
+      baseline platelet count of &lt;75 Giga (10^9) per liter (Gi/L).  This is a randomized,
+      double-blind, parallel group, placebo-controlled study designed to explore the platelet
+      supportive care effects of eltrombopag versus placebo in combination with the standard of
+      care hypomethylating agent, azacitidine.  The primary objective of this study is to
+      determine the effect of eltrombopag versus placebo on the proportion of subjects who are
+      platelet transfusion free during the first 4 cycles of azacitidine therapy. Key secondary
+      endpoints include overall survival, disease response, and disease progression.
+    </textblock>
+  </brief_summary>
+  <overall_status>Not yet recruiting</overall_status>
+  <start_date>June 2014</start_date>
+  <completion_date type="Anticipated">December 2017</completion_date>
+  <primary_completion_date type="Anticipated">December 2017</primary_completion_date>
+  <phase>Phase 3</phase>
+  <study_type>Interventional</study_type>
+  <study_design>Allocation: Randomized, Endpoint Classification: Safety/Efficacy Study, Intervention Model: Parallel Assignment, Masking: Double Blind (Subject, Investigator), Primary Purpose: Treatment</study_design>
+  <primary_outcome>
+    <measure>Cycle 1-4 platelet transfusion independence (The proportion of subjects who are platelet transfusion free during Cycles 1-4 of azacitidine therapy)</measure>
+    <time_frame>4 cycles (Cycle = 28 days)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>A subject is defined as being platelet transfusion independent if they receive no platelet transfusions within the first 4 cycles of treatment with azacitidine</description>
+  </primary_outcome>
+  <secondary_outcome>
+    <measure>Overall survival (OS)</measure>
+    <time_frame>Approximately 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Overall survival is defined as the time from randomization until death due to any cause.  Subjects still alive at the time of the analysis and subjects who have withdrawn from the study will be censored at the time of last contact</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Disease Response</measure>
+    <time_frame>Approximately 6 Cycles (Cycle = 28 days)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The investigator will assess best disease response categorized as complete remission (CR), partial remission (PR), or marrow CR, stable disease, disease progression, and as non-evaluable; according to modified 2006 International Working Group (IWG) criteria for MDS</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Duration of Disease Response</measure>
+    <time_frame>Approximately 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Duration of disease response will be summarized for subjects who had some form of response</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Progression Free Survival</measure>
+    <time_frame>Approximately 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Progression-free survival is defined as the time from randomization until either disease progression or death</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Time to Progression</measure>
+    <time_frame>Approximately 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The time to progression defined as the time from patient inclusion to the date of the first documented date of disease progression (using the modified 2006 IWG response criteria for MDS)</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Proportion of subjects that progress to Acute Myeloid Leukemia (AML)</measure>
+    <time_frame>Approximately to 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>AML progression will be defined as meeting the definition of disease progression according to the modified 2006 IWG response criteria for MDS, with the additional requirement that post-baseline bone marrow and/or peripheral blasts must be &gt;= 20%</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Time to AML progression</measure>
+    <time_frame>Approximately 5.5 years</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The time to progression defined as the time from patient inclusion to the date of the first documented date of  AML progression (defined as meeting the definition of disease progression</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Hematologic improvement (HI) in platelets, neutrophils, and hemoglobin</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>HI in platelets, neutrophils and haemoglobin will be calculated based on the modified IWG criteria for MDS</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Duration of HI of platelets, neutrophils and hemoglobin</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Duration of HI will be summarized for subjects who had some form of response</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Number of platelet and Red Blood Cells (RBC) transfusions</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Duration of platelet and RBC transfusion independence</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Duration of platelet and RBC transfusion-independence is defined as a time period where subjects do not receive any platelet or RBC transfusions during the treatment period and follow-up</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Bleeding adverse events (AEs) &gt;= Grade 3</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Bleeding will be assessed by recording AEs or SAEs as graded according to National Cancer Institute (NCI) Common Terminology Criteria for Adverse Events (CTCAE) v4.0</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Azacitidine dose delays and dose reductions</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The proportion of subjects with any delay or reduction in dosage of Azacitidine excluding those for non-medical reasons will be analyzed</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Evaluation of Adverse event reporting (including bleeding and transfusion-related adverse events) and clinical laboratory tests</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>An AE is any untoward medical occurrence temporally associated with the use of the medicinal product, whether or not considered associated with the product. Common Terminology Criteria for Adverse Events (CTCAE) will be used for toxicity grading</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Changes from baseline in all domains of Euroquol-5 Dimensions of Health, 3 Response Levels (EQ-5D-3L™)</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The EQ-5D is a general health status and health utility measure which captures 5 dimensions of health state: mobility, self-care, usual activities, pain/discomfort, and anxiety/depression. The survey also includes a visual analog scale (VAS or thermometer) measuring overall health state. (EQ-5D is a trademark of the EuroQol Group) .</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Changes from baseline in all domains of Functional Assessment of Chronic Disease Therapy-fatigue subscale (FACIT-Fatigue)</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>The FACIT-Fatigue subscale measures severity and impact of fatigue on functioning and Health Related QoL experienced in the past 7 days (The FACIT Fatigue Scale is owned by David Cella, Ph.D.)</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Changes from baseline in all domains of European Organization for Research and Treatment of Cancer - Quality of Life questionnaire - 30 item (EORTC QLQ-C30)</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Cancer related symptoms and quality of life (QoL) will be assessed with the EORTC QLQ-C30 version 3. This is composed of multi-item and single-item scales. These include five functional scales (physical, role, emotional, social, and cognitive), three symptom scales (fatigue, nausea and vomiting, pain), a global health status scale and six single items (dyspnea, insomnia, appetite loss, constipation, diarrhea and financial difficulties) (EORTC QLQ-C30 is owned by the EORTC Quality of Life Group)</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Changes from baseline in all domains of independent questions regarding the value of transfusion independence</measure>
+    <time_frame>At 4 week follow-up</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Upon study permanent discontinuation of study treatment, a supplementary set of questions will evaluate subjects' perceived value in achieving transfusion independence and the consequences of maintaining dose density of azacitidine.</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Medical resource utilization (MRU): Event and use of site specific medical resources</measure>
+    <time_frame>From Day 1 to 4-week follow-up (Approximate median 9 Cycles+4 weeks follow-up)</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>MRU data will be collected for each subject.  Events corresponding to unscheduled (not scheduled per protocol) hospitalizations, office visits including consultations, laboratory and diagnostic tests (lab results, imaging etc.), and procedures prior to therapy initiation and during therapy will be collected</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Pharmacokinetics: Evaluation of covariates, and estimates of between and within subject variability</measure>
+    <time_frame>Cycle 1, Week 2: Pre-dose, 1.5 and 3 hour post dose; Cycle 1, Week 3: 4, 5.5, and 7 hours post dose</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Plasma eltrombopag population pharmacokinetic parameters, including evaluation of covariates, and estimates of between and within subject variability</description>
+  </secondary_outcome>
+  <number_of_arms>2</number_of_arms>
+  <enrollment type="Anticipated">350</enrollment>
+  <condition>Thrombocytopaenia</condition>
+  <arm_group>
+    <arm_group_label>Eltrombopag</arm_group_label>
+    <arm_group_type>Experimental</arm_group_type>
+    <description>Eligible subject will receive a starting dose of eltrombopag of 200 milligrams (mg) (100 mg for subjects of East Asian heritage).  Dose modifications of eltrombopag will be permitted by 100 mg increments (50 mg increments for East Asians) to a lowest dose of 100 mg (50 mg for East Asian heritage) or a maximum dose of 300 mg (150 mg for East Asian heritage) in order to maintain platelet counts at a safe and effective level (i.e. a level sufficient to avoid platelet transfusions and bleeding events). Subjects will receive azacitidine 75 mg/meter^2 subcutaneously once daily for 7 days (+/- 3 day treatment window permitted) every 28 days, for at least 6 cycles if tolerated and until they are no longer receiving benefit (defined as at least stable disease per the investigator's assessment) or until disease progression, death, or unacceptable toxicity/adverse event. The subject may receive eltrombopag daily for the full 28 days each cycle for as long as the subject is receiving azacitidine</description>
+  </arm_group>
+  <arm_group>
+    <arm_group_label>Placebo</arm_group_label>
+    <arm_group_type>Placebo Comparator</arm_group_type>
+    <description>Eligible subject will receive eltrombopag matching placebo. Subjects will receive azacitidine 75 mg/meter^2 subcutaneously once daily for 7 days (+/- 3 day treatment window permitted) every 28 days, for at least 6 cycles if tolerated and until they are no longer receiving benefit (defined as at least stable disease per the investigator's assessment) or until disease progression, death, or unacceptable toxicity/adverse event. The subject may receive eltrombopag daily for the full 28 days each cycle for as long as the subject is receiving azacitidine</description>
+  </arm_group>
+  <intervention>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>Eltrombopag</intervention_name>
+    <description>Eltrombopag will be round film-coated tablets containing eltrombopag equivalent to 50 mg (white to off-white), 200 mg and 300 mg (green) of eltrombopag free acid</description>
+    <arm_group_label>Eltrombopag</arm_group_label>
+  </intervention>
+  <intervention>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>Azacitidine</intervention_name>
+    <description>Subcutaneous Injection (IV if local standard)</description>
+    <arm_group_label>Eltrombopag</arm_group_label>
+    <arm_group_label>Placebo</arm_group_label>
+  </intervention>
+  <intervention>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>Placebo</intervention_name>
+    <description>Eltrombopag matching placebo tablets will be supplied</description>
+    <arm_group_label>Placebo</arm_group_label>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        Inclusion Criteria:
+
+          -  Age &gt;=18 years
+
+          -  Intermediate 1, intermediate 2 or high risk MDS by IPSS
+
+          -  At least one platelet count &lt; 75 Gi/L
+
+          -  Eastern Cooperative Oncology Group (ECOG) Status 0-2
+
+          -  Adequate baseline organ function defined by the criteria below: total bilirubin =&lt;
+             1.5x the upper limit of normal (ULN) except for Gilbert's syndrome or cases clearly
+             not indicative of inadequate liver function (i.e. elevation of indirect [haemolytic]
+             bilirubin in the absence of alanine aminotransferase [ALT] abnormality); ALT =&lt;
+             3xULN; creatinine =&lt; 2.5xULN
+
+          -  Subjects with a corrected QT interval (QTc) &lt;450 milliseconds (msec) or &lt;480msec for
+             subjects with bundle branch block.  The QTc is the QT interval corrected for heart
+             rate according to Fridericia's formula (QTcF), machine or manual overread.  For
+             subject eligibility and withdrawal, QTcF will be used.  For purposes of data
+             analysis, QTcF will be used.  The QTc should be based on single or averaged QTc
+             values of triplicate electrocardiograms (ECGs) obtained over a brief recording period
+
+          -  Subject is able to understand and comply with protocol requirements and instructions
+
+          -  Subject has signed and dated informed consent
+
+          -  Women must be either of non-child bearing potential, or women with child-bearing
+             potential and men with reproductive potential must be willing to practice acceptable
+             methods of birth control during the study
+
+          -  Women of childbearing potential must have a negative serum or urine pregnancy test
+             within 7 days of first dose of study treatment and agree to use effective
+             contraception during the study and for 30 days following the last dose of study
+             treatment
+
+          -  Men with a female partner of childbearing potential must have either had a prior
+             vasectomy or agree to use effective contraception from time of randomization until 16
+             weeks after the last dose of study treatment
+
+          -  French subjects: In France, a subject will be eligible for inclusion in this study
+             only if either affiliated to or a beneficiary of a social security category
+
+        Exclusion Criteria:
+
+          -  Previous treatment with hypomethylating agent or induction chemotherapy for MDS
+
+          -  History of treatment with eltrombopag, romiplostim or other thrombopoietin receptor
+             (TPO-R) agonists
+
+          -  Previous allogeneic stem-cell transplantation
+
+          -  Known thrombophilic risk factors.  Exception: Subjects for whom the potential
+             benefits of participating in the study outweigh the potential risks of thromboembolic
+             events, as determined by the investigator
+
+          -  Treatment with an investigational drug within 30 days or 5 half-lives (whichever is
+             longer) preceding the first dose of investigational product (eltrombopag/placebo)
+
+          -  Active and uncontrolled infections, including hepatitis B or C
+
+          -  Known Human Immunodeficiency Virus (HIV) infection
+
+          -  Known immediate or delayed hypersensitivity reaction or idiosyncrasy to drugs
+             chemically related to eltrombopag or its excipient, or azacitidine, that
+             contraindicates the subjects' participation
+
+          -  Pregnant or lactating female
+
+          -  Any serious and/or unstable pre-existing medical, psychiatric disorder, or other
+             conditions that could interfere with subject's safety, obtaining informed consent or
+             compliance with the study procedures
+
+          -  French subjects: the French subject has participated in any study using an
+             investigational drug during the previous 30 days
+      </textblock>
+    </criteria>
+    <gender>Both</gender>
+    <minimum_age>18 Years</minimum_age>
+    <maximum_age>N/A</maximum_age>
+    <healthy_volunteers>No</healthy_volunteers>
+  </eligibility>
+  <overall_official>
+    <last_name>GSK Clinical Trials</last_name>
+    <role>Study Director</role>
+    <affiliation>GlaxoSmithKline</affiliation>
+  </overall_official>
+  <overall_contact>
+    <last_name>US GSK Clinical Trials Call Center</last_name>
+    <phone>877-379-3718</phone>
+    <email>GSKClinicalSupportHD@gsk.com</email>
+  </overall_contact>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>Seoul</city>
+        <zip>138-736</zip>
+        <country>Korea, Republic of</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>Seoul</city>
+        <zip>135-710</zip>
+        <country>Korea, Republic of</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>Seoul</city>
+        <zip>137-701</zip>
+        <country>Korea, Republic of</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>Kaluga</city>
+        <zip>248007</zip>
+        <country>Russian Federation</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>Moscow</city>
+        <zip>129301</zip>
+        <country>Russian Federation</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location>
+    <facility>
+      <name>GSK Investigational Site</name>
+      <address>
+        <city>ChiangMai</city>
+        <zip>50000</zip>
+        <country>Thailand</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>US GSK Clinical Trials Call Center</last_name>
+      <phone>877-379-3718</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact>
+    <contact_backup>
+      <last_name>EU GSK Clinical Trials Call Center</last_name>
+      <phone>+44 (0) 20 8990 4466</phone>
+      <email>GSKClinicalSupportHD@gsk.com</email>
+    </contact_backup>
+  </location>
+  <location_countries>
+    <country>Korea, Republic of</country>
+    <country>Russian Federation</country>
+    <country>Thailand</country>
+  </location_countries>
+  <verification_date>June 2014</verification_date>
+  <lastchanged_date>June 12, 2014</lastchanged_date>
+  <firstreceived_date>June 5, 2014</firstreceived_date>
+  <responsible_party>
+    <responsible_party_type>Sponsor</responsible_party_type>
+  </responsible_party>
+  <keyword>Eltrombopag</keyword>
+  <keyword>azacitidine</keyword>
+  <keyword>thrombocytopenia</keyword>
+  <keyword>myelodysplastic syndromes (MDS)</keyword>
+  <keyword>thrombopoietin</keyword>
+  <is_fda_regulated>No</is_fda_regulated>
+  <has_expanded_access>No</has_expanded_access>
+  <condition_browse>
+    <!-- CAUTION:  The following MeSH terms are assigned with an imperfect algorithm  -->
+    <mesh_term>Myelodysplastic Syndromes</mesh_term>
+    <mesh_term>Preleukemia</mesh_term>
+    <mesh_term>Syndrome</mesh_term>
+    <mesh_term>Thrombocytopenia</mesh_term>
+  </condition_browse>
+  <intervention_browse>
+    <!-- CAUTION:  The following MeSH terms are assigned with an imperfect algorithm  -->
+    <mesh_term>Azacitidine</mesh_term>
+  </intervention_browse>
+  <!-- Results have not yet been posted for this study                                -->
+</clinical_study>

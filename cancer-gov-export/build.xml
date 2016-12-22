@@ -1,0 +1,118 @@
+<project name="cancer-gov-export" default="generate" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property name="tier" value="LOCAL" />
+	<property file="${basedir}/../build-pa/tier-properties/build-lite-${tier}.properties" />
+	<property file="${basedir}/../build-pa/tier-properties/build-lite.properties" />
+	<property file="${basedir}/../build-po/tier-properties/${po.tier}.properties" />
+	<property file="${basedir}/../build-po/install.properties" />
+	<property name="output.dir" value="${basedir}/output" />
+	
+	<condition property="po.db.password" value="${po.db.password}">
+		<isset property="po.db.password" />
+	</condition>
+	<condition property="po.db.password" value="${database.password}">
+		<not>
+			<isset property="po.db.password" />
+		</not>
+	</condition>
+
+	<condition property="pa.db.password" value="${pa.db.password}">
+		<isset property="pa.db.password" />
+	</condition>
+	<condition property="pa.db.password" value="${db.password}">
+		<not>
+			<isset property="pa.db.password" />
+		</not>
+	</condition>
+	
+	<echoproperties />
+
+	<mkdir dir="${output.dir}" />
+	<delete includeemptydirs="true" failonerror="yes">
+		<fileset dir="${output.dir}" includes="**/*" />
+	</delete>
+
+	<path id="pdqexport.classpath">
+		<fileset dir="${basedir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="pdqexport.classpath" />
+	<taskdef classname="org.codehaus.groovy.ant.Groovy" classpathref="pdqexport.classpath" name="groovy" />
+
+	<target name="generate" description="Generates the Cancer.Gov XML Feed Export">
+		<echo message="Generating Cancer.Gov XML Feed Export..." />
+		<groovy classpathref="pdqexport.classpath" src="src/main/groovy/export.groovy" />
+        <tstamp>
+	            <format property="TODAY" pattern="yyyy-MM-dd" locale="US" />
+	    </tstamp>
+		<zip destfile="${output.dir}/CTRP-TO-CANCER-GOV-EXPORT-${TODAY}.zip" basedir="${output.dir}" includes="*.xml" />
+		<copy file="${output.dir}/CTRP-TO-CANCER-GOV-EXPORT-${TODAY}.zip" tofile="${output.dir}/LATEST-CTRP-TO-CANCER-GOV-EXPORT.zip" />
+		<scp todir="${pa.ssh.user}:${pa.ssh.password}@${pa.ssh.host}:${pdq.upload.filepath.loc}" trust="yes" verbose="yes">
+			<fileset dir="${output.dir}">
+				<include name="**/*.zip" />
+			</fileset>
+		</scp>
+		
+		<echo message = "Granting SELECT privilege to copparead..."/>
+        <sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db.server}:${db.port}/${db.name}"
+            userid="${db.username}" password="${pa.db.password}"
+            onerror="continue" 
+            expandproperties="true" autocommit="true">
+        	<transaction>
+			GRANT SELECT ON rv_search_results to pamaint;
+			GRANT SELECT ON rv_trial_id_nci to pamaint;
+			GRANT SELECT ON rv_trial_id_nct to pamaint;
+			GRANT SELECT ON rv_ctep_id to pamaint;
+			GRANT SELECT ON rv_dcp_id to pamaint;
+			GRANT SELECT ON rv_lead_organization to pamaint;
+GRANT SELECT ON rv_active_milestone to pamaint;
+GRANT SELECT ON rv_admin_milestone to pamaint;
+GRANT SELECT ON rv_biomarker_existence to pamaint;
+GRANT SELECT ON v_ccr_id to pamaint;
+GRANT SELECT ON rv_checkout_admin to pamaint;
+GRANT SELECT ON rv_checkout_scientific to pamaint;
+GRANT SELECT ON rv_ctep_id to pamaint;
+GRANT SELECT ON rv_dcp_id to pamaint;
+GRANT SELECT ON rv_dwf_current to pamaint;
+GRANT SELECT ON rv_dwf_previous to pamaint;
+GRANT SELECT ON rv_last_hold to pamaint;
+GRANT SELECT ON rv_last_milestone to pamaint;
+GRANT SELECT ON rv_lead_organization to pamaint;
+GRANT SELECT ON rv_organization_responsible_party to pamaint;
+GRANT SELECT ON rv_other_milestone to pamaint;
+GRANT SELECT ON rv_principal_investigator_responsible_party to pamaint;
+GRANT SELECT ON rv_scientific_milestone to pamaint;
+GRANT SELECT ON rv_search_results to pamaint;
+GRANT SELECT ON rv_sos_current to pamaint;
+GRANT SELECT ON rv_sponsor_organization to pamaint;
+GRANT SELECT ON rv_study_principal_investigator to pamaint;
+GRANT SELECT ON rv_study_resourcing to pamaint;
+GRANT SELECT ON rv_trial_id_cdr to pamaint;
+GRANT SELECT ON rv_trial_id_nci to pamaint;
+GRANT SELECT ON rv_trial_id_nct to pamaint;
+GRANT SELECT ON rv_trial_submitter to pamaint;
+GRANT SELECT ON rv_updating_trials to pamaint;
+        		GRANT SELECT ON program_code,family,study_program_code,account_common_organizations, accounts, accrual_collections, accrual_disease, accrual_out_of_scope_trial, activity_relationship, anatomic_sites, arm, arm_intervention, assay_type, assessment_type, auditlogdetail, auditlogrecord, batch_file, biomarker_purpose, biomarker_use, cancer_gov_export_log, clinical_research_staff, consortia_category, country, csm_application, csm_filter_clause, csm_group, csm_mapping, csm_pg_pe, csm_privilege, csm_protection_element, csm_protection_group, csm_remote_group, csm_remote_group_sync_record, csm_role, csm_role_privilege, csm_user, csm_user_group, csm_user_group_role_pg, csm_user_pe, ctgov_org_map, ctgov_person_map, ctgovimport_log, databasechangelog, databasechangeloglock, document, document_workflow_status, dose_form, dose_frequency, email_attachment, email_log, evaluation_type, funding_mechanism, healthcare_facility, healthcare_provider, hpid, icd9_disease, intervention, intervention_alternate_name, lesion_location_anatomic_site, mapping_identifier, messages_log, messages_log_audit, method_code, misc_documents, nih_institute, organization, organizational_contact, oversight_committee, pa_properties, patient, patient_stage, pdq_disease, pdq_disease_altername, pdq_disease_parent, pdq_exports_log, performed_activity, performed_observation_result, person, planned_activity, planned_eligibility_criterion, planned_marker, planned_marker_sync_cadsr, planned_marker_synonyms, planned_procedure, planned_substance_administration, primary_purpose, procedure_name, prs_sync_history, qrtz_pa_blob_triggers, qrtz_pa_calendars, qrtz_pa_cron_triggers, qrtz_pa_fired_triggers, qrtz_pa_job_details, qrtz_pa_job_listeners, qrtz_pa_locks, qrtz_pa_paused_trigger_grps, qrtz_pa_scheduler_state, qrtz_pa_simple_triggers, qrtz_pa_trigger_listeners, qrtz_pa_triggers, registry_user, regulatory_authority, research_organization, route_of_administration, sdc_disease, secondary_purpose, specimen_collection, specimen_type, stratum_group, study_accrual_access, study_alternate_title, study_anatomic_site, study_checkout, study_contact, study_disease, study_document_stage, study_funding_stage, study_inbox, study_indide_stage, study_indlde, study_milestone, study_objective, study_onhold, study_otheridentifiers, study_otheridentifiers_stage, study_outcome_measure, study_overall_status, study_owner, study_processing_error, study_protocol, study_protocol_association, study_protocol_flags, study_protocol_sec_purpose, study_protocol_stage, study_record_change, study_recruitment_status, study_regulatory_authority, study_relationship, study_resourcing, study_site, study_site_accrual_access, study_site_accrual_status, study_site_contact, study_site_overall_status, study_site_owner, study_site_subject_accrual_count, study_subject, study_summary_four_org_identifier_stage, target_site, tmp_ctep_id, trial_data_verification, tumor_marker, tweets, unit_of_measurement, webservice_access_log TO copparead;
+			GRANT SELECT,USAGE ON SEQUENCE HIBERNATE_SEQUENCE to pamaint;
+			GRANT SELECT ON rv_active_milestone, rv_admin_milestone, rv_biomarker_existence, rv_ccr_id, rv_checkout_admin, rv_checkout_scientific, rv_ctep_id, rv_dcp_id, rv_dwf_current, rv_dwf_previous, rv_last_hold, rv_last_milestone, rv_lead_organization, rv_organization_responsible_party, rv_other_milestone, rv_principal_investigator_responsible_party, rv_scientific_milestone, rv_search_results, rv_sos_current, rv_sponsor_organization, rv_study_principal_investigator, rv_study_resourcing, rv_trial_id_cdr, rv_trial_id_nci, rv_trial_id_nct, rv_trial_submitter, rv_updating_trials  TO copparead;
+        	</transaction>
+            <classpath>
+                <path refid="pdqexport.classpath"/>
+            </classpath>
+	    </sql>
+        <sql driver="org.postgresql.Driver" url="jdbc:postgresql://${database.server}:${database.port}/${database.name}"
+            userid="${database.user}" password="${po.db.password}"
+            onerror="continue" 
+            expandproperties="true" autocommit="true">
+            <transaction>
+                GRANT SELECT ON ALL TABLES IN SCHEMA public TO copparead;
+            </transaction>
+            <classpath>
+                <path refid="pdqexport.classpath"/>
+            </classpath>
+        </sql>     
+
+	</target>
+</project>

@@ -1,0 +1,26 @@
+<project name="ctgov_pdq_mapping_gen" default="gen" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+   <tstamp>
+        <format property="TODAY" pattern="yyyy-MM-dd" locale="US"/>
+    </tstamp>   
+	
+	<property file="${basedir}/local.properties" />
+	<property file="${basedir}/build.properties"/>
+	<echoproperties destfile="${basedir}/resolved.build.properties"/>  
+	
+    <path id="pdqexport.classpath">
+        <fileset dir="${basedir}/lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="pdqexport.classpath"/>
+    <taskdef classname="org.codehaus.groovy.ant.Groovy" classpathref="pdqexport.classpath" name="groovy"/> 
+    	
+    <target name="gen" description="Populates mapping tables">
+        <echo message = "Populating ctgov_org_map and ctgov_person_map tables in PA database..."/>
+        <groovy src="groovy/PopulateMappingTables.groovy"/>
+    	<!-- <delete quiet="true" file="${basedir}/resolved.build.properties"/> -->
+    </target>
+    
+</project>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ctrpUserSecurityGroup" language="groovy" pageWidth="1800" pageHeight="842" columnWidth="1760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select dfo.family_name, dfo.organization_name, du.last_name || ', '||du.first_name as name,
+case when du.phone ~'^(\(\d{3}\))-' then regexp_replace(du.phone,'[\./\s()]','','g')
+when du.phone ~'\d{3} \d{3}' then  regexp_replace(du.phone,'[\./\s()]','-','g')
+WHEN du.phone ~'^(\(\d{3}\))\s' then regexp_replace(du.phone,'[\./\s()]','','g')
+WHEN du.phone ~'^\d{3}\.' then regexp_replace(du.phone,'[\./\s()]','-','g')
+WHEN du.phone ~'^\d{3}/' then regexp_replace(du.phone,'[\./\s()]','-','g')
+when du.phone ~'^(\(\d{3}\)\d)' then regexp_replace(du.phone,'[\./\s()]','','g')
+ELSE du.phone
+End as phone, du.email,du.site_admin from dw_family_organization dfo
+left join dw_user du on du.affiliated_organization_id=dfo.organization_id AND du.csm_user_id NOT IN (select csm_user_id from dw_user where name  in ('Lauren Anthone',
+'Paula Brown',
+'Edmond Mulaire',
+'mamuadr_1446067262682',
+'Smita Hastak',
+'Ed Mulaire',
+'Edmond Mulaire',
+'Naveen Amiruddin',
+'Hariprasad Davanagere',
+'David Loose',
+'Joseph Martucci',
+'David Loose',
+'Rosemarie Mamuad',
+'Charles Yaghmour',
+'Michael Izbicki',
+'michael Izbicki',
+'Bryan Nowlin',
+'Joseph Martucci',
+'Michael Izbicki',
+'Paula Brown',
+'NCI Systems',
+'Steve Lustbader',
+'Charles Yaghmour',
+'Hugh Reinhart',
+'Ram palaniappan',
+'Paul Davis',
+'Gene Kraus',
+'Joseph Martucci',
+'Sulekha Avasthi',
+'ncictro',
+'Rashmi Srinivasa',
+'CHRISTOPHE LUDET',
+'Claire Wolfe',
+'CTEPRSS RSS',
+'CTRO Staff National Cancer Institute',
+'Farhan Khan',
+'Claire Wolfe',
+'DCP_DCIM_USER DCP_DCIM_LAST',
+'Hugh Reinhart',
+'Denis Krylov',
+'Denis Krylov',
+'Monish Dombla',
+'Mahesh Yelisetti',
+'ctrpdoc sci3',
+'ctro_staff_1446067205585',
+'ClinicalTrials.gov Import ',
+'CTEP ECM',
+'AppScan AppScan',
+'CTRP QATester1',
+'CTEP System-Account',
+'ctrpdoc adminsci4',
+'ctrpdoc result5',
+'ctrpdoc super1',
+'ctrpdoc admin2',
+'ctrpdoc adminsci4',
+'SKCCC System-Account',
+'Shamim Ahmed',
+'Barry Alkis',
+'Ann Pham',
+'Shilpi Singh',
+'CTRP PA',
+'Braulio Cabral',
+'Brittany Jackson',
+'Hemant Undale',
+'Shanthala Basavappa',
+'Sophia Rarhai')) and 
+du.login_name not like '%OU=caGrid%' 
+order by dfo.family_name,dfo.organization_name,name]]>
+	</queryString>
+	<field name="family_name" class="java.lang.String"/>
+	<field name="organization_name" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="site_admin" class="java.lang.String"/>
+	<group name="FamilyGroup">
+		<groupExpression><![CDATA[$F{family_name}]]></groupExpression>
+	</group>
+	<group name="Family_group">
+		<groupExpression><![CDATA[$F{family_name}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField>
+					<reportElement x="0" y="0" width="736" height="50" uuid="9e011621-181b-4429-87a1-7f8f76b0ce96"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{family_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Organization_group">
+		<groupExpression><![CDATA[$F{organization_name}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="35" y="0" width="512" height="15" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9356dc40-26a7-412b-8222-c53708615c31"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{organization_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="0" y="0" width="1760" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="1760" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cancer Centers CTRP Users"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="547" height="32" backcolor="#D6D6FF" uuid="753e9bff-8028-449e-bac2-81ba41ee815a"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="547" y="0" width="321" height="32" backcolor="#D6D6FF" uuid="91864f55-3b33-4438-998b-5a2dac3d2cac"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Affiliated User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="868" y="0" width="307" height="32" backcolor="#D6D6FF" uuid="9fabf800-0091-4c13-8fbd-29bb32063f7f"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1175" y="0" width="350" height="32" backcolor="#D6D6FF" uuid="c8878aa8-8893-4004-8aea-781146d5d0da"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1525" y="0" width="235" height="32" backcolor="#D6D6FF" uuid="4bab9619-0663-43b3-9160-50445113f2c3"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Is a Site Admin ?]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="547" y="0" width="321" height="15" isRemoveLineWhenBlank="true" uuid="fda6abaa-cc0c-4b21-9ccc-ee2fe086334d"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="868" y="0" width="307" height="15" uuid="310c5fc1-b9eb-4489-9e99-259bfce92170"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1175" y="0" width="350" height="15" uuid="b0ca3d8c-8e5f-4d6f-9f02-a29961b69c14"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1525" y="0" width="235" height="15" uuid="c6ff4480-61e9-4fae-9f00-da8cd66a8893"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{site_admin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="1354" y="0" width="347" height="25" uuid="af4c6208-b555-4b75-ae18-07a243997de2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="1701" y="0" width="59" height="25" uuid="c0374313-4e5c-4402-9e7c-b96eb630a339"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="590" height="25" uuid="a7a3ff4c-e8df-40ba-ad30-d778ce76b17f"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, MMMM dd, yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

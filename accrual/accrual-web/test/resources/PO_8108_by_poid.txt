@@ -1,0 +1,3 @@
+"COLLECTIONS","@nciid@",20131031,20131031,"AC",20110708,"Adair^Jennifer","206-667-7110","","jadair@fhcrc.org","1"
+"PUBLICATIONS","@nciid@",1,"19466234","Extended survival of glioblastoma patients after chemoprotective HSC gene therapy","Science Translational Medicine","4",2012,"AAAS","133ra57"
+"PATIENTS","@nciid@","FHCRC 2000.016","98021","US",196106,"1","1","1",20101013,"","@poid@","2","06",,"98",20110103,"SG1","2","0",0,10007959,"7","2"

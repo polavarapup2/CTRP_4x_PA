@@ -1,0 +1,1 @@
+ALTER TABLE csm_user ALTER COLUMN phone_number TYPE varchar(50);

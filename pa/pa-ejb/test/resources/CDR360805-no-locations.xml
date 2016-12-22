@@ -1,0 +1,239 @@
+<clinical_study nct-id="NCT00081263" ctep-id="GOG-0207" dcp-id="">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000360805</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000360805</org_study_id>
+    <secondary_id>GOG-0207</secondary_id>
+  </id_info>
+  <is_fda_regulated>yes</is_fda_regulated>
+  <is_section_801>yes</is_section_801>
+  <delayed_posting>no</delayed_posting>
+  <is_ind_study>yes</is_ind_study>
+  <ind_info>
+    <ind_grantor>CDER</ind_grantor>
+    <ind_number>69656</ind_number>
+    <ind_serial_number></ind_serial_number>
+  </ind_info>
+  <brief_title>Celecoxib in Treating Patients With Cervical Intraepithelial Neoplasia</brief_title>
+  <official_title>A Randomized Double-Blind Phase II Trial of Celecoxib, a COX-2 Inhibitor, in the Treatment of Patients with Cervical Intraepithelial Neoplasia 2/3 or 3 (CIN 2/3 or CIN 3)</official_title>
+<lead_org ctep-id="">Gynecologic Oncology Group</lead_org>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Gynecologic Oncology Group</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+    <resp_party ctep-id='4242' party-type='person'>
+   <name_title>Philip J. DiSaia</name_title>
+   <organization>Gynecologic Oncology Group</organization>
+   <phone>714-456-5220</phone>
+   <email>pjdisaia@uci.edu</email>
+  </resp_party>
+</sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Chemoprevention therapy is the use of certain drugs to try to prevent the development of cancer or to treat early cancer. Celecoxib may be effective in preventing the development of cervical cancer in patients who have cervical intraepithelial neoplasia (CIN).
+
+PURPOSE: This randomized phase II trial is studying how well celecoxib works in preventing cervical cancer in patients with CIN.</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: PrimaryDetermine the efficacy of celecoxib, in terms of achieving histologic complete or partial response, in patients with cervical intraepithelial neoplasia (CIN) 2/3 or  3.Determine the toxicity of this drug in these patients.SecondaryDetermine the effect of this drug on changes in lesion size in these patients.Determine the effect of this drug on human papillomavirus (HPV)  viral load in these patients.Correlate histologic response, HPV viral load, lesion size, proliferation index, apoptosis index, angiogenesis (VEGF) and COX-2 in tissue, amount of VEGF and bFGF in serum, and serum celecoxib levels during treatment in  these patients.
+OUTLINE: This is a randomized, double-blind, placebo-controlled, multicenter study. Patients are stratified according to lesion size (covering     ≤   ½ area of the cervix vs covering &gt; ½ area of the cervix) and degree of cervical intraepithelial neoplasia  (CIN) (CIN 2/3 vs CIN 3).  Patients are randomized to 1 of 2 treatment arms.Arm I: Patients receive oral celecoxib once daily for 14-18 weeks.Arm II: Patients receive oral placebo once daily for 14-18 weeks.Patients undergo colposcopy at week 8 and between weeks 14 and 18.  Between weeks 14 and 18, patients with evidence of disease also undergo large loop excision of the transformation zone (cone biopsy) or cervical biopsy and patients with no evidence of disease undergo a cervical biopsy to confirm the absence of disease on colposcopy.
+PROJECTED ACCRUAL: A maximum of 130 patients (39 per treatment arm) will be accrued for this study within 13 months.</textblock>
+  </detailed_description>
+  <overall_status>Recruiting</overall_status>
+    <lead_org_status status_date='2010-09-28'>Active</lead_org_status>
+
+  <start_date date_type="Actual">2005-06-15</start_date>
+  <primary_compl_date>2015-06-15</primary_compl_date>
+  <primary_compl_date_type>Anticipated</primary_compl_date_type>
+  <phase>2</phase>
+  <study_design>
+    <study_type>interventional</study_type>
+    <interventional_design>
+      <interventional_subtype>Prevention</interventional_subtype>
+      <allocation>Randomized</allocation>
+      <masking>Double Blind</masking>
+      <control>Placebo Control</control>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms>2</number_of_arms>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Histologic complete response</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <outcome_measure>Frequency and severity of adverse effects</outcome_measure>
+    <outcome_safety_issue>yes</outcome_safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <outcome_measure>HPV viral load,  proliferation index,  apoptosis index by TUNEL assay,  angiogenesis (VEGF), and COX-2 in tissue, levels of VEGF and bFGF pre- and post-treatment in serum, and levels of celecoxib in serum following treatment</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+<enrollment>130</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000037892">cervical cancer</condition>
+  <condition cdr-id="CDR0000613644">cervical intraepithelial neoplasia grade 2</condition>
+  <condition cdr-id="CDR0000613643">cervical intraepithelial neoplasia grade 3</condition>  <arm_group>
+   <arm_group_label>Arm I</arm_group_label>
+   <arm_type>Experimental</arm_type>
+   <arm_group_description><textblock>Patients receive oral celecoxib once daily for 14-18 weeks.</textblock></arm_group_description>
+  </arm_group>
+  <arm_group>
+   <arm_group_label>Arm II</arm_group_label>
+   <arm_type>Placebo comparator</arm_type>
+   <arm_group_description><textblock>Patients receive oral placebo once daily for 14-18 weeks.</textblock></arm_group_description>
+  </arm_group>
+  <intervention cdr-id='CDR0000043023'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>celecoxib</intervention_name>
+    <intervention_description>
+      <textblock>Given orally</textblock>
+    </intervention_description>
+    <arm_group_label>Arm I</arm_group_label>
+  </intervention>
+  <intervention cdr-id='CDR0000043469'>
+    <intervention_type>Other</intervention_type>
+    <intervention_name>placebo</intervention_name>
+    <intervention_description>
+      <textblock>Given orally</textblock>
+    </intervention_description>
+    <arm_group_label>Arm II</arm_group_label>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        <EntryCriteria>
+        <DiseaseCharacteristics>
+          <ItemizedList Compact="No" Style="bullet" id="_11">
+              <ListItem>Histologically confirmed cervical intraepithelial neoplasia (CIN) 2/3 or 3 by cervical biopsy 2-8 weeks prior to study entry<ItemizedList Style="dash" id="_32">
+                  <ListItem>Pathology report must clearly state "CIN 2/3" or   "3" OR "moderate-severe dysplasia," "moderate-severe dyskaryosis," "severe dysplasia," or "sever dyskaryosis."<ItemizedList Style="bullet" id="_33">
+                      <ListItem>No CIN 2 alone OR moderate dysplasia or dyskaryosis alone</ListItem>
+                    </ItemizedList>
+                </ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>Colposcopically visible cervical lesion at study entry that is consistent with biopsy</ListItem>
+              <ListItem>No evidence of endocervical dysplasia or invasive cancer by cytology or biopsy</ListItem>
+              <ListItem>No history of cervical cancer</ListItem>
+            </ItemizedList>
+        </DiseaseCharacteristics>
+        <PatientCharacteristics>
+          <ItemizedList Style="bullet" id="_12">
+              <ListTitle>Age</ListTitle>
+              <ListItem>18 and over</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_13">
+              <ListTitle>Performance status</ListTitle>
+              <ListItem>GOG 0-2</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_14">
+              <ListTitle>Life expectancy</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_15">
+              <ListTitle>Hematopoietic</ListTitle>
+              <ListItem>Platelet count &gt; 125,000/mm^3</ListItem>
+              <ListItem>Hemoglobin &gt; 11.0 g/dL</ListItem>
+              <ListItem>WBC &gt; 3,000/mm^3</ListItem>
+              <ListItem>No significant bleeding disorder</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_16">
+              <ListTitle>Hepatic</ListTitle>
+              <ListItem>Bilirubin ≤ 1.5 times upper limit of normal (ULN) (&gt; 1.5 times ULN allowed if due to Gilbert's disease)</ListItem>
+              <ListItem>AST and ALT &lt; 2.0 times ULN</ListItem>
+              <ListItem>No hepatic disorder</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_17">
+              <ListTitle>Renal</ListTitle>
+              <ListItem>Creatinine ≤ 1.5 times ULN</ListItem>
+              <ListItem>No known renal failure</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_31">
+              <ListTitle>Cardiovascular</ListTitle>
+              <ListItem>No history of transient ischemic attack or stroke</ListItem>
+              <ListItem>No history of cardiovascular disease</ListItem>
+              <ListItem>No uncontrolled hypertension</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_18">
+              <ListTitle>Other</ListTitle>
+              <ListItem>No undiagnosed abnormal vaginal bleeding</ListItem>
+              <ListItem>No known immunocompromised condition</ListItem>
+              <ListItem>No known allergic reaction (such as asthma, urticaria, or other reaction) to NSAIDs or aspirin</ListItem>
+              <ListItem>No known hypersensitivity to celecoxib</ListItem>
+              <ListItem>No known allergic reaction to sulfonamides</ListItem>
+              <ListItem>No history of peptic ulcer disease</ListItem>
+              <ListItem>Must be good candidate for delayed treatment of CIN (i.e., deemed reliable to return for follow-up and provide adequate contact information)</ListItem>
+              <ListItem>Not pregnant or nursing</ListItem>
+              <ListItem>Negative pregnancy test</ListItem>
+              <ListItem>Fertile patients must use effective contraception</ListItem>
+            </ItemizedList>
+        </PatientCharacteristics>
+        <PriorConcurrentTherapy>
+          <ItemizedList Style="bullet" id="_19">
+              <ListTitle>Biologic therapy</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_20">
+              <ListTitle>Chemotherapy</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_21">
+              <ListTitle>Endocrine therapy</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_22">
+              <ListTitle>Radiotherapy</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_23">
+              <ListTitle>Surgery</ListTitle>
+              <ListItem>No prior renal transplantation</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_24">
+              <ListTitle>Other</ListTitle>
+              <ListItem>At least 15 days since prior nonsteriodal anti-inflammatory agents (NSAIDs) or aspirin</ListItem>
+              <ListItem>No other concurrent NSAIDs or aspirin</ListItem>
+              <ListItem>No concurrent fluconazole or lithium</ListItem>
+            </ItemizedList>
+        </PriorConcurrentTherapy>
+      </EntryCriteria>
+      </textblock>
+    </criteria>
+    <healthy_volunteers>no</healthy_volunteers>
+    <expected_enrollment>130</expected_enrollment>
+    <gender>Female</gender>
+    <minimum_age>18</minimum_age>
+    <maximum_age>120</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="">
+    <first_name>Janet</first_name>
+    <middle_name>S.</middle_name>
+    <last_name>Rader</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Siteman Cancer Center at Barnes-Jewish Hospital - Saint Louis</affiliation>
+  </overall_official>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/GOG-0207</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <keyword cdr-id="CDR0000037892">cervical cancer</keyword>
+  <keyword cdr-id="CDR0000613644">cervical intraepithelial neoplasia grade 2</keyword>
+  <keyword cdr-id="CDR0000613643">cervical intraepithelial neoplasia grade 3</keyword>
+  <verification_date>2011-01-12</verification_date>
+</clinical_study>

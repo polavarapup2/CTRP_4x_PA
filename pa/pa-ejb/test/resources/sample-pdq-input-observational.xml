@@ -1,0 +1,249 @@
+<clinical_study nct-id="NCT00026221" ctep-id="2669" dcp-id="" partial_upload="true">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000069010</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000069010</org_study_id>
+    <secondary_id>OSU-01H0185</secondary_id>
+    <secondary_id>NCI-2669</secondary_id>
+  </id_info>
+  <is_fda_regulated>yes</is_fda_regulated>
+  <is_section_801>yes</is_section_801>
+  <delayed_posting>no</delayed_posting>
+  <is_ind_study>yes</is_ind_study>
+  <ind_info>
+    <ind_grantor>CDER</ind_grantor>
+    <ind_number>7921</ind_number>
+    <ind_serial_number></ind_serial_number>
+  </ind_info>
+  <brief_title>Bevacizumab With or Without Interferon alfa in Treating Patients With Metastatic Malignant Melanoma</brief_title>
+  <official_title>A Phase 2 Study Of Bevacizumab And Interferon-Alpha-2b In Metastatic Malignant Melanoma</official_title>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Arthur G. James Cancer Hospital and Richard J. Solove Research Institute at Ohio State University Comprehensive Cancer Center</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+</sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Monoclonal antibodies, such as bevacizumab, can block cancer growth in different ways. Some block the ability of cancer cells to grow and spread. Others find cancer cells and help kill them or deliver cancer-killing substances to them. Interferon alfa may interfere with the growth of the cancer cells and slow the growth of the tumor. Combining bevacizumab with interferon alfa may kill more tumor cells.
+
+PURPOSE: This randomized phase II trial is studying giving bevacizumab together with interferon alfa to see how well it works compared to giving bevacizumab alone in treating patients with metastatic malignant melanoma.</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: 
+  * Compare the objective response rate and progression-free survival in patients with metastatic malignant melanoma treated with bevacizumab with or without low- or high-dose interferon alfa.
+
+OUTLINE: This is a randomized study. Patients are randomized to 1 of 3 treatment arms.
+
+
+  * Arm I: Patients receive bevacizumab IV over 30-90 minutes on day 1. Patients also receive low-dose interferon alfa (IFN-α) subcutaneously (SC) on days 1-14.
+  * Arm II: Patients receive bevacizumab as in arm I.
+  * Arm III: Patients receive bevacizumab as in arm I. Patients also receive high-dose IFN-α SC on days 1, 3, 5, 8, 10, and 12.
+In all arms, treatment repeats every 14 days for up to 12 courses in the absence of disease progression or unacceptable toxicity. Patients undergo restaging at the completion of course 12. Patients with stable disease or a clinical response may continue treatment according to their assigned treatment arm for up to 1 year. Patients with stable disease after 1 year of treatment with bevacizumab and IFN-α (arms I and III) may continue to receive bevacizumab alone (as in arm II) in the absence of disease progression.
+
+Patients are followed every 3 months for 2 years.
+
+
+PROJECTED ACCRUAL: A total of 65 patients will be accrued for this study within 6-10 months.
+
+</textblock>
+  </detailed_description>
+  <overall_status>No longer recruiting</overall_status>
+  <start_date>2001-12-01</start_date>
+  <primary_compl_date>2002-09-27</primary_compl_date>
+  <primary_compl_date_type>Anticipated</primary_compl_date_type>
+  <phase>2</phase>
+  <study_design>
+    <study_type>observational</study_type>
+    <interventional_design>
+      <interventional_subtype>Treatment</interventional_subtype>
+      <allocation>Randomized</allocation>
+      <masking/>
+      <control>Active Control</control>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms>3</number_of_arms>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Response rate every 3 months</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Progression-free survival every 3 months</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+<enrollment>65</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000038837">stage IV melanoma</condition>
+  <condition cdr-id="CDR0000038838">recurrent melanoma</condition>  <arm_group>
+   <arm_group_label>Arm I</arm_group_label>
+   <arm_type>Experimental</arm_type>
+   <arm_group_description><textblock>Patients receive bevacizumab IV over 30-90 minutes on day 1.  
+Patients also receive low-dose interferon alfa (IFN-α) subcutaneously (SC) on days 1-14.</textblock></arm_group_description>
+  </arm_group>
+  <arm_group>
+   <arm_group_label>Arm II</arm_group_label>
+   <arm_type>Experimental</arm_type>
+   <arm_group_description><textblock>Patients receive bevacizumab as in arm I.</textblock></arm_group_description>
+  </arm_group>
+  <arm_group>
+   <arm_group_label>Arm III</arm_group_label>
+   <arm_type>Experimental</arm_type>
+   <arm_group_description><textblock>Patients receive bevacizumab as in arm I. Patients also receive high-dose IFN-α SC on days 1, 3, 5, 8, 10, and 12.</textblock></arm_group_description>
+  </arm_group>
+  <intervention cdr-id='CDR0000043234'>
+    <intervention_type>Biological/Vaccine</intervention_type>
+    <intervention_name>bevacizumab</intervention_name>
+    <intervention_description>
+      <textblock>Given IV</textblock>
+    </intervention_description>
+    <arm_group_label>Arm I</arm_group_label>
+    <arm_group_label>Arm II</arm_group_label>
+    <arm_group_label>Arm III</arm_group_label>
+  </intervention>
+  <intervention cdr-id='CDR0000040467'>
+    <intervention_type>Biological/Vaccine</intervention_type>
+    <intervention_name>recombinant interferon alfa</intervention_name>
+    <intervention_description>
+      <textblock>Given subcutaneously</textblock>
+    </intervention_description>
+    <arm_group_label>Arm I</arm_group_label>
+    <arm_group_label>Arm III</arm_group_label>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>DISEASE CHARACTERISTICS: 
+  * Histologically or cytologically confirmed cutaneous malignant melanoma
+
+      - Must meet one of the following criteria:
+
+          + Clinical evidence of metastatic disease
+          + Unresectable regional lymphatic disease
+          + Extensive in transit recurrent disease
+  * Measurable disease
+
+      - At least 20 mm by conventional techniques OR at least 10 mm by spiral CT scan
+  * No known brain metastases
+  * No ocular melanoma
+
+PATIENT CHARACTERISTICS: 
+Age:
+  * Over 18
+
+Performance status:
+  * ECOG 0-2
+    OR
+
+  * Karnofsky 60-100%
+
+Life expectancy:
+  * More than 6 months
+
+Hematopoietic:
+  * WBC at least 3,000/mm^3
+  * Absolute neutrophil count at least 1,500/mm^3
+  * Platelet count at least 100,000/mm^3
+  * No clinical evidence of coagulopathy
+
+Hepatic:
+  * Bilirubin ≤ 2.0 mg/dL (3.0 mg/dL for patients with Gilbert's disease provided patient is stable and asymptomatic)
+  * AST/ALT no greater than 2.5 times ULN
+  * PT/INR less than 1.5
+
+Renal:
+  * Creatinine ≤ 1.5 mg/dL
+    OR
+
+  * Creatinine clearance at least 60 mL/min
+  * Protein &lt; 1,000 mg on 24-hour urine collection for patients with proteinuria ≥ 1+
+
+Cardiovascular:
+  * No symptomatic congestive heart failure
+  * No unstable angina pectoris
+  * No cardiac arrhythmia
+  * No history of thrombosis (e.g., deep vein thrombosis), unless the following criteria are met:
+
+      - INR in normal range (usually 2-3) AND on a stable dose of warfarin or low molecular weight heparin
+      - No active bleeding or pathologic condition that would confer a high risk of bleeding (e.g., known varices or tumor involving major vessels)
+  * No uncontrolled hypertension
+
+Other:
+  * Not pregnant or nursing
+  * Negative pregnancy test
+  * Fertile patients must use effective contraception
+  * No prior allergic reactions to compounds of similar chemical or biologic composition to bevacizumab or interferon alfa
+  * No ongoing or active infection
+  * No other concurrent uncontrolled illness
+  * No psychiatric illness or social situation that would preclude study compliance
+  * HIV allowed provided otherwise well
+
+PRIOR CONCURRENT THERAPY: 
+Biologic therapy:
+  * At least 4 weeks since prior adjuvant interferon alfa
+  * No prior interferon alfa for metastatic disease
+  * No prior cytokine therapy for metastatic disease (e.g., high-dose interleukin-2 [IL-2])
+
+      - Prior IL-2 allowed for patients randomized to arm III only
+  * No prior investigational antiangiogenic agents
+
+Chemotherapy:
+  * No more than 1 prior chemotherapy regimen for metastatic disease
+  * At least 4 weeks since prior chemotherapy and recovered
+
+Endocrine therapy:
+  * Not specified
+
+Radiotherapy:
+  * At least 4 weeks since prior radiotherapy and recovered
+
+Surgery:
+  * Not specified
+
+Other:
+  * No other concurrent investigational agents
+</textblock>
+    </criteria>
+    <healthy_volunteers>no</healthy_volunteers>
+    <expected_enrollment>65</expected_enrollment>
+    <gender>Both</gender>
+    <minimum_age>18</minimum_age>
+    <maximum_age>120</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="24690">
+    <first_name>William</first_name>
+    <middle_name>E.</middle_name>
+    <last_name>Carson</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>Arthur G. James Cancer Hospital and Richard J. Solove Research Institute at Ohio State University Comprehensive Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="">
+    <first_name>Bryan</first_name>
+    <middle_name>J.</middle_name>
+    <last_name>Donnelly</last_name>
+    <degrees>MD, FRCSC, MSC</degrees>
+    <role>Principal Investigator</role>
+    <affiliation>Tom Baker Cancer Centre - Calgary</affiliation>
+  </overall_official>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/OSU-01H0185</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <keyword cdr-id="CDR0000038837">stage IV melanoma</keyword>
+  <keyword cdr-id="CDR0000038838">recurrent melanoma</keyword>
+  <verification_date>2007-10-05</verification_date>
+</clinical_study>

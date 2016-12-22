@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="biomarkers" language="groovy" pageWidth="4608" pageHeight="842" columnWidth="4568" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.366026910730141"/>
+	<property name="ireport.x" value="476"/>
+	<property name="ireport.y" value="48"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Subject System Id" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NCI ID" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Study Title" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Lead Organization Family" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Lead Organization" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct (A.id) as subject_system_id ,A.nci_id,A.study_title,A.lead_org_family,A.lead_org,A.submitting_org, A.subject_id,A.participating_site,
+A.status_code,A.birth_date,A.gender, A.country ,A.zip_code,A.race,A.ethnicity,A.submission_method,A.payment_method,A.delete_reason,A.registration_group,
+A.site_disease_identifier,A.study_lead_org_id,A.study_ctep_id,A.study_dcp_id,A.study_nct_id,A.lead_org_ctep_id,A.participating_site_ctep_id,
+A.lead_org_poid,A.participating_site_poid,A.study_site_identifier,A.disease_identifier,A.study_protocol_identifier, A.added_on,A.last_updated_on,A.added_by_name,A.added_by_email,A.last_updated_by_name,A.last_updated_by_email  from (select dssad.subject_identifier as id, dssad.nci_id as nci_id ,ds.official_title as study_title ,
+ds.lead_org_org_family as lead_org_family, ds.lead_org as lead_org,ds.submitter_organization as submitting_org,dssad.study_subject_id as subject_id, dssad.org_name  as participating_site,
+dssad.status as status_code,dssad.date_last_created as added_on,dssad.date_last_updated as last_updated_on, dssad.user_name_last_created as added_by_name,dssad.user_email_last_created as added_by_email,
+ dssad.user_name_last_updated as last_updated_by_name,dssad.user_email_last_updated as last_updated_by_email,dssad.birth_date as birth_date, dssad.gender as gender,dssad.country as country,
+dssad.zip as zip_code,dssad.race as race, dssad.ethnicity as ethnicity,dssad.submission_type as submission_method,
+dssad.payment_method as payment_method, dssad.deletion_reason as delete_reason, dssad.registration_group as registration_group,dssad.site_disease_identifier as site_disease_identifier,
+ds.lead_org_id as study_lead_org_id,ds.ctep_id as study_ctep_id, ds.dcp_id as study_dcp_id, ds.nct_id as study_nct_id,
+lead.ctep_id as lead_org_ctep_id,ps.ctep_id as participating_site_ctep_id,
+lead.po_id as lead_org_poid, dssad.site_org_id as participating_site_poid, dssad.site_id as study_site_identifier,
+dssad.disease_identifier as disease_identifier,ds.internal_system_id as study_protocol_identifier
+from dw_study_site_accrual_details dssad
+join dw_study ds on ds.nci_id=dssad.nci_id
+join dw_data_table_4 d4 on d4.nci_id= ds.nci_id
+join (select po_id, ctep_id from dw_organization where status!='NULLIFIED') lead  on lead.po_id =d4.lead_org_po_id
+join (select po_id, ctep_id from dw_organization where status!='NULLIFIED') as ps on ps.po_id =dssad.site_org_id
+where dssad.status !='NULLIFIED'
+order by dssad.subject_identifier) A
+join (select dssad.subject_identifier as id, dssad.nci_id as nci_id ,ds.official_title as study_title ,
+ds.lead_org_org_family as lead_org_family, ds.lead_org as lead_org,ds.submitter_organization as submitting_org,dssad.study_subject_id as subject_id, dssad.org_name  as participating_site,
+dssad.status as status_code,dssad.date_last_created as added_on,dssad.date_last_updated as last_updated_on, dssad.user_name_last_created as added_by_name,dssad.user_email_last_created as added_by_email,
+ dssad.user_name_last_updated as last_updated_by_name,dssad.user_email_last_updated as last_updated_by_email,dssad.birth_date as birth_date, dssad.gender as gender,dssad.country as country,
+dssad.zip as zip_code,dssad.race as race, dssad.ethnicity as ethnicity,dssad.submission_type as submission_method,
+dssad.payment_method as payment_method, dssad.deletion_reason as delete_reason, dssad.registration_group as registration_group,dssad.site_disease_identifier as site_disease_identifier,
+ds.lead_org_id as study_lead_org_id,ds.ctep_id as study_ctep_id, ds.dcp_id as study_dcp_id, ds.nct_id as study_nct_id,
+lead.ctep_id as lead_org_ctep_id,ps.ctep_id as participating_site_ctep_id,
+lead.po_id as lead_org_poid, dssad.site_org_id as participating_site_poid, dssad.site_id as study_site_identifier,
+dssad.disease_identifier as disease_identifier,ds.internal_system_id as study_protocol_identifier
+from dw_study_site_accrual_details dssad
+join dw_study ds on ds.nci_id=dssad.nci_id
+join dw_data_table_4 d4 on d4.nci_id= ds.nci_id
+join (select po_id, ctep_id from dw_organization where status!='NULLIFIED') lead  on lead.po_id =d4.lead_org_po_id
+join (select po_id, ctep_id from dw_organization where status!='NULLIFIED') as ps on ps.po_id =dssad.site_org_id
+where dssad.status !='NULLIFIED'
+order by dssad.subject_identifier) B  on B.nci_id=A.nci_id
+ where B.nci_id=A.nci_id and upper(B.subject_id)=upper(A.subject_id) AND (B.id != A.id) order by A.nci_id,A.subject_id]]>
+	</queryString>
+	<field name="subject_system_id" class="java.lang.Integer"/>
+	<field name="nci_id" class="java.lang.String"/>
+	<field name="study_title" class="java.lang.String"/>
+	<field name="lead_org_family" class="java.lang.String"/>
+	<field name="lead_org" class="java.lang.String"/>
+	<field name="submitting_org" class="java.lang.String"/>
+	<field name="subject_id" class="java.lang.String"/>
+	<field name="participating_site" class="java.lang.String"/>
+	<field name="status_code" class="java.lang.String"/>
+	<field name="birth_date" class="java.sql.Timestamp"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="country" class="java.lang.String"/>
+	<field name="zip_code" class="java.lang.String"/>
+	<field name="race" class="java.lang.String"/>
+	<field name="ethnicity" class="java.lang.String"/>
+	<field name="submission_method" class="java.lang.String"/>
+	<field name="payment_method" class="java.lang.String"/>
+	<field name="delete_reason" class="java.lang.String"/>
+	<field name="registration_group" class="java.lang.String"/>
+	<field name="site_disease_identifier" class="java.lang.Long"/>
+	<field name="study_lead_org_id" class="java.lang.String"/>
+	<field name="study_ctep_id" class="java.lang.String"/>
+	<field name="study_dcp_id" class="java.lang.String"/>
+	<field name="study_nct_id" class="java.lang.String"/>
+	<field name="lead_org_ctep_id" class="java.lang.String"/>
+	<field name="participating_site_ctep_id" class="java.lang.String"/>
+	<field name="lead_org_poid" class="java.lang.Integer"/>
+	<field name="participating_site_poid" class="java.lang.Long"/>
+	<field name="study_site_identifier" class="java.lang.Long"/>
+	<field name="disease_identifier" class="java.lang.Long"/>
+	<field name="study_protocol_identifier" class="java.lang.Integer"/>
+	<field name="added_on" class="java.sql.Timestamp"/>
+	<field name="last_updated_on" class="java.sql.Timestamp"/>
+	<field name="added_by_name" class="java.lang.String"/>
+	<field name="added_by_email" class="java.lang.String"/>
+	<field name="last_updated_by_name" class="java.lang.String"/>
+	<field name="last_updated_by_email" class="java.lang.String"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[true]]></printWhenExpression>
+		</band>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="-104" y="-113" width="2096" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement mode="Opaque" x="0" y="-4" width="4664" height="37" backcolor="#A90101" uuid="18713c99-baec-4bb3-ae3e-56845ebacd8b"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="256" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CTRP Duplicate Accruals"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="649" y="0" width="4015" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["As of: " + new SimpleDateFormat("MMM-dd-yy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="256" y="0" width="393" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="a04fcef1-277b-4a58-bb06-defa1239e4ad"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="97" y="0" width="116" height="32" backcolor="#D6D6FF" uuid="815cb5bc-93f6-4009-9b20-f8bde88c743f"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[NCI ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="213" y="0" width="106" height="32" backcolor="#D6D6FF" uuid="91864f55-3b33-4438-998b-5a2dac3d2cac"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="319" y="0" width="133" height="32" backcolor="#D6D6FF" uuid="6070af77-4581-470f-bfcc-7e8081119fc9"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Lead Organization
+Family]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="451" y="0" width="128" height="32" backcolor="#D6D6FF" uuid="3120e13f-4826-4e14-bf91-36793ec836ff"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Lead Organization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="579" y="0" width="132" height="32" backcolor="#D6D6FF" uuid="20a2c584-cbec-4449-bffa-73a44766c046"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Submitting organization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="820" y="0" width="134" height="32" backcolor="#D6D6FF" uuid="9db77bde-9835-4d48-9bfc-2af09227d430"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Participating Site]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="4039" y="0" width="147" height="32" backcolor="#D6D6FF" uuid="3925df05-27dc-4d7c-a876-f9034ef26e3f"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Added BY(Name)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1870" y="0" width="119" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Delete Reason]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1988" y="0" width="130" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Registration Group]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1038" y="0" width="123" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Birth Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1161" y="0" width="78" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Gender]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1354" y="0" width="81" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Zip Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1435" y="0" width="104" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Race]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1539" y="0" width="89" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Ethnicity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1627" y="0" width="139" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Submission Method]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1766" y="0" width="104" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Payment Method]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2402" y="0" width="177" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study CTEP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2118" y="0" width="129" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Site Disease Identifier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2579" y="0" width="143" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study DCP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2722" y="0" width="197" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study NCT ID(Clinicaltrials.gov)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2919" y="0" width="109" height="32" backcolor="#D6D6FF" uuid="e003a196-0fb7-4f39-b540-8919d87e7643"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Lead Org CTEP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="97" height="32" backcolor="#D6D6FF" uuid="9c199443-9795-44a8-b202-d4a6adc24528"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Subject
+System Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="711" y="0" width="110" height="32" backcolor="#D6D6FF" uuid="723a788c-9a71-4af4-9c7b-2406c582863a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Subject ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3028" y="0" width="152" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Participating Site CTEP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3179" y="0" width="96" height="32" backcolor="#D6D6FF" uuid="3fcf13e2-6d7f-4a89-8e4d-44d31a8bd6f5"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Lead Org POID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3275" y="1" width="123" height="32" backcolor="#D6D6FF" uuid="238dcf23-1b0a-4b82-a1f2-2324d0408a45"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Participating Site POID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3398" y="0" width="115" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study Site Identifier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3513" y="0" width="102" height="32" backcolor="#D6D6FF" uuid="1b90141d-11b7-4cf2-a296-6e15330ab6d2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Disease Identifier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3615" y="0" width="130" height="32" backcolor="#D6D6FF" uuid="8706e368-7be2-4144-b906-e4b05948c7cd"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study Protocol Identifier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3744" y="0" width="149" height="32" backcolor="#D6D6FF" uuid="e744c8ff-7923-49cb-919b-f1cd1b816e13"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Added on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3892" y="0" width="148" height="32" backcolor="#D6D6FF" uuid="5c784308-bdab-45c7-bcd7-4b42ee95c938"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Last updated on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="4186" y="0" width="159" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Added by (email address)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="4345" y="0" width="146" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Last Updated by (Name)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="4490" y="0" width="174" height="32" backcolor="#D6D6FF" uuid="5cfc5581-150d-493b-837d-b7d524cf9e03"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Last Updated by (email address)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="954" y="0" width="84" height="32" backcolor="#D6D6FF" uuid="72c85d0c-769d-44ab-96c8-61b890832b06"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Subject Status Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2247" y="0" width="155" height="32" backcolor="#D6D6FF" uuid="7106b30f-9611-4daa-b376-2a4c6787e1c7"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Study Lead Org ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1239" y="0" width="115" height="32" backcolor="#D6D6FF" uuid="1397a00f-2053-4323-9d12-ae7b1df85c4b"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="57">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="579" y="0" width="132" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{submitting_org}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="954" y="0" width="84" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1543" y="0" width="89" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ethnicity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1993" y="0" width="130" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{registration_group}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3617" y="0" width="129" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_protocol_identifier}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="97" y="0" width="116" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nci_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="711" y="0" width="110" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subject_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="451" y="0" width="127" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="213" y="0" width="106" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_title}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="319" y="0" width="133" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org_family}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="820" y="0" width="134" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{participating_site}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2123" y="0" width="128" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{site_disease_identifier}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="YYYY-MM" isBlankWhenNull="true">
+				<reportElement x="1038" y="0" width="123" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{birth_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1875" y="0" width="119" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{delete_reason}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1161" y="0" width="78" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1358" y="0" width="81" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{zip_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1439" y="0" width="104" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{race}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1632" y="0" width="139" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{submission_method}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1771" y="0" width="104" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payment_method}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="96" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subject_system_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4187" y="0" width="159" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{added_by_email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4345" y="0" width="146" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{last_updated_by_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2405" y="0" width="177" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_ctep_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2582" y="0" width="143" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_dcp_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2724" y="0" width="200" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_nct_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2924" y="0" width="109" height="42" uuid="4fab4d69-ec4a-4732-9840-8a6dd3f2b10f"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org_ctep_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3033" y="0" width="152" height="42" uuid="bad4ab0b-edb6-449e-be08-f95ee1ca6c22"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{participating_site_ctep_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3185" y="0" width="97" height="42" uuid="e0fa0586-e775-424a-a46e-128e6a5ab933"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lead_org_poid}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3281" y="0" width="123" height="42" uuid="9a747605-f6e3-41bd-914d-223f8e0d8c9d"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{participating_site_poid}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3403" y="0" width="113" height="42" uuid="e980450a-b4aa-492d-9571-3be111051aaa"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_site_identifier}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3516" y="0" width="102" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{disease_identifier}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3892" y="0" width="149" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{last_updated_on}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4041" y="0" width="147" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{added_by_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4490" y="0" width="174" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{last_updated_by_email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3746" y="0" width="147" height="42" uuid="69e14d9d-1ff3-46b7-b0fe-a0d6a75bd9c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{added_on}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2250" y="0" width="155" height="42" uuid="620591f0-ec3c-4cec-9688-e2ac421b276e"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{study_lead_org_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1239" y="0" width="119" height="42" uuid="daf200e4-13ec-4429-b5fe-f94cf283d86c"/>
+				<textElement verticalAlignment="Top">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

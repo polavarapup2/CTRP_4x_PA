@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CTEP_Trials_with_primary_completed_date_Reports" language="groovy" pageWidth="1867" pageHeight="842" columnWidth="1827" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a2ab4921-b82c-4618-b7ce-a972b98c5776">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="798"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\pa\\data-warehouse\\ireport\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 1]]>
+	</queryString>
+	<field name="?column?" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="1847" height="50" uuid="57bbc060-1ef9-409f-98f3-ba5d199ee507"/>
+				<subreportParameter name="OS_WINDOWS"/>
+				<subreportParameter name="IMAGES_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CTEP_Trials_with_Primary_Completion_Date.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="34"/>
+		<band height="50" splitType="Prevent">
+			<subreport>
+				<reportElement x="0" y="0" width="1847" height="50" uuid="0a800bdb-1f3c-46be-a1fe-86c90a57374e"/>
+				<subreportParameter name="OS_WINDOWS"/>
+				<subreportParameter name="IMAGES_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CTEP_Trials_with_Primary_Completion_Date_past.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccrualDiseaseTerminologyForAllTrials" language="groovy" pageWidth="1457" pageHeight="842" columnWidth="1417" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="374"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select so.extension as nci_id,rct.local_sp_indentifier as CTEP_ID,rd.local_sp_indentifier as DCP_ID,
+                 rcc.local_sp_indentifier as CCR_ID, sp.accrual_disease_code_system as Accrual_Disease_Terminology
+                 from study_otheridentifiers  so
+                 join study_protocol sp on sp.identifier=so.study_protocol_id
+                 left outer join rv_ctep_id rct on sp.identifier=rct.study_protocol_identifier
+                 left outer join rv_dcp_id rd on sp.identifier=rd.study_protocol_identifier
+                 left outer join rv_ccr_id rcc on sp.identifier=rcc.study_protocol_identifier
+                 where so.root='2.16.840.1.113883.3.26.4.3' and sp.status_code='ACTIVE' order by so.extension]]>
+	</queryString>
+	<field name="nci_id" class="java.lang.String"/>
+	<field name="ctep_id" class="java.lang.String"/>
+	<field name="dcp_id" class="java.lang.String"/>
+	<field name="ccr_id" class="java.lang.String"/>
+	<field name="accrual_disease_terminology" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="0" y="0" width="1419" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="560" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Accrual Disease Terminology"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="560" y="0" width="859" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MMM-yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="329" height="32" backcolor="#D6D6FF" uuid="096b1128-c8ac-4ce6-bb02-61b6f4b55206"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[NCI_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="329" y="0" width="251" height="32" backcolor="#D6D6FF" uuid="a59df5ef-412f-42ac-ab3c-e0ea1f7b7a6b"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[CTEP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="580" y="0" width="237" height="32" backcolor="#D6D6FF" uuid="167b7eee-5ed1-4105-8bd6-9d6af32dd8c4"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[DCP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="817" y="0" width="261" height="32" backcolor="#D6D6FF" uuid="474b568f-1ca6-42f3-b6a1-2bb5094bdb67"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[CCR ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1078" y="0" width="341" height="32" backcolor="#D6D6FF" uuid="d94b53bf-34b3-4d0e-93be-b4e0e7b400fb"/>
+				<textElement markup="none">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Accrual Disease Terminology]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="329" y="0" width="251" height="29" uuid="fda6abaa-cc0c-4b21-9ccc-ee2fe086334d"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctep_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="329" height="29" isPrintWhenDetailOverflows="true" uuid="9356dc40-26a7-412b-8222-c53708615c31"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nci_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="580" y="0" width="237" height="29" uuid="310c5fc1-b9eb-4489-9e99-259bfce92170"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dcp_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="817" y="0" width="261" height="29" uuid="29085072-09c5-47c2-ae36-9ee9eca83bc0"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ccr_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1078" y="0" width="341" height="29" uuid="82ded6fd-50b3-4930-9a4b-bc916adf7fd3"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accrual_disease_terminology}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
