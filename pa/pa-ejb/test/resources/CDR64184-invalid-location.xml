@@ -1,0 +1,624 @@
+<clinical_study nct-id="NCT00002651" ctep-id="INT-0162" dcp-id="">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000064184</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000064184</org_study_id>
+    <secondary_id>SWOG-9346</secondary_id>
+    <secondary_id>CAN-NCIC-PR8</secondary_id>
+    <secondary_id>CALGB-9594</secondary_id>
+    <secondary_id>ECOG-S9346</secondary_id>
+    <secondary_id>EORTC-30985</secondary_id>
+    <secondary_id>CAN-NCIC-JPR8</secondary_id>
+    <secondary_id>INT-0162</secondary_id>
+  </id_info>
+  <is_fda_regulated>yes</is_fda_regulated>
+  <is_section_801>yes</is_section_801>
+  <delayed_posting>no</delayed_posting>
+  <is_ind_study>none</is_ind_study>
+  <brief_title>Hormone Therapy in Treating Men With Stage IV Prostate Cancer</brief_title>
+  <official_title>Intermittent Androgen Deprivation in Patients With Stage D2 Prostate Cancer, Phase III</official_title>
+<lead_org/>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Southwest Oncology Group</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+    <collaborator>
+      <agency>NCIC-Clinical Trials Group</agency>
+    </collaborator>
+    <collaborator>
+      <agency>Cancer and Leukemia Group B</agency>
+    </collaborator>
+    <collaborator>
+      <agency>Eastern Cooperative Oncology Group</agency>
+    </collaborator>
+    <collaborator>
+      <agency>European Organization for Research and Treatment of Cancer</agency>
+    </collaborator>
+    <resp_party ctep-id='4655'>
+   <name_title>Laurence H. Baker</name_title>
+   <organization>Southwest Oncology Group
+ - Group Chair's Office</organization>
+   <phone>(734) 998-7130</phone>
+   <email>bakerl@umich.edu</email>
+  </resp_party>
+</sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Testosterone can stimulate the growth of prostate cancer cells. Hormone therapy may be effective treatment for prostate cancer. It is not yet known which regimen of hormone therapy is most effective for stage IV prostate cancer.
+
+PURPOSE: This randomized phase III trial is studying two different regimens of hormone therapy and comparing how well they work in treating men with stage IV prostate cancer.</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: Primary Compare the survival of patients with metastatic stage IV prostate cancer responsive to combined androgen-deprivation therapy (CAD) treated with intermittent vs continuous CAD.
+ Compare the effects of these treatment regimens on impotence, libido, and vitality/fatigue as well as the physical and emotional well-being of these patients.
+Secondary Compare general symptoms, role functioning, global perception of quality of life, and social functioning of patients treated with these regimens.
+ Assess prostate-specific antigen (PSA) levels after continuous CAD administered before randomization and evaluate PSA changes throughout randomized treatment of these patients.
+
+OUTLINE: This is a randomized, multicenter study.  Patients are stratified according to SWOG 
+performance status (0-1 vs 2), severity of disease (minimal vs extensive), and 
+prior hormonal therapy (neoadjuvant hormonal therapy vs finasteride vs 
+neither).  Induction therapy: Patients receive combined androgen-deprivation (CAD) 
+therapy comprising goserelin subcutaneously once a month and oral bicalutamide 
+once daily for 8 courses (7 months).Consolidation therapy: Patients are randomized to 1 of 2 consolidation 
+regimens.Arm I (continuous CAD therapy):  Patients continue CAD therapy as in induction therapy. 
+Treatment continues in the absence of disease progression.Arm II (intermittent CAD therapy):  Patients undergo observation in the 
+absence of rising prostate-specific antigen (PSA) or clinical symptoms of 
+progressive disease.  Patients with rising PSA or progressive disease begin 
+CAD therapy as in induction therapy. Patients whose PSA normalizes after 8 courses 
+return to observation. Patients whose PSA does not normalize after 8 
+courses continue CAD therapy. 
+          Quality of life is assessed before induction therapy, at 3 months 
+(before consolidation therapy), and then at 9 and 15 months.Patients are followed every 6 months.
+PROJECTED ACCRUAL: Approximately 1,500 patients will be accrued for this study.</textblock>
+  </detailed_description>
+  <overall_status>Recruiting</overall_status>
+  <start_date>1995-05-15</start_date>
+  <primary_compl_date>2012-06-01</primary_compl_date>
+  <primary_compl_date_type>Anticipated</primary_compl_date_type>
+  <phase>3</phase>
+  <study_design>
+    <study_type>interventional</study_type>
+    <interventional_design>
+      <interventional_subtype>Treatment</interventional_subtype>
+      <allocation>Randomized</allocation>
+      <masking/>
+      <control>Active Control</control>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms>2</number_of_arms>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Treatment-specific  symptoms as measured on the four-item Medical Outcomes Study Short Form-36 (SF-36) and Vitality scale</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <outcome_measure>Physical functioning as measured by the SF-36</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <outcome_measure>Emotional functioning as measured by the SF-36 Mental Health Inventory</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Symptoms as assessed by the Symptom Distress Scale</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Role functioning as assessed by the Role Functioning Scale SF-20</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Social functioning as assessed by the General Health Survey SF-20</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Global quality of life (QOL) and health-related QOL</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Comorbidity, social support, and demographic variables</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+<enrollment>1512</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000040281">adenocarcinoma of the prostate</condition>
+  <condition cdr-id="CDR0000038786">stage IV prostate cancer</condition>
+  <condition cdr-id="CDR0000038787">recurrent prostate cancer</condition>  <arm_group>
+   <arm_group_label>Consolidation arm I</arm_group_label>
+   <arm_type>Active comparator</arm_type>
+   <arm_group_description><textblock>Patients continue CAD therapy comprising goserelin subcutaneously once a month and oral bicalutamide 
+once daily. 
+Treatment continues in the absence of disease progression.</textblock></arm_group_description>
+  </arm_group>
+  <arm_group>
+   <arm_group_label>Consolidation arm II</arm_group_label>
+   <arm_type>Experimental</arm_type>
+   <arm_group_description><textblock>Patients undergo observation  in the 
+absence of rising prostate-specific antigen (PSA) or clinical symptoms of 
+progressive disease.  Patients with rising PSA or progressive disease begin 
+CAD therapy as in consolidation arm I. Patients whose PSA normalizes after 8 courses 
+return to observation. Patients whose PSA does not normalize after 8 
+courses continue CAD therapy.</textblock></arm_group_description>
+  </arm_group>
+  <intervention cdr-id='CDR0000041298'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>bicalutamide</intervention_name>
+    <intervention_description>
+      <textblock>Given orally</textblock>
+    </intervention_description>
+    <arm_group_label>Consolidation arm I</arm_group_label>
+    <arm_group_label>Consolidation arm II</arm_group_label>
+  </intervention>
+  <intervention cdr-id='CDR0000040224'>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>goserelin</intervention_name>
+    <intervention_description>
+      <textblock>Given subcutaneously</textblock>
+    </intervention_description>
+    <arm_group_label>Consolidation arm I</arm_group_label>
+    <arm_group_label>Consolidation arm II</arm_group_label>
+  </intervention>
+  <intervention cdr-id='CDR0000467903'>
+    <intervention_type>Other</intervention_type>
+    <intervention_name>clinical observation</intervention_name>
+    <intervention_description>
+      <textblock>Patients undergo observation  in the 
+absence of rising prostate-specific antigen (PSA) or clinical symptoms of 
+progressive disease.</textblock>
+    </intervention_description>
+    <arm_group_label>Consolidation arm II</arm_group_label>
+  </intervention>
+  <intervention cdr-id='CDR0000042829'>
+    <intervention_type>Procedure/Surgery</intervention_type>
+    <intervention_name>computed tomography</intervention_name>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        <EntryCriteria>
+        <DiseaseCharacteristics>
+          <ItemizedList Compact="No" Style="bullet" id="_37">
+              <ListItem>Histologically or cytologically confirmed adenocarcinoma of the prostate<ItemizedList Style="dash" id="_10">
+                  <ListItem> Metastatic stage IV (stage D2)
+<ItemizedList Style="bullet" id="_11">
+                      <ListItem>  Any number of bone metastases by bone scan allowed
+</ListItem>
+                      <ListItem>  Unequivocal visceral organ metastases (liver, brain, 
+or lung) allowed
+</ListItem>
+                    </ItemizedList>
+                </ListItem>
+                  <ListItem> No suspected second primary tumors unless metastases are 
+histologically
+  confirmed, including special stains (e.g., prostate 
+specific antigen [PSA]  and prostatic alkaline phosphatase [PAP])
+</ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>For entry into late induction therapy:<ItemizedList Style="dash" id="_14">
+                  <ListItem> No more than 1 month from the beginning of 
+antiandrogen therapy to the beginning of luteinizing hormone-releasing hormone 
+(LHRH) agonist therapy 
+
+</ListItem>
+                  <ListItem> No more than 6 months since initiation of current 
+combined androgen-deprivation therapy (LHRH agonist and antiandrogen)</ListItem>
+                  <ListItem> The effectiveness of the current depot LHRH agonist 
+would not extend beyond 8
+months after initiation of combined androgen therapy   
+
+</ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>PSA at least 5 ng/mL 
+</ListItem>
+              <ListItem>No acute spinal cord compression
+</ListItem>
+            </ItemizedList>
+        </DiseaseCharacteristics>
+        <PatientCharacteristics>
+          <ItemizedList Style="bullet" id="_20">
+              <ListTitle>Age:</ListTitle>
+              <ListItem>Adult</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_21">
+              <ListTitle>Performance status:</ListTitle>
+              <ListItem>SWOG 0-2</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_22">
+              <ListTitle>Hematopoietic:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_23">
+              <ListTitle>Hepatic:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_24">
+              <ListTitle>Renal:</ListTitle>
+              <ListItem>Not specified</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_25">
+              <ListTitle>Other:</ListTitle>
+              <ListItem>Recovered from any major infection</ListItem>
+              <ListItem>No active medical illness that would preclude study or limit 
+survival</ListItem>
+              <ListItem>No other malignancy within the past 5 years except:<ItemizedList Style="dash" id="_40">
+                  <ListItem> Adequately treated basal cell or squamous cell skin 
+cancer</ListItem>
+                  <ListItem> Adequately treated carcinoma in situ of the bladder</ListItem>
+                  <ListItem> Adequately treated other superficial cancer</ListItem>
+                </ItemizedList>
+            </ListItem>
+            </ItemizedList>
+        </PatientCharacteristics>
+        <PriorConcurrentTherapy>
+          <ItemizedList Style="bullet" id="_26">
+              <ListTitle>Biologic therapy:</ListTitle>
+              <ListItem>No concurrent biological response modifier therapy</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_27">
+              <ListTitle>Chemotherapy:</ListTitle>
+              <ListItem>No concurrent chemotherapy</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_28">
+              <ListTitle>Endocrine therapy:</ListTitle>
+              <ListItem>See Disease Characteristics</ListItem>
+              <ListItem>More than 1 year since any prior neoadjuvant or adjuvant 
+hormonal therapy for a duration of no more than 4 months <ItemizedList Style="dash" id="_60">
+                  <ListItem>Single or combination therapy allowed</ListItem>
+                </ItemizedList>
+            </ListItem>
+              <ListItem>More than 1 year since prior finasteride for prostate cancer 
+for a duration of no more than 9 months (less than 6 months for benign 
+prostatic hypertrophy)</ListItem>
+              <ListItem>Prior or concurrent megestrol for hot flashes 
+allowed</ListItem>
+              <ListItem>No other concurrent hormonal therapy</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_29">
+              <ListTitle>Radiotherapy:</ListTitle>
+              <ListItem>No concurrent radiotherapy other than palliation of painful 
+bone metastases</ListItem>
+            </ItemizedList>
+          <ItemizedList Style="bullet" id="_30">
+              <ListTitle>Surgery:</ListTitle>
+              <ListItem>No prior bilateral orchiectomy</ListItem>
+              <ListItem>Recovered from any prior major surgery</ListItem>
+            </ItemizedList>
+        </PriorConcurrentTherapy>
+      </EntryCriteria>
+      </textblock>
+    </criteria>
+    <healthy_volunteers>no</healthy_volunteers>
+    <expected_enrollment>1512</expected_enrollment>
+    <gender>Male</gender>
+    <minimum_age>18</minimum_age>
+    <maximum_age>120</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="18231">
+    <first_name>Maha Hadi </first_name>
+    <middle_name>A.</middle_name>
+    <last_name>Hussain</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>University of Michigan Comprehensive Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="">
+    <first_name>Bryan</first_name>
+    <middle_name>J.</middle_name>
+    <last_name>Donnelly</last_name>
+    <degrees>MD, FRCSC, MSC</degrees>
+    <role>Study Chair</role>
+    <affiliation>Tom Baker Cancer Centre - Calgary</affiliation>
+  </overall_official>
+  <overall_official ctep-id="19629">
+    <first_name>Eric </first_name>
+    <middle_name>J.</middle_name>
+    <last_name>Small</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>UCSF Helen Diller Family Comprehensive Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="15463">
+    <first_name>George</first_name>
+    <last_name>Wilding</last_name>
+    <degrees>MD</degrees>
+    <role>Study Chair</role>
+    <affiliation>University of Wisconsin Paul P.  Carbone Comprehensive Cancer Center</affiliation>
+  </overall_official>
+  <overall_official ctep-id="">
+    <first_name>Atif</first_name>
+    <last_name>Akdas</last_name>
+    <degrees>MD</degrees>
+    <affiliation>Marmara University Hospital</affiliation>
+  </overall_official>
+  <location>
+    <facility ctep-id="">
+      <name>Cancer Centre of Southeastern Ontario at Kingston General Hospital</name>
+      <address>
+        <city>Kingston</city>
+        <state>Ontario</state>
+        <zip>K7L 5P9</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Aamer</first_name>
+      <last_name>Mahmud</last_name>
+      <phone>613-544-2631</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11074">
+      <name>Centre Hospitalier Universitaire de Quebec</name>
+      <address>
+        <city>Quebec City</city>
+        <state>Quebec</state>
+        <zip>G1R 2J6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Louis</first_name>
+      <last_name>Lacombe</last_name>
+      <phone>418-691-5O50</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11065">
+      <name>CHUS-Hopital Fleurimont</name>
+      <address>
+        <city>Sherbrooke</city>
+        <state>Quebec</state>
+        <zip>J1H 5N4</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Abdenour</first_name>
+      <last_name>Nabid</last_name>
+      <phone>819-346-1110</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11132">
+      <name>Cross Cancer Institute at University of Alberta</name>
+      <address>
+        <city>Edmonton</city>
+        <state>Alberta</state>
+        <zip>T6G 1Z2</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Peter</first_name>
+      <last_name>Venner</last_name>
+      <phone>780-432-8757</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11118">
+      <name>Edmond Odette Cancer Centre at Sunnybrook</name>
+      <address>
+        <city>Toronto</city>
+        <state>Ontario</state>
+        <zip>M4N 3M5</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Laurence</first_name>
+      <last_name>Klotz</last_name>
+      <phone>416-480-4673</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11127">
+      <name>Hopital Notre-Dame du CHUM</name>
+      <address>
+        <city>Montreal</city>
+        <state>Quebec</state>
+        <zip>H2L 4M1</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Fred</first_name>
+      <last_name>Saad</last_name>
+      <phone>514-890-8000</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11137">
+      <name>London Regional Cancer Program at London Health Sciences Centre</name>
+      <address>
+        <city>London</city>
+        <state>Ontario</state>
+        <zip>N6A 4L6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Joseph</first_name>
+      <last_name>Chin</last_name>
+      <phone>519-685-8451</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11152">
+      <name>McGill Cancer Centre at McGill University</name>
+      <address>
+        <city>Montreal</city>
+        <state>Quebec</state>
+        <zip>H2W 1S6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Raghu</first_name>
+      <last_name>Rajan</last_name>
+      <phone>514-934-1934</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11008">
+      <name>Nova Scotia Cancer Centre</name>
+      <address>
+        <city>Halifax</city>
+        <state>Nova Scotia</state>
+        <zip>B3H 1V7</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Derek</first_name>
+      <last_name>Wilke</last_name>
+      <phone>902-473-6022</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11025">
+      <name>Ottawa Hospital Regional Cancer Centre - General Campus</name>
+      <address>
+        <city>Ottawa</city>
+        <state>Ontario</state>
+        <zip>K1H 8L6</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Libni</first_name>
+      <last_name>Eapen</last_name>
+      <phone>613-737-7700</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11030">
+      <name>Princess Margaret Hospital</name>
+      <address>
+        <city>Toronto</city>
+        <state>Ontario</state>
+        <zip>M5G 2M9</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Juanita</first_name>
+      <last_name>Crook</last_name>
+      <phone>416-946-4501</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11120">
+      <name>Saskatoon Cancer Centre at the University of Saskatchewan</name>
+      <address>
+        <city>Saskatoon</city>
+        <state>Saskatchewan</state>
+        <zip>S7N 4H4</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Donald B.</first_name>
+      <last_name>Gardiner</last_name>
+      <phone>306-655-2743</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11134">
+      <name>Tom Baker Cancer Centre - Calgary</name>
+      <address>
+        <city>Calgary</city>
+        <state>Alberta</state>
+        <zip>T2N 4N2</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>Bryan</first_name>
+      <last_name>Donnelly</last_name>
+      <phone>403-259-2676</phone>
+    </contact>
+  </location>
+  <location>
+    <facility ctep-id="11105">
+      <name>University of British Columbia</name>
+      <address>
+        <city>Vancouver</city>
+        <state>British Columbia</state>
+        <zip>V5Z 1M9</zip>
+        <country>Canada</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <first_name>S. Larry</first_name>
+      <last_name>Goldenberg</last_name>
+      <phone>604-875-4111</phone>
+    </contact>
+  </location>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/SWOG-9346</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <reference>
+    <pubmed_id>16921051</pubmed_id>
+    <is_results_ref>yes</is_results_ref>
+  </reference>
+  <reference>
+    <citation>Hussain M, Tangen CM, Schellhammer PF, et al.: Absolute PSA value after androgen deprivation (AD) is a strong independent predictor of survival in new metastatic (D2) prostate cancer (PCa): data from Southwest Oncology Group trial 9346 (INT-0162). [Abstract] J Clin Oncol  24 (Suppl 18): A-4517, 2006.</citation>
+    <is_results_ref>yes</is_results_ref>
+  </reference>
+  <reference>
+    <citation>Tangen CM, Hussain M, Wilding G, et al.: Determinants of prostate specific antigen (PSA) normalization in prostate cancer (PCa) patients (pts) treated with androgen deprivation (AD) on Southwest Oncology Group (SWOG) study 9346 (INT-0162). [Abstract] Proceedings of the American Society of Clinical Oncology  22: A-1591, 2003.</citation>
+    <is_results_ref>yes</is_results_ref>
+  </reference>
+  <reference>
+    <citation>Hussain M, Tangen CM, Higano CS, et al.: Improved overall survival (OS) of patients (pts) with new metastatic prostate cancer (pca): better efficacy or stage migration? Data from SWOG: S9346 and 8894. [Abstract] 2010 Genitourinary Cancers Symposium, March 5-7, 2010, San Francisco, California.  A-30, 2010.</citation>
+    <is_results_ref>no</is_results_ref>
+  </reference>
+  <reference>
+    <pubmed_id>19380444</pubmed_id>
+    <is_results_ref>no</is_results_ref>
+  </reference>
+  <reference>
+    <citation>Goldman B, Hussain M, Tangen C, et al.: Prostate-specific antigen progression (PSA-P) as a predictor of overall survival (OS) in patients (pts) with metastatic prostate cancer (PC): data from S9346 and S9916. [Abstract] American Society of Clinical Oncology 2008 Genitourinary Cancers Symposium, Feb 14-16, 2008, San Francisco, CA.  A-165, 2008.</citation>
+    <is_results_ref>no</is_results_ref>
+  </reference>
+  <reference>
+    <citation>Hussain MH, Goldman B, Tangen CM, et al.: Use of prostate-specific antigen progression (PSA-P) to predict overall survival (OS) in patients (pts) with metastatic prostate cancer (PC): data from S9346 and S9916. [Abstract] J Clin Oncol  26 (Suppl 15): A-5015, 2008.</citation>
+    <is_results_ref>no</is_results_ref>
+  </reference>
+  <keyword cdr-id="CDR0000040281">adenocarcinoma of the prostate</keyword>
+  <keyword cdr-id="CDR0000038786">stage IV prostate cancer</keyword>
+  <keyword cdr-id="CDR0000038787">recurrent prostate cancer</keyword>
+  <verification_date>2009-04-27</verification_date>
+</clinical_study>

@@ -1,0 +1,214 @@
+
+.breadcrumbItemPane INPUT {
+    float: left;
+    position: in; 
+    left: -1px; 
+    top: 7px; 
+}
+
+.breadcrumbItemBox {
+    font-weight: normal;
+    border: 1px solid #D8E6F3;
+    background: #FFFFFF url('../images/grad_ltblue_01.gif') repeat-x bottom;                                            /* for non-CSS3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr='#FAFAE0', endColorstr='#FFFFFF'); /* for IE */
+    background: -webkit-gradient(linear, left top, right bottom, from(#FAFAE0), to(#FFFFFF));                           /* for WebKit browsers */
+    background: -moz-linear-gradient(-45deg, #FAFAE0, #FFFFFF);                                                         /* for Firefox 3.6+ */ 
+    float: left;
+    width: 50%;
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+.breadcrumbSynBox {
+    font-weight: normal;
+    border: 1px solid #D8E6F3;
+    background: #FFFFFF url('../images/grad_ltblue_01.gif') repeat-x bottom;                                            /* for non-CSS3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr='#FAFAE0', endColorstr='#FFFFFF'); /* for IE */
+    background: -webkit-gradient(linear, left top, right bottom, from(#FAFAE0), to(#FFFFFF));                           /* for WebKit browsers */
+    background: -moz-linear-gradient(-45deg, #FAFAE0, #FFFFFF);                                                         /* for Firefox 3.6+ */ 
+    margin-left: 52%;
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+.breadcrumbElement, .breadcrumbFeaturedElement, .breadcrumbElementSeparator {
+    float: left;
+    background: #FAFAFA;                                                                                                /* for non-CSS3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E0E0E0'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#E0E0E0));                            /* for WebKit browsers */
+    background: -moz-linear-gradient(top, #FFFFFF, #E0E0E0);                                                            /* for Firefox 3.6+ */ 
+    border: 1px solid #D8E6F3;
+    margin: -1px 0px 0px -1px;
+}
+
+.breadcrumbSynonymElementText{
+    float: left;
+    font-size: 0.8em;
+    padding: 1px 3px;
+}
+
+.breadcrumbElementText, .breadcrumbElementSeparator {
+    float: left;
+    font-size: 0.8em;
+    font-weight: normal;
+    padding: 1px 3px;
+}
+
+
+.breadcrumbFeaturedElementText {
+    float: left;
+    font-size: 1em;
+    font-weight: bolder;
+    padding: 2px 5px;
+}
+
+.breadcrumbElementText:HOVER, .breadcrumbFeaturedElementText:HOVER {
+    background: #D0D0FF;                                                                                                /* for non-CSS3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#A0A0F0'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#A0A0F0));                            /* for WebKit browsers */
+    background: -moz-linear-gradient(top, #FFFFFF, #A0A0F0);                                                            /* for Firefox 3.6+ */
+    cursor: hand; cursor: pointer;
+    text-decoration: underline; 
+}
+
+.breadcrumbElementImageLink, .breadcrumbFeaturedElementImageLink, .breadcrumbFeaturedElementTreeLink{
+    float: left;
+}
+
+.breadcrumbElementImageLink > A, .breadcrumbFeaturedElementImageLink > A, .breadcrumbFeaturedElementTreeLink > A {
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin: 0px 4px 0px 2px;
+}
+
+.breadcrumbElementImageLink > A IMG, .breadcrumbFeaturedElementImageLink > A IMG, .breadcrumbFeaturedElementTreeLink > A IMG {
+    width: 100%;
+    height: 100%;
+}
+
+.breadcrumbElementImageLink:HOVER, .breadcrumbFeaturedElementImageLink:HOVER, .breadcrumbFeaturedElementTreeLink:HOVER {
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#A0A0F0'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#A0A0F0));                            /* for WebKit browsers */
+    background: -moz-linear-gradient(top, #FFFFFF, #A0A0F0);                                                            /* for Firefox 3.6+ */
+    cursor: hand; cursor: pointer;
+    text-decoration: underline; 
+}
+
+
+.breadcrumbHighlight {
+    color: red;
+}
+
+/*
+.breadcrumbElementSelection {
+    font-weight: bolder;
+    background: #C3FDB8;
+}
+*/
+
+.breadcrumbs {
+    font-family: Helvetica, sans-serif;
+    color: #666666;
+    font-size: 12px;
+    background: #FFFFFF;
+    
+    position: relative;
+    z-index: 1000;
+}
+.breadcrumbs LI UL { 
+    position: absolute;
+    float: left;
+}
+.breadcrumbs, .breadcrumbs LI, .breadcrumbs UL, .breadcrumbs UL LI {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.breadcrumbs { clear: both; }
+.breadcrumbs, .breadcrumbs LI {
+    float: left;
+}
+.breadcrumbs UL {
+    display: none;
+}
+
+/*  Top Level  */
+.breadcrumbs {
+    background: #F0F0F0;
+    width: 100%;
+}
+.breadcrumbs LI {
+    padding: 5px;
+    border-right: 1px solid #CECECE;
+    height: 16px;
+}
+.breadcrumbs LI.current {
+    border-right: none;
+}
+.breadcrumbs LI A {
+    font-size: 11px;
+    color: #666666;
+    text-decoration: none;
+}
+.breadcrumbs LI A:HOVER, .breadcrumbs LI.hover A {
+    color: #0A8ECC;
+}
+/*  Top Level - Current Page  */
+.breadcrumbs LI.current A {
+    color: #333333;
+    font-weight: bold;
+}
+/*  Sub-level  */
+.breadcrumbs LI UL {
+    padding: 3px;
+    background: #333333;
+    font-size: 11px;
+    width: 180px;
+    top: 25px;
+}
+.breadcrumbs LI UL LI {
+    float: left;
+    width: 100%;
+    border-right: none;
+    height: auto;
+}
+.breadcrumbs LI UL LI A {
+    text-decoration: none;
+    color: #CCCCCC !important;
+    display: block;
+    padding: 4px;
+    border-bottom: 1px dotted #666666;
+}
+.breadcrumbs LI UL LI:last-child A {
+    border-bottom: none;
+}
+.breadcrumbs LI UL LI A:HOVER {
+    background: #444444;
+}
+
+
+.breadcrumbs LI {
+    border-right: none;
+    background: url(breadcrumbs/separator.gif) no-repeat right center;
+    padding-right: 15px;
+    padding-left: 10px;
+}
+.breadcrumbs LI.current { 
+    background: none; 
+}
+
+.breadcrumbs LI UL LI { 
+    background: none; 
+}
+
+    padding-left: 20px;
+.breadcrumbs LI A.home {
+    background: url(breadcrumbs/home.gif) no-repeat left center;
+}

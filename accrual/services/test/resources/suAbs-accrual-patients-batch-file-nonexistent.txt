@@ -1,0 +1,7 @@
+"COLLECTIONS","NCI-2015-10003",,,,,,,,,1
+"PATIENTS","NCI-2015-10003","200118","30096","US","196411","Male","Not Hispanic or Latino","6b","20120904","Internal Oncology","2",,,,,,,,,,10053571,,                    
+"PATIENTS","NCI-2015-10003","200708","32322","US","","Female","Not Reported","6a","20110601","Lung Oncology","93",,,,,,,,,,,,                    
+"PATIENTS","NCI-2015-10003","200831","31112","US","","Female","Not Reported","6a","20110601","Lung Oncology","2013",,,,,,,,,,,,                    
+"PATIENT_RACES","NCI-2015-10003","200118","01"     
+"PATIENT_RACES","NCI-2015-10003","200708","01"  
+"PATIENT_RACES","NCI-2015-10003","200831","01" 

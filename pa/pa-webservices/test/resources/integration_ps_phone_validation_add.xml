@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ParticipatingSite xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">
+	<tns:recruitmentStatus>Administratively Complete</tns:recruitmentStatus>
+	<tns:recruitmentStatusDate>2001-05-06</tns:recruitmentStatusDate>
+	<tns:localTrialIdentifier>MN000001</tns:localTrialIdentifier>
+	<tns:programCode>PG0000001</tns:programCode>
+	<tns:openedForAccrual>2001-02-02</tns:openedForAccrual>
+	<tns:closedForAccrual>2010-03-04</tns:closedForAccrual>
+	<tns:targetAccrualNumber>100000</tns:targetAccrualNumber>
+	<tns:investigator>
+		<tns:person>
+			<tns:existingPerson>
+				<tns:poID>1</tns:poID>
+			</tns:existingPerson>
+		</tns:person>
+		<tns:role>Principal Investigator</tns:role>
+		<tns:primaryContact>false</tns:primaryContact>
+	</tns:investigator>
+	<tns:primaryContact>
+		<tns:person>
+			<tns:newPerson>
+				<tns1:prefix>Mr.</tns1:prefix>
+				<tns1:firstName>Richard</tns1:firstName>
+				<tns1:lastName>Doe</tns1:lastName>
+				<tns1:suffix>Sr.</tns1:suffix>
+				<tns1:address>
+					<tns1:line1>1029 N Stuart St</tns1:line1>
+					<tns1:line2>Apt 99999</tns1:line2>
+					<tns1:city>Vienna</tns1:city>
+					<tns1:stateOrProvince>VA</tns1:stateOrProvince>
+					<tns1:country>USA</tns1:country>
+					<tns1:postalcode>22201</tns1:postalcode>
+				</tns1:address>
+				<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+				<tns1:contact type="PHONE">55-5555552</tns1:contact>
+			</tns:newPerson>
+		</tns:person>
+		<tns:contactDetails>
+			<tns:email>richardroe@example.com</tns:email>
+			<tns:phone>70-035556666</tns:phone>
+		</tns:contactDetails>
+	</tns:primaryContact>
+	<tns:organization>
+		<tns:existingOrganization>
+			<tns:poID>5</tns:poID>
+		</tns:existingOrganization>
+	</tns:organization>
+</tns:ParticipatingSite>

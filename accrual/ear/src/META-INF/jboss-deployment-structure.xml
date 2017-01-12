@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+	<deployment>
+		<dependencies>
+			<module name="javax.api" />
+			<module name="javax.persistence.api" />
+			<module name="javax.transaction.api" />
+			<module name="javax.validation.api" />
+			<module name="javax.wsdl4j.api" export="TRUE" />
+			<module name="org.jboss.as.web" export="TRUE" />
+			<module name="org.jboss.remote-naming" export="TRUE" />
+			<module name="org.jboss.xnio" export="TRUE" />
+			<module name="org.postgresql" export="TRUE" />
+			<module name="org.apache.log4j"/>
+            <module name="org.slf4j"/>
+			<module name="org.slf4j.impl" export="TRUE" />			
+			<module name="org.apache.xalan" export="TRUE" />
+			<module name="org.apache.santuario.xmlsec" export="TRUE" />
+			<module name="org.jboss.resteasy.resteasy-jaxrs" export="TRUE" />
+		</dependencies>
+		<exclusions>
+			<module name="org.hibernate" />
+			<module name="org.hibernate.commons-annotations" />
+			<module name="org.hibernate.validator" />
+			<module name="org.javassist" />
+		</exclusions>
+	</deployment>
+	<sub-deployment name="accrual-services.jar" />
+	<sub-deployment name="accrual.war" />
+	<sub-deployment name="webservices.war" />
+</jboss-deployment-structure>

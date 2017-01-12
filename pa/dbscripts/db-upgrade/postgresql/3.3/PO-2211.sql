@@ -1,0 +1,2 @@
+--Update length of comment field to 2000 characters.
+ALTER TABLE STUDY_OVERALL_STATUS ALTER COLUMN COMMENT_TEXT TYPE VARCHAR(2000);

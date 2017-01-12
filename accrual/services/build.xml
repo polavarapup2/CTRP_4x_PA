@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== -->
+<!-- ant script for CTRP Accrual Services                                   -->
+<!-- ====================================================================== -->
+
+<project name="accrual.services" default="jar-notest" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <property name="tier" value="LOCAL"/>
+    <property file="${basedir}/../../build-pa/tier-properties/build-lite-${tier}.properties"/>
+    <property file="${basedir}/../../build-pa/build-lite.properties"/>
+    <property file="${basedir}/../../build-pa/version.properties"/>
+    <property name="services.coverage.line" value="91"/>
+    <property name="services.coverage.branch" value="85"/>
+    <property name="services.pmd.maxerrors" value="64"/>
+
+    <property name="software.dir" value="${basedir}/../.."/>
+    <property name="common.dir" value="${basedir}/../../build-pa/common"/>
+    <property name="resource.dir" value="${basedir}/../resources"/>
+    <property name="pmdFile" value="${resource.dir}/accrualPmd.xml"/>
+    <property name="checkstyle.url" value="${resource.dir}/checkstyle.xml"/>
+    <property name="java.major.version" value="1.7"/>
+    <property name="java.encoding" value="utf-8"/>
+
+    <property name="pa.dir" value="${software.dir}/pa"/>
+    <property name="lib.dir" value="${software.dir}/target/accrual/lib"/>
+    <property name="services.report.dir" value="${software.dir}/target/accrual/reports/services"/>
+    <property name="services.build.dir" value="${basedir}/target"/>
+    <property name="services.build.outputDir" value="${services.build.dir}/classes"/>
+    <property name="services.build.srcDir" value="${basedir}/src/java"/>
+    <property name="services.build.javadoc" value="${basedir}/javadoc"/>
+    <property name="services.build.domainDir" value="${services.build.srcDir}/gov/nih/nci/pa"/>
+    <property name="services.build.resourceDir" value="${basedir}/src/resources"/>
+    <property name="services.jar" value="accrual-services.jar"/>
+    <property name="services-client.jar" value="accrual-services-client.jar"/>
+    <property name="services.build.testSrcDir" value="${basedir}/test/java"/>
+    <property name="services.build.testOutputDir" value="${services.build.dir}/test-classes"/>
+    <property name="services.build.testResourceDir" value="${basedir}/test/resources"/>
+    <property name="services.build.coberturaOutputDir" value="${services.build.dir}/generated-classes"/>
+    <property name="services.test.reports" value="${services.report.dir}/test-reports"/>
+    <property name="services.coverage.reports" value="${services.report.dir}/coverage-reports"/>
+
+    <!-- ====================================================================== -->
+    <!-- Defining classpaths                                                    -->
+    <!-- ====================================================================== -->
+ 
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}/build">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}/ear">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test.classpath">
+        <fileset dir="${lib.dir}/test">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/ear">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/compile">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-findbugs.classpath">
+        <fileset dir="${lib.dir}/test-findbugs">
+            <include name="*.jar"/>
+        </fileset>
+    </path> 	
+	
+    <path id="test-simian.classpath">
+        <fileset dir="${lib.dir}/test-simian">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-cobertura.classpath">
+        <fileset dir="${lib.dir}/test-cobertura">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-checkstyle.classpath">
+        <fileset dir="${lib.dir}/test-checkstyle">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test-pmd.classpath">
+        <fileset dir="${lib.dir}/test-pmd">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- ====================================================================== -->
+    <!-- Cleaning target                                                        -->
+    <!-- ====================================================================== -->
+
+    <target name="clean"
+            description="Deletes subproject's classes and other target directories which should not exist before starting the build">
+        <delete dir="${services.build.dir}"/>
+        <delete dir="${services.report.dir}"/>
+        <mkdir dir="${services.report.dir}"/>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Get hibernate annotated classes/configuration                          -->
+    <!-- ====================================================================== -->
+
+    <target name="get-domain">
+        <property name="paear.properties.file" value="${software.dir}/pa/pa-ejb/target/classes/paear.properties"/>
+        <available file="${paear.properties.file}" property="earPropertiesPresent"/>
+        <fail unless="earPropertiesPresent" message="File paear.properties not found. Please build PA."/>
+        <delete dir="${services.build.domainDir}"/>
+        <copy todir="${services.build.domainDir}/service/correlation">
+            <fileset file="${software.dir}/pa/pa-ejb/src/java/gov/nih/nci/pa/service/correlation/OrganizationCorrelationServiceRemote.java"/>
+        </copy>
+        <copy todir="${services.build.outputDir}" overwrite="true">
+            <fileset file="${paear.properties.file}"/>
+        </copy>
+     </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Compile target                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="compile" depends="get-domain" description="Compiles the subproject">
+        <mkdir dir="${services.build.outputDir}"/>
+        <javac destdir="${services.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${services.build.srcDir}"/>
+            </src>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+
+        <copy todir="${services.build.outputDir}">
+            <fileset dir="${services.build.resourceDir}"/>
+        </copy>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Test-compilation target                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="compile-tests" depends="compile" description="Compile the test code">
+        <mkdir dir="${services.build.testOutputDir}"/>
+        <javac destdir="${services.build.testOutputDir}" nowarn="false" debug="true" optimize="false"
+               deprecation="true" target="${java.major.version}" verbose="false" fork="false"
+               source="${java.major.version}" encoding="${java.encoding}">
+            <src>
+                <pathelement location="${services.build.testSrcDir}"/>
+            </src>
+            <classpath>
+                <pathelement location="${services.build.outputDir}"/>
+                <path refid="test.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${services.build.outputDir}">
+            <fileset dir="${services.build.testResourceDir}"/>
+        </copy>
+        <copy todir="${services.build.testOutputDir}">
+            <fileset dir="${services.build.testResourceDir}"/>
+        </copy>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Cobertura and JUnit                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="runTest" description="Runs the test you specify on the command line with -Dtest=" depends="compile-tests">
+        <mkdir dir="${services.test.reports}"/>
+        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <sysproperty key="basedir" value="."/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${services.build.outputDir}"/>
+            <classpath location="${services.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="compile.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <test if="test" name="${test}" haltonerror="false" haltonfailure="false"></test>
+            <batchtest todir="${services.test.reports}" fork="yes" unless="test">
+                <fileset dir="${services.build.testSrcDir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+
+    <target name="test-cobertura" depends="compile-tests">
+
+        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties"/>
+
+        <delete file="${services.build.dir}/cobertura.ser"/>
+
+        <cobertura-instrument datafile="${services.build.dir}/cobertura.ser" toDir="${services.build.coberturaOutputDir}">
+            <fileset dir="${services.build.outputDir}">
+                <include name="**/accrual/**/*.class"/>
+            	<exclude name="**/PoMockLocator.class"/>
+            </fileset>
+            <auxClasspath>            
+                 <path refid="compile.classpath"/>                
+            </auxClasspath>
+        </cobertura-instrument>
+
+        <mkdir dir="${services.test.reports}"/>
+        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
+            <jvmarg value="-XX:-UseSplitVerifier"/>
+            <sysproperty key="basedir" value="."/>
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${services.build.dir}/cobertura.ser"/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${services.build.coberturaOutputDir}"/>
+            <classpath location="${services.build.outputDir}"/>
+            <classpath location="${services.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="compile.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <batchtest todir="${services.test.reports}">
+                <fileset dir="${services.build.testSrcDir}">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/*Abstract*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${services.test.reports}">
+            <fileset dir="${services.test.reports}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report todir="${services.test.reports}" />
+        </junitreport>
+        <fail if="junit.failure" message="Unit test(s) failed.  See reports at ${services.test.reports}/index.html."/>
+
+        <cobertura-report datafile="${services.build.dir}/cobertura.ser"
+                          destdir="${services.coverage.reports}"
+                          srcdir="${services.build.srcDir}"/>
+
+        <cobertura-report datafile="${services.build.dir}/cobertura.ser"
+                          format="xml"
+                          destdir="${services.coverage.reports}"
+                          srcdir="${services.build.srcDir}"/>
+
+        <cobertura-check datafile="${services.build.dir}/cobertura.ser"
+                         totalbranchrate="${services.coverage.branch}"
+                         totallinerate="${services.coverage.line}"
+                         haltonfailure="true"/>
+     </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run checkstyle                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="test-checkstyle">
+        <taskdef resource="checkstyletask.properties" classpathref="test-checkstyle.classpath"/>
+        <checkstyle config="${checkstyle.url}" failOnViolation="true">
+            <fileset dir="src">
+                    <include name="**/accrual/**/*.java"/>
+            </fileset>
+            <classpath location="${services.build.dir}/classes"/>
+            <classpath refid="compile.classpath"/>
+            <formatter type="plain"/>
+            <formatter type="plain" toFile="${services.report.dir}/checkstyle.txt"/>
+            <formatter type="xml" toFile="${services.report.dir}/checkstyle.xml"/>
+        </checkstyle>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Run PMD                                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-pmd">
+        <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pmdFile}" maxruleviolations="${services.pmd.maxerrors}">
+            <classpath refid="compile.classpath"/>
+            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toFile="${services.report.dir}/pmd.txt"/>
+            <formatter type="xml"  toFile="${services.report.dir}/pmd.xml"/>
+            <formatter type="html" toFile="${services.report.dir}/pmd.html"/>
+            <fileset dir="src">
+                <include name="**/accrual/**/*.java"/>
+            </fileset>
+         <sourceLanguage name="java" version="1.7"/></pmd>
+    </target>
+	
+    <!-- ====================================================================== -->
+    <!-- Run Find Bugs                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-findbugs">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="test-findbugs.classpath"/>
+        <findbugs reportLevel="high" failOnError="true" classpathref="test-findbugs.classpath"
+                      output="xml:withMessages" warningsProperty="bugsFound" maxrank="14" projectname="accrual-services"
+                      outputFile="${services.report.dir}/findbugs.xml">
+          <auxClasspath>
+            <path refid="compile.classpath"/>
+          </auxClasspath>
+          <sourcePath path="${services.build.srcDir}" />
+          <class location="${services.build.outputDir}" />
+        </findbugs>
+        <fail if="bugsFound" message="Bugs found! See ${services.report.dir}/findbugs.xml for details."/>
+    </target>       
+
+
+
+    <!-- ====================================================================== -->
+    <!-- Run Simian                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-simian">
+       <taskdef resource="simiantask.properties" classpathref="test-simian.classpath"/>
+       <simian>
+               <fileset dir="src">
+                     <include name="**/accrual/**/*.java"/>
+               </fileset>
+            <formatter type="plain" toFile="${services.report.dir}/simian.txt"/>
+            <formatter type="xml" toFile="${services.report.dir}/simian.xml"/>
+            <formatter type="plain"/>
+        </simian>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Static analysis target                                                 -->
+    <!-- ====================================================================== -->
+
+    <target name="inspect" depends="create-jar, test-checkstyle, test-pmd, test-simian, test-findbugs"
+            description="Runs various static analysis tools such as PMD, Checkstyle, Simian">
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- JUnit/Cobertura target                                                 -->
+    <!-- ====================================================================== -->
+
+    <target name="test" depends="test-cobertura"
+            description="Runs various tests in the subproject">
+    </target>
+
+    <target name="test-dynamic-analysis" depends="inspect, test"
+        description="Runs full analysis and test">
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Package targets                                                        -->
+    <!-- ====================================================================== -->
+
+    <target name="create-jar" depends="compile">
+        <jar jarfile="${services.build.dir}/${services.jar}"
+             compress="true"
+             index="false"
+             basedir="${services.build.outputDir}"/>
+
+        <jar jarfile="${services.build.dir}/${services-client.jar}"
+                     compress="true"
+                     index="false"
+                     basedir="${services.build.outputDir}"
+                     includes="**/*.class"
+                     excludes="**/pa/**/*.class
+                                    **/convert/*
+                                    **/service/*Bean.class
+                                    **/service/*BeanLocal.class
+                                    **/service/Abstract*.class"/>
+    </target>
+
+    <target name="jar" depends="create-jar, test-dynamic-analysis"
+            description="Makes services jar">
+    </target>
+
+    <target name="jar-notest" depends="create-jar"
+            description="Makes services jar, doesn't run tests">
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Maven Installation Targets                                             -->
+    <!-- ====================================================================== -->
+    <target name="maven:generate-pom">
+        <!-- We cannot use in memory poms due to a bug: http://jira.codehaus.org/browse/MANTTASKS-170 -->
+        <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="build.classpath" />
+        <artifact:pom id="accrual-pom-temp" groupId="gov.nih.nci.coppa.accrual" artifactId="accrual-services-client" version="${pa.clients.version}" name="Accrual Services Client"/>
+        <artifact:writepom pomRefId="accrual-pom-temp" file="target/pom.xml"/>
+        <artifact:pom id="accrual-pom" file="target/pom.xml"/>
+    </target>
+
+    <target name="maven:install" depends="jar-notest,maven:generate-pom">
+        <echo message="Installing version ${pa.clients.version} to the local maven repo."/>
+        <artifact:install file="${services.build.dir}/${services-client.jar}">
+            <pom refid="accrual-pom"/>
+        </artifact:install>
+    </target>
+
+    <target name="maven:deploy" depends="jar-notest,maven:generate-pom">
+        <artifact:remoteRepository id="remote.repository" url="https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/">
+            <authentication username="${maven.username}" password="${maven.password}"/>
+        </artifact:remoteRepository>
+        <echo message="Installing version ${pa.clients.version} to the remote maven repo."/>
+        <artifact:deploy file="${services.build.dir}/${services-client.jar}" uniqueversion="false">
+            <remoteRepository refid="remote.repository" />
+            <pom refid="accrual-pom"/>
+        </artifact:deploy>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Generate Javadoc                                                       -->
+    <!-- ====================================================================== -->
+
+    <target name="generate-javadoc">
+        <javadoc destdir="${services.build.javadoc}"
+            sourcepath="${services.build.srcDir}"
+            windowtitle="CTRP Accrual EJB">
+            <doctitle><![CDATA[<h1>CTRP Accrual Service Layer</h1>]]></doctitle>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javadoc>
+    </target>
+
+
+    <!-- ====================================================================== -->
+    <!-- Generate Javadoc                                                       -->
+    <!-- ====================================================================== -->
+
+    <target name="generate-sdc-sql" description="Reads and generate sql for SDC codes.  Specify file via: -DsdcFile=filename">
+        <java fork="true" classname="gov.nih.nci.accrual.util.SDCExcelReader" dir="${basedir}">
+            <classpath>
+                <path refid="compile.classpath"/>
+                <path location="${services.build.dir}/${services.jar}"/>
+            </classpath>
+            <arg value="${sdcFile}"/>
+            <arg value="${services.build.dir}/"/>
+        </java>
+    </target>
+
+</project>

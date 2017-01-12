@@ -1,0 +1,36 @@
+header {background: white}
+.navbar-custom, .btn-primary, .table thead, .trial-ownership:before, .btn-group .btn-default.active {background: #216FBC; box-shadow:none; text-shadow:none;}
+.btn-default, .nav-tabs > li > a, .accordion-heading > .accordion-toggle, h3.notAssigned {background: #f7f7f7; box-shadow: none; text-shadow:none;}
+.btn-default:hover, .nav-tabs > li > a:hover {background: #fff; border-color: #ccc}
+.btn-group .btn-default.active {border-color:#225A95}
+
+.navbar-custom {box-shadow: none;}
+.navbar-custom .navbar-nav > li > a {border-left: none !important; border-right-color: #003E7C}
+h1, h2, h3, h4 {color:#216FBC}
+
+.navbar-nav li .open, .navbar-custom .navbar-nav > .active > a, .navbar-custom .navbar-nav > .active > a:hover {background:#4D9CEA; box-shadow:none;}
+
+.navbar-nav {border: none; border-left: 1px solid #003E7C}
+
+.navbar-custom .navbar-nav > .dropdown > a .caret {border-color:#003E7C rgba(0, 0, 0, 0)}
+.navbar-custom .navbar-nav > .dropdown > a .caret:after {border: none}
+.navbar-custom .navbar-nav .dropdown-menu > li > a, a, .nav-tabs > li > a, header .pull-right > .dropdown-menu .account:before, header .pull-right > .dropdown-menu .help:before, header .pull-right > .dropdown-menu > li > a {color:#216FBC}
+a:hover, .masthead .nav-user:hover, #nci-footer a:hover, .nav-user:active, .dropdown.open .nav-user {color:#4D9CEA}
+
+.navbar-custom .navbar-nav .dropdown.active  > a .caret {border-color:#216FBC rgba(0, 0, 0, 0)}
+.btn-primary:hover {background: #4D9CEA}
+
+button, label {
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	transition: all 0.2s linear;
+	}
+	
+	.navbar-custom .navbar-nav > li > a, .text-sizer a {text-shadow: none; }
+	
+	.text-sizer{box-shadow:none;}
+	#decfont {border-left: none;}
+	.text-sizer a:hover {color: white;}
+#footer, .tab-content > .tab-pane {background: white; box-shadow:none;}	
+	
+.navbar-custom .navbar-nav .dropdown-menu > li > a:hover, header .pull-right > .dropdown-menu > li > a:hover {background:#EFF7FF}	

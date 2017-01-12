@@ -1,0 +1,1 @@
+insert into consortia_category values ('INSTITUTIONAL', 'Institutional','Industrial;Institutional' );

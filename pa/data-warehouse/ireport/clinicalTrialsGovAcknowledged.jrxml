@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ctgAcknowledged" language="groovy" pageWidth="1384" pageHeight="842" columnWidth="1344" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="615c27e5-225b-4bc7-8ecd-a9c9be457bae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\Users\\ctrp\\code\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NCI_Trial_ID_po" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Start_Date_o" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="End_Date_o" class="java.util.Date">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT soi.extension, si.open_date, si.admin, si.scientific,
+       si.close_date, si.admin_close_date, si.scientific_close_date,
+       ru.first_name AS ru_first_name, ru.last_name AS ru_last_name,
+       cu.first_name AS cu_first_name, cu.last_name AS cu_last_name
+FROM study_inbox si
+JOIN study_otheridentifiers soi ON (si.study_protocol_identifier = soi.study_protocol_id)
+LEFT JOIN registry_user ru ON (ru.csm_user_id = si.user_last_updated_id)
+LEFT JOIN csm_user cu ON (cu.user_id = si.user_last_updated_id)
+WHERE si.comments LIKE 'Trial has been updated from ClinicalTrials.gov%'
+  AND (si.close_date IS NOT NULL OR si.admin_close_date IS NOT NULL OR si.scientific_close_date IS NOT NULL)
+  AND soi.root = '2.16.840.1.113883.3.26.4.3'
+  AND ($P{Start_Date_o}::DATE IS NULL
+       OR $P{Start_Date_o}::DATE <= date_trunc('day', si.close_date)
+       OR $P{Start_Date_o}::DATE <= date_trunc('day', si.admin_close_date)
+       OR $P{Start_Date_o}::DATE <= date_trunc('day', si.scientific_close_date)
+      )
+  AND ($P{End_Date_o}::DATE IS NULL
+       OR $P{End_Date_o}::DATE >= date_trunc('day', si.close_date)
+       OR $P{End_Date_o}::DATE >= date_trunc('day', si.admin_close_date)
+       OR $P{End_Date_o}::DATE >= date_trunc('day', si.scientific_close_date)
+      )
+  AND ($P{NCI_Trial_ID_po} IS NULL OR soi.extension LIKE ( '%' || $P{NCI_Trial_ID_po} || '%'))
+ORDER BY soi.extension, si.open_date, si.close_date]]>
+	</queryString>
+	<field name="extension" class="java.lang.String"/>
+	<field name="open_date" class="java.sql.Timestamp"/>
+	<field name="admin" class="java.lang.Boolean"/>
+	<field name="scientific" class="java.lang.Boolean"/>
+	<field name="close_date" class="java.sql.Timestamp"/>
+	<field name="admin_close_date" class="java.sql.Timestamp"/>
+	<field name="scientific_close_date" class="java.sql.Timestamp"/>
+	<field name="ru_first_name" class="java.lang.String"/>
+	<field name="ru_last_name" class="java.lang.String"/>
+	<field name="cu_first_name" class="java.lang.String"/>
+	<field name="cu_last_name" class="java.lang.String"/>
+	<variable name="name" class="java.lang.String">
+		<variableExpression><![CDATA[(org.apache.commons.lang.StringUtils.isBlank($F{cu_last_name}))
+ ? (org.apache.commons.lang.StringUtils.isBlank($F{ru_first_name})
+    ? $F{ru_last_name} : ($F{ru_first_name} + " " + $F{ru_last_name}))
+ : (org.apache.commons.lang.StringUtils.isBlank($F{cu_first_name})
+    ? $F{cu_last_name} : ($F{cu_first_name} + " " + $F{cu_last_name}))]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement uuid="9bd4402c-b77f-4890-9600-7c69606313a5" mode="Opaque" x="0" y="0" width="1344" height="37" backcolor="#A90101">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9dafca2a-36d7-47b0-93c6-a6323491ac48" mode="Opaque" x="0" y="0" width="352" height="22" forecolor="#FFFFFF" backcolor="#475B82"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Clinicaltrials.gov Acknowledged Trial Updates]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ee8f481c-a39c-4a85-95ec-712df9e6a36a" mode="Opaque" x="352" y="0" width="992" height="22" forecolor="#FFFFFF" backcolor="#475B82"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(org.apache.commons.lang.StringUtils.isEmpty($P{NCI_Trial_ID_po}) ? '' : ('Trial ID contains ' + $P{NCI_Trial_ID_po}))
++ (($P{Start_Date_o} != null || $P{End_Date_o} != null) ? '    Updates ' : '')
++ ($P{Start_Date_o} == null ? '' : ('from ' + new SimpleDateFormat("dd-MMM-yyyy").format($P{Start_Date_o}) + ($P{End_Date_o} == null ? '' : '  ')))
++ ($P{End_Date_o} == null ? '' : ('to ' + new SimpleDateFormat("dd-MMM-yyyy").format($P{End_Date_o})))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e91cc91e-4eac-48dd-81f4-de675f978aa7" mode="Opaque" x="0" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Trial ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba2c6598-f058-44c4-8518-b54333e269f4" mode="Opaque" x="128" y="0" width="224" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Update Rcvd. Date / Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b5639ca-0326-44ae-9740-804f3a110f2b" mode="Opaque" x="352" y="0" width="224" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Type of Update(s) Received]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4ee5e930-e752-4a5c-b3d4-a597e76d8bc1" mode="Opaque" x="576" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Admin Ack. Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e89166c-987d-4750-aeb1-be79871d54ef" mode="Opaque" x="704" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Admin User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7b5ba34f-88e8-46e5-9b46-86fd52be7d1a" mode="Opaque" x="832" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Scientific Ack. Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="22d3c38c-e53e-499f-8a12-59bdbd8a1fc4" mode="Opaque" x="960" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Scientific User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3949cb85-86ef-4859-883c-d7c283330f12" mode="Opaque" x="1088" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Generic Ack. Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a0be5bf5-4b4f-4663-97e8-dd77ae2ecedd" mode="Opaque" x="1216" y="0" width="128" height="32" backcolor="#D6D6FF"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Generic User]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="2ee6b239-21a9-4f47-b2f9-406a5ab446d8" mode="Opaque" x="0" y="0" width="1344" height="32" backcolor="#E0E0E0">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dbf88a6e-6bc8-4ac5-9a57-bf81ea6ade38" x="0" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{extension}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="15bb78f6-d109-4657-857d-16735939f9cb" x="128" y="0" width="224" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{open_date} == null ? null :
+  new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format($F{open_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="354ad46d-73c3-49c5-a5b3-d10ae4863ed8" x="576" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{admin_close_date} == null ? null :
+  new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format($F{admin_close_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1d596999-0593-41f1-a695-0deaf6c3bafb" x="704" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{admin_close_date} == null ? ""
+  : (($F{scientific_close_date} == null
+     || $F{scientific_close_date} < $F{admin_close_date})
+    ? $V{name}
+    : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="af61d0da-f564-4293-86f8-1806d7b31d05" x="832" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{scientific_close_date} == null ? null :
+  new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format($F{scientific_close_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="581ebf51-9009-4a04-9136-008a5332addb" x="352" y="0" width="224" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{admin} != true && $F{scientific} != true)
+    ? "Generic" :
+(($F{admin} == true) ? "Admin" : "") +
+(($F{admin} == true && $F{scientific} == true) ? "\n" : "") +
+(($F{scientific} == true) ? "Scientific" : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="52d0998a-f0bb-48fa-82be-488bc41b04cf" x="960" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{scientific_close_date} == null ? ""
+  : (($F{admin_close_date} == null
+     || $F{admin_close_date} < $F{scientific_close_date})
+    ? $V{name}
+    : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f0fecf25-b1d6-4acf-8049-8ba67c67c64f" x="1088" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{admin} == true || $F{scientific} == true)
+  ?  "" :
+  new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a").format($F{close_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="90feb8c2-6c44-4bf0-b147-6bd4bef2a001" x="1216" y="0" width="128" height="32"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{admin} == true || $F{scientific} == true)
+  ?  "" : $V{name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Immediate"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="142" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

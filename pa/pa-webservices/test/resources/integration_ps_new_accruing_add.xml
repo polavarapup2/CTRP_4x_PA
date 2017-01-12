@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ParticipatingSite xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">
+	<tns:recruitmentStatus>Active</tns:recruitmentStatus>
+	<tns:recruitmentStatusDate>2001-05-06</tns:recruitmentStatusDate>
+	<tns:localTrialIdentifier>MN000001</tns:localTrialIdentifier>
+	<tns:programCode>PG0000001</tns:programCode>
+	<tns:openedForAccrual>2014-02-02</tns:openedForAccrual>	
+	<tns:targetAccrualNumber>100000</tns:targetAccrualNumber>
+	<tns:investigator>
+		<tns:person>
+			<tns:existingPerson>
+				<tns:poID>1</tns:poID>
+			</tns:existingPerson>
+		</tns:person>
+		<tns:role>Principal Investigator</tns:role>
+		<tns:primaryContact>true</tns:primaryContact>
+	</tns:investigator>
+	<tns:organization>
+		<tns:existingOrganization>
+			<tns:poID>10</tns:poID>
+		</tns:existingOrganization>
+	</tns:organization>
+</tns:ParticipatingSite>

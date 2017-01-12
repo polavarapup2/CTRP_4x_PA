@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="1.0">
+    <xs:element name="clinical_study">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="id_info" />
+                <xs:element ref="trial_owners" />
+                <xs:element ref="lead_org" />
+                <xs:element ref="nci_specific_information" />
+                <xs:element minOccurs="0" ref="is_fda_regulated" />
+                <xs:element minOccurs="0" ref="is_section_801" />
+                <xs:element minOccurs="0" ref="delayed_posting" />
+                <xs:element minOccurs="0" ref="trial_ind_ide" />
+                <xs:element minOccurs="0" ref="brief_title" />
+                <xs:element minOccurs="0" ref="acronym" />
+                <xs:element minOccurs="0" ref="official_title" />
+                <xs:element ref="sponsors" />
+                <xs:element ref="oversight_info" />
+                <xs:element minOccurs="0" ref="brief_summary" />
+                <xs:element minOccurs="0" ref="detailed_description" />
+                <xs:element ref="trial_status" />
+                <xs:element minOccurs="0" ref="trial_funding" />
+                <xs:element ref="study_design" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="primary_outcome" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="secondary_outcome" />
+                <xs:element minOccurs="0"  ref="disease_conditions" />
+                <xs:element minOccurs="0" ref="sub_groups" />
+                <xs:element minOccurs="0" ref="enrollment" />
+                <xs:element minOccurs="0" ref="enrollment_type" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="arm_group" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="intervention" />
+                <xs:element minOccurs="0" ref="eligibility" />
+                <xs:element ref="overall_official" />
+                <xs:element minOccurs="0" ref="overall_contact" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="location" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="keyword" />
+                <xs:element minOccurs="0" ref="verification_date" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:group name="id_group">
+        <xs:sequence>
+            <xs:element minOccurs="0"  ref="po_id" />
+            <xs:element minOccurs="0"  ref="ctep_id" />
+        </xs:sequence>
+    </xs:group>
+    
+    <xs:element name="id_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="org_study_id" />
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element minOccurs="0"  ref="ctep_id" />
+                    <xs:element minOccurs="0"  ref="dcp_id" />
+                    <xs:element ref="secondary_id" />
+                </xs:choice>
+                <xs:element ref="org_name" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:group name="person_name_group">
+        <xs:sequence>
+            <xs:element minOccurs="0" ref="first_name" />
+            <xs:element minOccurs="0" ref="middle_initial" />
+            <xs:element ref="last_name" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="telecom_group">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="phone" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fax" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="tty" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="email" />
+        </xs:sequence>
+    </xs:group>
+    <xs:element name="org_study_id" type="xs:string" />
+    <xs:element name="secondary_id">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="id" />
+                <xs:element minOccurs="0" ref="id_type" />
+                <xs:element minOccurs="0" ref="id_domain" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="id" type="xs:string" />
+    <xs:element name="id_type" type="xs:string" />
+    <xs:element name="id_domain" type="xs:string" />
+    <xs:element name="org_name" type="xs:string" />
+    <xs:element name="trial_owners" type="name_type" />
+    <xs:element name="lead_org" type="org_name_type" />
+    <xs:element name="nci_specific_information">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="reporting_data_set_method" />
+                <xs:element minOccurs="0" ref="summary_4_funding_category" />
+                <xs:element minOccurs="0" ref="summary_4_funding_sponsor_source" />
+                <xs:element minOccurs="0" ref="program_code" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="reporting_data_set_method" type="xs:string" />
+    <xs:element name="summary_4_funding_category" type="xs:string" />
+    <xs:element name="summary_4_funding_sponsor_source" type="org_name_type" />
+    <xs:element name="program_code" type="xs:string" />
+    <xs:element name="is_fda_regulated" type="xs:string" />
+    <xs:element name="is_section_801" type="xs:string" />
+    <xs:element name="delayed_posting" type="xs:string" />
+    <xs:element name="trial_ind_ide">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ind_info" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ind_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ind_ide_type" />
+                <xs:element ref="ind_holder_type" />
+                <xs:element minOccurs="0" ref="ind_nih_inst_holder" />
+                <xs:element minOccurs="0" ref="ind_nci_div_holder" />
+                <xs:element ref="has_expanded_access" />
+                <xs:element minOccurs="0" ref="expanded_access_status" />
+                <xs:element ref="is_exempt" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ind_ide_type" type="xs:string" />
+    <xs:element name="ind_holder_type" type="xs:string" />
+    <xs:element name="ind_nih_inst_holder" type="xs:string" />
+    <xs:element name="ind_nci_div_holder" type="xs:string" />
+    <xs:element name="has_expanded_access" type="xs:string" />
+    <xs:element name="expanded_access_status" type="xs:string" />
+    <xs:element name="is_exempt" type="xs:string" />
+    <xs:element name="brief_title" type="xs:string" />
+    <xs:element name="acronym" type="xs:string" />
+    <xs:element name="official_title" type="text_block_type" />
+    <xs:element name="sponsors">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="lead_sponsor" />
+                <xs:element ref="resp_party" />
+                <xs:element maxOccurs="unbounded" ref="collaborator" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="lead_sponsor" type="org_name_type" />
+    <xs:element name="resp_party">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" >
+                    <xs:element ref="resp_party_person" minOccurs="0"/>
+                    <xs:element ref="resp_party_generic_contact" minOccurs="0"/>
+                </xs:choice>
+                <xs:element ref="resp_party_organization" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="resp_party_person">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="person_name_group" />
+                <xs:element ref="po_id" />
+                <xs:element minOccurs="0"  ref="ctep_id" />
+                <xs:element ref="address" />
+                <xs:group ref="telecom_group" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="fax" type="xs:string" />
+    <xs:element name="resp_party_organization" type="org_name_type" />
+    <xs:element name="resp_party_generic_contact" type="generic_org_name_type" />
+    <xs:element name="collaborator">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="text_block_type" />
+                <xs:group ref="id_group"/>
+                <xs:element ref="address" />
+                <xs:group ref="telecom_group" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="agency" type="xs:string" />
+    <xs:element name="oversight_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="regulatory_authority" />
+                <xs:element minOccurs="0"   ref="has_dmc" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="regulatory_authority" type="xs:string" />
+    <xs:element name="has_dmc" type="xs:string" />
+    <xs:element name="brief_summary">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="textblock" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="detailed_description">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="textblock" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="trial_status">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="current_trial_status" />
+                <xs:element ref="current_trial_status_date" />
+                <xs:element minOccurs="0" ref="why_stopped" />
+                <xs:element ref="current_trial_start_date" />
+                <xs:element ref="current_trial_start_date_type" />
+                <xs:element ref="current_trial_completion_date" />
+                <xs:element ref="current_trial_completion_date_type" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="current_trial_status" type="xs:string" />
+    <xs:element name="current_trial_status_date" type="xs:NMTOKEN" />
+    <xs:element name="why_stopped" type="xs:string"></xs:element>
+    <xs:element name="current_trial_start_date" type="xs:NMTOKEN" />
+    <xs:element name="current_trial_start_date_type" type="xs:string" />
+    <xs:element name="current_trial_completion_date" type="xs:NMTOKEN" />
+    <xs:element name="current_trial_completion_date_type" type="xs:string" />
+    <xs:element name="trial_funding">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="funding_info" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="funding_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="funding_code" />
+                <xs:element ref="funding_nih_inst_code" />
+                <xs:element ref="funding_serial_number" />
+                <xs:element ref="funding_nci_div_program" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="funding_code" type="xs:string" />
+    <xs:element name="funding_nih_inst_code" type="xs:string" />
+    <xs:element name="funding_serial_number" type="xs:integer" />
+    <xs:element name="funding_nci_div_program" type="xs:string" />
+    <xs:element name="study_design">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="study_type" />
+                <xs:element ref="interventional_design" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="study_type" type="xs:string" />
+    <xs:element name="interventional_design">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="interventional_subtype" />
+                <xs:element minOccurs="0" ref="interventional_additional_qualifier" />
+                <xs:element minOccurs="0" ref="interventional_other_text" />
+                <xs:element minOccurs="0" ref="phase_additional_qualifier" />
+                <xs:element minOccurs="0" ref="phase" />
+                <xs:element minOccurs="0" ref="allocation" />
+                <xs:element minOccurs="0" ref="masking" />
+                <xs:element minOccurs="0" ref="masked_assessor" />
+                <xs:element minOccurs="0" ref="masked_caregiver" />
+                <xs:element minOccurs="0" ref="masked_investigator" />
+                <xs:element minOccurs="0" ref="masked_subject" />
+                <xs:element minOccurs="0" ref="assignment" />
+                <xs:element minOccurs="0" ref="endpoint" />
+                <xs:element minOccurs="0" ref="number_of_arms" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="interventional_subtype" type="xs:string" />
+    <xs:element name="interventional_additional_qualifier" type="xs:string" />
+    <xs:element name="interventional_other_text" type="xs:string" />
+    <xs:element name="phase_additional_qualifier" type="xs:string" />
+    <xs:element name="phase" type="xs:string" />
+    <xs:element name="allocation" type="xs:string" />
+    <xs:element name="masking" type="xs:string" />
+    <xs:element name="masked_assessor" type="xs:string" />
+    <xs:element name="masked_subject" type="xs:string" />
+    <xs:element name="masked_investigator" type="xs:string" />
+    <xs:element name="masked_caregiver" type="xs:string" />
+    <xs:element name="assignment" type="xs:string" />
+    <xs:element name="endpoint" type="xs:string" />
+    <xs:element name="number_of_arms" type="xs:integer" />
+    <xs:element name="primary_outcome">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="outcome_measure" />
+                <xs:element minOccurs="0" ref="outcome_description" />
+                <xs:element ref="outcome_safety_issue" />
+                <xs:element ref="outcome_time_frame" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="outcome_description">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="textblock" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="secondary_outcome">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="outcome_measure" />
+                <xs:element minOccurs="0" ref="outcome_description" />
+                <xs:element ref="outcome_safety_issue" />
+                <xs:element ref="outcome_time_frame" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="disease_conditions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="condition_info" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="condition_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="preferred_name" />
+                <xs:element ref="disease_code" />
+                <xs:element minOccurs="0" ref="nci_thesaurus_id" />
+                <xs:element ref="menu_display_name" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="disease_code" type="xs:string" />
+    <xs:element name="menu_display_name" type="text_block_type" />
+    <xs:element name="nci_thesaurus_id" type="xs:string" />
+    <xs:element name="preferred_name" type="xs:string" />
+    <xs:element name="sub_groups">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="sub_groups_info" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="sub_groups_info">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="group_number" />
+                <xs:element ref="description" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="group_number" type="text_block_type" />
+    <xs:element name="description" type="text_block_type" />
+    <xs:element name="enrollment" type="xs:integer" />
+    <xs:element name="enrollment_type" type="xs:string" />
+    <xs:element name="arm_group">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="arm_group_label" />
+                <xs:element minOccurs="0" ref="arm_type" />
+                <xs:element minOccurs="0" ref="arm_group_description" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="arm_type" type="xs:string" />
+    <xs:element name="arm_group_description">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="textblock" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="intervention">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="intervention_type" />
+                <xs:element ref="intervention_name" />
+                <xs:element minOccurs="0" ref="intervention_description" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="intervention_other_name" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="arm_group_label" />
+            </xs:sequence>
+            <xs:attribute name="cdr-id" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="intervention_type" type="xs:string" />
+    <xs:element name="intervention_name" type="xs:string" />
+    <xs:element name="intervention_description">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="textblock" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="intervention_other_name" type="xs:string" />
+    <xs:element name="eligibility">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="criteria"/>
+                <xs:element ref="healthy_volunteers" />
+                <xs:element ref="gender" />
+                <xs:element ref="minimum_age" />
+                <xs:element ref="maximum_age" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="criteria">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="criterion" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="criterion">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:element minOccurs="0" ref="type" />
+                <xs:element ref="data" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="type" type="xs:string" />
+    <xs:element name="data" type="text_block_type" />
+    <xs:element name="healthy_volunteers" type="xs:string" />
+    <xs:element name="gender" type="xs:string" />
+    <xs:element name="minimum_age" type="xs:string" />
+    <xs:element name="maximum_age" type="xs:string" />
+    <xs:element name="overall_official">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="person_name_group" />
+                <xs:group ref="id_group"/>
+                <xs:element ref="address" />
+                <xs:group ref="telecom_group" />
+                <xs:element ref="role" />
+                <xs:element ref="affiliation" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="affiliation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string" />
+                <xs:group ref="id_group"/>
+                <xs:element ref="address" />
+                <xs:group ref="telecom_group" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="location">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="facility" />
+                <xs:element ref="status" />
+                <xs:element minOccurs="0" ref="contact" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="investigator" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="facility">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="name">
+                    <xs:sequence>
+                        <xs:group ref="id_group"/>
+                        <xs:element ref="address" />
+                        <xs:group ref="telecom_group" />
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="status" type="xs:string" />
+    <xs:element name="contact" type="contact_type" />
+    <xs:element name="overall_contact" type="contact_type" />
+    <xs:element name="investigator">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="person_name_group" />
+                <xs:group minOccurs="0" ref="id_group"/>
+                <xs:element minOccurs="0" ref="address" />
+                <xs:group minOccurs="0" ref="telecom_group"/>
+                <xs:element minOccurs="0" ref="role" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="keyword" type="xs:string" />
+    <xs:element name="verification_date" type="xs:NMTOKEN" />
+    <xs:complexType name="name">
+        <xs:sequence>
+            <xs:element ref="name" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="name" type="text_block_type" />
+    <xs:element name="po_id" type="xs:integer" />
+    <xs:element name="ctep_id" type="xs:string" />
+    <xs:element name="dcp_id" type="xs:string" />
+    <xs:element name="address">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="street" />
+                <xs:element ref="city" />
+                <xs:element minOccurs="0" ref="state" />
+                <xs:element ref="zip" />
+                <xs:element ref="country" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="street" type="text_block_type" />
+    <xs:element name="city" type="xs:string" />
+    <xs:element name="state" type="xs:string" />
+    <xs:element name="zip" type="xs:string" />
+    <xs:element name="country" type="xs:string" />
+    <xs:element name="phone" type="xs:string" />
+    <xs:element name="email" type="xs:string" />
+    <xs:element name="tty" type="xs:string" />
+    <xs:element name="textblock" type="xs:string" />
+    <xs:element name="outcome_measure" type="text_block_type" />
+    <xs:element name="outcome_safety_issue" type="xs:string" />
+    <xs:element name="outcome_time_frame" type="text_block_type" />
+    <xs:element name="arm_group_label" type="xs:string" />
+    <xs:element name="first_name" type="xs:string" />
+    <xs:element name="last_name" type="xs:string" />
+    <xs:element name="middle_initial" type="xs:string" />
+    <xs:element name="role" type="xs:string" />
+    <xs:complexType name="name_type">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="org_name_type">
+        <xs:complexContent>
+            <xs:extension base="name">
+                <xs:sequence>
+                    <xs:element ref="po_id" />
+                    <xs:element minOccurs="0" ref="ctep_id" />
+                    <xs:element ref="address" />
+                    <xs:group ref="telecom_group" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="generic_org_name_type">
+       <xs:sequence>
+           <xs:element ref="name" minOccurs="0"/>
+           <xs:element ref="po_id" minOccurs="0"/>
+           <xs:element ref="ctep_id" minOccurs="0"/>
+           <xs:element ref="address" minOccurs="0"/>
+           <xs:group   ref="telecom_group" minOccurs="0"/>
+       </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="contact_type">
+        <xs:sequence>
+            <xs:group ref="person_name_group" />
+            <xs:group minOccurs="0" ref="id_group"/>
+            <xs:element minOccurs="0" ref="address" />
+            <xs:group ref="telecom_group" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="text_block_type" mixed="true">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="textblock" />
+        </xs:sequence>
+    </xs:complexType>
+    <!-- error xml -->
+    <xs:element name="error">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="error_description" minOccurs="0"/>
+                <xs:element ref="study_identifier" minOccurs="0"/>
+                <xs:element ref="study_title" minOccurs="0"/>
+                <xs:element ref="contact_info" minOccurs="0"/>
+                <xs:element ref="error_type" minOccurs="0"/>
+                <xs:element ref="error_messages" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="error_description" type="xs:string" />
+    <xs:element name="study_identifier" type="xs:string" />
+    <xs:element name="study_title" type="xs:string" />
+    <xs:element name="contact_info" type="xs:string" />
+    <xs:element name="error_type" type="xs:string" />
+    <xs:element name="error_messages">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="error_message" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="error_message" type="xs:string" />
+</xs:schema>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CTEPTrialsPCDConcerns1" language="groovy" pageWidth="1847" pageHeight="800" columnWidth="1807" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="493"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\COPPA\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select so.extension as nci_id,r.local_sp_indentifier as ctep_id, TO_CHAR(sp.pri_compl_date, 'YYYY-MM-DD') as pcd,
+sp.pri_compl_date_type_code as pcd_type,l.name as lead_org_name,l.assigned_identifier as lead_poid,contact.last_name || ', ' || contact.first_name as study_PI
+,contact.assigned_identifier as study_pi_poid,ru.last_name || ', ' || ru.first_name as CTRP_Site_Admin, ru.phone as phone, ru.email_address as  email
+from study_protocol sp
+join study_otheridentifiers so on so.study_protocol_id=sp.identifier
+join rv_ctep_id r on r.study_protocol_identifier=sp.identifier
+join rv_dwf_current rv on rv.study_protocol_identifier=sp.identifier
+join rv_lead_organization l on l.study_protocol_identifier=sp.identifier
+left join (
+ SELECT sc.study_protocol_identifier, per.first_name, per.last_name,per.assigned_identifier
+   FROM study_contact sc
+   join study_protocol sp on sp.identifier=sc.study_protocol_identifier
+   JOIN clinical_research_staff crs ON crs.identifier = sc.clinical_research_staff_identifier
+   JOIN person per ON crs.person_identifier = per.identifier
+  WHERE sc.role_code::text = 'STUDY_PRINCIPAL_INVESTIGATOR'::text and sp.status_code='ACTIVE') contact on sp.identifier= contact.study_protocol_identifier
+  left join registry_user ru on ru.affiliated_org_id::text=l.assigned_identifier::text and ru.affiliated_org_user_type='ADMIN'
+where so.root='2.16.840.1.113883.3.26.4.3' and sp.status_code='ACTIVE'  and sp.pri_compl_date<=CURRENT_DATE and sp.pri_compl_date_type_code='ANTICIPATED'
+and rv.status_code !='REJECTED' and rv.status_code !='SUBMISSION_TERMINATED' and sp.dcp_id is null and sp.study_protocol_type='InterventionalStudyProtocol'
+order by so.extension,ru.last_name]]>
+	</queryString>
+	<field name="nci_id" class="java.lang.String"/>
+	<field name="ctep_id" class="java.lang.String"/>
+	<field name="pcd" class="java.lang.String"/>
+	<field name="pcd_type" class="java.lang.String"/>
+	<field name="lead_org_name" class="java.lang.String"/>
+	<field name="lead_poid" class="java.lang.String"/>
+	<field name="study_PI" class="java.lang.String"/>
+	<field name="study_pi_poid" class="java.lang.String"/>
+	<field name="CTRP_Site_Admin" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<group name="AdminGroup1">
+		<groupExpression><![CDATA[$F{nci_id}]]></groupExpression>
+		<groupHeader>
+			<band height="12">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="137" height="12" isPrintWhenDetailOverflows="true" uuid="9356dc40-26a7-412b-8222-c53708615c31"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nci_id}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="137" y="0" width="134" height="12" uuid="c44d1cc9-c411-44e6-9347-964cccee9b51"/>
+					<textElement markup="none">
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ctep_id}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="271" y="0" width="142" height="12" uuid="310c5fc1-b9eb-4489-9e99-259bfce92170"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pcd}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="413" y="0" width="159" height="12" uuid="54924601-3abc-4775-a781-1a7cf55b12b6"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pcd_type}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="572" y="0" width="321" height="12" uuid="ca6bc524-cdd8-48c0-b913-6c8002ee001f"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{lead_org_name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="893" y="0" width="67" height="12" uuid="bad5a55f-045b-4d1a-a520-8073a78c3f8a"/>
+					<textElement textAlignment="Right">
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{lead_poid}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="974" y="0" width="174" height="12" uuid="dfd41282-e13f-42e0-a9d5-56dbfa23545e"/>
+					<textElement>
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{study_PI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="1149" y="0" width="71" height="12" uuid="39baae37-ad7f-4a26-887c-e4d05637b4b3"/>
+					<textElement textAlignment="Right">
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{study_pi_poid}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<image>
+				<reportElement mode="Opaque" x="0" y="0" width="1808" height="37" backcolor="#A90101" uuid="1dcb890e-b83e-459a-8d6a-1ed970ab71f6"/>
+				<imageExpression><![CDATA[$P{IMAGES_DIR} + "logotype.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="1187" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="6e76b1d6-4629-41cf-a76e-71691f17c671"/>
+				<textElement markup="none">
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[CTEP Trials with Primary Completion Date Concerns. CTEP trials with a Primary Completion Date in the past with a date type = ‘ANTICIPATED’]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="1187" y="0" width="621" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42"/>
+				<textElement textAlignment="Right">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("MM/dd/yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="137" height="32" backcolor="#D6D6FF" uuid="7f671156-b699-46b4-8c24-9ddf611df263"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCI ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="137" y="0" width="134" height="32" backcolor="#D6D6FF" uuid="1d1313f7-288d-4bf7-a56b-18579e271876"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CTEP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="271" y="0" width="142" height="32" backcolor="#D6D6FF" uuid="c1a69277-ec41-42b5-8cf8-d40900ef62c6"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PCD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="413" y="0" width="159" height="32" backcolor="#D6D6FF" uuid="191f00a8-34bf-401e-a722-e6da909f4f88"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ PCD Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="572" y="0" width="321" height="32" backcolor="#D6D6FF" uuid="4c6f05a4-4d4b-439b-8af2-535599ec224f"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lead organization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="893" y="0" width="67" height="32" backcolor="#D6D6FF" uuid="9abcc2aa-0918-4c31-9d19-4c6245e5aca3"/>
+				<textElement textAlignment="Left" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lead org                                  PO ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="960" y="0" width="188" height="32" backcolor="#D6D6FF" uuid="066df3b7-1654-498d-81f0-1ff0e1cc2d7d"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Study PI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1149" y="0" width="71" height="32" backcolor="#D6D6FF" uuid="54308d84-459e-4f2d-a8f6-df203b8ebf4e"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Study PI                                               PO ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1220" y="0" width="201" height="32" backcolor="#D6D6FF" uuid="6b6211d5-76f8-4efd-b968-b4c1854ef717"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   CTRP Site Admin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1421" y="0" width="140" height="32" backcolor="#D6D6FF" uuid="5b0c88e0-ac84-4505-be47-2d6a0113ae9a"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Site Admin Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1561" y="0" width="247" height="32" backcolor="#D6D6FF" uuid="555d71ef-cbaf-4d9f-b5fe-1b370bf2eeee"/>
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Site Admin Email]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1230" y="0" width="191" height="12" uuid="ab05cbce-8f6f-4416-8e78-881fb0fb3b36"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CTRP_Site_Admin}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1421" y="0" width="140" height="12" uuid="20447fae-320d-45c5-980d-71c62c59e1d6"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1561" y="0" width="247" height="12" uuid="22621842-62a2-498b-941d-c4a98e1d561d"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

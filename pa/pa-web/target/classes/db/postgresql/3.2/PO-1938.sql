@@ -1,0 +1,2 @@
+--Clearing out properties here so csm.properties' values are always used.
+update csm_application set update_date = now(), database_url = null, database_password = null, database_user_name = null, database_dialect = null, database_driver = null where application_name = 'pa';

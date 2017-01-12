@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib"/>
+	<classpathentry kind="lib" path="lib/pa-ejb.jar"/>
+	<classpathentry kind="lib" path="lib/pa-commons.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-jdbc3-8.3-603.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations-3.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/persistence-api-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-ftp-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-compress-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jsch-0.1.49.jar"/>
+	<classpathentry kind="lib" path="lib/nci-commons-ctrp-core-1.4.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/po-services-3.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/jollyday-0.4.5.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-1.6.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

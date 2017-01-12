@@ -1,0 +1,4 @@
+/* Clear the link-url some browsers print after the link. */
+a[href]:after {
+	content: "" !important;
+}

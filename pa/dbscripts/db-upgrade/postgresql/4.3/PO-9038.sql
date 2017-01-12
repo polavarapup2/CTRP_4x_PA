@@ -1,0 +1,1 @@
+alter table study_outcome_measure ALTER COLUMN description TYPE varchar(999);

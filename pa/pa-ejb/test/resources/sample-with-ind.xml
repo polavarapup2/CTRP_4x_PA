@@ -1,0 +1,200 @@
+<clinical_study nct-id="NCT00287833" ctep-id="" dcp-id="N01-CN-25118" partial_upload="true">
+  <id_info>
+    <provider_name>National Cancer Institute</provider_name>
+    <provider_study_id>CDR0000429594</provider_study_id>
+    <org_name>NCI</org_name>
+    <org_study_id>CDR0000429594</org_study_id>
+    <secondary_id>UPCC-706366</secondary_id>
+  </id_info>
+  <is_ind_study>yes</is_ind_study>
+  <ind_info>
+    <ind_grantor>CDER</ind_grantor>
+    <ind_number>34671</ind_number>
+    <ind_serial_number></ind_serial_number>
+  </ind_info>
+  <brief_title>Bowman-Birk Inhibitor Concentrate in Preventing Cancer in Healthy Men</brief_title>
+  <official_title>Phase I Single Dose Safety and Pharmacokinetic Study of Bowman Birk Inhibitor Concentrate, Delivered as an Orange Juice Suspension to Healthy Male Volunteers Between 18 and 65 Years of Age</official_title>
+<lead_org/>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Abramson Cancer Center of the University of Pennsylvania</agency>
+    </lead_sponsor>
+    <collaborator>
+      <agency>NCI</agency>
+    </collaborator>
+  </sponsors>
+  <oversight_info>
+    <regulatory_authority/>
+    <irb_info>
+      <name/>
+      <affiliation/>
+      <phone/>
+      <phone_ext/>
+      <email/>
+      <full_address/>
+    </irb_info>
+  </oversight_info>
+  <brief_summary>
+    <textblock>RATIONALE: Chemoprevention is the use of certain drugs to keep cancer from forming, growing, or coming back. The use of Bowman-Birk inhibitor concentrate may prevent cancer.
+
+PURPOSE: This randomized phase I trial is studying the side effects and best dose of Bowman-Birk inhibitor concentrate in preventing cancer in healthy men.</textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>OBJECTIVES: 
+Primary
+  * Determine the toxic effects of Bowman-Birk inhibitor concentrate, administered as an orange juice suspension, in healthy male participants.
+  * Determine a safe dose range of this drug in these participants.
+  * Determine a recommended phase II dose of this drug in these participants.
+
+Secondary
+  * Determine the pharmacokinetics of this drug in these participants.
+
+OUTLINE: This is a randomized, placebo-controlled, double-blind, dose-escalation study. Participants are sequentially assigned to 1 of 4 dose level cohorts. One participant in each dose level cohort is randomized to receive placebo.
+
+Participants receive 1 of 4 escalating doses of oral Bowman-Birk inhibitor concentrate or placebo, as an orange juice suspension, on day 1.
+
+After completion of study treatment, participants are followed periodically for 4 weeks.
+
+
+PROJECTED ACCRUAL: A total of 20 participants (5 per dose level cohort) will be accrued for this study.
+
+</textblock>
+  </detailed_description>
+  <overall_status>Completed</overall_status>
+  <start_date>2006-01-02</start_date>
+  <primary_compl_date>2007-04-24</primary_compl_date>
+  <primary_compl_date_type>Actual</primary_compl_date_type>
+  <phase>1</phase>
+  <study_design>
+    <study_type>interventional</study_type>
+    <interventional_design>
+      <interventional_subtype>Prevention</interventional_subtype>
+      <allocation>Randomized</allocation>
+      <masking>Double Blind</masking>
+      <control>Placebo Control</control>
+      <assignment/>
+      <endpoint/>
+      <number_of_arms/>
+    </interventional_design>
+  </study_design>
+  <primary_outcome>
+    <outcome_measure>Safety as measured by NCI Common Toxicity Criteria</outcome_measure>
+    <outcome_safety_issue>yes</outcome_safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <outcome_measure>Pharmacokinetics</outcome_measure>
+    <outcome_safety_issue>no</outcome_safety_issue>
+  </secondary_outcome>
+<enrollment>20</enrollment>
+  <enrollment_type>Anticipated</enrollment_type>
+  <condition cdr-id="CDR0000038974">unspecified adult solid tumor, protocol specific</condition>  <intervention cdr-id='CDR0000433272'>
+    <intervention_type>Dietary Supplement</intervention_type>
+    <intervention_name>Bowman-Birk inhibitor concentrate</intervention_name>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>DISEASE CHARACTERISTICS: 
+  * Healthy volunteer
+
+PATIENT CHARACTERISTICS: 
+Age
+  * 18 to 65
+
+Sex
+  * Male
+
+Performance status
+  * ECOG 0-2
+
+Life expectancy
+  * Not specified
+
+Hematopoietic
+  * RBC normal
+  * WBC ≥ 3,000/mm^3
+  * Platelet count normal
+  * Hemoglobin normal
+  * Hematocrit normal
+
+Hepatic
+  * ALT and AST normal
+  * Bilirubin normal
+
+Renal
+  * Creatinine normal
+
+Cardiovascular
+  * No history of heart disease
+  * EKG normal
+
+Gastrointestinal
+  * No history of pancreatitis or obstruction of pancreatic ducts
+  * No history of pancreatic cancer or pancreatic adenoma
+
+Other
+  * Amylase normal
+  * Lipase normal
+  * Cholesterol normal
+  * Triglycerides normal
+  * Serum glucose ± 10% of normal
+  * Within 15% of ideal body weight
+  * No history of chronic medical condition
+  * No history of excessive alcohol consumption (i.e., &gt; 2 alcoholic beverages per day on average)
+  * No history of amyloidosis
+  * Non-smoker
+
+      - Former smokers are eligible provided they have not smoked within the past 3 months
+  * No history of medical condition that would influence gastrointestinal uptake of the study drug
+  * No history of diabetes mellitus
+  * No allergy or prior adverse reaction to soybeans
+  * Not a vegetarian
+  * No diagnosis of cancer within the past 5 years except nonmelanoma skin cancer
+  * No evidence of other life-threatening disease
+  * No evidence of psychiatric problems
+
+PRIOR CONCURRENT THERAPY: 
+Biologic therapy
+  * Not specified
+
+Chemotherapy
+  * More than 12 months since prior chemotherapy
+
+Endocrine therapy
+  * Not specified
+
+Radiotherapy
+  * Not specified
+
+Surgery
+  * Not specified
+
+Other
+  * More than 1 month since prior experimental drugs
+  * More than 3 days since prior consumption of alcoholic beverages
+  * More than 2 weeks since prior and no concurrent regular use (i.e., &gt; 3 times/week) of nonsteroidal anti-inflammatory drugs
+  * More than 2 weeks since prior multivitamin tablets (or other vitamin supplements) of &gt; 2 per day
+  * No more than 2 multivitamin tablets (or other vitamin supplements) per day during study participation
+  * No more than 1 serving of tofu, soy milk, or other primarily soy-based food per day
+</textblock>
+    </criteria>
+    <healthy_volunteers>yes</healthy_volunteers>
+    <expected_enrollment>20</expected_enrollment>
+    <gender>Male</gender>
+    <minimum_age>18</minimum_age>
+    <maximum_age>65</maximum_age>
+  </eligibility>
+  <overall_official ctep-id="">
+    <first_name>Robert</first_name>
+    <middle_name>A.</middle_name>
+    <last_name>Lustig</last_name>
+    <degrees>MD</degrees>
+    <role>Principal Investigator</role>
+    <affiliation>Abramson Cancer Center of the University of Pennsylvania</affiliation>
+  </overall_official>
+  <link>
+    <url>http://cancer.gov/clinicaltrials/UPCC-706366</url>
+    <description>Clinical trial summary from the National Cancer Institute's PDQ® database</description>
+  </link>
+  <keyword cdr-id="CDR0000038974">unspecified adult solid tumor, protocol specific</keyword>
+  <verification_date>2006-11-05</verification_date>
+</clinical_study>

@@ -1,0 +1,1 @@
+alter table study_overall_status add addl_comments varchar(2000);

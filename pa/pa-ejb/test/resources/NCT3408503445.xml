@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clinical_study>
+  <!-- This xml conforms to an XML Schema at:
+    http://clinicaltrials.gov/ct2/html/images/info/public.xsd
+ and an XML DTD at:
+    http://clinicaltrials.gov/ct2/html/images/info/public.dtd -->
+  <required_header>
+    <download_date>ClinicalTrials.gov processed this data on July 04, 2013</download_date>
+    <link_text>Link to the current ClinicalTrials.gov record.</link_text>
+    <url>http://clinicaltrials.gov/show/NCT3408503445</url>
+  </required_header>
+  <id_info>
+    <org_study_id>REP0210</org_study_id>
+    <nct_id>NCT3408503445</nct_id>
+  </id_info>
+  <brief_title>Pilot Study to Evaluate the Safety and Biological Effects of Orally Administered Reparixin in Early Breast Cancer Patients</brief_title>
+  <official_title>A Single Arm, Preoperative, Pilot Study to Evaluate the Safety and Biological Effects of Orally Administered Reparixin in Early Breast Cancer Patients Who Are Candidates for Surgery</official_title>
+  <sponsors>
+    <lead_sponsor>
+      <agency>Sponsor Inc.</agency>
+      <agency_class>Industry</agency_class>
+    </lead_sponsor>
+    <collaborator>
+        <agency>National Institutes of Health (NIH)</agency>
+        <agency_class>NIH</agency_class>
+    </collaborator>
+  </sponsors>
+  <source>Sponsor Inc.</source>
+  <oversight_info>
+    <authority>United States: Food and Drug Administration</authority>
+    <has_dmc>Yes</has_dmc>
+  </oversight_info>
+  <brief_summary>
+    <textblock>
+      cancer investigating use of reparixin as single agent in the time period between clinical
+    </textblock>
+  </brief_summary>
+  <detailed_description>
+    <textblock>
+      According to the cancer stem cell (CSC) model, tumors are organized in a cellular hierarchy
+    </textblock>
+  </detailed_description>
+  <overall_status>Active, not recruiting</overall_status>
+  <start_date>February 2013</start_date>
+  <completion_date type="Anticipated">September 2014</completion_date>
+  <primary_completion_date type="Anticipated">February 2014</primary_completion_date>
+  <phase>Phase 2</phase>
+  <study_type>Interventional</study_type>
+  <study_design>Endpoint Classification:  Safety/Efficacy Study, Intervention Model:  Single Group Assignment, Masking: Double Blind (Subject, Caregiver), Primary Purpose:  Treatment</study_design>
+  <primary_outcome>
+    <measure>Markers of Cancer Stem Cells (CSCs) in the primary tumor and the tumoral microenvironment</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>CSCs will be measured in tissue samples by techniques that may include: ALDEFLUOR assay and assessment of CD44/CD24 by flow cytometry or examination of RNA transcripts by RT-PCR, aldehyde dehydrogenase 1 (ALDH1), CD44/CD24 and epithelial mesenchymal markers (Snail, Twist, Notch) by immunohistochemistry (IHC).</description>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>Serine-threonine protein kinase (AKT)</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>Focal adhesion kinase (FAK)</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>CXCR1 levels</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>interleukin-1beta [IL-1beta]</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>interleukin-6 [IL-6]</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>tumor necrosis factor-alpha [TNF-alfa]</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>granulocyte macrophage colony stimulating factor [GM-CSF]</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>IL-8</measure>
+    <time_frame>Evaluation at day 0 and day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <primary_outcome>
+    <measure>CD4, CD8, NK and Macrophages</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </primary_outcome>
+  <secondary_outcome>
+    <measure>PK profile of the treatment</measure>
+    <time_frame>Day 1; Day 21</time_frame>
+    <safety_issue>No</safety_issue>
+    <description>Day 1: Cmax, AUCinf (area under the concentration time curve from time 0 extrapolated to infinity calculated by adding Clast/LambdaZ to AUClast [area under the concentration time curve calculated by the linear trapezoidal rule - time 0 to last sample with a quantifiable concentration Clast at time tlast]), AUC0-8 (area under the concentration time curve from time 8 hours post dosing), tmax (time to maximum plasma concentration), LambdaZ (terminal rate constant), t1/2 (calculated as (ln 2)/LambdaZ) and CL/F (apparent oral clearance for DF 1681Y only).
+Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, and CL/F.</description>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Vital signs (Blood Pressure, Heart rate, Body Temperature)</measure>
+    <time_frame>Day 0 and within 28 days of last dose</time_frame>
+    <safety_issue>Yes</safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Hematology parameters (hemoglobin, white blood cell (WBC) and differential count, platelets)</measure>
+    <time_frame>Days 1, 7, 14 and 21 and at the off-treatment visit</time_frame>
+    <safety_issue>Yes</safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Clinical chemistry parameters (sodium, potassium, calcium, serum creatinine, total protein, albumin, aspartate aminotransferase [AST], alanine aminotransferase [ALT], alkaline phosphatase [ALP], urea, total bilirubin)</measure>
+    <time_frame>Days 1, 7, 14 and 21 and at the off treatment visit</time_frame>
+    <safety_issue>Yes</safety_issue>
+  </secondary_outcome>
+  <secondary_outcome>
+    <measure>Urinalysis (pH, specific gravity and dipstick)</measure>
+    <time_frame>up to 14 days prior to treatment; up to 28 days after treatment</time_frame>
+    <safety_issue>Yes</safety_issue>
+  </secondary_outcome>
+  <other_outcome>
+    <measure>Markers of angiogenesis (CD31 staining)</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </other_outcome>
+  <other_outcome>
+    <measure>Tumor infiltrating leukocytes (CD4, CD8, NK and macrophages)</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </other_outcome>
+  <other_outcome>
+    <measure>Autophagy (P62 and LC3 by IHC)</measure>
+    <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
+  </other_outcome>
+  <number_of_arms>1</number_of_arms>
+  <enrollment type="Anticipated">40</enrollment>
+  <condition>Breast Cancer</condition>
+  <arm_group>
+    <arm_group_label>Treated patients</arm_group_label>
+    <arm_group_type>Experimental</arm_group_type>
+    <description>Patients eligible will be treated with Reparixin as add-in monotherapy</description>
+  </arm_group>
+  <intervention>
+    <intervention_type>Drug</intervention_type>
+    <intervention_name>Reparixin</intervention_name>
+    <description>1000 mg Oral Reparixin t.i.d. for 21 consecutive days prior to surgery</description>
+    <arm_group_label>Treated patients</arm_group_label>
+  </intervention>
+  <eligibility>
+    <criteria>
+      <textblock>
+        Inclusion Criteria:
+
+          -  Female aged &gt; 18 years.
+
+          -  Patients with histologically proven clinical stage II and IIa operable breast cancer,
+             with clinical tumor diameter of at least 2 cm.
+
+          -  Zubrod (Eastern Co-operative Oncology Group [ECOG]) Performance Status (PS) of 0-1.
+
+          -  No prior treatment by surgery, radiotherapy, hormone therapy e.g. TAMOXIFEN® or
+             RALOXIFEN® for prevention or chemotherapy.
+
+          -  Scheduled to undergo definitive local surgery for breast cancer.
+
+          -  Patients must be willing to undergo two mandatory tumor biopsies (pre and post
+             therapy) that are not required for standard care. A sample of tumor tissue removed
+             during surgery will also be collected for analysis.
+
+          -  Patients must be able to swallow and retain oral medication (intact tablet).
+
+          -  Able to undergo all screening assessments outlined in the protocol after giving
+             informed consent.
+
+          -  Adequate organ function (defined by the following parameters):
+
+               1. Serum creatinine &lt; 140 μmol/L or creatinine clearance &gt; 60 mL/min.
+
+               2. Serum hemoglobin &gt; 9 g/dL; absolute neutrophil count &gt; 1.5 x 109/L; platelets &gt;
+                  100 x 109/L.
+
+               3. Serum bilirubin &lt; upper normal limit (UNL).
+
+               4. Serum alanine aminotransferase (ALT), aspartate aminotransferase (AST) ≤ UNL;
+                  alkaline phosphatase (ALP) (liver isoenzyme fraction) ≤ UNL; albumin within
+                  normal limits.
+
+          -  Documented hormone receptor (ER and progesterone receptor) and HER-2- status.
+
+          -  No known hepatitis B virus (unless due to immunization), hepatitis C virus, human
+             immune deficiency virus-I and  II positive status.
+
+        Exclusion Criteria:
+
+          -  Male.
+
+          -  Pregnancy or lactation or unwillingness to use adequate method of birth control.
+
+          -  Any other breast cancer types including inflammatory form.
+
+          -  Prior surgery to the breast area or primary axillary dissection.
+
+          -  Prior treatment for breast cancer.
+
+          -  Use of an investigational drug within 30 days preceding the first dose of study
+             medication.
+
+          -  Any prior or current cancer, except in situ uterine carcinoma or basocellular
+             cutaneous cancer considered as definitively cured.
+
+          -  Any associated medical condition considered incompatible with the study, e.g.
+             cardiac, renal, medullar, respiratory or hepatic insufficiency.
+
+          -  Neurological or psychiatric disorders which may influence understanding of study and
+             informed consent procedures.
+
+          -  Active or uncontrolled infection.
+
+          -  Malabsorption syndrome, disease significantly affecting gastrointestinal function.
+
+          -  Hypersensitivity to:
+
+               1. ibuprofen or to more than one non-steroidal anti-inflammatory drug;
+
+               2. medications belonging to the class of sulfonamides, such as sulfamethazine,
+                  sulfamethoxazole, sulfasalazine, nimesulide or celecoxib.
+      </textblock>
+    </criteria>
+    <gender>Female</gender>
+    <minimum_age>18 Years</minimum_age>
+    <maximum_age>N/A</maximum_age>
+    <healthy_volunteers>No</healthy_volunteers>
+  </eligibility>
+  <overall_official>
+    <last_name>Lori J Goldstein, MD</last_name>
+    <role>Principal Investigator</role>
+    <affiliation>Fox Chase Cancer Center</affiliation>
+  </overall_official>
+  <overall_official>
+    <last_name>Jenny C Chang, MD</last_name>
+    <role>Principal Investigator</role>
+    <affiliation>The Methodist Hospital Research Institute</affiliation>
+  </overall_official>
+  <overall_official>
+    <last_name>Joseph Sparano, MD</last_name>
+    <role>Principal Investigator</role>
+    <affiliation>Montefiore Medical Center</affiliation>
+  </overall_official>
+  <overall_official>
+    <last_name>Courtney Vito, MD</last_name>
+    <role>Principal Investigator</role>
+    <affiliation>City of Hope Hospital</affiliation>
+  </overall_official>
+  <overall_official>
+    <last_name>Raymond Perez, MD</last_name>
+    <role>Principal Investigator</role>
+    <affiliation>University of Kansas Cancer Center</affiliation>
+  </overall_official>
+  <overall_contact>
+    <last_name>Pieradelchi Ruffini, MD</last_name>
+    <phone>+390258383500</phone>
+    <email>pieradelchi.ruffini@dompe.it</email>
+  </overall_contact>
+  <location>
+    <facility>
+      <name>City of Hope Hospital, 1500 Duarte Road</name>
+      <address>
+        <city>Duarte</city>
+        <state>California</state>
+        <zip>91010</zip>
+        <country>United States</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Courtney Vito, MD</last_name>
+    </contact>
+    <investigator>
+      <last_name>Courtney Vito, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
+  </location>
+  <location>
+    <facility>
+      <name>University of Kansas Cancer Center, 4350 Shawnee Mission Pkwy, Suite 1500, Mailstop 6004</name>
+      <address>
+        <city>Fairway</city>
+        <state>Kansas</state>
+        <zip>66205</zip>
+        <country>United States</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Raymond Perez, MD</last_name>
+      <email>rperez3@kumc.edu</email>
+    </contact>
+    <investigator>
+      <last_name>Raymond Perez, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
+  </location>
+  <location>
+    <facility>
+      <name>Montefiore Medical Center, MMC Medical Park at Eastchester</name>
+      <address>
+        <city>Bronx</city>
+        <state>New York</state>
+        <zip>10461</zip>
+        <country>United States</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Joseph Sparano, MD</last_name>
+      <email>jsparano@montefiore.org</email>
+    </contact>
+    <investigator>
+      <last_name>Joseph Sparano, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
+  </location>
+  <location>
+    <facility>
+      <name>Fox Chase Cancer Center</name>
+      <address>
+        <city>Philadelphia</city>
+        <state>Pennsylvania</state>
+        <zip>19111</zip>
+        <country>United States</country>
+      </address>
+    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Lori J Goldstein MD, MD</last_name>
+      <email>Lori.Goldstein@fccc.edu</email>
+    </contact>
+    <investigator>
+      <last_name>Lori J Goldstein, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
+  </location>
+  <location>
+    <facility>
+      <name>The Methodist Hospital Research Institute</name>
+      <address>
+        <city>Houston</city>
+        <state>Texas</state>
+        <zip>77030</zip>
+        <country>United States</country>
+      </address>
+    </facility>
+    <status>Recruiting</status>
+    <contact>
+      <last_name>Jenny C Chang, MD</last_name>
+      <email>jcchang@tmhs.org</email>
+    </contact>
+    <investigator>
+      <last_name>Jenny C Chang, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
+  </location>
+  <location_countries>
+    <country>United States</country>
+  </location_countries>
+  <verification_date>May 2013</verification_date>
+  <lastchanged_date>May 21, 2013</lastchanged_date>
+  <firstreceived_date>April 18, 2013</firstreceived_date>
+  <responsible_party>
+    <responsible_party_type>Principal Investigator</responsible_party_type>
+    <investigator_affiliation>Children's Hospital Boston</investigator_affiliation>
+    <investigator_full_name>Lori J Goldstein, MD</investigator_full_name>
+    <investigator_title>Associate professor of pediatrics</investigator_title>
+  </responsible_party>
+  <keyword>Cancer Stem Cells</keyword>
+  <keyword>Novel targeted therapy</keyword>
+  <keyword>CXCR1/2 Inhibitors</keyword>
+  <is_fda_regulated>Yes</is_fda_regulated>
+  <is_section_801>Yes</is_section_801>
+  <has_expanded_access>Yes</has_expanded_access>
+  <condition_browse>
+    <!-- CAUTION:  The following MeSH terms are assigned with an imperfect algorithm  -->
+    <mesh_term>Breast Neoplasms</mesh_term>
+  </condition_browse>
+  <!-- Results have not yet been posted for this study                                -->
+</clinical_study>

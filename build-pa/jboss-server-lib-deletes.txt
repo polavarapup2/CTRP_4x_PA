@@ -1,0 +1,10 @@
+clm-*.jar
+coppa-commons-*.jar
+ehcache-*.jar
+iso-datatypes-*.jar
+jdom-*.jar
+nci-commons-core-*.jar
+po-services-client-*.jar
+postgresql-jdbc3-*.jar
+security-*.jar
+commons-httpclient*.jar

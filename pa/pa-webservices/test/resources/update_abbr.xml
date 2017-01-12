@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:AbbreviatedTrialUpdate xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">
+	<tns:clinicalTrialsDotGovTrialID>NCT234234234</tns:clinicalTrialsDotGovTrialID>
+	<tns:irbApprovalDocument filename="irb_u.pdf">dGVzdA==</tns:irbApprovalDocument>
+	<tns:informedConsentDocument filename="consent_u.pdf">dGVzdA==</tns:informedConsentDocument>
+	<tns:otherDocument filename="other_u.pdf">dGVzdA==</tns:otherDocument>
+</tns:AbbreviatedTrialUpdate>

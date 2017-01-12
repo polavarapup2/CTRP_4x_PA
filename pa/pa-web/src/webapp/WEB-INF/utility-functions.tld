@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <description>CTRP Utility Functions</description>
+    <display-name>CTRP Utility Functions</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>ctrp</short-name>
+    <uri>http://ctrp.nci.nih.gov/taglib/utility-functions</uri>
+
+    <function>
+        <description>makes a string safe to be used inside a quoted javascript string, dealing with quotes, tabs, newlines, etc</description>
+        <name>escapeJavaScript</name>
+        <function-class>org.apache.commons.lang.StringEscapeUtils</function-class>
+        <function-signature>java.lang.String escapeJavaScript(java.lang.String)</function-signature>
+        <example>'${func:escapeJavaScript(somVal)}'</example>
+    </function>
+
+    <function>
+        <description>Abbreviates a String using ellipses</description>
+        <name>abbreviate</name>
+        <function-class>org.apache.commons.lang.StringUtils</function-class>
+        <function-signature>java.lang.String abbreviate(java.lang.String, int)</function-signature>
+        <example>'${func:abbreviate(string, maxWidth)}'</example>
+    </function>
+    
+    <function>
+        <description>Concatenates Strings using a separator</description>
+        <name>join</name>
+        <function-class>org.apache.commons.lang.StringUtils</function-class>
+        <function-signature>java.lang.String join(java.util.Collection, java.lang.String)</function-signature>
+        <example>'${func:join(stringCollection, separator)}'</example>
+    </function>
+
+    <function>
+        <description>Converts all the whitespace separated words in a String into capitalized words, that is each word is made up of a titlecase character and then a series of lowercase characters.</description>
+        <name>capitalizeFully</name>
+        <function-class>org.apache.commons.lang.WordUtils</function-class>
+        <function-signature>java.lang.String capitalizeFully(java.lang.String)</function-signature>
+        <example>'${func:capitalizeFully(str)}'</example>
+    </function>
+
+    <function>
+        <description>Formats a date/time into a specific pattern.</description>
+        <name>format</name>
+        <function-class>org.apache.commons.lang.time.DateFormatUtils</function-class>
+        <function-signature>java.lang.String format(java.util.Date, java.lang.String)</function-signature>
+        <example>N/A</example>
+    </function>
+
+    
+</taglib>

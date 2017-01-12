@@ -1,0 +1,1 @@
+update study_otheridentifiers set identifier_name='Study Protocol Other Identifier' where root='2.16.840.1.113883.19' and identifier_name is null;

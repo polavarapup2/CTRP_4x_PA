@@ -1,0 +1,2 @@
+INSERT INTO CSM_GROUP (GROUP_NAME, GROUP_DESC, APPLICATION_ID, UPDATE_DATE) VALUES ('ResultsAbstractor', 'Results reporting and tracking abstractor role', (select application_id from csm_application where application_name = 'pa'),current_date);
+insert into CSM_REMOTE_GROUP (GROUP_ID, APPLICATION_ID, GRID_GROUPER_URL, GRID_GROUPER_GROUP_NAME) values ((select group_id from csm_group where group_name = 'ResultsAbstractor'), (select application_id from csm_application where application_name = 'pa'), '@gridgrouper.url@', 'Organization:CBIIT:CTRP-COPPA:PA:ResultsAbstractor');

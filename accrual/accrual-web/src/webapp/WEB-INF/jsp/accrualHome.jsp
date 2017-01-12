@@ -1,0 +1,1 @@
+<% response.sendRedirect("/accrual/protected/welcome.action"); %>

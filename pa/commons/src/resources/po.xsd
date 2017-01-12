@@ -1,0 +1,1456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="gov.nih.nci.po.webservices.types"
+        xmlns:tns="gov.nih.nci.po.webservices.types" elementFormDefault="qualified"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
+        xmlns:annox="http://annox.dev.java.net"
+        xmlns:ja="http://annox.dev.java.net/org.codehaus.jackson.annotate"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+                        http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+        jaxb:extensionBindingPrefixes="xjc annox">
+
+	<annotation>
+		<appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="gov.nih.nci.po.webservices.types" />
+			</jaxb:schemaBindings>
+		</appinfo>
+	</annotation>
+
+	<simpleType name="EntityStatus">
+		<annotation>
+			<documentation>List of all statuses that a PO entity can be in
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="PENDING" />
+			<enumeration value="ACTIVE" />
+			<enumeration value="NULLIFIED" />
+			<enumeration value="INACTIVE" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ContactType">
+		<annotation>
+			<documentation>Type of contact information
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="EMAIL" />
+			<enumeration value="PHONE" />
+			<enumeration value="FAX" />
+			<enumeration value="TTY" />
+			<enumeration value="URL" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="Contact">
+		<annotation>
+			<documentation>A piece of contact information</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="type" type="tns:ContactType" use="required" />
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<complexType name="Address">
+		<annotation>
+			<documentation>An address</documentation>
+		</annotation>
+		<sequence>
+			<element name="line1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="254" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="line2" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="254" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="city">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="50" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="stateOrProvince" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="50" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="country" type="tns:CountryISO-3166-1-alpha-3-Code" />
+			<element name="postalcode" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Entity" abstract="true">
+		<annotation>
+			<documentation>Base type for all PO entities</documentation>
+		</annotation>
+		<sequence>
+			<element name="id" type="long" minOccurs="0">
+				<annotation>
+					<documentation>Unique numeric identifier of a PO entity
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="EntityWithStatus" abstract="true">
+		<annotation>
+			<documentation>Entity with a status</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Entity">
+				<sequence>
+					<element name="status" type="tns:EntityStatus">
+						<annotation>
+							<documentation>Current status of a PO entity
+							</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Person">
+		<annotation>
+			<documentation>A human being</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:EntityWithStatus">
+				<sequence>
+					<element name="prefix" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="10" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="firstName">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="50" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="middleName" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="50" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="lastName">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="50" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="suffix" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="10" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="ctepId" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="255" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="address" type="tns:Address" />
+					<element name="contact" type="tns:Contact" maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Role" abstract="true">
+		<annotation>
+			<documentation>A role that a person or an organization can play. A
+				role always involves an organization, either as a role player or as
+				a role scoper.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:EntityWithStatus">
+				<sequence>
+					<element name="organizationId" type="long" />
+					<element name="address" type="tns:Address" minOccurs="0"
+						maxOccurs="unbounded" />
+					<element name="contact" type="tns:Contact" minOccurs="0"
+						maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="PersonRole" abstract="true">
+		<annotation>
+            <appinfo>
+                <annox:annotate>                    
+                     <ja:JsonTypeInfo use="CLASS" include="PROPERTY" property="@class"/>
+                </annox:annotate>                
+            </appinfo>
+            <documentation>A role that a person plays in an organization
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="tns:Role">
+                <sequence>
+                    <element name="personId" type="long" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+	<complexType name="HealthCareProvider">
+		<annotation>
+			<documentation>Health Care Provider role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:PersonRole">
+				<sequence>
+					<element name="license" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="255" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ClinicalResearchStaff">
+		<annotation>
+			<documentation>Clinical Research Staff role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:PersonRole">
+				<sequence />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="OrganizationalContactType">
+		<annotation>
+			<documentation>Organizational Contact Type
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="IRB" />
+			<enumeration value="Responsible Party" />
+			<enumeration value="Site" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="OrganizationalContact">
+		<annotation>
+			<documentation>Organizational Contact role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:PersonRole">
+				<sequence>
+					<element name="title" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="255" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="type" type="tns:OrganizationalContactType" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Organization">
+		<annotation>
+			<documentation>An organization, such as a Cancer Center
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:EntityWithStatus">
+				<sequence>
+					<element name="name">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="160" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="ctepId" minOccurs="0">
+                        <simpleType>
+                            <restriction base="string">
+                                <maxLength value="255" />
+                                <minLength value="1" />
+                            </restriction>
+                        </simpleType>
+                    </element>
+					<element name="address" type="tns:Address" />
+					<element name="contact" type="tns:Contact" maxOccurs="unbounded"
+						minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OrganizationRole" abstract="true">
+		<annotation>
+		    <appinfo>
+                <annox:annotate>                    
+                     <ja:JsonTypeInfo use="CLASS" include="PROPERTY" property="@class"/>
+                </annox:annotate>                
+            </appinfo>
+			<documentation>A role that an organization plays within the cancer
+				research community
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Role">
+				<sequence />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="HealthCareFacility">
+		<annotation>
+			<documentation>Health Care Facility role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:OrganizationRole">
+				<sequence>
+					<element name="name" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="160" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="ctepId" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="255" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ResearchOrganization">
+		<annotation>
+			<documentation>Research Organization role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:OrganizationRole">
+				<sequence>
+					<element name="name" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="160" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="ctepId" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="255" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="type" type="tns:ResearchOrganizationType"
+						minOccurs="0" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="ResearchOrganizationType">
+		<annotation>
+			<documentation>Research Organization Type: CCR-Cancer Center, DCY-Drug Company, CLC-Clinical Center, 
+			CGP-Cooperative Group, CSM-Consortia, NWK-Network, RSB-Research Base, COP-CCOP, NCP-NCP, 
+			P2C-Phase II Contract, NCTN-National Clinical Trials Network
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="CCR" />
+			<enumeration value="DCY" />
+			<enumeration value="CLC" />
+			<enumeration value="CGP" />
+			<enumeration value="CSM" />
+			<enumeration value="NWK" />
+			<enumeration value="RSB" />
+			<enumeration value="COP" />
+			<enumeration value="NCP" />
+			<enumeration value="P2C" />
+			<enumeration value="NCTN" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="OversightCommittee">
+		<annotation>
+			<documentation>Oversight Committee role</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:OrganizationRole">
+				<sequence>
+					<element name="type" type="tns:OversightCommitteeType" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="OversightCommitteeType">
+		<annotation>
+			<documentation>Oversight Committee Type
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="Institutional Review Board (IRB)" />
+			<enumeration value="Ethics Committee" />
+			<enumeration value="Research Ethics Board" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="Family">
+		<annotation>
+			<documentation>Organization Family, a group of related organizations
+				under the same umbrella
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:EntityWithStatus">
+				<sequence>
+					<element name="name">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="160" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="startDate" type="date" />
+					<element name="p30SerialNumber" type="string" minOccurs="0"/>
+					<element name="member" type="tns:FamilyMember" minOccurs="0"
+						maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FamilyMember">
+		<annotation>
+			<documentation>Represents a member-of relationship of an organization
+				to a family
+			</documentation>
+		</annotation>
+		<sequence>
+		    <element name="familyId" type="long" />
+			<element name="organizationId" type="long" />
+			<element name="type" type="tns:FamilyMemberType" />
+			<element name="startDate" type="date" />
+			<element name="endDate" type="date" minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<simpleType name="FamilyMemberType">
+		<annotation>
+			<documentation>Family Member Type
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="ORGANIZATIONAL" />
+			<enumeration value="CONTRACTUAL" />
+			<enumeration value="AFFILIATION" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="FamilyMemberRelationship">
+		<annotation>
+			<documentation>Represents a hierarchical relationship between any two
+				members of a family. "organizationId" is a
+				PEER|PARENT|CHILD|DIVISION|SUBDIVISION|DEPARTMENT|SUBDEPARTMENT of
+				"relatedToOrganizationId"
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Entity">
+				<sequence>
+					<element name="familyId" type="long">
+						<annotation>
+							<documentation>Family ID</documentation>
+						</annotation>
+					</element>
+					<element name="organizationId" type="long">
+						<annotation>
+							<documentation>The 'From' end of the relationship.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="relatedToOrganizationId" type="long">
+						<annotation>
+							<documentation>The 'To' end of the relationship.</documentation>
+						</annotation>
+					</element>
+					<element name="type" type="tns:FamilyMemberRelationshipType" />
+					<element name="startDate" type="date" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="FamilyMemberRelationshipType">
+		<annotation>
+			<documentation>Type of a hierarchical relationship between two
+				members of a single family.
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="PEER" />
+			<enumeration value="PARENT" />
+			<enumeration value="CHILD" />
+			<enumeration value="DIVISION" />
+			<enumeration value="SUBDIVISION" />
+			<enumeration value="DEPARTMENT" />
+			<enumeration value="SUBDEPARTMENT" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CountryISO-3166-1-alpha-3-Code">
+		<annotation>
+			<documentation>ISO 3166-1 alpha-3 codes are three-letter country
+				codes defined in ISO 3166-1
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="AFG" />
+			<enumeration value="ALA" />
+			<enumeration value="ALB" />
+			<enumeration value="DZA" />
+			<enumeration value="ASM" />
+			<enumeration value="AND" />
+			<enumeration value="AGO" />
+			<enumeration value="AIA" />
+			<enumeration value="ATA" />
+			<enumeration value="ATG" />
+			<enumeration value="ARG" />
+			<enumeration value="ARM" />
+			<enumeration value="ABW" />
+			<enumeration value="AUS" />
+			<enumeration value="AUT" />
+			<enumeration value="AZE" />
+			<enumeration value="BHS" />
+			<enumeration value="BHR" />
+			<enumeration value="BGD" />
+			<enumeration value="BRB" />
+			<enumeration value="BLR" />
+			<enumeration value="BEL" />
+			<enumeration value="BLZ" />
+			<enumeration value="BEN" />
+			<enumeration value="BMU" />
+			<enumeration value="BTN" />
+			<enumeration value="BOL" />
+			<enumeration value="BIH" />
+			<enumeration value="BWA" />
+			<enumeration value="BVT" />
+			<enumeration value="BRA" />
+			<enumeration value="IOT" />
+			<enumeration value="BRN" />
+			<enumeration value="BGR" />
+			<enumeration value="BFA" />
+			<enumeration value="BDI" />
+			<enumeration value="KHM" />
+			<enumeration value="CMR" />
+			<enumeration value="CAN" />
+			<enumeration value="CPV" />
+			<enumeration value="CYM" />
+			<enumeration value="CAF" />
+			<enumeration value="TCD" />
+			<enumeration value="CHL" />
+			<enumeration value="CHN" />
+			<enumeration value="CXR" />
+			<enumeration value="CCK" />
+			<enumeration value="COL" />
+			<enumeration value="COM" />
+			<enumeration value="COG" />
+			<enumeration value="COD" />
+			<enumeration value="COK" />
+			<enumeration value="CRI" />
+			<enumeration value="CIV" />
+			<enumeration value="HRV" />
+			<enumeration value="CUB" />
+			<enumeration value="CYP" />
+			<enumeration value="CZE" />
+			<enumeration value="DNK" />
+			<enumeration value="DJI" />
+			<enumeration value="DMA" />
+			<enumeration value="DOM" />
+			<enumeration value="ECU" />
+			<enumeration value="EGY" />
+			<enumeration value="SLV" />
+			<enumeration value="GNQ" />
+			<enumeration value="ERI" />
+			<enumeration value="EST" />
+			<enumeration value="ETH" />
+			<enumeration value="FLK" />
+			<enumeration value="FRO" />
+			<enumeration value="FJI" />
+			<enumeration value="FIN" />
+			<enumeration value="FRA" />
+			<enumeration value="GUF" />
+			<enumeration value="PYF" />
+			<enumeration value="ATF" />
+			<enumeration value="GAB" />
+			<enumeration value="GMB" />
+			<enumeration value="GEO" />
+			<enumeration value="DEU" />
+			<enumeration value="GHA" />
+			<enumeration value="GIB" />
+			<enumeration value="GRC" />
+			<enumeration value="GRL" />
+			<enumeration value="GRD" />
+			<enumeration value="GLP" />
+			<enumeration value="GUM" />
+			<enumeration value="GTM" />
+			<enumeration value="GGY" />
+			<enumeration value="GIN" />
+			<enumeration value="GNB" />
+			<enumeration value="GUY" />
+			<enumeration value="HTI" />
+			<enumeration value="HMD" />
+			<enumeration value="VAT" />
+			<enumeration value="HND" />
+			<enumeration value="HKG" />
+			<enumeration value="HUN" />
+			<enumeration value="ISL" />
+			<enumeration value="IND" />
+			<enumeration value="IDN" />
+			<enumeration value="IRN" />
+			<enumeration value="IRQ" />
+			<enumeration value="IRL" />
+			<enumeration value="IMN" />
+			<enumeration value="ISR" />
+			<enumeration value="ITA" />
+			<enumeration value="JAM" />
+			<enumeration value="JPN" />
+			<enumeration value="JEY" />
+			<enumeration value="JOR" />
+			<enumeration value="KAZ" />
+			<enumeration value="KEN" />
+			<enumeration value="KIR" />
+			<enumeration value="PRK" />
+			<enumeration value="KOR" />
+			<enumeration value="KWT" />
+			<enumeration value="KGZ" />
+			<enumeration value="LAO" />
+			<enumeration value="LVA" />
+			<enumeration value="LBN" />
+			<enumeration value="LSO" />
+			<enumeration value="LBR" />
+			<enumeration value="LBY" />
+			<enumeration value="LIE" />
+			<enumeration value="LTU" />
+			<enumeration value="LUX" />
+			<enumeration value="MAC" />
+			<enumeration value="MKD" />
+			<enumeration value="MDG" />
+			<enumeration value="MWI" />
+			<enumeration value="MYS" />
+			<enumeration value="MDV" />
+			<enumeration value="MLI" />
+			<enumeration value="MLT" />
+			<enumeration value="MHL" />
+			<enumeration value="MTQ" />
+			<enumeration value="MRT" />
+			<enumeration value="MUS" />
+			<enumeration value="MYT" />
+			<enumeration value="MEX" />
+			<enumeration value="FSM" />
+			<enumeration value="MDA" />
+			<enumeration value="MCO" />
+			<enumeration value="MNG" />
+			<enumeration value="MNE" />
+			<enumeration value="MSR" />
+			<enumeration value="MAR" />
+			<enumeration value="MOZ" />
+			<enumeration value="MMR" />
+			<enumeration value="NAM" />
+			<enumeration value="NRU" />
+			<enumeration value="NPL" />
+			<enumeration value="NLD" />
+			<enumeration value="ANT" />
+			<enumeration value="NCL" />
+			<enumeration value="NZL" />
+			<enumeration value="NIC" />
+			<enumeration value="NER" />
+			<enumeration value="NGA" />
+			<enumeration value="NIU" />
+			<enumeration value="NFK" />
+			<enumeration value="MNP" />
+			<enumeration value="NOR" />
+			<enumeration value="OMN" />
+			<enumeration value="PAK" />
+			<enumeration value="PLW" />
+			<enumeration value="PSE" />
+			<enumeration value="PAN" />
+			<enumeration value="PNG" />
+			<enumeration value="PRY" />
+			<enumeration value="PER" />
+			<enumeration value="PHL" />
+			<enumeration value="PCN" />
+			<enumeration value="POL" />
+			<enumeration value="PRT" />
+			<enumeration value="PRI" />
+			<enumeration value="QAT" />
+			<enumeration value="REU" />
+			<enumeration value="ROU" />
+			<enumeration value="RUS" />
+			<enumeration value="RWA" />
+			<enumeration value="BLM" />
+			<enumeration value="SHN" />
+			<enumeration value="KNA" />
+			<enumeration value="LCA" />
+			<enumeration value="MAF" />
+			<enumeration value="SPM" />
+			<enumeration value="VCT" />
+			<enumeration value="WSM" />
+			<enumeration value="SMR" />
+			<enumeration value="STP" />
+			<enumeration value="SAU" />
+			<enumeration value="SEN" />
+			<enumeration value="SRB" />
+			<enumeration value="SYC" />
+			<enumeration value="SLE" />
+			<enumeration value="SGP" />
+			<enumeration value="SVK" />
+			<enumeration value="SVN" />
+			<enumeration value="SLB" />
+			<enumeration value="SOM" />
+			<enumeration value="ZAF" />
+			<enumeration value="SGS" />
+			<enumeration value="ESP" />
+			<enumeration value="LKA" />
+			<enumeration value="SDN" />
+			<enumeration value="SUR" />
+			<enumeration value="SJM" />
+			<enumeration value="SWZ" />
+			<enumeration value="SWE" />
+			<enumeration value="CHE" />
+			<enumeration value="SYR" />
+			<enumeration value="TWN" />
+			<enumeration value="TJK" />
+			<enumeration value="TZA" />
+			<enumeration value="THA" />
+			<enumeration value="TLS" />
+			<enumeration value="TGO" />
+			<enumeration value="TKL" />
+			<enumeration value="TON" />
+			<enumeration value="TTO" />
+			<enumeration value="TUN" />
+			<enumeration value="TUR" />
+			<enumeration value="TKM" />
+			<enumeration value="TCA" />
+			<enumeration value="TUV" />
+			<enumeration value="UGA" />
+			<enumeration value="UKR" />
+			<enumeration value="ARE" />
+			<enumeration value="GBR" />
+			<enumeration value="USA" />
+			<enumeration value="UMI" />
+			<enumeration value="URY" />
+			<enumeration value="UZB" />
+			<enumeration value="VUT" />
+			<enumeration value="VEN" />
+			<enumeration value="VNM" />
+			<enumeration value="VGB" />
+			<enumeration value="VIR" />
+			<enumeration value="WLF" />
+			<enumeration value="ESH" />
+			<enumeration value="YEM" />
+			<enumeration value="ZMB" />
+			<enumeration value="ZWE" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="BaseSearchCriteria" abstract="true">
+		<annotation>
+			<documentation>Base SearchCriteria for all PO entities
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="offset" type="int" minOccurs="0">
+				<annotation>
+					<documentation>Offset - If offset is not specified by service
+						caller, then presume it to be zero
+					</documentation>
+				</annotation>
+			</element>
+			<element name="limit" type="int" minOccurs="0">
+				<annotation>
+					<documentation>Limit the number of records to be fetched - If limit
+						not specified, then presume it to be 100.
+					</documentation>
+				</annotation>
+			</element>
+            <element name="ctepID" minOccurs="0">
+                <annotation>
+                    <documentation>It will search for Person's/Organization's(HCF, RO, IO) 'ctepID'
+                        using "LIKE" search
+                    </documentation>
+                </annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="255" />
+                        <minLength value="1" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="id" type="long" minOccurs="0">
+                <annotation>
+                    <documentation>It will search for Person's/Organization's database Id
+                        using "EXACT" search
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="statusCode" type="tns:EntityStatus"
+                minOccurs="0">
+                <annotation>
+                    <documentation>It will search for Person's/Organization's Status
+                        using "EXACT" search
+                    </documentation>
+                </annotation>
+            </element>			
+			<element name="line1" type="string" minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address-'line1' using LIKE-search
+					</documentation>
+				</annotation>
+			</element>
+			<element name="line2" type="string" minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address-'line2' using LIKE-search
+					</documentation>
+				</annotation>
+			</element>
+			<element name="city" type="string" minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address-'city' using LIKE-search
+					</documentation>
+				</annotation>
+			</element>
+			<element name="stateOrProvince" type="string" minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address-'stateOrProvince' using
+						LIKE-search
+					</documentation>
+				</annotation>
+			</element>
+			<element name="countryCode" type="tns:CountryISO-3166-1-alpha-3-Code"
+				minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address-'country code(alpha 3)'
+						using
+						Exact-search
+					</documentation>
+				</annotation>
+			</element>
+			<element name="postalcode" type="string" minOccurs="0">
+				<annotation>
+					<documentation>It will search for Address- 'postalcode' using
+						LIKE-search
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PersonSearchCriteria">
+		<annotation>
+			<documentation>SearchCriteria for Person</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:BaseSearchCriteria">
+				<sequence>
+					<element name="firstName" minOccurs="0">
+						<annotation>
+							<documentation>It will search for Person's 'firstName' using
+								"LIKE" search
+							</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="50" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="lastName" minOccurs="0">
+						<annotation>
+							<documentation>It will search for Person's 'lastName' using
+								"LIKE" search
+							</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="50" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="email" minOccurs="0">
+						<annotation>
+							<documentation>It will search for Person's 'email' using
+								"LIKE"
+								search
+							</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="254" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="affiliation" minOccurs="0">
+						<annotation>
+							<documentation>It will search for Person's 'Organization'
+								using
+								"LIKE" search
+							</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="160" />
+								<minLength value="1" />
+							</restriction>
+						</simpleType>
+					</element>					
+					<element name="hasPendingCrsRoles" type="boolean"
+						minOccurs="0">
+						<annotation>
+							<documentation>It will search if Person has pending
+								clinicalresearchstaff
+								role
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hasPendingHcpRoles" type="boolean"
+						minOccurs="0">
+						<annotation>
+							<documentation>It will search if Person has pending
+								healthcareprovider
+								role
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hasPendingOcRoles" type="boolean" minOccurs="0">
+						<annotation>
+							<documentation>It will search if Person has pending
+								organizationalcontact
+								role
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<simpleType name="RoleType">
+		<annotation>
+			<documentation>List of all RoleType(RoleGroup) that a Person can have
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="CRS" />
+			<enumeration value="HCP" />
+			<enumeration value="OC" />
+			<enumeration value="OPI" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="Affiliation">
+		<annotation>
+			<documentation>Person's affiliated Organization
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="orgName" type="string">
+				<annotation>
+					<documentation>Organization Name
+					</documentation>
+				</annotation>
+			</element>
+			<element name="pending" type="boolean">
+				<annotation>
+					<documentation>whether Person's affiliation with the organization
+						is pending
+					</documentation>
+				</annotation>
+			</element>
+			<element name="type" type="tns:RoleType" />
+		</sequence>
+	</complexType>
+
+	<complexType name="BaseSearchResult" abstract="true">
+		<annotation>
+			<documentation>Base SearchResult for all PO entities
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="id" type="long">
+				<annotation>
+					<documentation>Database ID
+					</documentation>
+				</annotation>
+			</element>
+			<element name="statusCode" type="tns:EntityStatus">
+				<annotation>
+					<documentation>Entity status
+					</documentation>
+				</annotation>
+			</element>
+			<element name="line1" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-line1
+					</documentation>
+				</annotation>
+			</element>
+			<element name="line2" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-line2
+					</documentation>
+				</annotation>
+			</element>
+			<element name="city" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-City
+					</documentation>
+				</annotation>
+			</element>
+			<element name="state" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-State
+					</documentation>
+				</annotation>
+			</element>
+			<element name="countryCode" type="tns:CountryISO-3166-1-alpha-3-Code"
+				minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-Country Code(Alpha 3)
+					</documentation>
+				</annotation>
+			</element>
+			<element name="countryName" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-Country Name
+					</documentation>
+				</annotation>
+			</element>
+			<element name="postalcode" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Address-Postalcode
+					</documentation>
+				</annotation>
+			</element>
+			<element name="emailAddresses" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity Email Addresses, separated by semi-colon
+					</documentation>
+				</annotation>
+			</element>
+			<element name="phones" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Entity phones, separated by semi-colon
+					</documentation>
+				</annotation>
+			</element>
+			<element name="duplicateOf" type="long" minOccurs="0">
+				<annotation>
+					<documentation>Entity is duplicate of this database id
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PersonSearchResult">
+		<annotation>
+			<documentation>SearchResult for Person</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:BaseSearchResult">
+				<sequence>
+					<element name="ctepID" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Person ctepID
+							</documentation>
+						</annotation>
+					</element>
+					<element name="firstName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Person's First Name
+							</documentation>
+						</annotation>
+					</element>
+					<element name="middleName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Person's Middle Name
+							</documentation>
+						</annotation>
+					</element>
+					<element name="lastName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Person's Last Name
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalCrs" type="int">
+						<annotation>
+							<documentation>Total count of Person's Clinical Research Staff
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalHcp" type="int">
+						<annotation>
+							<documentation>Total count of Person's Health Care Provider Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalOc" type="int">
+						<annotation>
+							<documentation>Total count of Person's Organizational Contact
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalPending" type="int">
+						<annotation>
+							<documentation>Total count of Person's Pending Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="affiliation" type="tns:Affiliation"
+						minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OrganizationSearchCriteria">
+		<annotation>
+			<documentation>SearchCriteria for Organization</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:BaseSearchCriteria">
+				<sequence>					
+					<element name="organizationName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Organization's Name using LIKE search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="familyName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Organization's Family Name using LIKE search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hasChangeRequest" type="boolean" minOccurs="0">
+						<annotation>
+							<documentation>It will search if Organization has unprocessed
+								Change Request
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hasPendingHcfRoles" type="boolean"
+						minOccurs="0">
+						<annotation>
+							<documentation>It will search if Organization has pending
+								healthcarefacility
+								role
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hasPendingRoRoles" type="boolean" minOccurs="0">
+						<annotation>
+							<documentation>It will search if Organization has pending
+								researchorganization
+								role
+								using
+								"EXACT" search
+							</documentation>
+						</annotation>
+					</element>
+					<element name="searchAliases" type="boolean" minOccurs="0">
+                        <annotation>
+                            <documentation>The searchAliases flag is used to specify whether the search should include 
+                            aliases in addition to the organization name.
+                            </documentation>
+                        </annotation>
+                    </element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+    <complexType name="Alias">
+        <annotation>
+            <documentation>Organization Alias Name</documentation>
+        </annotation>
+        <simpleContent>
+            <extension base="string">                
+            </extension>
+        </simpleContent>
+    </complexType>
+    
+	<complexType name="OrganizationSearchResult">
+		<annotation>
+			<documentation>SearchResult for Organization</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:BaseSearchResult">
+				<sequence>
+					<element name="organizationName" type="string">
+						<annotation>
+							<documentation>Organization's Name
+							</documentation>
+						</annotation>
+					</element>
+					<element name="familyName" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Organization's Family Name
+							</documentation>
+						</annotation>
+					</element>
+					<element name="roCtepID" type="string" minOccurs="0">
+						<annotation>
+							<documentation>ResearchOrganization's ctepID
+							</documentation>
+						</annotation>
+					</element>
+					<element name="hcfCtepID" type="string" minOccurs="0">
+						<annotation>
+							<documentation>HealthCareFacility's ctepID
+							</documentation>
+						</annotation>
+					</element>
+					<element name="orgCtepId" type="string" minOccurs="0">
+                        <annotation>
+                            <documentation>Organization's ctepID (mapped to Identified CTEP ID)
+                            </documentation>
+                        </annotation>
+                    </element>
+					<element name="changeRequests" type="int">
+						<annotation>
+							<documentation> Total count of Organization Change Requests
+							</documentation>
+						</annotation>
+					</element>
+					<element name="pendingROs" type="int">
+						<annotation>
+							<documentation>Total count of pending ResearchOrganization Roles
+								of the
+								Organization
+							</documentation>
+						</annotation>
+					</element>
+					<element name="pendingHCFs" type="int">
+						<annotation>
+							<documentation>Total count of pending HealthCareFacility Roles of
+								the
+								Organization
+							</documentation>
+						</annotation>
+					</element>
+					<element name="statusDate" type="date" />
+					<element name="totalROs" type="int">
+						<annotation>
+							<documentation>Total count of Organization's ResearchOrganization
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalHCFs" type="int">
+						<annotation>
+							<documentation>Total count of Organization's HealthCareFacility
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalIdOrgs" type="int">
+						<annotation>
+							<documentation>Total count of Identified Organization
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalOversightCommitees" type="int">
+						<annotation>
+							<documentation>Total count of Organization's OversightCommittee
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="totalOrgContacts" type="int">
+						<annotation>
+							<documentation>Total count of Organization's OrgContact
+								Roles
+							</documentation>
+						</annotation>
+					</element>
+					<element name="alias" type="tns:Alias" minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<element name="person" type="tns:Person"/>
+	
+	<element name="personList">
+        <annotation>
+            <documentation>List of Person</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:person" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element>    
+    
+    <element name="personRole" type="tns:PersonRole"/>
+    
+    <element name="personRoleList">
+        <annotation>
+            <documentation>List of PersonRole</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:personRole" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element> 
+    
+    <element name="personSearchResult" type="tns:PersonSearchResult"/>
+    
+    <element name="personSearchResultList">
+        <annotation>
+            <documentation>List of PersonSearchResult</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:personSearchResult" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element>
+    
+    <element name="organization" type="tns:Organization"/>
+    
+    <element name="organizationRole" type="tns:OrganizationRole"/>
+    
+    <element name="organizationRoleList">
+        <annotation>
+            <documentation>List of OrganizationRole</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:organizationRole" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element> 
+    
+    <element name="organizationSearchResult" type="tns:OrganizationSearchResult"/>
+    
+    <element name="organizationSearchResultList">
+        <annotation>
+            <documentation>List of OrganizationSearchResult</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:organizationSearchResult" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element>
+    
+    <element name="family" type="tns:Family"/>
+    
+    <element name="familyList">
+        <annotation>
+            <documentation>List of Family</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:family" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element> 
+    
+    <element name="familyMemberRelationship" type="tns:FamilyMemberRelationship"/>
+    
+    <element name="familyMemberRelationshipList">
+        <annotation>
+            <documentation>List of FamilyMemberRelationship</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element ref="tns:familyMemberRelationship" minOccurs="0" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+    </element> 
+
+</schema>

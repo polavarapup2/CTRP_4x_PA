@@ -1,0 +1,2 @@
+INSERT INTO PA_PROPERTIES VALUES ((select max(identifier) + 1 from pa_properties),'jasper.rest.user.default.tenantid','organization_1');
+INSERT INTO PA_PROPERTIES VALUES ((select max(identifier) + 1 from pa_properties),'jasper.rest.role.default.dt4','ROLE_ANONYMOUS,ROLE_USER,GROUP_DT4_CC_VIEWERS|organization_1');

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 5.2.0  -->
+<!-- 2016-10-25T16:16:25 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PRS_Verification_Date_Trials_Report" language="groovy" pageWidth="2800" pageHeight="595" orientation="Landscape" columnWidth="2760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="639ccac9-dd49-4e77-8355-1b6e365c8f9c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="1333"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="https://trials.nci.nih.gov/reports/"/>
+	<property name="ireport.jasperserver.user" value="gundalar"/>
+	<property name="ireport.jasperserver.report.resource" value="/public/CTRP_Reports_DEV/PRS_Verification_Date_Trials_Report_files/PRS_Verification_Date_Trials_Report_"/>
+	<property name="ireport.jasperserver.reportUnit" value="/public/CTRP_Reports_DEV/PRS_Verification_Date_Trials_Report"/>
+	<queryString>
+		<![CDATA[Select distinct (a.nci_id) as "NCI_ID",
+a.lead_org as "Lead_Organization",
+a.lead_org_id as "Lead_Organization_ID",
+a.nct_id as "NCT_ID",
+Case When a.ctep_id IS NOT NULL Then a.ctep_id Else '/'||a.dcp_id End as "CTEP/DCP_ID",
+a.sponsor as "Sponsor",
+a.primary_completion_date as "Primary_Completion_Date",
+a.primary_completion_date_type_code as  "Primary_Completion_Date_Type",
+a.current_milestone as "Current_Milestone",
+(select b.date from dw_study_milestone b
+    where a.nci_id=b.nci_id
+    and a.current_milestone=b.name
+    and b.internal_system_id in (select max(c.internal_system_id) from dw_study_milestone c
+                                    where a.nci_id=c.nci_id
+                                    and c.name=a.current_milestone)) as "Milestone_date",
+current_trial_status as "Current_Trial_Status",
+a.current_trial_status_date as "Current_Status_Date",
+a.record_verification_date as "Record_Verification_Date"
+FROM dw_study a
+Where (a.ctep_id is not null OR a.dcp_id is not null)
+and lower(a.sponsor)  in ('national cancer institute')
+order by "NCI_ID"]]>
+	</queryString>
+	<field name="NCI_ID" class="java.lang.String"/>
+	<field name="Lead_Organization" class="java.lang.String"/>
+	<field name="Lead_Organization_ID" class="java.lang.String"/>
+	<field name="NCT_ID" class="java.lang.String"/>
+	<field name="CTEP/DCP_ID" class="java.lang.String"/>
+	<field name="Sponsor" class="java.lang.String"/>
+	<field name="Primary_Completion_Date" class="java.sql.Date"/>
+	<field name="Primary_Completion_Date_Type" class="java.lang.String"/>
+	<field name="Current_Milestone" class="java.lang.String"/>
+	<field name="Milestone_date" class="java.sql.Timestamp"/>
+	<field name="Current_Trial_Status" class="java.lang.String"/>
+	<field name="Current_Status_Date" class="java.sql.Date"/>
+	<field name="Record_Verification_Date" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="58" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="1211" y="20" width="539" height="35" forecolor="#0000CC" uuid="447e1c09-5f0d-4b3e-9a6e-47b09708d988"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bodoni MT Black" size="24"/>
+				</textElement>
+				<text><![CDATA[PRS Verification Date Trials - Created On -]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement stretchType="RelativeToBandHeight" x="1750" y="20" width="211" height="35" forecolor="#990000" uuid="56262c66-d01a-4866-b1fb-6587a2bee288"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bodoni MT Black" size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="16" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="0" width="100" height="35" isRemoveLineWhenBlank="true" uuid="e852c033-4964-48c5-8304-16445d6c05a3"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCI_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="400" height="35" uuid="648cbb37-ac31-44ec-a49d-190bf281b493"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lead_Organization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="0" width="167" height="35" uuid="2146afa6-57eb-47b5-a64d-881afce1691e"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lead_Organization_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="669" y="0" width="100" height="35" uuid="77df06bc-86c2-4b87-8003-85c6e7a37053"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCT_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="769" y="0" width="200" height="35" uuid="4f922be2-7ebe-4442-8bfd-a7535cc425d5"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CTEP/DCP_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="969" y="0" width="400" height="35" uuid="b457c233-7f7a-4089-b214-910dcebfea40"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sponsor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1369" y="0" width="203" height="35" uuid="e6271a40-e5f7-4b19-a02d-64f17c5101d5"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Primary_Completion_Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1572" y="0" width="249" height="35" uuid="b5e81a7a-5ab0-4c6e-81eb-86cc53395937"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Primary_Completion_Date_Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1821" y="0" width="250" height="35" uuid="b6c66a1e-e0a5-4b39-9428-eda55db263e6"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current_Milestone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="2071" y="0" width="120" height="35" uuid="72cb1950-59a7-46d8-8310-51f8822da19d"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Milestone_date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2391" y="0" width="168" height="35" uuid="5f5d3140-c329-4aaf-b2ee-18fa9f60e3a5"/>
+				<box>
+					<pen lineWidth="1.25"/>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current_Status_Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2559" y="0" width="200" height="35" uuid="eb515cca-8d53-4b74-af40-5bb0f538df78"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Record_Verification_Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2191" y="0" width="200" height="35" uuid="7d5a39ef-a9f5-4fca-a7c6-4a734cff7282"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current_Trial_Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="0" width="100" height="45" uuid="474d846c-2cb3-494a-8811-97fdb47bc172"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCI_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="102" y="0" width="400" height="45" uuid="f4ee39b3-cdec-41cf-b9ef-9a150c28f941"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Lead_Organization}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="502" y="0" width="167" height="45" uuid="06f84d0d-55ba-4b5a-9062-605429d8aca0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Lead_Organization_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="669" y="0" width="100" height="45" uuid="09fb3f09-8683-4ccb-8d6f-6af2dfd9e9ab"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCT_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="769" y="0" width="200" height="45" uuid="aefdaea6-a7b8-4b7e-b65e-72a6ea3762f4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CTEP/DCP_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="969" y="0" width="400" height="45" uuid="4fee21c3-6f3c-4638-86b3-7ada28c85acd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Sponsor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1369" y="0" width="203" height="45" uuid="cdc88527-cb5b-4cb3-9cdb-ba3004fdba3a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Primary_Completion_Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1572" y="0" width="249" height="45" uuid="90709b71-b12d-4a09-ba02-c2c95779c840"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Primary_Completion_Date_Type}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1821" y="0" width="250" height="45" uuid="2d659bb4-c255-44b8-9c04-d9c39be23353"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Current_Milestone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="2071" y="0" width="120" height="45" uuid="9003bacb-ce2d-4bcb-b5ac-72847cc1eba1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Milestone_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="2191" y="0" width="200" height="45" uuid="99f4fcb0-5cab-4043-92ea-2705816b9754"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Current_Trial_Status}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="2391" y="0" width="168" height="45" uuid="7a68917f-1b60-4491-b525-db76e8e37c05"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Current_Status_Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="2559" y="0" width="200" height="45" uuid="8cdf16cc-d3c5-42ce-9881-7299891a4077"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Record_Verification_Date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="1477" y="4" width="80" height="20" forecolor="#CC0000" uuid="9fe00f98-52f6-40af-b132-2385c5cfa789"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Bell MT" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="1557" y="4" width="57" height="20" uuid="84a60f32-cb6a-4cde-a2f7-af2d1b2be933"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Bell MT" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="2" splitType="Stretch"/>
+	</summary>
+</jasperReport>

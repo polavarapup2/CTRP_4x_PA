@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 5.2.0  -->
+<!-- 2016-10-25T16:16:25 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="biWeeklyTrialsCount" language="groovy" pageWidth="500" pageHeight="920" columnWidth="460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae6bc613-aa8b-4de2-bc57-668901c88560">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/public/CTRP_Reports_DEV/Trials_Count_Report"/>
+	<property name="ireport.jasperserver.url" value="https://trials.nci.nih.gov/reports/"/>
+	<property name="ireport.jasperserver.user" value="gundalar"/>
+	<property name="ireport.jasperserver.report.resource" value="/public/CTRP_Reports_DEV/Trials_Count_Report_files/Trials_Count_Report_"/>
+	<parameter name="OS_WINDOWS" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(
+System.getProperty( "os.name" ).toLowerCase().indexOf( "win" ) >= 0
+)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGES_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{OS_WINDOWS}.booleanValue() ?
+"C:\\Users\\ctrp\\code\\reg-web\\src\\webapp\\images\\" :
+"repo:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="start_date" class="java.lang.String">
+		<parameterDescription><![CDATA[Please Enter date like 01-01-2014 00:00 -( MM-DD-YYYY HH24:MI)]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<parameterDescription><![CDATA[Please Enter the Date like  01-01-2014 23:59  -(MM-DD-YYYY HH24:MI)]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+(select count(distinct a.nci_id)  from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission received date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Submitted_Trials",
+
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission received date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(b.category)='abbreviated'
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Abbreviated_Trial_Category_Submissions",
+
+(select count(distinct a.nci_id)from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission received date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(b.category)='complete'
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Completed_Trial_Category_Submissions" ,
+
+(select count(Distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission acceptance date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Accepted_Trials",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name) in ('submission rejection date','late rejection date')
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Rejected Trials",
+(select count(Distinct a.nci_id)from dw_study a,dw_study_on_hold_status b
+		where a.nci_id=b.nci_id
+		and b.on_hold_date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')) AS "Trials_Went_On-Hold",
+(select count(Distinct a.nci_id)from dw_study a,dw_study_on_hold_status b
+		where a.nci_id=b.nci_id
+		and b.off_hold_date is null
+        and a.submission_number <=1
+		and b.on_hold_date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')) as "Still_On_Hold_Status_Trials",
+(select count(Distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name) in ('ready for trial summary report date')
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Total_Abstracted_Trials",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)in ('ready for trial summary report date')
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(b.category)='abbreviated'
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as  "Abstracted_Abbreviated(C)_Trials",
+(select count(DISTINCT a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)in ('ready for trial summary report date')
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and lower(b.category)='complete'
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "Abstracted_Completed_(C)_Trials",
+(select count(DISTINCT a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='trial summary report date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number <=1
+		and a.internal_system_id=(select min(c.internal_system_id) from dw_study_milestone c
+						where a.nci_id=c.nci_id
+						and lower(c.name)in ('trial summary report date'))
+		and lower(a.user_name_created) not in (select lower(c.user_name_created) from dw_study_milestone c
+							where a.nci_id=c.nci_id
+							and lower(c.user_name_created) like '%sulekha%')) as "TSR_Sent_Trials",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission received date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number >1) as "Amendments_Total_Trials_submiteed",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission acceptance date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number >1) as "Amendments_Accepted_Trials_submiteed",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='submission rejection date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number > 1) as "Rejected_Amendment_Trials",
+(select count(distinct a.nci_id)from dw_study a,dw_study_on_hold_status b
+		where a.nci_id=b.nci_id
+		and a.submission_number > 1
+		and b.off_hold_date is null
+		and b.on_hold_date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI'))as "Still_On_Hold_Amendment_Trials",
+(select count(distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)in ('ready for trial summary report date')
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number > 1) as "Abstracted_Amendment_Trials",
+(select count (distinct a.nci_id) from dw_study_Milestone a, dw_study b
+		where lower(a.name)='trial summary report date'
+		and a.date between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+		and a.nci_id=b.nci_id
+		and b.submission_number > 1
+		and a.internal_system_id=(select max(c.internal_system_id) from dw_study_milestone c
+						where a.nci_id=c.nci_id
+						and lower(c.name)in ('trial summary report date'))) as "TSR_Sent_Amendments",
+(select count (corresponding_nci_id) from dw_accrual_batch_submission
+        where date_last_created between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')) as "Accrual_Submitted_Trials",
+(select count (corresponding_nci_id) from dw_accrual_batch_submission
+        where date_last_created between to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI') and to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+        and passed_validation='true') as "Accrual_Validation_passed_Count",
+(SELECT count (nci_id)
+ FROM dw_study_inbox ibx
+ JOIN dw_study std USING (nci_id)
+ WHERE ibx.open_date >= to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI')
+   AND ibx.open_date <= to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+   AND lower(ibx.type_code)='update') as "Trials_Updated_All_Trials",
+(SELECT count (nci_id)
+ FROM dw_study_inbox ibx
+ JOIN dw_study std USING (nci_id)
+ WHERE ibx.open_date >= to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI')
+   AND ibx.open_date <= to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+   AND lower(ibx.type_code)='update'
+   AND std.category = 'Complete') as "Trials_Update_Complete_Trials",
+(SELECT count (nci_id)
+ FROM dw_study_inbox ibx
+ JOIN dw_study std USING (nci_id)
+ WHERE ibx.open_date >= to_timestamp($P{start_date},'MM-DD-YYYY HH24:MI')
+   AND ibx.open_date <= to_timestamp($P{end_date},'MM-DD-YYYY HH24:MI')
+   AND lower(ibx.type_code)='update'
+   AND std.category = 'Abbreviated') as "Trials_Update_Abbreviated_Trials"]]>
+	</queryString>
+	<field name="Submitted_Trials" class="java.lang.Long"/>
+	<field name="Abbreviated_Trial_Category_Submissions" class="java.lang.Long"/>
+	<field name="Completed_Trial_Category_Submissions" class="java.lang.Long"/>
+	<field name="Accepted_Trials" class="java.lang.Long"/>
+	<field name="Rejected Trials" class="java.lang.Long"/>
+	<field name="Trials_Went_On-Hold" class="java.lang.Long"/>
+	<field name="Still_On_Hold_Status_Trials" class="java.lang.Long"/>
+	<field name="Total_Abstracted_Trials" class="java.lang.Long"/>
+	<field name="Abstracted_Abbreviated(C)_Trials" class="java.lang.Long"/>
+	<field name="Abstracted_Completed_(C)_Trials" class="java.lang.Long"/>
+	<field name="TSR_Sent_Trials" class="java.lang.Long"/>
+	<field name="Amendments_Total_Trials_submiteed" class="java.lang.Long"/>
+	<field name="Amendments_Accepted_Trials_submiteed" class="java.lang.Long"/>
+	<field name="Rejected_Amendment_Trials" class="java.lang.Long"/>
+	<field name="Still_On_Hold_Amendment_Trials" class="java.lang.Long"/>
+	<field name="Abstracted_Amendment_Trials" class="java.lang.Long"/>
+	<field name="TSR_Sent_Amendments" class="java.lang.Long"/>
+	<field name="Accrual_Submitted_Trials" class="java.lang.Long"/>
+	<field name="Accrual_Validation_passed_Count" class="java.lang.Long"/>
+	<field name="Trials_Updated_All_Trials" class="java.lang.Long"/>
+	<field name="Trials_Update_Complete_Trials" class="java.lang.Long"/>
+	<field name="Trials_Update_Abbreviated_Trials" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="23" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="460" height="22" forecolor="#FFFFFF" backcolor="#475B82" uuid="c40c7162-9eac-4604-80df-30028ea8b1aa"/>
+				<textElement>
+					<font size="15" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Trials Count"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="460" height="20" forecolor="#FFFFFF" backcolor="#475B82" uuid="ecf30522-3d21-41e3-bd1f-5c6ae85a4f42"/>
+				<textElement textAlignment="Left">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Range:  "
++ ($P{start_date})+ "  to  " + ($P{end_date})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="440" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="260" height="20" backcolor="#D6D6FF" uuid="1fdbe963-cacc-4949-87e9-782e6819bc89"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Submitted Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="260" height="20" backcolor="#D6D6FF" uuid="815cb5bc-93f6-4009-9b20-f8bde88c743f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Abbreviated Trial Category Submissions]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="40" width="260" height="20" backcolor="#D6D6FF" uuid="91864f55-3b33-4438-998b-5a2dac3d2cac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Completed Trial Category Submissions]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="60" width="260" height="20" backcolor="#D6D6FF" uuid="6070af77-4581-470f-bfcc-7e8081119fc9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Accepted Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="80" width="260" height="20" backcolor="#D6D6FF" uuid="2e4ee9a6-7c01-4012-9965-07e0e2734cc7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Rejected Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="100" width="260" height="20" backcolor="#D6D6FF" uuid="94ed0571-9003-4a23-b012-51f2a274b3ee"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Trials Went On-Hold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="120" width="260" height="20" backcolor="#D6D6FF" uuid="20a2c584-cbec-4449-bffa-73a44766c046"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Still On-Hold Status Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="140" width="260" height="20" backcolor="#D6D6FF" uuid="723a788c-9a71-4af4-9c7b-2406c582863a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total Abstracted Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="160" width="260" height="20" backcolor="#D6D6FF" uuid="9db77bde-9835-4d48-9bfc-2af09227d430"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Abstracted Abbreviated (C) Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="180" width="260" height="20" backcolor="#D6D6FF" uuid="ee9b28b1-2619-4614-a417-ecac65865478"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Abstracted Completed (C) Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="200" width="260" height="20" backcolor="#D6D6FF" uuid="3925df05-27dc-4d7c-a876-f9034ef26e3f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[TSR Sent Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="220" width="260" height="20" backcolor="#D6D6FF" uuid="476628bd-e1a9-4630-9062-7b1acd6b6c41"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Amendments Total Trials Submitted]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="240" width="260" height="20" backcolor="#D6D6FF" uuid="1609a86c-5bf0-4728-b21c-60f4d5b61a5e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Amendments Accepted Trials Submitted]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="260" width="260" height="20" backcolor="#D6D6FF" uuid="12b2d49c-e798-4291-b8b5-efb4eb4ad675"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Rejected Amendment Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="280" width="260" height="20" backcolor="#D6D6FF" uuid="df0cf154-2195-43d8-9526-532f3a01baa3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Still On Hold Amendment Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="300" width="260" height="20" backcolor="#D6D6FF" uuid="03003110-ff4b-4f37-a74c-5115f702b1dc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Abstracted Amendment Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="320" width="260" height="20" backcolor="#D6D6FF" uuid="502b4052-fc54-406e-a48e-17bd342cec9c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[TSR Sent Amendments]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="340" width="260" height="20" backcolor="#D6D6FF" uuid="993b9a85-577f-46a9-8c30-4ac0da717563"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Accrual Submitted Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="360" width="260" height="20" backcolor="#D6D6FF" uuid="439085c6-3350-465b-a0ea-884d6f26d624"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Accrual Validation Passed Count]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="380" width="260" height="20" backcolor="#D6D6FF" uuid="f537c752-41c0-45b3-8d1b-61d43622fed6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Trials Update All Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="400" width="260" height="20" backcolor="#D6D6FF" uuid="103f950d-022e-4c35-b952-4b4b418c8d73"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Trials Update Complete Trials]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="420" width="260" height="20" backcolor="#D6D6FF" uuid="c3298791-4bca-49ef-9108-125fa12e8b94"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Trials Update Abbreviated Trials]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="260" y="0" width="200" height="20" uuid="acebb791-55bf-4017-9924-981139b1063e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Submitted_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="20" width="200" height="20" uuid="89806530-9d65-4ca5-a6a2-4960a21099b2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Abbreviated_Trial_Category_Submissions}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="40" width="200" height="20" uuid="6e8a03ba-00f5-42bf-a62b-8e3e561c256b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Completed_Trial_Category_Submissions}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="60" width="200" height="20" uuid="6ae12434-e01d-4f96-bf5c-8df16b3e0ac2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Accepted_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="80" width="200" height="20" uuid="7429a55c-8777-46cf-adf4-b29f1c771376"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Rejected Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="100" width="200" height="20" uuid="3a717ab8-83ee-4780-bdc4-30cb52d22e83"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Trials_Went_On-Hold}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="120" width="200" height="20" uuid="dc12fae5-20ea-4f47-a62a-1f0b66852b3e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Still_On_Hold_Status_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="140" width="200" height="20" uuid="953007bf-16a6-4e00-ac1a-38f974d336aa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Abstracted_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="160" width="200" height="20" uuid="78e6fcf3-a104-4a37-aae8-7f5998e3952b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Abstracted_Abbreviated(C)_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="180" width="200" height="20" uuid="5d11c16f-eb07-441f-9f91-29cf854c7e0a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Abstracted_Completed_(C)_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="200" width="200" height="20" uuid="7bc32000-9292-40e1-a4ee-28b839467eb2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TSR_Sent_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="220" width="200" height="20" uuid="9f9bc519-9d09-4b99-bf34-209a8f6c9c0b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Amendments_Total_Trials_submiteed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="240" width="200" height="20" uuid="88027a7c-ee68-4c91-b480-b417811e3b10"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Amendments_Accepted_Trials_submiteed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="260" width="200" height="20" uuid="287f2e3f-fe9d-4258-9a61-e2666b204bfd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Rejected_Amendment_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="280" width="200" height="20" uuid="361600cb-a4ae-4188-8496-4228d2e0f966"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Still_On_Hold_Amendment_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="300" width="200" height="20" uuid="6f53b597-ab65-4aa7-a4c0-ffa60d4711d9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Abstracted_Amendment_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="320" width="200" height="20" uuid="c1dad00f-9600-45a9-a769-6e27cfd7e36e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TSR_Sent_Amendments}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="340" width="200" height="20" uuid="ecb03729-54ef-436a-82c1-fbce386f1e7a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Accrual_Submitted_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="360" width="200" height="20" uuid="1714242a-f31b-49d7-bb2c-19d47aff6593"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Accrual_Validation_passed_Count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="380" width="200" height="20" uuid="6c7ce1ab-c419-4a4d-bd6c-5a3da11bc6a9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Trials_Updated_All_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="400" width="200" height="20" uuid="82edc7b1-47ad-4b8f-a8c9-edf8c549c37f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Trials_Update_Complete_Trials}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="420" width="200" height="20" uuid="c6151751-9055-4e8a-86d3-e2f99de6d628"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Trials_Update_Abbreviated_Trials}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

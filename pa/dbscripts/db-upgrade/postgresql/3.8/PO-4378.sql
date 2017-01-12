@@ -1,0 +1,1 @@
+ALTER TABLE study_protocol ALTER COLUMN keyword_text TYPE Character Varying(4000);

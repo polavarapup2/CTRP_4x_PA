@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDirectory xmlns="http://www.omg.org/spec/CTS2/1.1/Entity"
+    xmlns:core="http://www.omg.org/spec/CTS2/1.1/Core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.omg.org/spec/CTS2/1.1/Entity http://informatics.mayo.edu/cts2/spec/CTS2/1.1/entity/Entity.xsd"
+    complete="PARTIAL" numEntries="50" next="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/NCI_Thesaurus-15.02d/entity/C2916/children?page=1&amp;maxtoreturn=50">
+    <core:heading>
+        <core:resourceRoot>http://lexevs62cts2.nci.nih.gov/lexevscts2/</core:resourceRoot>
+        <core:resourceURI>codesystem/NCI_Thesaurus/version/NCI_Thesaurus-15.02d/entity/C2916/children</core:resourceURI>
+        <core:accessDate>2015-03-23T16:20:36.765-04:00</core:accessDate>
+    </core:heading>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A11270_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A11270_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A11270_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C7132 and (R139 some C36771) and (R105 some C36773)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C2852">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C2852</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2852">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Adenocarcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A12103_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A12103_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A12103_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R108 some C48260) and (R115 some C35920) and (R115 some C3303) and (R115 some C36182) and (R115 some C35925) and (R89 some C36644)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C2970">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C2970</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2970">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Adenoid Cystic Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A12625_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A12625_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A12625_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R105 some C36773) and (R105 some C36771)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3727">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C3727</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3727">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Adenosquamous Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A19228_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A19228_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A19228_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C35470 and C2916 and C27933 and (R108 some C61052)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C27927">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C27927</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C27927">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Alcohol-Related Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A39010_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A39010_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A39010_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R105 some C54245) and (R108 some C38666) and (R108 some C54209)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4121">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4121</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4121">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Basaloid Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A45523_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A45523_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A45523_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C7627 and C2916</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C8500">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C8500</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C8500">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Bilateral Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A46483_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A46483_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A46483_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C9334 and (R101 some C12414) and (R115 some C3090)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4912">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4912</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4912">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Bladder Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A51556_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A51556_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A51556_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C7629 and C9335 and (R103 some C12937) and (R101 some C12971)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4872">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4872</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4872">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Breast Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68896_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A68896_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68896_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C3729 and (R108 some C54172) and (R108 some C54167) and (R108 some C41444) and (R104 some C33152) and (R115 some C54168) and (R115 some C53597) and (R115 some C35998) and (R115 some C54171)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4397">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4397</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4397">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Carcinoma ex Pleomorphic Adenoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68973_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A68973_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68973_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R126 some C3340)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C7682">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C7682</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C7682">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Carcinoma in a Polyp</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A68986_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A68986_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A68986_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C3341 and (R108 some C45659) and (R108 some C36118) and (R108 some C8364) and (R110 some C28079) and (R88 some C28051)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C2917">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C2917</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C2917">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Carcinoma In Situ</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A72957_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A72957_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A72957_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C4627 and (R101 some C12438)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C62332">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C62332</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C62332">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Central Nervous System Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A75371_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A75371_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A75371_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C9311 and (R103 some C49218) and (R101 some C12311) and (R101 some C12402) and (R101 some C12405) and (R176 some C18524) and (R176 some C16887) and (R176 some C17359) and (R89 some C36638) and (R89 some C36704) and (R89 some C36329) and (R89 some C36641)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C9039">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C9039</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C9039">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Cervical Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A95683_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A95683_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A95683_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R108 some C43573) and (R108 some C43574)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4139">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4139</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4139">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Combined Carcinoid and Adenocarcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A95970_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A95970_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A95970_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R108 some C36128)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4188">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4188</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4188">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Comedocarcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A98460_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A98460_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A98460_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R108 some C35920)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3680">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C3680</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3680">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Cribriform Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A123669_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A123669_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A123669_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C7629 and C27815 and C61574 and (R104 some C32515) and (R103 some C12313) and (R101 some C32514) and (R115 some C34818) and (R115 some C34937)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C7558">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C7558</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C7558">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Endometrial Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A126163_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A126163_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A126163_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C7201 and (R105 some C62177) and (R105 some C36780) and (R108 some C62127)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4199">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4199</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4199">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Epithelial-Myoepithelial Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A133471_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A133471_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A133471_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C4767 and (R101 some C12401)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C6079">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C6079</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C6079">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Eye Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A137942_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A137942_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A137942_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C7201 and C7480 and (R101 some C12403) and (R101 some C12402)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C3867">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C3867</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C3867">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Fallopian Tube Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A153108_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A153108_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A153108_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C4890 and (R101 some C12378)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C96963">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C96963</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C96963">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Digestive System Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A156292_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A156292_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A156292_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and (R105 some C36784) and (R108 some C54715)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C4153">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C4153</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C4153">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Glycogen-Rich Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A164914_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A164914_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A164914_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C4013 and (R101 some C12418)</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C35850">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C35850</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C35850">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Head and Neck Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A165500_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A165500_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A165500_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C27761</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C27764">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C27764</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C27764">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Helicobacter Pylori-Related Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#@A189825_2838be3f_6492_4256_8765_d7509da77e63">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>@A189825_2838be3f_6492_4256_8765_d7509da77e63</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/@A189825_2838be3f_6492_4256_8765_d7509da77e63">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>C2916 and C8505</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+    <entry about="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C9480">
+        <core:name>
+            <core:namespace>NCI_Thesaurus</core:namespace>
+            <core:name>C9480</core:name>
+        </core:name>
+        <core:knownEntityDescription href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d/entity/C9480">
+            <core:describingCodeSystemVersion>
+                <core:version href="http://lexevs62cts2.nci.nih.gov/lexevscts2/codesystem/NCI_Thesaurus/version/15.02d">NCI_Thesaurus-15.02d</core:version>
+                <core:codeSystem uri="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#">NCI_Thesaurus</core:codeSystem>
+            </core:describingCodeSystemVersion>
+            <core:designation>Invasive Carcinoma</core:designation>
+        </core:knownEntityDescription>
+    </entry>
+</EntityDirectory>

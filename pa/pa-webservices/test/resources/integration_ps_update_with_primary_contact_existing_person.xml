@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ParticipatingSiteUpdate xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">
+	<tns:recruitmentStatus>Closed to Accrual and Intervention</tns:recruitmentStatus>
+	<tns:recruitmentStatusDate>2014-01-02</tns:recruitmentStatusDate>
+	<tns:localTrialIdentifier>tns:localTrialIdentifier</tns:localTrialIdentifier>
+	<tns:programCode>tns:programCode</tns:programCode>
+	<tns:openedForAccrual>2010-05-02</tns:openedForAccrual>
+	<tns:closedForAccrual>2011-06-04</tns:closedForAccrual>
+	<tns:targetAccrualNumber>343</tns:targetAccrualNumber>
+	<tns:investigator>
+		<tns:person>
+			<tns:newPerson>
+				<tns1:prefix>Mr.</tns1:prefix>
+				<tns1:firstName>Richard</tns1:firstName>
+				<tns1:lastName>Robbson</tns1:lastName>
+				<tns1:suffix>Sr.</tns1:suffix>
+				<tns1:address>
+					<tns1:line1>13400 East Shea Boulevard</tns1:line1>
+					<tns1:line2>Suite 10001</tns1:line2>
+					<tns1:city>Scottsdale</tns1:city>
+					<tns1:stateOrProvince>AZ</tns1:stateOrProvince>
+					<tns1:country>USA</tns1:country>
+					<tns1:postalcode>85259</tns1:postalcode>
+				</tns1:address>
+				<tns1:contact type="EMAIL">example@example.com</tns1:contact>
+				<tns1:contact type="FAX">555-555-5551</tns1:contact>
+				<tns1:contact type="PHONE">555-555-5552</tns1:contact>
+				<tns1:contact type="TTY">555-555-5553</tns1:contact>
+				<tns1:contact type="URL">http://example.com</tns1:contact>
+			</tns:newPerson>
+		</tns:person>
+		<tns:role>Sub Investigator</tns:role>
+		<tns:primaryContact>false</tns:primaryContact>
+	</tns:investigator>
+	<tns:primaryContact>
+		<tns:person>
+			<tns:existingPerson>
+				<tns:poID>1</tns:poID>
+			</tns:existingPerson>
+		</tns:person>
+		<tns:contactDetails>
+			<tns:email>anndoe@example.com</tns:email>
+			<tns:phone>903-555-6666ext12</tns:phone>
+		</tns:contactDetails>
+	</tns:primaryContact>
+</tns:ParticipatingSiteUpdate>

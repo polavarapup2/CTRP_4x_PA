@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+This file should be a copy of the one in commons/src/resources.
+ -->
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <query name="gov.nih.nci.pa.domain.PlannedMarker.idsByLongNames">
+    <![CDATA[select id from gov.nih.nci.pa.domain.PlannedMarker where longName in (:longNames)]]>
+  </query>
+  <query name="gov.nih.nci.pa.domain.StudyOnhold.offholdByStudyProtocolIds">
+    <![CDATA[select soh.studyProtocol.id, soh from gov.nih.nci.pa.domain.StudyOnhold as soh where soh.studyProtocol.id in (:spIds) and soh.offholdDate is null]]>
+  </query>
+</hibernate-mapping>

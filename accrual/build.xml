@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ========================================================================== -->
+<!-- Master ant script for Accrual application                                  -->
+<!-- ========================================================================== -->
+
+<project name="accrual" default="deploy-notest" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property name="tier" value="LOCAL"/>
+    <property file="${basedir}/../build-pa/tier-properties/build-lite-${tier}.properties"/>
+    <property file="${basedir}/../build-pa/build-lite.properties"/>
+    <property file="${basedir}/../build-pa/version.properties"/>
+
+    <property name="common.dir" value="${basedir}/../build-pa/common"/>
+	<property name="pa.dir" value="${basedir}/../pa"/>
+    <property name="software.dir" value="${basedir}/.."/>
+    <property name="target.dir" location="${software.dir}/target/accrual" />
+    <property name="ivy.settings.file" location="${common.dir}/ivysettings.xml" />
+    <property name="lib.dir" value="${target.dir}/lib"/>
+    <property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+    <property name="accrual-web.tooltip" value="${basedir}/accrual-web/src/resources"/>
+    <property name="ear.target" value="${basedir}/ear/target"/>
+    <property name="ear.dir" value="${ear.target}/accrual"/>
+    <property name="ear.file" value="${ear.target}/accrual.ear"/>
+    <property name="jboss.deploy.dir" value="${application.base.path}/standalone/deployments"/>
+
+    <!-- ====================================================================== -->
+    <!-- Deploy targets                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="echoTime">
+        <tstamp>
+            <format property="now" pattern="yyyy MMMM dd HH:mm:ss" locale="en"/>
+        </tstamp>
+        <echo message="Build completed at ${now}" />
+    </target>
+
+    <target name="deploy-ear" depends="copy-tooltips-file">
+        <available file="${jboss.deploy.dir}" type="dir" property="container.present"/>
+        <fail unless="container.present" message="Deploy directory ${jboss.deploy.dir} not available."/>
+        <available file="${ear.file}" property="earEarPresent"/>
+        <fail unless="earEarPresent" message="Ear file not found."/>
+        <copy todir="${jboss.deploy.dir}" file="${ear.file}"/>
+    </target>
+	
+	<target name="copy-tooltips-file" unless="remote.build">
+	    <echo message="Copying ${accrual-web.tooltip}/AccrualWebTooltips.properties to ${tooltips.filepath.loc}" />
+	    <copy file="${accrual-web.tooltip}/AccrualWebTooltips.properties" todir="${tooltips.filepath.loc}" overwrite="true" />
+	</target>
+
+    <target name="build-notest" depends="package-subs-notest, ear, echoTime"
+            description="Build the ear, jar and war">
+    </target>
+
+    <target name="build" depends="package-subs, ear, echoTime"
+            description="Build the ear, jar and war">
+    </target>
+
+    <target name="deploy-notest" depends="package-subs-notest, ear, deploy-ear, echoTime"
+            description="Build and deploy without testing or getting dependencies.">
+    </target>
+
+    <target name="deploy" depends="package-subs, ear, deploy-ear, echoTime"
+            description="Build test and deploy."/>
+
+    <target name="run-selenium-tests" depends="build-notest" description="Runs integration tests against an already deployed application">
+        <ant target="run-selenium-tests" dir="accrual-web" inheritAll="false" inheritrefs="false">
+        	<property name="tier" value="${tier}"/>
+        </ant>
+    	<ant target="run-selenium-tests" dir="webservices" inheritAll="false" inheritrefs="false">
+    		 <property name="tier" value="${tier}"/>
+    	</ant>
+    </target>
+	
+	<target name="test-integration" description="Runs integration tests against the automatically deploy application." depends="deploy-notest">
+    	  <ant target="init-db-deploy-start-jboss" dir="${pa.dir}" inheritAll="false">
+                <property name="tier" value="${tier}"/>
+    	  </ant>
+		  <antcall target="run-selenium-tests"/>
+		  <ant target="stop-jboss-server" dir="${pa.dir}" inheritAll="false">
+                <property name="tier" value="${tier}"/>
+		  </ant>
+	</target>
+
+    <!-- ====================================================================== -->
+    <!-- Ivy targets                                                            -->
+    <!-- ====================================================================== -->
+
+    <target name="ivy-init">
+        <mkdir dir="${local.repo.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
+            <classpath>
+                <pathelement location="${common.dir}/ivy-2.0.0.jar"/>
+            </classpath>
+        </taskdef>
+        <ivy:settings file="${common.dir}/ivysettings.xml"/>
+    </target>
+
+    <target name="ivy-get" depends="ivy-clean,ivy-build,ivy-compile,ivy-ear,ivy-web,ivy-webservices,ivy-test"/>
+
+    <target name="ivy-clean" description="Delete jars.">
+        <delete dir="${lib.dir}" failonerror="false"/>
+    </target>
+
+    <target name="ivy-build" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="build"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="build"/>
+    </target>
+  
+    <target name="ivy-compile" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="compile"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="compile"/>
+    </target>
+
+    <target name="ivy-ear" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="ear"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="ear"/>
+        <property name="pa.commons.jar" value="${software.dir}/pa/commons/target/pa-commons.jar"/>
+        <available file="${pa.commons.jar}" property="pa.commons.jar.present"/>
+        <fail unless="pa.commons.jar.present" message="File pa-commons.jar not found. Please build PA."/>
+        <copy file="${pa.commons.jar}" todir="${lib.dir}/ear"/>
+        <property name="pa.ejb.client.jar" value="${software.dir}/pa/pa-ejb/target/pa-ejb-client.jar"/>
+        <available file="${pa.ejb.client.jar}" property="pa.ejb.client.jar.present"/>
+        <fail unless="pa.ejb.client.jar.present" message="File pa-ejb-client.jar not found. Please build PA."/>
+        <copy file="${pa.ejb.client.jar}" todir="${lib.dir}/ear"/>   	
+        
+    </target>
+ 
+    <target name="ivy-web" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="web"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="web"/>
+    </target>
+	
+    <target name="ivy-webservices" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="webservices"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="webservices"/>
+    </target>
+
+ 
+    <target name="ivy-test" depends="ivy-init">
+        <ivy:resolve refresh="true" conf="test"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test"/>
+        <ivy:resolve refresh="true" conf="test-checkstyle"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-checkstyle"/>
+        <ivy:resolve refresh="true" conf="test-cobertura"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-cobertura"/>
+        <ivy:resolve refresh="true" conf="test-selenium"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-selenium"/>
+        <ivy:resolve refresh="true" conf="test-pmd"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-pmd"/>
+        <ivy:resolve refresh="true" conf="test-simian"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-simian"/>
+        <ivy:resolve refresh="true" conf="test-findbugs"/>
+        <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" conf="test-findbugs"/>    	
+        <property name="pa.commons.test.jar" value="${software.dir}/pa/commons/target/pa-commons-test.jar"/>
+        <available file="${pa.commons.test.jar}" property="pa.commons.test.jar.present"/>
+        <fail unless="pa.commons.test.jar.present" message="File pa-commons-test.jar not found. Please build PA."/>
+        <copy file="${pa.commons.test.jar}" todir="${lib.dir}/test"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Build the jar, war and ear                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="package-subs-notest" depends="clean" description="Package the sub-projects">
+       <ant target="jar-notest" dir="services" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+       <ant target="war-notest" dir="accrual-web" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+        <ant target="war-notest" dir="webservices" inheritAll="false">
+             <property name="tier" value="${tier}"/>
+        </ant>    	
+    </target>
+
+    <target name="package-subs" depends="clean" description="Package and test the sub-projects">
+       <ant target="jar" dir="services" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+       <ant target="war" dir="accrual-web" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    	<ant target="war" dir="webservices" inheritAll="false">
+    	            <property name="tier" value="${tier}"/>
+    	</ant>
+    </target>
+
+    <target name="test" depends="clean">
+       <ant target="test-dynamic-analysis" dir="services" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+       </ant>
+       <ant target="test-dynamic-analysis" dir="accrual-web" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    	<ant target="test-dynamic-analysis" dir="webservices" inheritAll="false">
+    	    <property name="tier" value="${tier}"/>
+    	</ant>
+    </target>
+
+    <target name="ear" description="Build the ear">
+        <echo message="creating ear..."/>
+		<delete dir="${ear.target}"/>
+  		<copy todir="${ear.dir}">
+            <fileset dir="${basedir}/ear/src"/>
+        </copy>
+ 		<copy todir="${ear.dir}/lib">
+            <fileset dir="${lib.dir}/ear"/>
+        </copy>
+		<copy file="services/target/accrual-services.jar" todir="${ear.dir}"/>
+		<copy file="accrual-web/target/accrual.war" todir="${ear.dir}"/>
+    	<copy file="webservices/target/webservices.war" todir="${ear.dir}"/>
+        <ear destfile="${ear.file}"
+             basedir="${ear.dir}"
+             compress="false"
+             appxml="${ear.dir}/META-INF/application.xml"/>
+   </target>
+
+    <!-- ====================================================================== -->
+    <!-- Clean the services and web subprojects                                 -->
+    <!-- ====================================================================== -->
+
+    <target name="clean" description="Clean the subprojects">
+        <ant target="clean" dir="services" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+        <ant target="clean" dir="accrual-web" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+        <ant target="clean" dir="webservices" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    	
+    </target>
+
+    <!-- Maven management targets -->
+    <target name="maven:install" depends="clean">
+        <ant target="maven:install" dir="services" inheritall="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+     </target>
+    <target name="maven:deploy" depends="clean">
+        <ant target="maven:deploy" dir="services" inheritall="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Generate Javadoc                                                       -->
+    <!-- ====================================================================== -->
+    <target name="generate-javadoc" description="Generate Javadoc">
+		<delete dir="javadoc"/>
+        <mkdir dir="javadoc"/>
+
+        <ant target="generate-javadoc" dir="accrual-web" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+        <ant target="generate-javadoc" dir="webservices" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+    	
+        <copy todir="javadoc/accrual-web">
+            <fileset dir="accrual-web/javadoc" />
+        </copy>
+        <copy todir="javadoc/webservices">
+            <fileset dir="webservices/javadoc" />
+        </copy>
+    	
+
+        <ant target="generate-javadoc" dir="services" inheritAll="false">
+            <property name="tier" value="${tier}"/>
+        </ant>
+        <copy todir="javadoc/services">
+            <fileset dir="services/javadoc" />
+        </copy>
+
+        <zip destfile="javadoc/accrual-javadoc.zip">
+            <fileset dir="javadoc"/>
+        </zip>
+    </target>
+
+</project>

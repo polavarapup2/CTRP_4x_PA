@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:CompleteTrialUpdate xmlns:tns="gov.nih.nci.pa.webservices.types"
+	xmlns:tns1="gov.nih.nci.po.webservices.types.trimmed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="gov.nih.nci.pa.webservices.types ../../src/resources/ws.xsd ">	
+	<tns:clinicalTrialsDotGovTrialID>NCT11111111111</tns:clinicalTrialsDotGovTrialID>
+	<tns:otherTrialID>ADDED01</tns:otherTrialID>	
+	<tns:accrualDiseaseTerminology>ICD-O-3</tns:accrualDiseaseTerminology>
+	<tns:grant>
+		<tns:fundingMechanism>C06</tns:fundingMechanism>
+		<tns:nihInstitutionCode>AA</tns:nihInstitutionCode>
+		<tns:serialNumber>111111</tns:serialNumber>
+		<tns:nciDivisionProgramCode>CCR</tns:nciDivisionProgramCode>
+		<tns:fundingPercentage>100.0</tns:fundingPercentage>
+	</tns:grant>
+	<tns:trialStatus>Closed to Accrual</tns:trialStatus>
+	<tns:whyStopped></tns:whyStopped>
+	<tns:trialStatusDate>2014-07-07</tns:trialStatusDate>
+	<tns:trialStartDate type="Actual">2010-01-11</tns:trialStartDate>
+	<tns:primaryCompletionDate type="Anticipated">2025-01-01</tns:primaryCompletionDate>
+	<tns:completionDate type="Anticipated">2050-01-01</tns:completionDate>
+	<tns:protocolDocument filename="protocol_updated.pdf">dGVzdA==</tns:protocolDocument>
+	<tns:irbApprovalDocument filename="irb_updated.pdf">dGVzdA==</tns:irbApprovalDocument>
+	<tns:participatingSitesDocument
+		filename="sites_updated.pdf">dGVzdA==</tns:participatingSitesDocument>
+	<tns:informedConsentDocument filename="consent_updated.pdf">dGVzdA==</tns:informedConsentDocument>
+	<tns:otherDocument filename="other_updated.pdf">dGVzdA==</tns:otherDocument>
+</tns:CompleteTrialUpdate>

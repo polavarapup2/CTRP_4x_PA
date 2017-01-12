@@ -1,0 +1,2 @@
+DROP TRIGGER IF EXISTS study_recruitment_status_set_current_trigger ON study_recruitment_status;
+DROP TRIGGER IF EXISTS study_overall_status_update_study_recruitment_status ON study_overall_status;

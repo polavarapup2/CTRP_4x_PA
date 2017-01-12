@@ -1,0 +1,5 @@
+"COLLECTIONS","{nciId}",20110105,20101231,"CL",20090101,"Davis^B^Darlene","(206)342-1632","(206)652-1339","aevansel@example.com","1"
+PATIENTS,"{nciId}",1014001,00000,,195706,Female,Not Hispanic or Latino,,20110519,,3,,,,,,,,,,"A00",,
+PATIENTS,"{nciId}",1014002,00000,,193406,Male,Unknown,,20130404,,3,,,,,,,,,,"A00",,
+PATIENT_RACES,"{nciId}",1014001,White
+PATIENT_RACES,"{nciId}",1014002,White
