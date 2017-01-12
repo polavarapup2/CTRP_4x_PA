@@ -1,1 +1,0 @@
-update study_protocol_stage set responsible_party_type='PI' where responsible_party_type='pi';

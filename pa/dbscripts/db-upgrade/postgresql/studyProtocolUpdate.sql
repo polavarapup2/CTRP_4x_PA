@@ -1,1 +1,0 @@
-update study_protocol set status_code = 'ACTIVE' , submission_number = 1 where status_code is null;

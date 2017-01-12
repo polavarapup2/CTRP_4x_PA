@@ -1,7 +1,0 @@
-#
-# Properties for test cases.
-#
-server.hostname=@pa.server.name@
-server.port=@jboss.port@
-selenium.server.port=@selenium.server.port@
-selenium.delay=@selenium.delay@

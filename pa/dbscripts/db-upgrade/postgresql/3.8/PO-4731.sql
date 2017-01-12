@@ -1,1 +1,0 @@
-alter table study_protocol_stage add column responsible_oc_identifier varchar(50);

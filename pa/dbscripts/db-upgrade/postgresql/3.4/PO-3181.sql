@@ -1,1 +1,0 @@
-UPDATE PA_PROPERTIES SET value = 'CDE Marker Request ${markerName} for ${trialIdentifier}' where name = 'CDE_MARKER_REQUEST_SUBJECT';

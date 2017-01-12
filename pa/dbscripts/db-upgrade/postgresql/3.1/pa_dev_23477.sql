@@ -1,1 +1,0 @@
-ALTER TABLE planned_activity ALTER COLUMN text_description TYPE VARCHAR(5000);

@@ -1,1 +1,0 @@
-alter table study_owner add column enable_emails bool NOT NULL DEFAULT true;

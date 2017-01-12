@@ -1,1 +1,0 @@
-alter table ctgovimport_log add column review_required bool;

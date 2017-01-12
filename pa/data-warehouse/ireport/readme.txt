@@ -1,1 +1,0 @@
-To create the variable report open dataTable4.jrmxl and change the default for the parameter Use_Start_Date to true.

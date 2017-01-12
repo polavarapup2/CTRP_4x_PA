@@ -1,1 +1,0 @@
-ALTER TABLE study_subject ADD COLUMN submission_type CHARACTER VARYING(200);
