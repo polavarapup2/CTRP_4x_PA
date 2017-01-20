@@ -18,8 +18,10 @@ ant -f build-lite.xml dist
 
 Ant Commands
 
-"ant deploy-notest" will rebuild and redeploy EAR into JBoss quickly without running tests
+"ant deploy-notest" will rebuild and redeploy EAR into JBoss quickly without running tests.
+
 "ant deploy" will run all tests for the given module (pa, reg-web or accrual) and redeploy EAR in JBoss.
+
 "ant database.install database.update populate-test-db" in pa will DROP your PA database and re-initialize it for Selenium tests (see below).
 
 
