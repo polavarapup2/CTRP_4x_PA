@@ -42,7 +42,7 @@
     </context-param>
     <context-param>
         <param-name>appTagRevision</param-name>
-        <param-value>2017 January 11 13:47:14</param-value>
+        <param-value>2017 January 26 12:39:10</param-value>
     </context-param>
 
     <!-- Filters -->

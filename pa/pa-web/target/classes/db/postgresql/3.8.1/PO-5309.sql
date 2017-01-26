@@ -1,1 +1,0 @@
-update pa_properties set value = 'Enrolled in Incorrect Study,Other Administrative Error,' where name = 'subject.delete.reasons';

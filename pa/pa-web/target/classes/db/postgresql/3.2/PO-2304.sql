@@ -1,2 +1,0 @@
-delete from csm_user_group where group_id = (select group_id from csm_group where group_name = 'gridClient') 
-    and user_id in (select user_id from csm_user_group where group_id = (select group_id from csm_group where group_name = 'Outcomes'));

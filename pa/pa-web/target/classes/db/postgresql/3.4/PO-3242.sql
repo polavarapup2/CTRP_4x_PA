@@ -1,1 +1,0 @@
-ALTER TABLE submission ADD COLUMN total_number_of_accruals INTEGER CHECK (total_number_of_accruals >= 0);

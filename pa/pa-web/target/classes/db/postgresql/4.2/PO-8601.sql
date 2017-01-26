@@ -1,2 +1,0 @@
-update study_overall_status set status_date = date_trunc('day', status_date) where status_date is not null;
-update study_site_accrual_status set status_date = date_trunc('day', status_date) where status_date is not null;

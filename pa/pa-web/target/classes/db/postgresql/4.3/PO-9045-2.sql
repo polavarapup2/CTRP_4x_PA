@@ -1,2 +1,0 @@
-GRANT SELECT ON TABLE accounts TO copparead;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE accounts TO pamaint;

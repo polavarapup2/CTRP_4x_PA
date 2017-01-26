@@ -1,2 +1,0 @@
---Update length of comment field to 2000 characters.
-ALTER TABLE STUDY_PROTOCOL_STAGE ALTER COLUMN STATUS_REASON TYPE VARCHAR(2000);

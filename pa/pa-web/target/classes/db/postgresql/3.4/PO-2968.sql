@@ -1,1 +1,0 @@
-UPDATE pa_properties set value = '3.4' where identifier = 34;

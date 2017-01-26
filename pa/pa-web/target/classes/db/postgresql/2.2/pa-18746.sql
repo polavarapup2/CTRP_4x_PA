@@ -1,1 +1,0 @@
-alter table organizational_contact alter COLUMN person_identifier DROP NOT NULL;
