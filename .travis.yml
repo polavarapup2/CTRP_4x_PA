@@ -1,0 +1,35 @@
+# whitelist
+branches:
+  only:
+    - master
+sudo: required
+services:
+  - docker
+language: java
+jdk:
+  - openjdk7
+before_install:
+  - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
+  - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
+  - wget https://archive.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
+  - tar xzvf apache-maven-2.2.1-bin.tar.gz
+  - rm -rf $HOME/.m2
+  - export M2_HOME=`pwd`/apache-maven-2.2.1
+  - export M2=$M2_HOME/bin
+  - export PATH=$M2:$PATH
+  - mvn -v
+script:
+  ###Build Script for PA
+  # - cp build-pa/tier-properties/local.properties local.properties
+  - cd build-pa
+  - ant -f build-lite.xml dist
+
+after_success:
+  - pwd
+  - ls -alth
+  - find ~/CBIIT/CTRP_4x_PA/
+  - find ~/.m2/
+
+# after_script:
+notifications:
+  slack: clinicalbiomed:W5L3wQ69vtL1XJCo8uT3oQgY
