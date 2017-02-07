@@ -322,7 +322,7 @@ public final class ParticipatingSiteServiceTest extends AbstractRestServiceTest 
         response = updateSite(siteID, upd);
         verifyUpdateSiteResponse(response, siteID);
         verifySiteUpdate(siteID, upd);
-        assertTrue(getSiteValue(siteID).contains("Deleted because another  record with the same site status"));
+        assertTrue(getSiteValue(siteID).contains("Deleted because another record with the same site status"));
         
     }
     

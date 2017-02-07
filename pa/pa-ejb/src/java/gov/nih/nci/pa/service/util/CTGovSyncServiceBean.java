@@ -3,8 +3,10 @@
  */
 package gov.nih.nci.pa.service.util; // NOPMD
 
+import static gov.nih.nci.pa.service.ctgov.ResponsiblePartyTypeEnum.PRINCIPAL_INVESTIGATOR;
+import static gov.nih.nci.pa.service.ctgov.ResponsiblePartyTypeEnum.SPONSOR;
+import static gov.nih.nci.pa.service.ctgov.ResponsiblePartyTypeEnum.SPONSOR_INVESTIGATOR;
 import static org.apache.commons.lang.StringUtils.defaultString;
-import static org.apache.commons.lang.StringUtils.indexOf;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
@@ -87,15 +89,20 @@ import gov.nih.nci.pa.service.TrialRegistrationServiceLocal;
 import gov.nih.nci.pa.service.ctgov.ArmGroupStruct;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
 import gov.nih.nci.pa.service.ctgov.ContactStruct;
-import gov.nih.nci.pa.service.ctgov.DateStruct;
 import gov.nih.nci.pa.service.ctgov.EligibilityStruct;
 import gov.nih.nci.pa.service.ctgov.EnrollmentStruct;
 import gov.nih.nci.pa.service.ctgov.IdInfoStruct;
 import gov.nih.nci.pa.service.ctgov.InvestigatorStruct;
+import gov.nih.nci.pa.service.ctgov.PhaseEnum;
 import gov.nih.nci.pa.service.ctgov.ProtocolOutcomeStruct;
 import gov.nih.nci.pa.service.ctgov.ResponsiblePartyStruct;
+import gov.nih.nci.pa.service.ctgov.ResponsiblePartyTypeEnum;
+import gov.nih.nci.pa.service.ctgov.RoleEnum;
 import gov.nih.nci.pa.service.ctgov.SponsorStruct;
+import gov.nih.nci.pa.service.ctgov.StudyTypeEnum;
 import gov.nih.nci.pa.service.ctgov.TextblockStruct;
+import gov.nih.nci.pa.service.ctgov.VariableDateStruct;
+import gov.nih.nci.pa.service.ctgov.YesNoEnum;
 import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
 import gov.nih.nci.pa.service.util.AbstractPDQTrialServiceHelper.PersonWithFullNameDTO;
 import gov.nih.nci.pa.service.util.ProtocolComparisonServiceLocal.Difference;
@@ -115,12 +122,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -128,7 +134,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -146,7 +151,6 @@ import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -169,11 +173,22 @@ import com.fiveamsolutions.nci.commons.util.UsernameHolder;
  * 
  */
 @Stateless
-@Interceptors({RemoteAuthorizationInterceptor.class, PaHibernateSessionInterceptor.class })
+@Interceptors({ RemoteAuthorizationInterceptor.class,
+        PaHibernateSessionInterceptor.class })
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @SuppressWarnings({ "unchecked", "PMD.TooManyMethods",
         "PMD.ExcessiveClassLength", "PMD.CyclomaticComplexity" })
 public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
+
+    /**
+     * UNKNOWN_STATUS
+     */
+    private static final String UNKNOWN_STATUS = "Unknown status";
+
+    /**
+     * N_8
+     */
+    private static final int N_8 = 8;
 
     private static final int RETRY_NUMBER = 3;
 
@@ -193,19 +208,17 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
      * CTGOV Import user name.
      */
     public static final String CTGOVIMPORT_USERNAME = "ClinicalTrials.gov Import";
-    
-    private static final int INDEX_3 = 3;
 
-    private static final String MASKING = "Masking";
+    private static final int INDEX_1 = 1;
 
     private static final String NEW_TRIAL_ACTION = "New Trial";
 
     private static final String UPDATE_ACTION = "Update";
 
     private static final String EMPTY = "";
-    
-    private static final String EXCLUSION_CRITERIA_MARKER = 
-            "(?:(?:\\sExclusion (?:C|c)riteria\\s*:?)|(?:\\s{3,}Exclusion:\\s))(?=\\s+-\\s{2})";
+
+    private static final String EXCLUSION_CRITERIA_MARKER = "(?:(?:\\sExclusion (?:C|c)riteria\\s*:?)"
+            + "|(?:\\s{3,}Exclusion:\\s))(?=\\s+-\\s{2})";
 
     private static final String INCLUSION_CRITERIA_MARKER = "\\sInclusion (?:C|c)riteria\\s*:?(?=\\s+-\\s{2})";
 
@@ -240,14 +253,16 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     private static final int L_32000 = 32000;
 
     private static final int L_5000 = 5000;
-    
+
     private static final int L_10000 = 10000;
-    
+
     private static final int L_800 = 800;
 
     private static final int L_200 = 200;
-    
+
     private static final String UNITED_STATES = "United States";
+
+    private static final String ALL = "All";
 
     @EJB
     private LookUpTableServiceRemote lookUpTableService;
@@ -280,7 +295,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     private static final int L_300 = 300;
 
     /**
-     * Mapping of values between ClinicalTrials.gov and CTRP. Key is ClinicalTrials.gov, Value is CTRP
+     * Mapping of values between ClinicalTrials.gov and CTRP. Key is
+     * ClinicalTrials.gov, Value is CTRP
      */
     public static final Map<String, String> CTGOV_TO_CTRP_MAP = new HashMap<String, String>();
 
@@ -300,6 +316,11 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 BlindingSchemaCode.SINGLE_BLIND.getCode());
         CTGOV_TO_CTRP_MAP.put("Double-Blind",
                 BlindingSchemaCode.DOUBLE_BLIND.getCode());
+
+        CTGOV_TO_CTRP_MAP
+                .put("Participant", BlindingRoleCode.SUBJECT.getCode());
+        CTGOV_TO_CTRP_MAP.put("Care Provider",
+                BlindingRoleCode.CAREGIVER.getCode());
 
         CTGOV_TO_CTRP_MAP.put("Single Group Assignment",
                 DesignConfigurationCode.SINGLE_GROUP.getCode());
@@ -341,9 +362,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         CTGOV_TO_CTRP_MAP.put("Enrolling by invitation",
                 StudyStatusCode.ENROLLING_BY_INVITATION.getCode());
         CTGOV_TO_CTRP_MAP.put("Active, not recruiting",
-                StudyStatusCode.CLOSED_TO_ACCRUAL.getCode());        
+                StudyStatusCode.CLOSED_TO_ACCRUAL.getCode());
         CTGOV_TO_CTRP_MAP.put("No longer available",
                 StudyStatusCode.CLOSED_TO_ACCRUAL_AND_INTERVENTION.getCode());
+        CTGOV_TO_CTRP_MAP.put("Temporarily not available",
+                StudyStatusCode.TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION
+                        .getCode());
         CTGOV_TO_CTRP_MAP.put("Suspended",
                 StudyStatusCode.TEMPORARILY_CLOSED_TO_ACCRUAL.getCode());
         CTGOV_TO_CTRP_MAP.put("Suspended",
@@ -403,16 +427,19 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         }
         return null;
     }
+
     /**
      * 
-     * @param nctID nctID
-     * @return boolean  
+     * @param nctID
+     *            nctID
+     * @return boolean
      */
     protected boolean isNctIdValid(String nctID) {
         Pattern p = Pattern.compile("^NCT[0-9]+");
         Matcher m = p.matcher(nctID);
-        return  m.matches();
+        return m.matches();
     }
+
     /**
      * @param xml
      * @return
@@ -456,6 +483,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                         "Unable to get data from ClinicalTrials.gov; see previous error messages.");
 
     }
+
     /**
      * @param nctID
      * @return
@@ -509,7 +537,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             xml = getCtGovXmlByNctId(nctID);
         } catch (Exception e) {
             LOG.error(e, e);
-            createImportLogEntry(EMPTY, nctID, EMPTY, EMPTY, "Failure: unable to retrieve from ClinicalTrials.gov", 
+            createImportLogEntry(EMPTY, nctID, EMPTY, EMPTY,
+                    "Failure: unable to retrieve from ClinicalTrials.gov",
                     currentUser, false, false, false, null);
             throw new PAException(e.getMessage()); // NOPMD
         }
@@ -536,8 +565,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         return StringUtils.join(nciIDs, ", ");
     }
 
-    private List<StudyProtocolDTO> filterOutRejected(final List<StudyProtocolDTO> list)
-            throws PAException {
+    private List<StudyProtocolDTO> filterOutRejected(
+            final List<StudyProtocolDTO> list) throws PAException {
         CollectionUtils.filter(list, new Predicate() {
             @Override
             public boolean evaluate(Object arg0) {
@@ -564,14 +593,16 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         final String currentUser = getCurrentUser();
         try {
             ClinicalStudy study = unmarshallClinicalStudy(xml);
-            nctIdStr = study.getIdInfo().getNctId();            
+            nctIdStr = study.getIdInfo().getNctId();
 
             StudyProtocolDTO studyProtocolDTO = instantiateStudyProtocolDTO(study);
-            studyProtocolDTO.setStudySource(CdConverter.convertToCd(StudySourceCode.CLINICAL_TRIALS_GOV));
+            studyProtocolDTO.setStudySource(CdConverter
+                    .convertToCd(StudySourceCode.CLINICAL_TRIALS_GOV));
 
             final String protocolID = verifyPopulateAndPersist(
-                    studyProtocolDTO, study, nctIdStr, xml, false);            
-            title = StConverter.convertToString(studyProtocolDTO.getOfficialTitle());            
+                    studyProtocolDTO, study, nctIdStr, xml, false);
+            title = StConverter.convertToString(studyProtocolDTO
+                    .getOfficialTitle());
             String trialNciId = paServiceUtils.getTrialNciId(Long
                     .valueOf(protocolID));
             createImportLogEntry(trialNciId, nctIdStr, title, NEW_TRIAL_ACTION,
@@ -579,7 +610,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             return trialNciId;
         } catch (Exception e) {
             createImportLogEntry(EMPTY, nctIdStr, title, NEW_TRIAL_ACTION,
-                    FAILURE + e.getMessage(), currentUser, false, false, false, null);
+                    FAILURE + e.getMessage(), currentUser, false, false, false,
+                    null);
             throw new PAException(e);
         }
 
@@ -589,54 +621,62 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             final StudyProtocolDTO existentStudy) // NOPMD
             throws PAException { // NOPMD
 
-        final Long id = Long
-                        .valueOf(existentStudy.getIdentifier().getExtension());
+        final Long id = Long.valueOf(existentStudy.getIdentifier()
+                .getExtension());
         String trialNciId = paServiceUtils.getTrialNciId(id);
         String title = EMPTY;
         final String currentUser = getCurrentUser();
-        try {            
+        try {
             ClinicalStudy study = unmarshallClinicalStudy(xml);
-            nctIdStr = study.getIdInfo().getNctId();            
+            nctIdStr = study.getIdInfo().getNctId();
 
             StudyProtocolDTO studyProtocolDTO = existentStudy;
-            if (!BlConverter.convertToBool(studyProtocolDTO.getProprietaryTrialIndicator())) {
-                throw new PAException("Complete trials cannot be updated from ClinicalTrials.gov");
+            if (!BlConverter.convertToBool(studyProtocolDTO
+                    .getProprietaryTrialIndicator())) {
+                throw new PAException(
+                        "Complete trials cannot be updated from ClinicalTrials.gov");
             }
-            
-            ProtocolSnapshot before = protocolComparisonService.captureSnapshot(id);
+
+            ProtocolSnapshot before = protocolComparisonService
+                    .captureSnapshot(id);
             verifyPopulateAndPersist(studyProtocolDTO, study, nctIdStr, xml,
-                    true);            
-            title = StConverter.convertToString(studyProtocolDTO.getOfficialTitle());
-            ProtocolSnapshot after = protocolComparisonService.captureSnapshot(id);
-            
+                    true);
+            title = StConverter.convertToString(studyProtocolDTO
+                    .getOfficialTitle());
+            ProtocolSnapshot after = protocolComparisonService
+                    .captureSnapshot(id);
+
             final boolean needsReview = needsReview(before, after);
             final boolean adminChanged = adminChanged(before, after);
-            final boolean scientificChanged = scientificChanged(before, after);            
-            
+            final boolean scientificChanged = scientificChanged(before, after);
+
             StudyInboxDTO recent = null;
-            //Associate ctgov import log entry and study inbox entry
-            List<StudyInboxDTO> inboxEntries = studyInboxService.getOpenInboxEntries(
-                    studyProtocolDTO.getIdentifier());
+            // Associate ctgov import log entry and study inbox entry
+            List<StudyInboxDTO> inboxEntries = studyInboxService
+                    .getOpenInboxEntries(studyProtocolDTO.getIdentifier());
             if (!inboxEntries.isEmpty()) {
                 recent = inboxEntries.get(0);
             }
-            createImportLogEntry(trialNciId, nctIdStr, title, UPDATE_ACTION, SUCCESS, currentUser, 
-                    needsReview, adminChanged, scientificChanged, recent);
-            
+            createImportLogEntry(trialNciId, nctIdStr, title, UPDATE_ACTION,
+                    SUCCESS, currentUser, needsReview, adminChanged,
+                    scientificChanged, recent);
+
             if (needsReview) {
-                attachListOfChangedFieldsToInboxEntry(studyProtocolDTO.getIdentifier(), 
-                        before, after, adminChanged, scientificChanged);
+                attachListOfChangedFieldsToInboxEntry(
+                        studyProtocolDTO.getIdentifier(), before, after,
+                        adminChanged, scientificChanged);
             }
-            
+
             closeStudyInboxAndAcceptTrialIfNeeded(
                     studyProtocolDTO.getIdentifier(), needsReview,
                     study.getLastchangedDate());
-            
+
             return trialNciId;
         } catch (Exception e) {
             LOG.error(e, e);
-            createImportLogEntry(trialNciId, nctIdStr, title, UPDATE_ACTION, 
-                    FAILURE + e.getMessage(), currentUser, false, false, false, null);
+            createImportLogEntry(trialNciId, nctIdStr, title, UPDATE_ACTION,
+                    FAILURE + e.getMessage(), currentUser, false, false, false,
+                    null);
             throw new PAException(e.getMessage()); // NOPMD
         }
 
@@ -647,12 +687,13 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         List<String> sections = Arrays.asList("", "Admin");
         return sectionsChanged(before, after, sections);
     }
-    
-    private boolean scientificChanged(ProtocolSnapshot before, ProtocolSnapshot after)
-            throws PAException {
+
+    private boolean scientificChanged(ProtocolSnapshot before,
+            ProtocolSnapshot after) throws PAException {
         List<String> sections = Arrays.asList("Scientific");
         return sectionsChanged(before, after, sections);
     }
+
     /**
      * @param before
      * @param after
@@ -672,7 +713,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         }
         return false;
     }
-    
+
     private String getFieldSection(String fieldKey) throws PAException {
         String fieldKeyMap = lookUpTableService
                 .getPropertyValue("ctgov.sync.fields_of_interest.key_to_sect_mapping");
@@ -683,13 +724,13 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             return StringUtils.EMPTY;
         }
     }
+
     /**
      * @param fieldKey
      * @param fieldKeyMap
      * @return
      */
-    private String getFieldKeyMappingValue(String fieldKey,
-            String fieldKeyMap) {
+    private String getFieldKeyMappingValue(String fieldKey, String fieldKeyMap) {
         Matcher m = getFieldKeyMappingMatcher(fieldKey, fieldKeyMap);
         if (m.find()) {
             return m.group(1).trim();
@@ -697,6 +738,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             return fieldKey;
         }
     }
+
     /**
      * @param fieldKey
      * @param fieldKeyMap
@@ -705,9 +747,9 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     private Matcher getFieldKeyMappingMatcher(String fieldKey,
             String fieldKeyMap) {
         Pattern p = Pattern.compile("(?m)^\\Q" + fieldKey + "\\E=(.*)$");
-        return p.matcher(fieldKeyMap);        
+        return p.matcher(fieldKeyMap);
     }
-    
+
     private void attachListOfChangedFieldsToInboxEntry(Ii studyProtocolIi,
             ProtocolSnapshot before, ProtocolSnapshot after,
             boolean adminChanged, boolean scientificChanged) throws PAException {
@@ -740,17 +782,17 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     private void closeStudyInboxAndAcceptTrialIfNeeded(Ii spId,
-            boolean fieldsOfInterestChanged, DateStruct ctgovLastUpdateDate) throws PAException {
+            boolean fieldsOfInterestChanged, String ctgovLastUpdateDate)
+            throws PAException {
         if (fieldsOfInterestChanged || ctgovLastUpdateDate == null
-                || StringUtils.isBlank(ctgovLastUpdateDate.getContent())) {
+                || StringUtils.isBlank(ctgovLastUpdateDate)) {
             return;
         }
         try {
-            Date lastUpdateDate = DateUtils.parseDate(
-                    ctgovLastUpdateDate.getContent(), new String[] {"MMM dd, yyyy"});
+            Date lastUpdateDate = parseCtGovDate(ctgovLastUpdateDate);
             Date tsrDate = null;
-            
-            List<StudyMilestoneDTO> milestones = findTsrMilestones(spId);            
+
+            List<StudyMilestoneDTO> milestones = findTsrMilestones(spId);
             for (StudyMilestoneDTO dto : milestones) {
                 Timestamp date = TsConverter.convertToTimestamp(dto
                         .getMilestoneDate());
@@ -780,9 +822,9 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     private void acceptTrial(Ii spId) throws PAException {
         DocumentWorkflowStatusDTO dws = dwsService
                 .getCurrentByStudyProtocol(spId);
-        if (dws != null 
-                && DocumentWorkflowStatusCode.SUBMITTED.equals(
-                        CdConverter.convertCdToEnum(DocumentWorkflowStatusCode.class, 
+        if (dws != null
+                && DocumentWorkflowStatusCode.SUBMITTED.equals(CdConverter
+                        .convertCdToEnum(DocumentWorkflowStatusCode.class,
                                 dws.getStatusCode()))) {
             DocumentWorkflowStatusDTO dwfDto = new DocumentWorkflowStatusDTO();
             dwfDto.setStatusCode(CdConverter
@@ -828,7 +870,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             ProtocolSnapshot after) throws PAException {
         List<String> ognls = Arrays.asList(lookUpTableService.getPropertyValue(
                 "ctgov.sync.fields_of_interest").split(";"));
-        return protocolComparisonService.compare(before, after, ognls);        
+        return protocolComparisonService.compare(before, after, ognls);
     }
 
     private String verifyPopulateAndPersist(StudyProtocolDTO studyProtocolDTO, // NOPMD
@@ -839,12 +881,13 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 .getPropertyValue("ctgov.sync.import_persons"));
         boolean importOrgs = Boolean.parseBoolean(lookUpTableService
                 .getPropertyValue("ctgov.sync.import_orgs"));
-        
-        if (!isUpdate) {  // PO-7843:  When importing updates from Clinicaltrials.gov
-                           // ignore agency class if trial exists and has NCT #
+
+        if (!isUpdate) { // PO-7843: When importing updates from
+                         // Clinicaltrials.gov
+                         // ignore agency class if trial exists and has NCT #
             verifyTrialCategory(study);
         }
-        
+
         // convert into CTRP DTOs, piece by piece
         extractStudyProtocolDTOFields(study, studyProtocolDTO, isUpdate);
         List<ArmDTO> arms = extractArms(study);
@@ -861,11 +904,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         PersonDTO centralContactDTO = importPersons ? extractCentralContact(study
                 .getOverallContact()) : null;
 
-        PersonDTO investigatorDTO = importPersons ? extractInvestigator(study) : null;
+        PersonDTO investigatorDTO = importPersons ? extractInvestigator(study)
+                : null;
         OrganizationDTO leadOrgDTO = importOrgs ? extractSponsor(study)
                 : getGenericOrganization();
         StudyOverallStatusDTO overallStatusDTO = extractOverallStatusDTO(study);
-        StudyRegulatoryAuthorityDTO regAuthDTO = extractRegulatoryAuthorityDTO(study);
+        final StudyRegulatoryAuthorityDTO regAuthDTO = null;
 
         List<StudyOutcomeMeasureDTO> outcomes = new ArrayList<StudyOutcomeMeasureDTO>();
         outcomes.addAll(extractOutcomes(study.getPrimaryOutcome(), true,
@@ -875,7 +919,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         outcomes.addAll(extractOutcomes(study.getOtherOutcome(), false,
                 OutcomeMeasureTypeCode.OTHER_PRE_SPECIFIED));
 
-        OrganizationDTO sponsorDTO = importOrgs && !isSubmittedByNotCtGov ? extractSponsor(study) : null;
+        OrganizationDTO sponsorDTO = importOrgs && !isSubmittedByNotCtGov ? extractSponsor(study)
+                : null;
         ResponsiblePartyDTO partyDTO = importPersons && importOrgs
                 && !isSubmittedByNotCtGov ? extractResponsibleParty(study)
                 : null;
@@ -891,15 +936,15 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         if (isUpdate) {
             return trialRegistrationService.updateAbbreviatedStudyProtocol(
                     studyProtocolDTO, nctID, leadOrgDTO, leadOrgID, sponsorDTO,
-                    investigatorDTO, partyDTO, centralContactDTO, overallStatusDTO,
-                    regAuthDTO, arms, eligibility, outcomes, collaborators,
-                    Arrays.asList(document)).getExtension();
+                    investigatorDTO, partyDTO, centralContactDTO,
+                    overallStatusDTO, regAuthDTO, arms, eligibility, outcomes,
+                    collaborators, Arrays.asList(document)).getExtension();
         } else {
             return trialRegistrationService.createAbbreviatedStudyProtocol(
                     studyProtocolDTO, nctID, leadOrgDTO, leadOrgID, sponsorDTO,
-                    investigatorDTO, partyDTO, centralContactDTO, overallStatusDTO,
-                    regAuthDTO, arms, eligibility, outcomes, collaborators,
-                    Arrays.asList(document)).getExtension();
+                    investigatorDTO, partyDTO, centralContactDTO,
+                    overallStatusDTO, regAuthDTO, arms, eligibility, outcomes,
+                    collaborators, Arrays.asList(document)).getExtension();
         }
     }
 
@@ -921,14 +966,15 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         ResponsiblePartyDTO partyDTO = null;
         final ResponsiblePartyStruct party = study.getResponsibleParty();
         if (party != null && party.getResponsiblePartyType() != null) {
-            final String type = party.getResponsiblePartyType();
+            final ResponsiblePartyTypeEnum type = party
+                    .getResponsiblePartyType();
             partyDTO = new ResponsiblePartyDTO();
-            if ("Sponsor".equalsIgnoreCase(type)) {
+            if (SPONSOR.equals(type)) {
                 partyDTO.setType(ResponsiblePartyType.SPONSOR);
-            } else if ("Principal Investigator".equalsIgnoreCase(type)) {
+            } else if (PRINCIPAL_INVESTIGATOR.equals(type)) {
                 partyDTO.setType(ResponsiblePartyType.PRINCIPAL_INVESTIGATOR);
                 extractRespPartyInvestigatorInfo(partyDTO, party);
-            } else if ("Sponsor-Investigator".equalsIgnoreCase(type)) {
+            } else if (SPONSOR_INVESTIGATOR.equals(type)) {
                 partyDTO.setType(ResponsiblePartyType.SPONSOR_INVESTIGATOR);
                 extractRespPartyInvestigatorInfo(partyDTO, party);
             } else {
@@ -962,9 +1008,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         person.setName(breakDownCtGovPersonName(EnPnConverter.convertToEnPn(
                 null, null, left(party.getInvestigatorFullName(), L_50), null,
                 null)));
-        setFullNameCtGovStyle(person, null,
-                null, party.getInvestigatorFullName(),
-                null);
+        setFullNameCtGovStyle(person, null, null,
+                party.getInvestigatorFullName(), null);
 
         partyDTO.setTitle(left(party.getInvestigatorTitle(), L_200));
         partyDTO.setAffiliation(org);
@@ -977,8 +1022,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
      */
     private String getCurrentUser() throws PAException {
         User csmUser = CSMUserService.getInstance().getCSMUser(
-                UsernameHolder.getUser());        
-        RegistryUser ru = registryUserService.getUser(csmUser.getLoginName());        
+                UsernameHolder.getUser());
+        RegistryUser ru = registryUserService.getUser(csmUser.getLoginName());
         if (ru != null) {
             return ru.getFullName();
         } else {
@@ -987,11 +1032,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     // CHECKSTYLE:OFF
-    private void createImportLogEntry(String trialNciId, // NOPMD
+    private void createImportLogEntry(
+            String trialNciId, // NOPMD
             String nctIdStr, // NOPMD
             String title, String action, String status, String user,
-            boolean needsReview, boolean adminChanged, boolean scientificChanged, StudyInboxDTO recent)
-            throws PAException {
+            boolean needsReview, boolean adminChanged,
+            boolean scientificChanged, StudyInboxDTO recent) throws PAException {
         CTGovImportLog log = new CTGovImportLog();
         log.setNciID(trialNciId);
         log.setNctID(left(nctIdStr, L_20));
@@ -1007,9 +1053,10 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             StudyInbox studyInbox = new StudyInbox();
             studyInbox.setId(IiConverter.convertToLong(recent.getIdentifier()));
             log.setStudyInbox(studyInbox);
-        }        
+        }
         createCtGovImportLogEntry(log);
     }
+
     // CHECKSTYLE:ON
 
     private void createCtGovImportLogEntry(CTGovImportLog log) {
@@ -1071,8 +1118,6 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             StudyOutcomeMeasureDTO outcome = new StudyOutcomeMeasureDTO();
             outcome.setName(StConverter.convertToSt(left(struct.getMeasure(),
                     L_2000)));
-            outcome.setSafetyIndicator(BlConverter.convertToBl(BooleanUtils
-                    .toBoolean(struct.getSafetyIssue())));
             outcome.setPrimaryIndicator(BlConverter
                     .convertToBl(primaryIndicator));
             outcome.setTimeFrame(StConverter.convertToSt(left(
@@ -1085,87 +1130,15 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         return outcomes;
     }
 
-    private StudyRegulatoryAuthorityDTO extractRegulatoryAuthorityDTO(
-            ClinicalStudy study) throws PAException {
-        if (study.getOversightInfo() == null
-                || study.getOversightInfo().getAuthority().isEmpty()) {
-            return null;
-        }
-        String regulatoryAuthority = study.getOversightInfo().getAuthority()
-                .get(0);
-        String authorityName = EMPTY;
-        String countryName = EMPTY;
-        if (isNotEmpty(regulatoryAuthority)
-                && !UNSPECIFIED.equalsIgnoreCase(regulatoryAuthority)) {
-            int index = indexOf(regulatoryAuthority, ':');
-            if (index != -1) {
-                authorityName = regulatoryAuthority.substring(index + 1).trim();
-                countryName = regulatoryAuthority.substring(0, index).trim();
-            } else {
-                if (isPresentInTheAllowedRegulatoryAuthorities(regulatoryAuthority)) {
-                    authorityName = regulatoryAuthority.trim();
-                    countryName = UNITED_STATES;
-                } else {
-                    throw new PAException(
-                            "Unrecognizable regulatory authority information: "
-                                    + regulatoryAuthority);
-                }
+    private StudyOverallStatusDTO extractOverallStatusDTO(
+            final ClinicalStudy study) throws PAException {
 
-            }
-        }
-
-        final Long regulatoryAuthorityId = findRegulatoryAuthorityId(
-                countryName, authorityName);
-        if (regulatoryAuthorityId != null) {
-            StudyRegulatoryAuthorityDTO dto = new StudyRegulatoryAuthorityDTO();
-            dto.setRegulatoryAuthorityIdentifier(IiConverter
-                    .convertToRegulatoryAuthorityIi(regulatoryAuthorityId));
-            return dto;
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * @param regulatoryAuthority
-     * @throws PAException
-     */
-    private boolean isPresentInTheAllowedRegulatoryAuthorities(
-        String regulatoryAuthority) throws PAException {
-        String allowedRegulatoryAuthoritiesDefaultedToUnitedStates = lookUpTableService
-                .getPropertyValue("allowed.regulatory.authorities.no.country.name");
-        String[] allowedRegulatoryAuthoriries = allowedRegulatoryAuthoritiesDefaultedToUnitedStates
-                .split(",");
-        for (String regulatoryAuthorityElement : allowedRegulatoryAuthoriries) {
-            if (StringUtils.equalsIgnoreCase(
-                    regulatoryAuthorityElement.trim(), regulatoryAuthority)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Long findRegulatoryAuthorityId(String countryName,
-            String authorityName) throws PAException {
-        Long id = regulatoryAuthorityService.getRegulatoryAuthorityId(
-                authorityName, countryName);
-        if (id == null) {
-            LOG.warn("Unable to find a regulatory authority: " + authorityName
-                    + " in " + countryName);
-
-        }
-        return id;
-    }
-
-    private StudyOverallStatusDTO extractOverallStatusDTO(ClinicalStudy study)
-            throws PAException {
-
-        final String overallStatus = study.getOverallStatus();
+        final String overallStatus = determineCurrentStatus(study);
         if (WITHHELD.equalsIgnoreCase(overallStatus)) {
             throw new PAException(
                     "Trials with status of 'Withheld' cannot be imported or updated in CTRP");
         }
-        
+
         StudyOverallStatusDTO status = new StudyOverallStatusDTO();
         final String studyStatus = convertCtGovValue(overallStatus);
         status.setStatusCode(CdConverter.convertStringToCd(checkCodeExistence(
@@ -1182,8 +1155,22 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         return status;
     }
 
+    /**
+     * @param study
+     * @return
+     */
+    private String determineCurrentStatus(final ClinicalStudy study) {
+        String sos = study.getOverallStatus();
+        if (UNKNOWN_STATUS.equalsIgnoreCase(sos)
+                && StringUtils.isNotBlank(study.getLastKnownStatus())) {
+            sos = study.getLastKnownStatus();
+        }
+        return sos;
+    }
+
     private OrganizationDTO getNewOrganizationDTO() {
-        // ClinicalTrials.gov API will not provide nothing but a name for an organization.
+        // ClinicalTrials.gov API will not provide nothing but a name for an
+        // organization.
         // PO won't accept organization
         // curation requests without an address. Hence, we will do what PDQ
         // Import does: a fake address.
@@ -1218,7 +1205,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             return null;
         }
         for (InvestigatorStruct element : study.getOverallOfficial()) {
-            if ("Principal Investigator".equalsIgnoreCase(element.getRole())) {
+            if (RoleEnum.PRINCIPAL_INVESTIGATOR.equals(element.getRole())) {
                 return element;
             }
         }
@@ -1235,11 +1222,11 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             throw new PAException("Overall contact is missing a last name");
         }
         PersonDTO contactDTO = getNewPersonDTO();
-        final EnPn ctgovPersonName = EnPnConverter
-                .convertToEnPn(left(contact.getFirstName(), L_50),
-                        left(contact.getMiddleName(), L_50),
-                        left(contact.getLastName(), L_50), null,
-                        left(contact.getDegrees(), L_10));
+        final EnPn ctgovPersonName = EnPnConverter.convertToEnPn(
+                left(contact.getFirstName(), L_50),
+                left(contact.getMiddleName(), L_50),
+                left(contact.getLastName(), L_50), null,
+                left(contact.getDegrees(), L_10));
         contactDTO.setName(breakDownCtGovPersonName(ctgovPersonName));
         setFullNameCtGovStyle(contactDTO, contact.getFirstName(),
                 contact.getMiddleName(), contact.getLastName(),
@@ -1271,10 +1258,10 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * ClinicalTrials.gov XMLs contain all kinds of stuff in phone numbers that upsets PO.
-     * For example, "888-662-6728 (U.S. Only)" upsets PO because we default
-     * country to USA and this is not a valid USA number according to PO rules.
-     * This method is trying to normalize numbers whenever possible.
+     * ClinicalTrials.gov XMLs contain all kinds of stuff in phone numbers that
+     * upsets PO. For example, "888-662-6728 (U.S. Only)" upsets PO because we
+     * default country to USA and this is not a valid USA number according to PO
+     * rules. This method is trying to normalize numbers whenever possible.
      * 
      * @param phone
      * @return
@@ -1284,8 +1271,11 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         if (phone != null) {
             parsedPhone = phone
                     .replaceAll("(?i) \\(U.S. Only\\)", EMPTY)
-                    .replaceAll("^(\\d{3})\\s*(\\d{3})\\s*(\\d{4})$", "$1-$2-$3") // NOPMD                    
-                    .replaceAll("^(\\d+)-(\\d+) (\\d+)$", "$1-$2-$3") // NOPMD                    
+                    .replaceAll("^(\\d{3})\\s*(\\d{3})\\s*(\\d{4})$",
+                            "$1-$2-$3")
+                    // NOPMD
+                    .replaceAll("^(\\d+)-(\\d+) (\\d+)$", "$1-$2-$3")
+                    // NOPMD
                     .replaceAll("^(\\d+)\\s+(\\d+)-(\\d+)$", "$1-$2-$3")
                     .replaceAll("^\\+1\\((\\d+)\\)\\s*(\\d+)-(\\d+)$",
                             "$1-$2-$3")
@@ -1310,11 +1300,11 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * Interestingly enough, ClinicalTrials.gov Public API always stuffs a person's full
-     * name into last_name element, leaving first_name blank. This eventually
-     * upsets PO because a person must have both first and last names specified.
-     * This method will do the job of breaking down a person's full name into
-     * parts, whenever possible.
+     * Interestingly enough, ClinicalTrials.gov Public API always stuffs a
+     * person's full name into last_name element, leaving first_name blank. This
+     * eventually upsets PO because a person must have both first and last names
+     * specified. This method will do the job of breaking down a person's full
+     * name into parts, whenever possible.
      * 
      * @param enpn
      * @return EnPn
@@ -1337,7 +1327,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             throw new PAException(
                     "A person information is missing both first and last name");
         }
-        // At this point it is clear ClinicalTrials.gov stuffed the entire name into a
+        // At this point it is clear ClinicalTrials.gov stuffed the entire name
+        // into a
         // single element, usually <last_name>
         String fullName = isNotBlank(lastName) ? lastName : firstName;
         if (!fullName.contains(" ")) {
@@ -1389,7 +1380,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
 
     // CHECKSTYLE:ON
     private PersonDTO getNewPersonDTO() {
-        // ClinicalTrials.gov API will not provide enough information about a person to be
+        // ClinicalTrials.gov API will not provide enough information about a
+        // person to be
         // created in PO.
         // PO won't accept a person
         // curation requests without an address & contact info. Hence, we will
@@ -1448,7 +1440,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             EligibilityStruct elig) throws PAException {
         List<PlannedEligibilityCriterionDTO> list = new ArrayList<PlannedEligibilityCriterionDTO>();
         if (elig != null) {
-            String eligibleGenderCode = elig.getGender();
+            String eligibleGenderCode = elig.getGender() != null ? elig
+                    .getGender().value() : StringUtils.EMPTY;
             if (isNotEmpty(eligibleGenderCode)) {
                 PlannedEligibilityCriterionDTO pEligibiltyCriterionDTO = new PlannedEligibilityCriterionDTO();
                 pEligibiltyCriterionDTO.setCriterionName(StConverter
@@ -1514,7 +1507,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         }
         CollectionUtils.forAllDo(list, new Closure() {
             @Override
-            public void execute(Object obj) {               
+            public void execute(Object obj) {
                 PlannedEligibilityCriterionDTO pec = (PlannedEligibilityCriterionDTO) obj;
                 pec.setDisplayOrder(IntConverter.convertToInt(list.indexOf(obj)));
             }
@@ -1606,11 +1599,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
      * @throws PAException
      */
     private Cd getGenderCode(EligibilityStruct elig) throws PAException {
-        final EligibleGenderCode code = EligibleGenderCode.getByCode(elig
-                .getGender());
+        final String gender = StringUtils.replace(
+                elig.getGender() != null ? elig.getGender().value() : "", ALL,
+                EligibleGenderCode.BOTH.getCode());
+        final EligibleGenderCode code = EligibleGenderCode.getByCode(gender);
         if (code == null) {
-            throw new PAException("Unrecognizable gender code: "
-                    + elig.getGender());
+            throw new PAException("Unrecognizable gender code: " + gender);
         }
         return CdConverter.convertToCd(code);
     }
@@ -1650,21 +1644,20 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         dto.setScientificDescription(getSt(study.getDetailedDescription(),
                 L_32000));
         dto.setTargetAccrualNumber(getIvl(study.getEnrollment()));
-        //new code
-        String studyType = study.getStudyType();
-        if ("Expanded Access".equalsIgnoreCase(studyType)) {
-             dto.setExpandedAccessIndicator(getYesNoAsBl("Yes"));
+        // new code
+        final StudyTypeEnum studyType = study.getStudyType();
+        if (StudyTypeEnum.EXPANDED_ACCESS.equals(studyType)) {
+            dto.setExpandedAccessIndicator(getYesNoAsBl("Yes"));
         } else {
-             dto.setExpandedAccessIndicator(getYesNoAsBl("No"));
+            dto.setExpandedAccessIndicator(getYesNoAsBl("No"));
         }
-        dto.setFdaRegulatedIndicator(getYesNoAsBl(study.getIsFdaRegulated()));
-        dto.setSection801Indicator(getYesNoAsBl(study.getIsSection801()));
         dto.setKeywordText(getSt(study.getKeyword(), L_4000));
-        //For the case where official title is null/empty in XML.
+        // For the case where official title is null/empty in XML.
         if (StringUtils.isEmpty(study.getOfficialTitle())) {
-             dto.setOfficialTitle(getSt(defaultString(study.getBriefTitle()), L_4000));
-         } else {
-            dto.setOfficialTitle(getSt(defaultString(study.getOfficialTitle()), 
+            dto.setOfficialTitle(getSt(defaultString(study.getBriefTitle()),
+                    L_4000));
+        } else {
+            dto.setOfficialTitle(getSt(defaultString(study.getOfficialTitle()),
                     L_4000));
         }
         dto.setPhaseCode(CdConverter.convertStringToCd(convertPhaseCode(study
@@ -1689,8 +1682,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         }
 
         final Cd purposeCd = CdConverter.convertStringToCd(checkCodeExistence(
-                extractStudyDesignElement(study, "Primary Purpose"),
-                PrimaryPurposeCode.class));
+                study.getStudyDesignInfo() != null ? study.getStudyDesignInfo()
+                        .getPrimaryPurpose() : null, PrimaryPurposeCode.class));
         dto.setPrimaryPurposeCode(purposeCd);
         if (ISOUtil.isCdNull(purposeCd)) {
             setPrimaryPurposeCodeDefaults(dto);
@@ -1702,10 +1695,10 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         } else {
             extractNonInterventionalStudyProtocolDTO(
                     (NonInterventionalStudyProtocolDTO) dto, study);
-        }        
-        dto.setUserLastCreated(StConverter.convertToSt(CTGOVIMPORT_USERNAME));        
-    }    
-    
+        }
+        dto.setUserLastCreated(StConverter.convertToSt(CTGOVIMPORT_USERNAME));
+    }
+
     /**
      * @param dto
      */
@@ -1733,22 +1726,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             if (valueByCode == null) {
                 throw new PAException(
                         "The following ClinicalTrials.gov value does not correspond to a valid CTRP code: \""
-                                + code + "\" of class "
+                                + code
+                                + "\" of class "
                                 + enumOrLovClass.getSimpleName());
             }
         }
         return code;
-    }
-
-    private String extractStudyDesignElement(ClinicalStudy study, String name) {
-        if (isNotBlank(study.getStudyDesign())) {
-            Pattern p = Pattern.compile(name + ":(([a-zA-Z\\s\\-/])+)");
-            Matcher m = p.matcher(study.getStudyDesign());
-            if (m.find()) {
-                return convertCtGovValue(m.group(1).trim());
-            }
-        }
-        return null;
     }
 
     private String convertCtGovValue(String ctgovValue) {
@@ -1756,11 +1739,12 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 .get(ctgovValue) : ctgovValue;
     }
 
-    private String convertPhaseCode(String phase) throws PAException {
-        if (isBlank(phase)) {
+    private String convertPhaseCode(PhaseEnum phase) throws PAException {
+        if (phase == null || isBlank(phase.value())) {
             return null;
         }
-        return checkCodeExistence(convertCtGovValue(phase), PhaseCode.class);
+        return checkCodeExistence(convertCtGovValue(phase.value()),
+                PhaseCode.class);
     }
 
     private St getSt(List<String> list, int len) {
@@ -1784,14 +1768,19 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
 
     }
 
+    private Bl getYesNoAsBl(YesNoEnum yesOrNo) throws PAException {
+        return getYesNoAsBl(yesOrNo == null ? StringUtils.EMPTY : yesOrNo
+                .value());
+    }
+
     /**
      * @param enrollment
      * @return
      */
     private Ivl<Int> getIvl(EnrollmentStruct enrollment) {
         return enrollment != null ? IvlConverter.convertInt().convertToIvl(
-                enrollment.getContent(), null) : IvlConverter.convertInt()
-                .convertToIvl(null, null);
+                enrollment.getValue().toString(), null) : IvlConverter
+                .convertInt().convertToIvl(null, null);
     }
 
     private St getSt(String str, int length) {
@@ -1803,21 +1792,21 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 : null, length));
     }
 
-    private Cd getDateType(DateStruct date) throws PAException {
+    private Cd getDateType(VariableDateStruct date) throws PAException {
         if (date == null) {
             return CdConverter.convertStringToCd(null);
         }
-        if (isBlank(date.getType())) {
+        if (date.getType() == null) {
             return determineDateTypeFromDateValue(date);
         }
-        if (ActualAnticipatedTypeCode.getByCode(date.getType()) == null) {
+        if (ActualAnticipatedTypeCode.getByCode(date.getType().value()) == null) {
             throw new PAException("Unrecognizable date type code: "
                     + date.getType());
         }
-        return CdConverter.convertStringToCd(date.getType());
+        return CdConverter.convertStringToCd(date.getType().value());
     }
 
-    private Cd determineDateTypeFromDateValue(DateStruct ctGovDate)
+    private Cd determineDateTypeFromDateValue(VariableDateStruct ctGovDate)
             throws PAException {
         Ts ts = getTs(ctGovDate);
         if (!ISOUtil.isTsNull(ts)) {
@@ -1830,19 +1819,34 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         return CdConverter.convertStringToCd(null);
     }
 
-    private Ts getTs(DateStruct date) throws PAException {
-        if (date == null || isBlank(date.getContent())) {
+    private Ts getTs(VariableDateStruct date) throws PAException {
+        if (date == null || isBlank(date.getValue())) {
             return TsConverter.convertToTs(null);
         }
-        DateFormat fmt = new SimpleDateFormat("MMMM yyyy", Locale.US);
+        final String dateString = date.getValue();
+        return getTs(dateString);
+    }
+
+    /**
+     * @param dateString
+     * @return
+     * @throws PAException
+     */
+    private Ts getTs(final String dateString) throws PAException {
         Date d;
         try {
-            d = fmt.parse(date.getContent());
+            d = parseCtGovDate(dateString);
         } catch (ParseException e) {
             throw new PAException("Unrecognizable date format: " // NOPMD
-                    + date.getContent());
+                    + dateString);
         }
         return TsConverter.convertToTs(d);
+    }
+
+    private Date parseCtGovDate(String date) throws ParseException {
+        return StringUtils.isNotBlank(date) ? DateUtils.parseDate(date,
+                new String[] {"MMMM dd, yyyy", "MMM dd, yyyy", "MMMM yyyy" })
+                : null;
     }
 
     private void extractNonInterventionalStudyProtocolDTO(
@@ -1852,24 +1856,28 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 .getBiospecDescr() != null ? study.getBiospecDescr()
                 .getTextblock() : null, L_800)));
         dto.setBiospecimenRetentionCode(CdConverter.convertStringToCd(study
-                .getBiospecRetention()));
+                .getBiospecRetention() != null ? study.getBiospecRetention()
+                .value() : null));
         dto.setNumberOfGroups(getInt(study.getNumberOfGroups()));
 
         dto.setStudyModelCode(CdConverter.convertStringToCd(checkCodeExistence(
-                extractStudyDesignElement(study, "Observational Model"),
+                convertCtGovValue(study.getStudyDesignInfo() != null ? study
+                        .getStudyDesignInfo().getObservationalModel() : null),
                 StudyModelCode.class)));
         dto.setTimePerspectiveCode(CdConverter
-                .convertStringToCd(checkCodeExistence(
-                        extractStudyDesignElement(study, "Time Perspective"),
+                .convertStringToCd(checkCodeExistence(convertCtGovValue(study
+                        .getStudyDesignInfo() != null ? study
+                        .getStudyDesignInfo().getTimePerspective() : null),
                         TimePerspectiveCode.class)));
         dto.setStudySubtypeCode(CdConverter
                 .convertToCd(StudySubtypeCode.OBSERVATIONAL));
-        
+
         final EligibilityStruct elig = study.getEligibility();
-        if (elig != null && StringUtils.isNotBlank(elig.getSamplingMethod())) {
+        if (elig != null && elig.getSamplingMethod() != null) {
             dto.setSamplingMethodCode(CdConverter
-                    .convertStringToCd(checkCodeExistence(
-                            elig.getSamplingMethod(), SamplingMethodCode.class)));
+                    .convertStringToCd(checkCodeExistence(elig
+                            .getSamplingMethod().value(),
+                            SamplingMethodCode.class)));
         }
         if (elig != null && elig.getStudyPop() != null
                 && StringUtils.isNotBlank(elig.getStudyPop().getTextblock())) {
@@ -1884,46 +1892,61 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             throws PAException {
         dto.setNumberOfInterventionGroups(getInt(study.getNumberOfArms()));
         dto.setAllocationCode(CdConverter.convertStringToCd(checkCodeExistence(
-                extractStudyDesignElement(study, "Allocation"),
+                convertCtGovValue(study.getStudyDesignInfo() != null ? study
+                        .getStudyDesignInfo().getAllocation() : null),
                 AllocationCode.class)));
-        dto.setStudyClassificationCode(CdConverter
-                .convertStringToCd(checkCodeExistence(
-                        extractStudyDesignElement(study,
-                                "Endpoint Classification"),
-                        StudyClassificationCode.class)));
         dto.setDesignConfigurationCode(CdConverter
-                .convertStringToCd(checkCodeExistence(
-                        extractStudyDesignElement(study, "Intervention Model"),
+                .convertStringToCd(checkCodeExistence(convertCtGovValue(study
+                        .getStudyDesignInfo() != null ? study
+                        .getStudyDesignInfo().getInterventionModel() : null),
                         DesignConfigurationCode.class)));
-        dto.setBlindingSchemaCode(CdConverter
-                .convertStringToCd(checkCodeExistence(
-                        extractStudyDesignElement(study, MASKING),
-                        BlindingSchemaCode.class)));
-        dto.setBlindedRoleCode(extractBlindingRoleCodes(study));
+
+        extractMasking(dto, study);
     }
 
     /**
-     * @return
+     * @param dto
+     *            InterventionalStudyProtocolDTO
+     * @param study
+     *            ClinicalStudy
      * @throws PAException
+     *             PAException
      */
-    private DSet<Cd> extractBlindingRoleCodes(ClinicalStudy study)
-            throws PAException {
-        DSet<Cd> set = new DSet<Cd>();
-        set.setItem(new HashSet<Cd>());
-        if (isNotBlank(study.getStudyDesign())) {
-            Pattern p = Pattern.compile(MASKING
-                    + ":(([a-zA-Z\\s\\-/])+)\\((.+?)\\)");
-            Matcher m = p.matcher(study.getStudyDesign());
-            if (m.find()) {
-                String codesStr = m.group(INDEX_3);
-                for (String code : codesStr.split(",")) {
-                    set.getItem().add(
-                            CdConverter.convertStringToCd(checkCodeExistence(
-                                    code.trim(), BlindingRoleCode.class)));
+    final void extractMasking(final InterventionalStudyProtocolDTO dto,
+            final ClinicalStudy study) throws PAException {
+        if (study.getStudyDesignInfo() != null) {
+            final String masking = StringUtils.defaultString(study
+                    .getStudyDesignInfo().getMasking());
+            if (!masking.equalsIgnoreCase("No masking")) {
+                Pattern p = Pattern
+                        .compile("^((Open Label)|(Single-Blind)|(Double-Blind)|(Open)|(Single Blind)|(Double Blind))?"
+                                + "\\s*\\(?([\\w\\s,]*)\\)?$");
+                Matcher m = p.matcher(masking);
+                if (m.matches()) {
+                    String schema = m.group(1);
+                    String roles = m.group(N_8);
+                    if (StringUtils.isNotBlank(schema)) {
+                        dto.setBlindingSchemaCode(CdConverter
+                                .convertStringToCd(checkCodeExistence(
+                                        convertCtGovValue(schema),
+                                        BlindingSchemaCode.class)));
+                    }
+                    if (StringUtils.isNotBlank(roles)) {
+                        DSet<Cd> set = new DSet<Cd>();
+                        set.setItem(new HashSet<Cd>());
+                        for (String code : roles.split(",")) {
+                            set.getItem()
+                                    .add(CdConverter
+                                            .convertStringToCd(checkCodeExistence(
+                                                    convertCtGovValue(code
+                                                            .trim()),
+                                                    BlindingRoleCode.class)));
+                        }
+                        dto.setBlindedRoleCode(set);
+                    }
                 }
             }
         }
-        return set;
     }
 
     private Int getInt(String str) {
@@ -1933,16 +1956,20 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         return IntConverter.convertToInt(str);
     }
 
+    private Int getInt(BigInteger bigInt) {
+        return getInt(bigInt != null ? bigInt.toString() : StringUtils.EMPTY);
+    }
+
     private StudyProtocolDTO instantiateStudyProtocolDTO(ClinicalStudy study)
             throws PAException {
-        final String studyType = study.getStudyType();
-        if ("Interventional".equalsIgnoreCase(studyType)) {
+        final StudyTypeEnum studyType = study.getStudyType();
+        if (StudyTypeEnum.INTERVENTIONAL.equals(studyType)) {
             return new InterventionalStudyProtocolDTO();
-        } else if ("Observational".equalsIgnoreCase(studyType)
-                || "Observational [Patient Registry]"
-                        .equalsIgnoreCase(studyType)) {
+        } else if (StudyTypeEnum.OBSERVATIONAL.equals(studyType)
+                || StudyTypeEnum.OBSERVATIONAL_PATIENT_REGISTRY
+                        .equals(studyType)) {
             return new NonInterventionalStudyProtocolDTO();
-        } else if ("Expanded Access".equalsIgnoreCase(studyType)) {
+        } else if (StudyTypeEnum.EXPANDED_ACCESS.equals(studyType)) {
             return new InterventionalStudyProtocolDTO();
         } else {
             throw new PAException("Unsupported study type: " + studyType);
@@ -1962,56 +1989,71 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     @Override
-    public List<CTGovImportLog> getLogEntries(CTGovImportLogSearchCriteria searchCriteria) // NOPMD
+    public List<CTGovImportLog> getLogEntries(
+            CTGovImportLogSearchCriteria searchCriteria) // NOPMD
             throws PAException {
         Session session = PaHibernateUtil.getCurrentSession();
-        Criteria criteria = session.createCriteria(CTGovImportLog.class, "log");    
+        Criteria criteria = session.createCriteria(CTGovImportLog.class, "log");
         criteria.setFetchMode("studyInbox", FetchMode.JOIN);
         criteria.setMaxResults(L_10000);
         if (StringUtils.isNotEmpty(searchCriteria.getNciIdentifier())) {
-            criteria.add(Restrictions.like("nciID", "%" + searchCriteria.getNciIdentifier() + "%"));
+            criteria.add(Restrictions.like("nciID",
+                    "%" + searchCriteria.getNciIdentifier() + "%"));
         }
         if (StringUtils.isNotEmpty(searchCriteria.getNctIdentifier())) {
-            criteria.add(Restrictions.like("nctID", "%" + searchCriteria.getNctIdentifier() + "%"));
+            criteria.add(Restrictions.like("nctID",
+                    "%" + searchCriteria.getNctIdentifier() + "%"));
         }
         if (StringUtils.isNotEmpty(searchCriteria.getOfficialTitle())) {
-            criteria.add(Restrictions.like("title", "%" + searchCriteria.getOfficialTitle() + "%"));
+            criteria.add(Restrictions.like("title",
+                    "%" + searchCriteria.getOfficialTitle() + "%"));
         }
         if (StringUtils.isNotEmpty(searchCriteria.getAction())) {
             criteria.add(Restrictions.eq("action", searchCriteria.getAction()));
         }
         if (StringUtils.isNotEmpty(searchCriteria.getUserCreated())) {
-            criteria.add(Restrictions.eq("userCreated", searchCriteria.getUserCreated()));
+            criteria.add(Restrictions.eq("userCreated",
+                    searchCriteria.getUserCreated()));
         }
         if (StringUtils.isNotEmpty(searchCriteria.getImportStatus())) {
-            criteria.add(Restrictions.like("importStatus", searchCriteria.getImportStatus() + "%"));
+            criteria.add(Restrictions.like("importStatus",
+                    searchCriteria.getImportStatus() + "%"));
         }
-        //start date is specified but end date is not specified
-        if (searchCriteria.getOnOrAfter() != null && searchCriteria.getOnOrBefore() == null) {
-            criteria.add(Restrictions.ge("dateCreated", searchCriteria.getOnOrAfter())); // NOPMD
-        } else if (searchCriteria.getOnOrBefore() != null && searchCriteria.getOnOrAfter() == null) {                
-            //end date is specified but start date is not specified
-            criteria.add(Restrictions.le("dateCreated", searchCriteria.getOnOrBefore()));
-        } else if (searchCriteria.getOnOrBefore() != null && searchCriteria.getOnOrAfter() != null) {
-            //both start and end dates are specified
-            criteria.add(Restrictions.between("dateCreated", searchCriteria.getOnOrAfter(), 
+        // start date is specified but end date is not specified
+        if (searchCriteria.getOnOrAfter() != null
+                && searchCriteria.getOnOrBefore() == null) {
+            criteria.add(Restrictions.ge("dateCreated",
+                    searchCriteria.getOnOrAfter())); // NOPMD
+        } else if (searchCriteria.getOnOrBefore() != null
+                && searchCriteria.getOnOrAfter() == null) {
+            // end date is specified but start date is not specified
+            criteria.add(Restrictions.le("dateCreated",
                     searchCriteria.getOnOrBefore()));
-        }     
-        
-        if (Boolean.TRUE.equals(searchCriteria.getPendingAdminAcknowledgment()) 
-                || Boolean.TRUE.equals(searchCriteria.getPendingScientificAcknowledgment()) 
-                || Boolean.TRUE.equals(searchCriteria.getPerformedAdminAcknowledgment()) 
-                || Boolean.TRUE.equals(searchCriteria.getPerformedScientificAcknowledgment())) {
+        } else if (searchCriteria.getOnOrBefore() != null
+                && searchCriteria.getOnOrAfter() != null) {
+            // both start and end dates are specified
+            criteria.add(Restrictions.between("dateCreated",
+                    searchCriteria.getOnOrAfter(),
+                    searchCriteria.getOnOrBefore()));
+        }
+
+        if (Boolean.TRUE.equals(searchCriteria.getPendingAdminAcknowledgment())
+                || Boolean.TRUE.equals(searchCriteria
+                        .getPendingScientificAcknowledgment())
+                || Boolean.TRUE.equals(searchCriteria
+                        .getPerformedAdminAcknowledgment())
+                || Boolean.TRUE.equals(searchCriteria
+                        .getPerformedScientificAcknowledgment())) {
             criteria.createAlias("studyInbox", "inbox");
         }
-       
+
         if (Boolean.TRUE.equals(searchCriteria.getPendingAdminAcknowledgment())) {
             addPendingAdminAckCondition(criteria);
         }
         if (Boolean.TRUE.equals(searchCriteria
                 .getPendingScientificAcknowledgment())) {
             addPendingScientificAckCondition(criteria);
-        }       
+        }
         if (Boolean.TRUE.equals(searchCriteria
                 .getPerformedAdminAcknowledgment())) {
             addPerformedAdminAckCondition(criteria);
@@ -2023,15 +2065,20 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
         criteria.addOrder(Order.desc("dateCreated"));
         return criteria.list();
     }
-    
+
     /**
-     * Adds sql condition for study inbox entries with pending admin acknowledgment.
-     * @param criteria Criteria object.
+     * Adds sql condition for study inbox entries with pending admin
+     * acknowledgment.
+     * 
+     * @param criteria
+     *            Criteria object.
      */
     private void addPendingAdminAckCondition(Criteria criteria) {
         criteria.add(Subqueries.exists(DetachedCriteria
                 .forClass(StudyInbox.class, "si")
-                .add(Property.forName("si.studyProtocol.id").eqProperty("inbox.studyProtocol.id")) // NOPMD
+                .add(Property.forName("si.studyProtocol.id").eqProperty(
+                        "inbox.studyProtocol.id"))
+                // NOPMD
                 .add(Restrictions.and(
                         Restrictions.eq("si.admin", Boolean.TRUE),
                         Restrictions.isNull("si.adminCloseDate")))
@@ -2040,47 +2087,55 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * Adds sql condition for study inbox entries with pending scientific acknowledgment.
-     * @param criteria Criteria object.
+     * Adds sql condition for study inbox entries with pending scientific
+     * acknowledgment.
+     * 
+     * @param criteria
+     *            Criteria object.
      */
     private void addPendingScientificAckCondition(Criteria criteria) {
         criteria.add(Subqueries.exists(DetachedCriteria
                 .forClass(StudyInbox.class, "si")
-                .add(Property.forName("si.studyProtocol.id").eqProperty("inbox.studyProtocol.id"))
+                .add(Property.forName("si.studyProtocol.id").eqProperty(
+                        "inbox.studyProtocol.id"))
                 .add(Restrictions.and(
                         Restrictions.eq("si.scientific", Boolean.TRUE),
                         Restrictions.isNull("si.scientificCloseDate")))
                 .setProjection(Projections.property("si.id"))));
-    }   
-    
+    }
+
     /**
-     * Adds sql condition for study inbox entries with performed admin acknowledgment.
+     * Adds sql condition for study inbox entries with performed admin
+     * acknowledgment.
+     * 
      * @param criteria
      */
     private void addPerformedAdminAckCondition(Criteria criteria) {
         criteria.add(Subqueries.exists(DetachedCriteria
                 .forClass(StudyInbox.class, "si")
-                .add(Property.forName("si.studyProtocol.id").eqProperty("inbox.studyProtocol.id"))
+                .add(Property.forName("si.studyProtocol.id").eqProperty(
+                        "inbox.studyProtocol.id"))
                 .add(Restrictions.isNotNull("si.adminCloseDate"))
                 .setProjection(Projections.property("si.id"))));
     }
-    
+
     /**
-     * Adds sql condition for study inbox entries with performed scientific acknowledgment.
+     * Adds sql condition for study inbox entries with performed scientific
+     * acknowledgment.
+     * 
      * @param criteria
      */
     private void addPerformedSciAckCondition(Criteria criteria) {
 
         criteria.add(Subqueries.exists(DetachedCriteria
                 .forClass(StudyInbox.class, "si")
-                .add(Property.forName("si.studyProtocol.id").eqProperty("inbox.studyProtocol.id"))
+                .add(Property.forName("si.studyProtocol.id").eqProperty(
+                        "inbox.studyProtocol.id"))
                 .add(Restrictions.isNotNull("si.scientificCloseDate"))
                 .setProjection(Projections.property("si.id"))));
 
     }
-    
-  
-    
+
     /**
      * @param regulatoryAuthorityService
      *            the regulatoryAuthorityService to set
@@ -2135,7 +2190,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * @param protocolComparisonService the protocolComparisonService to set
+     * @param protocolComparisonService
+     *            the protocolComparisonService to set
      */
     public void setProtocolComparisonService(
             ProtocolComparisonServiceLocal protocolComparisonService) {
@@ -2143,7 +2199,8 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * @param studyMilestoneService the studyMilestoneService to set
+     * @param studyMilestoneService
+     *            the studyMilestoneService to set
      */
     public void setStudyMilestoneService(
             StudyMilestoneServicelocal studyMilestoneService) {
@@ -2151,14 +2208,16 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     }
 
     /**
-     * @param studyInboxService the studyInboxService to set
+     * @param studyInboxService
+     *            the studyInboxService to set
      */
     public void setStudyInboxService(StudyInboxServiceLocal studyInboxService) {
         this.studyInboxService = studyInboxService;
     }
 
     /**
-     * @param dwsService the dwsService to set
+     * @param dwsService
+     *            the dwsService to set
      */
     public void setDwsService(DocumentWorkflowStatusServiceLocal dwsService) {
         this.dwsService = dwsService;

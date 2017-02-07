@@ -124,6 +124,15 @@
                 <suffix value=".yyyy-MM-dd"/>
                 <append value="true"/>
             </periodic-rotating-file-handler>
+            <periodic-rotating-file-handler name="WebServiceAccessLog" autoflush="true">
+                <level name="@log.level@"/>
+                <formatter>
+                    <pattern-formatter pattern="%d{HH:mm:ss,SSS} %s%E%n"/>
+                </formatter>
+                <file relative-to="jboss.server.log.dir" path="WebServiceAccessLog.log"/>
+                <suffix value=".yyyy-MM-dd"/>
+                <append value="true"/>
+            </periodic-rotating-file-handler>
             <periodic-rotating-file-handler name="LDAP" autoflush="true">
                 <level name="@log.level@"/>
                 <formatter>
@@ -158,6 +167,12 @@
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="Twitter"/>
+                </handlers>
+            </logger>
+            <logger category="WebServiceAccessLog" use-parent-handlers="false">
+                <level name="@log.level@"/>
+                <handlers>
+                    <handler name="WebServiceAccessLog"/>
                 </handlers>
             </logger>
             <logger category="gov.nih.nci.coppa.services.ldap" use-parent-handlers="false">

@@ -11,7 +11,7 @@
     <property file="${basedir}/../../build-pa/version.properties"/>
     <property name="pa-ejb.coverage.line" value="78"/>
     <property name="pa-ejb.coverage.branch" value="64"/>
-    <property name="pa-ejb.pmd.maxerrors" value="545"/>
+    <property name="pa-ejb.pmd.maxerrors" value="556"/>
 
     <property name="software.dir" value="${basedir}/../.."/>
     <property name="pa.dir" value="${software.dir}/pa"/>

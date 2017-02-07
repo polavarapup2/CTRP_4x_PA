@@ -3091,8 +3091,10 @@ public class DashboardTest extends AbstractTrialStatusTest {
         driver.switchTo().frame("popupFrame");
         s.type("searchName", in);
         clickAndWait("link=Search");
-        clickAndWait("//td[@class='action']//span[text()='Select']");
-        pause(1000);
+        final String selectBtnXpath = "//td[@class='action']//span[normalize-space(text())='Select']";
+        waitForElementToBecomeAvailable(By.xpath(selectBtnXpath), 10);
+        clickAndWait(selectBtnXpath);
+        pause(2000);
         driver.switchTo().defaultContent();
         clickAndWait("link=Save");
         assertTrue(s.isTextPresent("Message. Record Created."));

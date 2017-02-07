@@ -2079,5 +2079,9 @@
     <changeSet id="url_upgrades" author="krylovd" runOnChange="true">       
        <comment>Correct URLs to caDSR and LexEVS.</comment>
        <sqlFile path="@db-upgrade.run.dir@/4.4/url_upgrades.sql"/>
-    </changeSet>    
+    </changeSet>  
+    <changeSet id="PO-10206" author="krylovd">       
+       <comment>ClinicalTrials.gov import schedule configurable.</comment>
+       <sqlFile path="@db-upgrade.run.dir@/4.4.1/PO-10206.sql"/>
+    </changeSet> 
 </databaseChangeLog>

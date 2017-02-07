@@ -419,9 +419,9 @@ public class ProgramCodeAssignmentTest extends AbstractRegistrySeleniumTest {
     }
 
     private void accessManageAssignmentScreen() {
-        waitForElementToBecomeVisible(By.linkText("Administration"), 2);
+        waitForElementToBecomeVisible(By.linkText("Administration"), 5);
         hoverLink("Administration");
-        waitForElementToBecomeVisible(By.linkText("Manage DT4 Information"), 2);
+        waitForElementToBecomeVisible(By.linkText("Manage DT4 Information"), 5);
         hoverLink("Manage DT4 Information");
         clickAndWait("link=Manage Program Code Assignment & Targeted Accrual for Your Center");
 

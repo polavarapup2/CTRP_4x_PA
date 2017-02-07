@@ -46,7 +46,12 @@
   <primary_completion_date type="Anticipated">February 2014</primary_completion_date>
   <phase>Phase 2</phase>
   <study_type>Interventional</study_type>
-  <study_design>Endpoint Classification:  Safety/Efficacy Study, Intervention Model:  Single Group Assignment, Masking: Double Blind, Primary Purpose:  Treatment</study_design>
+  <study_design_info>
+    <allocation>Randomized</allocation>
+    <intervention_model>Parallel Assignment</intervention_model>
+    <primary_purpose>Treatment</primary_purpose>
+    <masking>Double Blind (Subject, Investigator, Outcomes Assessor)</masking>
+  </study_design_info>
   <primary_outcome>
     <measure>Markers of Cancer Stem Cells (CSCs) in the primary tumor and the tumoral microenvironment</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>

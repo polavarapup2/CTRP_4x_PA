@@ -40,7 +40,7 @@ org.apache.commons.lang.time.DateUtils.addYears($P{End_Date}, -1)
 	<queryString language="SQL">
 		<![CDATA[-- WITH all filters applied
 WITH FAM_ID AS (
-    SELECT distinct family_id FROM dw_family_organization WHERE family_name = $P{Center}
+    SELECT distinct family_id FROM dw_family_organization WHERE family_name = $P{CC_Center}
 ),
 
 FAM_ORGS AS (

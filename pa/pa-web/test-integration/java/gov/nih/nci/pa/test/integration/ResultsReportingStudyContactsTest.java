@@ -80,7 +80,7 @@ public class ResultsReportingStudyContactsTest extends AbstractPaSeleniumTest {
                         + ";"
                         + "submitStudyContact('reportStudyContactsForm', 'ajaxResultsReportingContactdelete.action')");
         waitForPageToLoad();
-        pause(3000);
+        pause(6000);
         assertTrue(selenium
                 .isTextPresent("Selected designee/PIO study contact deleted successfully"));
 

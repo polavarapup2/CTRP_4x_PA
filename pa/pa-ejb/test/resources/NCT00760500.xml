@@ -78,8 +78,11 @@
   <completion_date type="Anticipated">September 2014</completion_date>
   <primary_completion_date type="Anticipated">September 2014</primary_completion_date>
   <phase>N/A</phase>
-  <study_type>Observational</study_type>
-  <study_design>Observational Model:  Ecologic or Community, Time Perspective:  Prospective</study_design>
+  <study_type>Observational</study_type>  
+  <study_design_info>
+    <observational_model>Ecologic or Community</observational_model>
+    <time_perspective>Prospective</time_perspective>   
+  </study_design_info>
   <primary_outcome>
     <measure>To identify Influenza A or B and the subtype of Influenza A of the isolates from children with febrile respiratory complaints who attend the pediatric clinic of the First Affiliated Hospital, Shantou University Medical College.</measure>
     <time_frame>This is an epidemiologic study, there is no time frame.</time_frame>

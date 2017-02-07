@@ -9,6 +9,11 @@
         </schemaBindings>
 
         <!-- rename the value element -->
+        <bindings node="//xs:complexType[@name='measure_count_struct']">
+            <bindings node=".//xs:attribute[@name='value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
         <bindings node="//xs:complexType[@name='measurement_struct']">
             <bindings node=".//xs:attribute[@name='value']">
                 <property name="ValueAttribute"/>

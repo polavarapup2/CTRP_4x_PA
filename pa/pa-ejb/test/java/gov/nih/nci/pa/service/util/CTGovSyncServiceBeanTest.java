@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.iso21090.EnPn;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.CTGovImportLog;
@@ -46,9 +47,13 @@ import gov.nih.nci.pa.enums.StudyModelCode;
 import gov.nih.nci.pa.enums.StudySiteFunctionalCode;
 import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.enums.SummaryFourFundingCategoryCode;
+import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyRegulatoryAuthorityBeanLocal;
+import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
+import gov.nih.nci.pa.service.ctgov.StudyDesignInfoStruct;
 import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
 import gov.nih.nci.pa.util.AbstractEjbTestCase;
 import gov.nih.nci.pa.util.PaHibernateUtil;
@@ -202,6 +207,135 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
                 .uniqueResult();
         assertEquals("Failure: unable to retrieve from ClinicalTrials.gov",
                 log.getImportStatus());
+    }
+
+    @Test
+    public final void testExtractMasking() throws PAException {
+        InterventionalStudyProtocolDTO dto = new InterventionalStudyProtocolDTO();
+        ClinicalStudy study = new ClinicalStudy();
+        final StudyDesignInfoStruct design = new StudyDesignInfoStruct();
+        study.setStudyDesignInfo(design);
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("No masking");
+        serviceBean.extractMasking(dto, study);
+        assertNull(dto.getBlindingSchemaCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Open Label");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.OPEN.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Single-Blind");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.SINGLE_BLIND.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Double-Blind");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.DOUBLE_BLIND.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Open");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.OPEN.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Single Blind");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.SINGLE_BLIND.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Double Blind");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.DOUBLE_BLIND.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertNull(dto.getBlindedRoleCode());
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Open Label (Subject)");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.OPEN.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertEquals(1, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Open Label (Subject, Caregiver, Investigator, Outcomes Assessor)");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.OPEN.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertEquals(4, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Caregiver")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Investigator")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Outcomes Assessor")));
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Subject");
+        serviceBean.extractMasking(dto, study);
+        assertNull(dto.getBlindingSchemaCode());
+        assertEquals(1, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Subject, Caregiver, Investigator, Outcomes Assessor");
+        serviceBean.extractMasking(dto, study);
+        assertNull(dto.getBlindingSchemaCode());
+        assertEquals(4, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Caregiver")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Investigator")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Outcomes Assessor")));
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Double-Blind (Participant, Care Provider, Investigator, Outcomes Assessor)");
+        serviceBean.extractMasking(dto, study);
+        assertEquals(BlindingSchemaCode.DOUBLE_BLIND.getCode(), dto
+                .getBlindingSchemaCode().getCode());
+        assertEquals(4, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Caregiver")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Investigator")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Outcomes Assessor")));
+
+        dto = new InterventionalStudyProtocolDTO();
+        design.setMasking("Participant, Care Provider, Investigator, Outcomes Assessor");
+        serviceBean.extractMasking(dto, study);
+        assertNull(dto.getBlindingSchemaCode());
+        assertEquals(4, dto.getBlindedRoleCode().getItem().size());
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Subject")));
+        assertTrue(dto.getBlindedRoleCode().getItem().contains(cd("Caregiver")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Investigator")));
+        assertTrue(dto.getBlindedRoleCode().getItem()
+                .contains(cd("Outcomes Assessor")));
+
+    }
+
+    private Cd cd(String code) {
+        final Cd cd = new Cd();
+        cd.setCode(code);
+        cd.setDisplayName(StConverter.convertToSt(code));
+        return cd;
     }
 
     @Test
@@ -464,6 +598,27 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
 
     @SuppressWarnings("unchecked")
     @Test
+    public final void testPO_10181_EligCriteriaHandling() throws PAException,
+            ParseException {
+        String nciID = serviceBean.importTrial("NCT01875705");
+        assertTrue(StringUtils.isNotEmpty(nciID));
+
+        final Session session = PaHibernateUtil.getCurrentSession();
+        session.flush();
+        session.clear();
+
+        final long id = getProtocolIdByNciId(nciID, session);
+
+        PlannedEligibilityCriterion gender = (PlannedEligibilityCriterion) session
+                .createQuery(
+                        "from PlannedEligibilityCriterion so where so.criterionName='GENDER' and so.studyProtocol.id="
+                                + id).uniqueResult();
+        assertEquals(EligibleGenderCode.BOTH, gender.getEligibleGenderCode());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
     public final void testPO6548EligCriteriaHandling() throws PAException,
             ParseException {
         String nciID = serviceBean.importTrial("NCT00653939");
@@ -615,9 +770,32 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
         assertEquals(BlindingSchemaCode.DOUBLE_BLIND,
                 sp.getBlindingSchemaCode());
         assertNull(sp.getBlindingRoleCodeCaregiver());
-        assertNull(sp.getBlindingRoleCodeSubject());
-        assertNull(sp.getBlindingRoleCodeInvestigator());
-        assertNull(sp.getBlindingRoleCodeOutcome());
+        assertNotNull(sp.getBlindingRoleCodeSubject());
+        assertNotNull(sp.getBlindingRoleCodeInvestigator());
+        assertNotNull(sp.getBlindingRoleCodeOutcome());
+
+    }
+
+    @Test
+    public final void testImportNoBlindingSchemaCode() throws PAException,
+            ParseException {
+
+        final String nctID = "NCT11111112";
+        String nciID = serviceBean.importTrial(nctID);
+
+        final Session session = PaHibernateUtil.getCurrentSession();
+        session.flush();
+        session.clear();
+
+        final long id = getProtocolIdByNciId(nciID, session);
+        InterventionalStudyProtocol sp = (InterventionalStudyProtocol) session
+                .get(InterventionalStudyProtocol.class, id);
+
+        assertNull(sp.getBlindingSchemaCode());
+        assertNotNull(sp.getBlindingRoleCodeCaregiver());
+        assertNotNull(sp.getBlindingRoleCodeSubject());
+        assertNotNull(sp.getBlindingRoleCodeInvestigator());
+        assertNotNull(sp.getBlindingRoleCodeOutcome());
 
     }
 
@@ -1127,8 +1305,7 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
         assertEquals(ActualAnticipatedTypeCode.ANTICIPATED, sp.getDates()
                 .getPrimaryCompletionDateTypeCode());
         assertEquals(PhaseCode.II, sp.getPhaseCode());
-        assertEquals(StudyClassificationCode.SAFETY_OR_EFFICACY,
-                sp.getStudyClassificationCode());
+        assertNull(sp.getStudyClassificationCode());
         assertEquals(DesignConfigurationCode.SINGLE_GROUP,
                 sp.getDesignConfigurationCode());
 
@@ -1151,7 +1328,7 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
                 outcomes.get(0).getName());
         assertEquals("Change in markers from baseline at day 21",
                 outcomes.get(0).getTimeFrame());
-        assertEquals(false, outcomes.get(0).getSafetyIndicator());
+        assertNull(outcomes.get(0).getSafetyIndicator());
         assertEquals(
                 "CSCs will be measured in tissue samples by techniques that may include: ALDEFLUOR assay and assessment of CD44/CD24 by flow cytometry or examination of RNA transcripts by RT-PCR, aldehyde dehydrogenase 1 (ALDH1), CD44/CD24 and epithelial mesenchymal markers (Snail, Twist, Notch) by immunohistochemistry (IHC).",
                 outcomes.get(0).getDescription());
@@ -1199,7 +1376,7 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
         assertEquals(
                 "Cancer Stem Cells, Novel targeted therapy, CXCR1/2 Inhibitors",
                 sp.getKeywordText());
-        assertTrue(sp.getFdaRegulatedIndicator());
+        assertNull(sp.getFdaRegulatedIndicator());
         assertFalse(sp.getExpandedAccessIndicator());
     }
 
@@ -1245,8 +1422,7 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
         assertEquals(ActualAnticipatedTypeCode.ANTICIPATED, sp.getDates()
                 .getPrimaryCompletionDateTypeCode());
         assertEquals(PhaseCode.III, sp.getPhaseCode());
-        assertEquals(StudyClassificationCode.SAFETY_OR_EFFICACY,
-                sp.getStudyClassificationCode());
+        assertNull(sp.getStudyClassificationCode());
         assertEquals(DesignConfigurationCode.PARALLEL,
                 sp.getDesignConfigurationCode());
 
@@ -1351,32 +1527,9 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
     private void checkRegulatoryInformation(Ii spID, String nctID)
             throws PAException, NumberFormatException {
 
-        if (nctID.equals(NCT02158936)) {
-            assertEquals(
-                    "IDMC",
-                    ((RegulatoryInformationBean) getEjbBean(RegulatoryInformationBean.class))
-                            .get(Long
-                                    .parseLong(((StudyRegulatoryAuthorityBeanLocal) getEjbBean(StudyRegulatoryAuthorityBeanLocal.class))
-                                            .getCurrentByStudyProtocol(spID)
-                                            .getRegulatoryAuthorityIdentifier()
-                                            .getExtension()))
-                            .getAuthorityName());
-        } else {
-            assertEquals(
-                    "Food and Drug Administration",
-                    ((RegulatoryInformationBean) getEjbBean(RegulatoryInformationBean.class))
-                            .get(Long
-                                    .parseLong(((StudyRegulatoryAuthorityBeanLocal) getEjbBean(StudyRegulatoryAuthorityBeanLocal.class))
-                                            .getCurrentByStudyProtocol(spID)
-                                            .getRegulatoryAuthorityIdentifier()
-                                            .getExtension()))
-                            .getAuthorityName());
-
-        }
-
         // Check only one record in study_regulatory_authority table.
         assertEquals(
-                1,
+                0,
                 ((StudyRegulatoryAuthorityBeanLocal) getEjbBean(StudyRegulatoryAuthorityBeanLocal.class))
                         .getByStudyProtocol(spID).size());
     }
@@ -1517,28 +1670,76 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
                 sp.getStudyModelCode());
 
     }
-    
+
     @Test
-    public final void testImportNCT00338442() throws PAException, ParseException {
-         final String nctID = "NCT00338442";
-         String nciID =serviceBean.importTrial(nctID);
-         assertTrue(StringUtils.isNotEmpty(nciID));
-         final Session session = PaHibernateUtil.getCurrentSession();
-         session.flush();
-         session.clear();
-         final long id = getProtocolIdByNciId(nciID, session);
-       
-         
-         try {
-             InterventionalStudyProtocol spin  = (InterventionalStudyProtocol) session
-                     .get(InterventionalStudyProtocol.class, id);
+    public final void testImportWithUknownStatus() throws PAException,
+            ParseException {
+        final String nctID = "NCT11111113";
+        String nciID = serviceBean.importTrial(nctID);
+        assertTrue(StringUtils.isNotEmpty(nciID));
+        final Session session = PaHibernateUtil.getCurrentSession();
+        session.flush();
+        session.clear();
+        final long id = getProtocolIdByNciId(nciID, session);
+
+        try {
+            InterventionalStudyProtocol spin = (InterventionalStudyProtocol) session
+                    .get(InterventionalStudyProtocol.class, id);
+            assertEquals(StudyStatusCode.CLOSED_TO_ACCRUAL, spin.getStudyOverallStatuses()
+                    .iterator().next().getStatusCode());
+        } finally {
+            deactivateTrial(session, id);
+        }
+    }
+
+    @Test
+    public final void testImportNCT00338442() throws PAException,
+            ParseException {
+        final String nctID = "NCT00338442";
+        String nciID = serviceBean.importTrial(nctID);
+        assertTrue(StringUtils.isNotEmpty(nciID));
+        final Session session = PaHibernateUtil.getCurrentSession();
+        session.flush();
+        session.clear();
+        final long id = getProtocolIdByNciId(nciID, session);
+
+        try {
+            InterventionalStudyProtocol spin = (InterventionalStudyProtocol) session
+                    .get(InterventionalStudyProtocol.class, id);
 
             assertTrue(spin.getExpandedAccessIndicator());
 
-         } finally {
-             deactivateTrial(session, id);
-         }
+        } finally {
+            deactivateTrial(session, id);
+        }
     }
+
+    @Test
+    public final void testImportNCT03015844() throws PAException,
+            ParseException {
+        final String nctID = "NCT03015844";
+        String nciID = serviceBean.importTrial(nctID);
+        assertTrue(StringUtils.isNotEmpty(nciID));
+        final Session session = PaHibernateUtil.getCurrentSession();
+        session.flush();
+        session.clear();
+        final long id = getProtocolIdByNciId(nciID, session);
+
+        try {
+            InterventionalStudyProtocol spin = (InterventionalStudyProtocol) session
+                    .get(InterventionalStudyProtocol.class, id);
+
+            assertTrue(spin.getExpandedAccessIndicator());
+            assertEquals(
+                    StudyStatusCode.TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION,
+                    spin.getStudyOverallStatuses().iterator().next()
+                            .getStatusCode());
+
+        } finally {
+            deactivateTrial(session, id);
+        }
+    }
+
     @Test
     public final void testImportObservationalPatientRegistry()
             throws PAException, ParseException {
@@ -2012,43 +2213,6 @@ public class CTGovSyncServiceBeanTest extends AbstractEjbTestCase {
         assertEquals(false, serviceBean.isNctIdValid("1NCT12344444"));
         assertEquals(false, serviceBean.isNctIdValid("N12344444"));
         assertEquals(false, serviceBean.isNctIdValid("NCT"));
-    }
-
-    @Test
-    public final void testImportTrialNoCountryPresentInRegulatoryAuthority()
-            throws PAException, ParseException {
-
-        final Session session = PaHibernateUtil.getCurrentSession();
-        session.createSQLQuery(
-                "update pa_properties set value='true' where name='ctgov.sync.import_orgs'")
-                .executeUpdate();
-        session.createSQLQuery(
-                "update pa_properties set value='false' where name='ctgov.sync.import_persons'")
-                .executeUpdate();
-        session.flush();
-        session.clear();
-
-        final String nctID = NCT02158936;
-        String nciID = serviceBean.importTrial(nctID);
-        assertTrue(StringUtils.isNotEmpty(nciID));
-
-        session.flush();
-        session.clear();
-
-        final long id = getProtocolIdByNciId(nciID, session);
-        try {
-            InterventionalStudyProtocol sp = (InterventionalStudyProtocol) session
-                    .get(InterventionalStudyProtocol.class, id);
-            checkTrialOrgData(sp, "GlaxoSmithKline", "GlaxoSmithKline", nctID);
-
-            checkTrialEmptyPersonData(sp);
-            checkNCT02158936OtherData(session, sp);
-            checkSuccessfulImportLogEntry(nctID, nciID, session, false);
-
-        } finally {
-            restoreImportOrgsPersonFlags(session);
-            deactivateTrial(session, id);
-        }
     }
 
     private StudyInbox createStudyInbox(StudyProtocol sp) {

@@ -368,7 +368,7 @@ public class StatusHistoryManagementActionTest extends AbstractRegWebTest {
         assertTrue((Boolean) json.get("warnings"));
     }
 
-    @SuppressWarnings("rawtypes")
+   /* @SuppressWarnings("rawtypes")Commented out the code as part of PO-10105
     @Test
     public void mustDisplayOpenSitesWarning() throws JSONException,
             ParseException, IOException, NoSuchFieldException,
@@ -391,7 +391,7 @@ public class StatusHistoryManagementActionTest extends AbstractRegWebTest {
 
         json = getJsonMap(action.mustDisplayOpenSitesWarning());
         assertTrue((Boolean) json.get("answer"));
-    }
+    }*/
 
     @SuppressWarnings("rawtypes")
     @Test

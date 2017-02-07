@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <clinical_study>
   <!-- This xml conforms to an XML Schema at:
-    https://clinicaltrials.gov/ct2/html/images/info/public.xsd -->
+    http://clinicaltrials.gov/ct2/html/images/info/public.xsd
+ and an XML DTD at:
+    http://clinicaltrials.gov/ct2/html/images/info/public.dtd -->
   <required_header>
-    <download_date>ClinicalTrials.gov processed this data on January 31, 2017</download_date>
+    <download_date>ClinicalTrials.gov processed this data on July 04, 2013</download_date>
     <link_text>Link to the current ClinicalTrials.gov record.</link_text>
-    <url>https://clinicaltrials.gov/show/NCT01861054</url>
+    <url>http://clinicaltrials.gov/show/NCT01861054</url>
   </required_header>
   <id_info>
     <org_study_id>REP0210</org_study_id>
-    <nct_id>NCT01861054</nct_id>
+    <nct_id>NCT11111113</nct_id>
   </id_info>
   <brief_title>Pilot Study to Evaluate the Safety and Biological Effects of Orally Administered Reparixin in Early Breast Cancer Patients</brief_title>
   <official_title>A Single Arm, Preoperative, Pilot Study to Evaluate the Safety and Biological Effects of Orally Administered Reparixin in Early Breast Cancer Patients Who Are Candidates for Surgery</official_title>
@@ -25,6 +27,7 @@
   </sponsors>
   <source>Sponsor Inc.</source>
   <oversight_info>
+    <authority>United States: Food and Drug Administration</authority>
     <has_dmc>Yes</has_dmc>
   </oversight_info>
   <brief_summary>
@@ -37,7 +40,8 @@
       According to the cancer stem cell (CSC) model, tumors are organized in a cellular hierarchy
     </textblock>
   </detailed_description>
-  <overall_status>Recruiting</overall_status>
+  <overall_status>Unknown status</overall_status>
+  <last_known_status>Active, not recruiting</last_known_status>
   <start_date>February 2013</start_date>
   <completion_date type="Anticipated">September 2014</completion_date>
   <primary_completion_date type="Anticipated">February 2014</primary_completion_date>
@@ -45,84 +49,103 @@
   <study_type>Interventional</study_type>
   <has_expanded_access>No</has_expanded_access>
   <study_design_info>
-    <intervention_model>Single Group Assignment</intervention_model>
+    <allocation>Randomized</allocation>
+    <intervention_model>Parallel Assignment</intervention_model>
     <primary_purpose>Treatment</primary_purpose>
-    <masking>Double Blind (Subject, Caregiver)</masking>
-  </study_design_info>
+    <masking>Participant, Care Provider, Investigator, Outcomes Assessor</masking>
+  </study_design_info>  
   <primary_outcome>
     <measure>Markers of Cancer Stem Cells (CSCs) in the primary tumor and the tumoral microenvironment</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
     <description>CSCs will be measured in tissue samples by techniques that may include: ALDEFLUOR assay and assessment of CD44/CD24 by flow cytometry or examination of RNA transcripts by RT-PCR, aldehyde dehydrogenase 1 (ALDH1), CD44/CD24 and epithelial mesenchymal markers (Snail, Twist, Notch) by immunohistochemistry (IHC).</description>
   </primary_outcome>
   <primary_outcome>
     <measure>Serine-threonine protein kinase (AKT)</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>Focal adhesion kinase (FAK)</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>CXCR1 levels</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>interleukin-1beta [IL-1beta]</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>interleukin-6 [IL-6]</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>tumor necrosis factor-alpha [TNF-alfa]</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>granulocyte macrophage colony stimulating factor [GM-CSF]</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>IL-8</measure>
     <time_frame>Evaluation at day 0 and day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <primary_outcome>
     <measure>CD4, CD8, NK and Macrophages</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </primary_outcome>
   <secondary_outcome>
     <measure>PK profile of the treatment</measure>
     <time_frame>Day 1; Day 21</time_frame>
+    <safety_issue>No</safety_issue>
     <description>Day 1: Cmax, AUCinf (area under the concentration time curve from time 0 extrapolated to infinity calculated by adding Clast/LambdaZ to AUClast [area under the concentration time curve calculated by the linear trapezoidal rule - time 0 to last sample with a quantifiable concentration Clast at time tlast]), AUC0-8 (area under the concentration time curve from time 8 hours post dosing), tmax (time to maximum plasma concentration), LambdaZ (terminal rate constant), t1/2 (calculated as (ln 2)/LambdaZ) and CL/F (apparent oral clearance for DF 1681Y only).
 Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, and CL/F.</description>
   </secondary_outcome>
   <secondary_outcome>
     <measure>Vital signs (Blood Pressure, Heart rate, Body Temperature)</measure>
     <time_frame>Day 0 and within 28 days of last dose</time_frame>
+    <safety_issue>Yes</safety_issue>
   </secondary_outcome>
   <secondary_outcome>
     <measure>Hematology parameters (hemoglobin, white blood cell (WBC) and differential count, platelets)</measure>
     <time_frame>Days 1, 7, 14 and 21 and at the off-treatment visit</time_frame>
+    <safety_issue>Yes</safety_issue>
   </secondary_outcome>
   <secondary_outcome>
     <measure>Clinical chemistry parameters (sodium, potassium, calcium, serum creatinine, total protein, albumin, aspartate aminotransferase [AST], alanine aminotransferase [ALT], alkaline phosphatase [ALP], urea, total bilirubin)</measure>
     <time_frame>Days 1, 7, 14 and 21 and at the off treatment visit</time_frame>
+    <safety_issue>Yes</safety_issue>
   </secondary_outcome>
   <secondary_outcome>
     <measure>Urinalysis (pH, specific gravity and dipstick)</measure>
     <time_frame>up to 14 days prior to treatment; up to 28 days after treatment</time_frame>
+    <safety_issue>Yes</safety_issue>
   </secondary_outcome>
   <other_outcome>
     <measure>Markers of angiogenesis (CD31 staining)</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </other_outcome>
   <other_outcome>
     <measure>Tumor infiltrating leukocytes (CD4, CD8, NK and macrophages)</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </other_outcome>
   <other_outcome>
     <measure>Autophagy (P62 and LC3 by IHC)</measure>
     <time_frame>Change in markers from baseline at day 21</time_frame>
+    <safety_issue>No</safety_issue>
   </other_outcome>
   <number_of_arms>1</number_of_arms>
   <enrollment type="Anticipated">40</enrollment>
@@ -150,8 +173,8 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
 
           -  Zubrod (Eastern Co-operative Oncology Group [ECOG]) Performance Status (PS) of 0-1.
 
-          -  No prior treatment by surgery, radiotherapy, hormone therapy e.g. TAMOXIFENВ® or
-             RALOXIFENВ® for prevention or chemotherapy.
+          -  No prior treatment by surgery, radiotherapy, hormone therapy e.g. TAMOXIFEN® or
+             RALOXIFEN® for prevention or chemotherapy.
 
           -  Scheduled to undergo definitive local surgery for breast cancer.
 
@@ -166,21 +189,21 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
 
           -  Adequate organ function (defined by the following parameters):
 
-               1. Serum creatinine &lt; 140 Ојmol/L or creatinine clearance &gt; 60 mL/min.
+               1. Serum creatinine &lt; 140 μmol/L or creatinine clearance &gt; 60 mL/min.
 
                2. Serum hemoglobin &gt; 9 g/dL; absolute neutrophil count &gt; 1.5 x 109/L; platelets &gt;
                   100 x 109/L.
 
                3. Serum bilirubin &lt; upper normal limit (UNL).
 
-               4. Serum alanine aminotransferase (ALT), aspartate aminotransferase (AST) в‰¤ UNL;
-                  alkaline phosphatase (ALP) (liver isoenzyme fraction) в‰¤ UNL; albumin within
+               4. Serum alanine aminotransferase (ALT), aspartate aminotransferase (AST) ≤ UNL;
+                  alkaline phosphatase (ALP) (liver isoenzyme fraction) ≤ UNL; albumin within
                   normal limits.
 
           -  Documented hormone receptor (ER and progesterone receptor) and HER-2- status.
 
           -  No known hepatitis B virus (unless due to immunization), hepatitis C virus, human
-             immune deficiency virus-I and II positive status.
+             immune deficiency virus-I and  II positive status.
 
         Exclusion Criteria:
 
@@ -255,14 +278,22 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
   </overall_contact>
   <location>
     <facility>
-      <name>Indiana University Simon Cancer Center</name>
+      <name>City of Hope Hospital, 1500 Duarte Road</name>
       <address>
-        <city>Indianapolis</city>
-        <state>Indiana</state>
-        <zip>46202-5289</zip>
+        <city>Duarte</city>
+        <state>California</state>
+        <zip>91010</zip>
         <country>United States</country>
       </address>
     </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Courtney Vito, MD</last_name>
+    </contact>
+    <investigator>
+      <last_name>Courtney Vito, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
   </location>
   <location>
     <facility>
@@ -274,17 +305,15 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
         <country>United States</country>
       </address>
     </facility>
-  </location>
-  <location>
-    <facility>
-      <name>The Cancer Institute of New Jersey</name>
-      <address>
-        <city>New Brunswick</city>
-        <state>New Jersey</state>
-        <zip>08903</zip>
-        <country>United States</country>
-      </address>
-    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Raymond Perez, MD</last_name>
+      <email>rperez3@kumc.edu</email>
+    </contact>
+    <investigator>
+      <last_name>Raymond Perez, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
   </location>
   <location>
     <facility>
@@ -296,17 +325,15 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
         <country>United States</country>
       </address>
     </facility>
-  </location>
-  <location>
-    <facility>
-      <name>Weill Cornell Medical College</name>
-      <address>
-        <city>New York</city>
-        <state>New York</state>
-        <zip>10065</zip>
-        <country>United States</country>
-      </address>
-    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Joseph Sparano, MD</last_name>
+      <email>jsparano@montefiore.org</email>
+    </contact>
+    <investigator>
+      <last_name>Joseph Sparano, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
   </location>
   <location>
     <facility>
@@ -318,28 +345,15 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
         <country>United States</country>
       </address>
     </facility>
-  </location>
-  <location>
-    <facility>
-      <name>Magee-Womens Hospital</name>
-      <address>
-        <city>Pittsburgh</city>
-        <state>Pennsylvania</state>
-        <zip>15213</zip>
-        <country>United States</country>
-      </address>
-    </facility>
-  </location>
-  <location>
-    <facility>
-      <name>Sara Cannon Research Institute</name>
-      <address>
-        <city>Nashville</city>
-        <state>Tennessee</state>
-        <zip>37203</zip>
-        <country>United States</country>
-      </address>
-    </facility>
+    <status>Not yet recruiting</status>
+    <contact>
+      <last_name>Lori J Goldstein MD, MD</last_name>
+      <email>Lori.Goldstein@fccc.edu</email>
+    </contact>
+    <investigator>
+      <last_name>Lori J Goldstein, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
   </location>
   <location>
     <facility>
@@ -351,6 +365,15 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
         <country>United States</country>
       </address>
     </facility>
+    <status>Recruiting</status>
+    <contact>
+      <last_name>Jenny C Chang, MD</last_name>
+      <email>jcchang@tmhs.org</email>
+    </contact>
+    <investigator>
+      <last_name>Jenny C Chang, MD</last_name>
+      <role>Principal Investigator</role>
+    </investigator>
   </location>
   <location_countries>
     <country>United States</country>
@@ -367,12 +390,12 @@ Day 21 (steady state): Cmax, AUCtau (AUC for a dosing interval), AUClast, tmax, 
   <keyword>Cancer Stem Cells</keyword>
   <keyword>Novel targeted therapy</keyword>
   <keyword>CXCR1/2 Inhibitors</keyword>
+  <is_fda_regulated>Yes</is_fda_regulated>
+  <is_section_801>Yes</is_section_801>
+  <has_expanded_access>Yes</has_expanded_access>
   <condition_browse>
     <!-- CAUTION:  The following MeSH terms are assigned with an imperfect algorithm  -->
     <mesh_term>Breast Neoplasms</mesh_term>
   </condition_browse>
-  <patient_data>
-    <sharing_ipd>No</sharing_ipd>
-  </patient_data>
   <!-- Results have not yet been posted for this study                                -->
 </clinical_study>

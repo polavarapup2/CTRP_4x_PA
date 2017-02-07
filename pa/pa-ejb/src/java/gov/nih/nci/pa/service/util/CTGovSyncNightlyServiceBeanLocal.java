@@ -11,9 +11,7 @@ import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
 import gov.nih.nci.pa.util.PaHibernateSessionInterceptor;
 import gov.nih.nci.pa.util.PaHibernateUtil;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +22,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -95,18 +94,17 @@ public class CTGovSyncNightlyServiceBeanLocal implements
                             List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
                             if (associatedImportLogs != null && !associatedImportLogs.isEmpty()) {
                                 if (study.getLastchangedDate() != null) {
-                                    try {
-                                        DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+                                    try {                                        
                                         //last updated date in CTGov
-                                        Date lastUpdatedDateInCTGov = dateFormat.parse(
-                                                study.getLastchangedDate().getContent());
+                                        Date lastUpdatedDateInCTGov = parseCtGovDate(
+                                                study.getLastchangedDate());
                                         CTGovImportLog latestImportLog = associatedImportLogs.get(0);
                                         //last updated date in CTRP
                                         Date lastUpdatedDateInCTRP = latestImportLog.getDateCreated();
                                         //if last update date in CTGov is more recent than last update in 
                                         //CTRP then import the trial from CT.Gov and update the same in CTRP. 
                                         //Else update should be skipped.
-                                        LOG.info("Comparing " + study.getLastchangedDate().getContent() 
+                                        LOG.info("Comparing " + study.getLastchangedDate()
                                                 + " and " + lastUpdatedDateInCTRP.toString());
                                         if (lastUpdatedDateInCTGov.compareTo(lastUpdatedDateInCTRP) > 0) {
                                             LOG.info("Last update date in CT.Gov is recent than the last update " 
@@ -221,5 +219,10 @@ public class CTGovSyncNightlyServiceBeanLocal implements
     private boolean isSyncEnabled() throws PAException {
         return Boolean.valueOf(lookUpTableService
                 .getPropertyValue("ctgov.sync.enabled"));
+    }
+    
+    private Date parseCtGovDate(String date) throws ParseException {
+        return DateUtils.parseDate(date, new String[] {"MMMM dd, yyyy",
+                "MMM dd, yyyy", "MMMM yyyy" });
     }
 }

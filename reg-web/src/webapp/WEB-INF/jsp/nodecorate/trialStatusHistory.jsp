@@ -369,9 +369,10 @@ div.error,b.error {
 																.val('true');
 														table.ajax.reload();
 													} else {
-														displayOpenSitesWarning(
-																e,
-																reviewBtnClickHandler);
+														//displayOpenSitesWarning( Commented out the code as part of PO-10105
+															//	e,
+															//	reviewBtnClickHandler);
+														reviewBtnClickHandler(e);
 													}
 												})
 										.fail(
@@ -386,7 +387,7 @@ div.error,b.error {
 		});
 	})(jQuery);
 
-	function displayOpenSitesWarning(e, reviewBtnClickHandler) {
+	/* function displayOpenSitesWarning(e, reviewBtnClickHandler) { Commented out the code as part of PO-10105
 		(function($) {
 			if (!openSitesWarningRequired) {
 				reviewBtnClickHandler(e);
@@ -471,7 +472,7 @@ div.error,b.error {
 
 			}
 		})(jQuery);
-	}
+	} */
 </script>
 
 <s:set name="statusCodeValues"
@@ -679,6 +680,7 @@ div.error,b.error {
 		</div>
 	</div>
 </div>
+ <!-- Commented out the code as part of PO-10105
 <div id="dialog-opensites" title="The trial has open sites"
 	style="display: none;">
 	<p>
@@ -705,4 +707,4 @@ div.error,b.error {
 			</table>
 		</div>
 	</div>
-</div>
+</div> -->

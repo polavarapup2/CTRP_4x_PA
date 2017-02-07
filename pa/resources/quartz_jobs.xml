@@ -187,7 +187,7 @@
             <group>DEFAULT</group>
             <job-class>gov.nih.nci.pa.util.EJBInvokerJob</job-class>
             <volatility>false</volatility>
-            <durability>false</durability>
+            <durability>true</durability>
             <recover>false</recover>
             <job-data-map allows-transient-data="true">
                 <entry>
@@ -203,18 +203,7 @@
                     <value>updateIndustrialAndConsortiaTrials</value>
                 </entry>
             </job-data-map>
-        </job-detail> 
-        <trigger>
-            <cron>
-                <name>ctgovSyncNightlyJobTrigger</name>
-                <group>DailyTriggerGroup</group>
-                <description>CT.Gov Sync Nightly Job Trigger</description>
-                <misfire-instruction>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</misfire-instruction>
-                <job-name>ctgovSyncNightlyJob</job-name>
-                <job-group>DEFAULT</job-group>                
-                <cron-expression>0 0 2 ? * MON-FRI</cron-expression>
-            </cron>
-        </trigger>
+        </job-detail>
     </job>
     
      <job>

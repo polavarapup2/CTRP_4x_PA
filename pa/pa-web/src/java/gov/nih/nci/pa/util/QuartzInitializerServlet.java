@@ -58,10 +58,11 @@ public class QuartzInitializerServlet extends
         setupJobSchedule(sc, "twitter.queue.process.schedule",
                 "tweetQueueProcessingJob", "tweetQueueProcessingJobTrigger");
         setupJobSchedule(sc, "twitter.trials.scan.schedule",
-                "trialTweetingJob", "trialTweetingJobTrigger");
-        
+                "trialTweetingJob", "trialTweetingJobTrigger");        
         setupJobSchedule(sc, "resultsUpdater.trials.scan.schedule",
                 "resultsPublishedDateUpdaterJob", "resultsPublishedDateUpdaterJobTrigger");
+        setupJobSchedule(sc, "ctgov.sync.schedule",
+                "ctgovSyncNightlyJob", "ctgovSyncNightlyJobTrigger");
 
     }
 

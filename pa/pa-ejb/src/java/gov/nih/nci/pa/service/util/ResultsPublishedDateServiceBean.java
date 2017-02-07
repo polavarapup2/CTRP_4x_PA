@@ -11,7 +11,6 @@ import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
-import gov.nih.nci.pa.service.ctgov.DateStruct;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaHibernateSessionInterceptor;
 import gov.nih.nci.pa.util.PaHibernateUtil;
@@ -148,15 +147,15 @@ public class ResultsPublishedDateServiceBean implements
        if (nctId != null) {
        ClinicalStudy clinicalStudy = ctGovSyncService.getCtGovStudyByNctId(nctId);
        if (clinicalStudy != null) {
-           DateStruct dateStruct = clinicalStudy.getFirstreceivedResultsDate();
+           String dateStruct = clinicalStudy.getFirstreceivedResultsDate();
            if (dateStruct != null) {
                //last updated date in CTGov
                try {
                 dateFormat.parse(
-                           dateStruct.getContent());
+                        dateStruct);
             } catch (ParseException e) {
                 //any exception means invalid date
-                LOG.warn("Invalid date format for trial " + nctId + " and date value is " + dateStruct.getContent());
+                LOG.warn("Invalid date format for trial " + nctId + " and date value is " + dateStruct);
                 return false;
             }
             

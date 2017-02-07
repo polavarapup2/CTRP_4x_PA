@@ -12,7 +12,6 @@ import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.enums.DocumentWorkflowStatusCode;
 import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
-import gov.nih.nci.pa.service.ctgov.DateStruct;
 import gov.nih.nci.pa.util.AbstractEjbTestCase;
 import gov.nih.nci.pa.util.AbstractMockitoTest;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
@@ -91,10 +90,8 @@ protected ProtocolQueryServiceLocal protocolQueryServiceLocal;
                                 Matchers.<ProtocolQueryPerformanceHints>anyVararg()))
                 .thenReturn(queryDTOList);
         
-        ClinicalStudy clinicalStudy = new ClinicalStudy();
-        DateStruct dateStruct = new DateStruct();
-        dateStruct.setContent("October 16, 2013");
-        clinicalStudy.setFirstreceivedResultsDate(dateStruct);
+        ClinicalStudy clinicalStudy = new ClinicalStudy();       
+        clinicalStudy.setFirstreceivedResultsDate("October 16, 2013");
         
         
         when (ctGovSyncServiceLocal.getCtGovStudyByNctId(any(String.class))).thenReturn(clinicalStudy);

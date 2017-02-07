@@ -1,10 +1,26 @@
 package gov.nih.nci.pa.service.util;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import gov.nih.nci.pa.domain.CTGovImportLog;
+import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
+import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
+import gov.nih.nci.pa.service.PAException;
+import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
+import gov.nih.nci.pa.service.ctgov.IdInfoStruct;
+import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
+import gov.nih.nci.pa.util.AbstractHibernateTestCase;
+import gov.nih.nci.pa.util.PaHibernateUtil;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SQLQuery;
@@ -12,27 +28,6 @@ import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-
-import gov.nih.nci.pa.domain.CTGovImportLog;
-import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
-import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
-import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
-import gov.nih.nci.pa.service.ctgov.DateStruct;
-import gov.nih.nci.pa.service.ctgov.IdInfoStruct;
-import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
-import gov.nih.nci.pa.util.AbstractHibernateTestCase;
-import gov.nih.nci.pa.util.PaHibernateUtil;
-import gov.nih.nci.pa.util.PaRegistry;
-import gov.nih.nci.pa.util.ServiceLocator;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.never;
 
 
 /**
@@ -123,7 +118,7 @@ public class CTGovSyncNightlyServiceLocalTest extends AbstractHibernateTestCase 
     private void setupCtGovSyncServiceMock()throws PAException {   
                
         ctGovSyncServiceLocal = mock(CTGovSyncServiceLocal.class);
-        DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
         Calendar calendar = Calendar.getInstance();
         
         //CT.Gov trial which is more recent than 
@@ -131,32 +126,26 @@ public class CTGovSyncNightlyServiceLocalTest extends AbstractHibernateTestCase 
         ClinicalStudy study1 = new ClinicalStudy();                
         IdInfoStruct idInfo1 = new IdInfoStruct();
         idInfo1.setNctId("NCT-2012-0001");
-        study1.setIdInfo(idInfo1);        
-        DateStruct date1 = new DateStruct();        
-        date1.setContent(dateFormat.format(calendar.getTime()));
-        study1.setLastchangedDate(date1);       
+        study1.setIdInfo(idInfo1);
+        study1.setLastchangedDate(dateFormat.format(calendar.getTime()));       
         
         //CT.Gov trial which doesn't have a corresponding CT.Gov
         //import log entry.
         ClinicalStudy study2 = new ClinicalStudy();        
         IdInfoStruct idInfo2 = new IdInfoStruct();
         idInfo2.setNctId("NCT-2012-0002");
-        study2.setIdInfo(idInfo2);        
-        DateStruct date2 = new DateStruct();                
-        date2.setContent(dateFormat.format(calendar.getTime()));
-        study2.setLastchangedDate(date2);
+        study2.setIdInfo(idInfo2);
+        study2.setLastchangedDate(dateFormat.format(calendar.getTime()));
         
         //CT.Gov trial which is older than the corresponding CT.Gov
         //import log entry.
         ClinicalStudy study3 = new ClinicalStudy();                
         IdInfoStruct idInfo3 = new IdInfoStruct();
         idInfo3.setNctId("NCT-2012-0003");
-        study3.setIdInfo(idInfo3);        
-        DateStruct date3 = new DateStruct();        
+        study3.setIdInfo(idInfo3);
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.add(Calendar.MONTH, -1);
-        date3.setContent(dateFormat.format(calendar1.getTime()));
-        study3.setLastchangedDate(date3);
+        calendar1.add(Calendar.MONTH, -1);       
+        study3.setLastchangedDate(dateFormat.format(calendar1.getTime()));
         
         when(ctGovSyncServiceLocal.getCtGovStudyByNctId("NCT-2012-0001")).thenReturn(study1);
         when(ctGovSyncServiceLocal.getCtGovStudyByNctId("NCT-2012-0002")).thenReturn(study2);

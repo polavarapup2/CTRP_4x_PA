@@ -85,6 +85,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.fiveamsolutions.nci.commons.util.AppProperties;
+
 /**
  * Property File reader which can be extended for passing in the run time properties for PA.
  *
@@ -123,7 +125,12 @@ public class PaEarPropertyReader {
     static {
         try {
             PROPS = new Properties();
-            PROPS.load(PaEarPropertyReader.class.getClassLoader().getResourceAsStream(RESOURCE_NAME));
+            if (!AppProperties.getAppProperties().isEmpty()) {
+                PROPS.putAll(AppProperties.getAppProperties());
+            } else {
+                PROPS.load(PaEarPropertyReader.class.getClassLoader()
+                        .getResourceAsStream(RESOURCE_NAME));
+            }
         } catch (Exception e) {
             LOG.error("Unable to read paear.properties", e);
             throw new IllegalStateException(e);

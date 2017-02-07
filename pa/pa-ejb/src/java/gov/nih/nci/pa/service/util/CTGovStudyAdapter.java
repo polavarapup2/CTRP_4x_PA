@@ -64,7 +64,8 @@ public final class CTGovStudyAdapter {
     public String getInterventions() {
         StringBuilder sb = new StringBuilder();
         for (InterventionStruct i : study.getIntervention()) {
-            sb.append(StringUtils.defaultString(i.getInterventionType()));
+            sb.append(StringUtils.defaultString(i.getInterventionType() != null ? i
+                    .getInterventionType().value() : null));
             sb.append(": ");
             sb.append(StringUtils.defaultString(i.getInterventionName()));
             sb.append("; ");
@@ -77,8 +78,10 @@ public final class CTGovStudyAdapter {
      */
     public String getStudyCategory() {
         return study.getSponsors() != null
-                && study.getSponsors().getLeadSponsor() != null ? study
-                .getSponsors().getLeadSponsor().getAgencyClass() : "";
+                && study.getSponsors().getLeadSponsor() != null
+                && study.getSponsors().getLeadSponsor().getAgencyClass() != null ? study
+                .getSponsors().getLeadSponsor().getAgencyClass().value()
+                : "";
     }
 
 }

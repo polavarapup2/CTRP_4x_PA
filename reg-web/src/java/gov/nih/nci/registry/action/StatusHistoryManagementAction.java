@@ -5,7 +5,6 @@ package gov.nih.nci.registry.action;
 
 import gov.nih.nci.pa.dto.ParticipatingOrgDTO;
 import gov.nih.nci.pa.enums.CodedEnum;
-import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.status.StatusDto;
 import gov.nih.nci.pa.service.status.StatusTransitionService;
@@ -275,6 +274,8 @@ public abstract class StatusHistoryManagementAction extends ActionSupport
                 .getBytes(UTF_8)));
     }
 
+/*    
+    Commented out the code as part of PO-10105
     /**
      * @return StreamResult
      * @throws UnsupportedEncodingException
@@ -282,7 +283,7 @@ public abstract class StatusHistoryManagementAction extends ActionSupport
      * @throws JSONException
      *             JSONException
      * @throws PAException
-     */
+     *//*
     public StreamResult mustDisplayOpenSitesWarning()
             throws UnsupportedEncodingException, JSONException, PAException {
         boolean mustDisplay = false;
@@ -306,7 +307,7 @@ public abstract class StatusHistoryManagementAction extends ActionSupport
 
     private boolean trialHasOpenSites() throws PAException {
         return !getOpenSiteList().isEmpty();
-    }
+    }*/
 
     private List<ParticipatingOrgDTO> getOpenSiteList() throws PAException {
         List<ParticipatingOrgDTO> list = new ArrayList<>();

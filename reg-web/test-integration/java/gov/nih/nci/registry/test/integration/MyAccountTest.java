@@ -154,6 +154,7 @@ public class MyAccountTest extends AbstractRegistrySeleniumTest {
         clickAndWait("css=a.nav-user");
         clickAndWait("css=a.account");
         driver.switchTo().frame(driver.findElement(By.id("popupFrame")));
+        waitForElementToBecomeAvailable(By.id("registryUserWebDTO.affiliateOrgField"), 10);
     	moveElementIntoView(By.id("registryUserWebDTO.affiliateOrgField"));    
         JavascriptExecutor js = (JavascriptExecutor) driver;                
         js.executeScript("showPopWin('orgPoplookuporgs.action', 850, 550, loadAffliatedOrgDiv, 'Select Affiliated Organization')");

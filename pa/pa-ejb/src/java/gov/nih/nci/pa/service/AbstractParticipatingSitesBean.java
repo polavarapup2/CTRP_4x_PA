@@ -104,12 +104,11 @@ import gov.nih.nci.pa.service.correlation.ClinicalResearchStaffCorrelationServic
 import gov.nih.nci.pa.service.correlation.HealthCareProviderCorrelationBean;
 import gov.nih.nci.pa.service.correlation.PABaseCorrelation;
 import gov.nih.nci.pa.service.status.StatusDto;
-import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.services.correlation.OrganizationalContactDTO;
-
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -154,14 +153,11 @@ public abstract class AbstractParticipatingSitesBean
                            && DateUtils.isSameDay(TsConverter.convertToTimestamp(studySiteAccrualConverterDto
                                .getStatusDate()), TsConverter.convertToTimestamp(newStatus.getStatusDate()))) {
                            String comments = StConverter.convertToString(studySiteAccrualConverterDto.getComments());
-                           try {
+                               SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
                               studySiteAccrualConverterDto.setComments(StConverter.convertToSt(comments 
                                 + "Deleted because another "
-                                + " record with the same site status and status date was received on" + PAUtil
-                                .getCurrentTime().toString()));
-                            } catch (ParseException e) {
-                                 e.printStackTrace();
-                           }
+                                + "record with the same site status and status date was received on " 
+                                + dt.format(new Date())));
                            getStudySiteAccrualStatusService().softDelete(studySiteAccrualConverterDto);
                        }
                      }
