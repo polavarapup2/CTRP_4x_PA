@@ -32,8 +32,8 @@ before_install:
 script:
   ###Build Script for PO
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
-  - ant -f build-lite.xml dist
-  # - ant -f build-lite.xml get-artifacts
+  #- ant -f build-lite.xml dist
+  - ant -f build-lite.xml get-artifacts
   # - find ~/.m2/
   - find /home/travis/build/CBIIT/CTRP_4x_PA/target/
   #Build Docker image
