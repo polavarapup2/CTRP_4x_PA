@@ -1,0 +1,1 @@
+ALTER TABLE batch_file ADD COLUMN results character varying(1000);

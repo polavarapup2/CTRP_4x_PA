@@ -1,0 +1,1 @@
+ALTER TABLE program_code ALTER COLUMN program_name DROP NOT NULL;

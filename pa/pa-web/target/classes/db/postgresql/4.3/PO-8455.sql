@@ -1,0 +1,1 @@
+UPDATE pa_properties set value='http://cadsrapi.nci.nih.gov/cadsrapi41' where name='CADSR_URL';

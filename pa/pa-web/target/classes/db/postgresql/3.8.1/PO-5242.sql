@@ -1,0 +1,1 @@
+ALTER TABLE study_outcome_measure ALTER COLUMN name TYPE CHARACTER VARYING(2000);

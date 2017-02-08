@@ -84,7 +84,23 @@
 	<target name="install" depends="dist,install-jboss">
 	</target>
 
-	<target name="install-jboss">
+  <target name="get-artifacts" depends="dist">
+    <copy tofile="${pa.target.dir}/dist/standalone.xml" file="./server-config/standalone.xml.pa" overwrite="true" failonerror="true" verbose="true" />
+	<copy todir="${application.base.path}/standalone/deployments" file="${pa.target.dir}/dist/pa.ear" overwrite="true" failonerror="true" verbose="true" />
+	<copy todir="${application.base.path}/standalone/deployments" file="${accrual.target.dir}/dist/accrual.ear" overwrite="true" failonerror="true" verbose="true" />
+    <mkdir dir="${tooltips.filepath.loc}" />
+    <copy todir="${tooltips.filepath.loc}" overwrite="true" failonerror="true" verbose="true">
+	  <fileset dir="${accrual.target.dir}/dist">
+		<include name="**/*.properties" />
+	  </fileset>
+	  <fileset dir="${pa.target.dir}/dist">
+		<include name="**/*.properties" />
+	  </fileset>
+	</copy>
+  </target>
+
+
+  <target name="install-jboss">
 		<delete dir="${application.base.path}" failonerror="true" />
 		<mkdir dir="${application.base.path}" />
 		<unzip dest="${application.base.path}" src="${jboss.eap.file}" />

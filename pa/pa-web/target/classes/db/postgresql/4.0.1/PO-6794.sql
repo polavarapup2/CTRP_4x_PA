@@ -1,0 +1,3 @@
+UPDATE pa_properties set value='NCI CTRP: Trial AMENDMENT # ${amendmentNumber} RECORD CREATED for ${nciTrialIdentifier}, ${leadOrgTrialIdentifier}' where name='trial.amend.subject';
+UPDATE pa_properties set value='NCI CTRP: Trial AMENDMENT # ${amendmentNumber} RECORD ACCEPTED for ${nciTrialIdentifier}, ${leadOrgTrialIdentifier}' where name='trial.amend.accept.subject';
+UPDATE pa_properties set value='NCI CTRP: Trial AMENDMENT # ${amendmentNumber} RECORD REJECTED for ${nciTrialIdentifier}, ${leadOrgTrialIdentifier}' where name='trial.amend.reject.subject';

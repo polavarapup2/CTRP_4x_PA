@@ -1,0 +1,236 @@
+connect
+
+/subsystem=transactions:write-attribute(name=default-timeout,value=600)
+
+/subsystem=web/virtual-server=default-host/access-log=configuration:add
+/subsystem=web/virtual-server=default-host/access-log=configuration:write-attribute(name="pattern",value="%h %l %u %t \"%r\" %q %s %B %S %T")
+/subsystem=web/virtual-server=default-host/access-log=configuration/directory=configuration:add
+/subsystem=web/virtual-server=default-host/access-log=configuration/directory=configuration:write-attribute(name="path",value="./")
+/subsystem=web/virtual-server=default-host/access-log=configuration/directory=configuration:write-attribute(name="relative-to",value="jboss.server.log.dir")
+
+/system-property=org.apache.tomcat.util.http.Parameters.MAX_COUNT:add(value="-1")
+
+/subsystem=infinispan/cache-container=security:add(default-cache=auth-cache)
+/subsystem=infinispan/cache-container=security/local-cache=auth-cache:add(batching=true)
+/subsystem=infinispan/cache-container=security/local-cache=auth-cache/expiration=EXPIRATION:add(lifespan=300000)
+/subsystem=security/security-domain=pa:write-attribute(name=cache-type,value="infinispan")
+/subsystem=security/security-domain=accrual:write-attribute(name=cache-type,value="infinispan")
+
+/subsystem=security/security-domain=pa/authentication=classic:remove() {allow-resource-service-restart=true}
+/subsystem=security/security-domain=pa/authentication=classic:add( \
+    login-modules=[ \   
+        { \
+            "code" => "gov.nih.nci.coppa.util.NullPasswordStackingLoginModule", \
+            "flag" => "optional", \
+            "module" => "deployment.pa.ear", \
+            "module-options" => [ \
+                ("password-stacking"=>"useFirstPass") \                
+            ] \
+        }, \    
+        {\  
+            "code" => "com.fiveamsolutions.nci.commons.authentication.CommonsGridLoginModule",\ 
+            "flag" => "optional",\  
+            "module" => "deployment.pa.ear",\   
+            "module-options" => {\  
+                "gridServicePrincipal" => "${grid.security.jndi.principal}",\   
+                "gridServiceCredential" => "${grid.security.jndi.credentials}",\  
+                "gridServicePrincipalSeparator" => "||"\    
+            }\  
+        },\ 
+        {\  
+            "code" => "com.fiveamsolutions.nci.commons.authentication.CommonsDBLoginModule",\   
+            "flag" => "optional",\  
+            "module" => "deployment.pa.ear",\   
+            "module-options" => {\  
+                "driver" => "org.postgresql.Driver",\   
+                "url" => "jdbc:postgresql://${db.server}:${db.port}/${db.name}",\    
+                "user" => "${db.username}",\   
+                "passwd" => "${db.password}",\ 
+                "query" => "SELECT * FROM csm_user WHERE login_name=? and password=?",\ 
+                "encryption-enabled" => "YES"\  
+            }\  
+        },\ 
+        { \
+            "code" => "Database", \
+            "flag" => "required", \
+            "module-options" => [ \
+                ("password-stacking"=>"useFirstPass"), \
+                ("dsJndiName"=>"java:/pa-ds"), \
+                ("rolesQuery" => "select group_name, 'Roles' FROM (SELECT cu.login_name,cg.group_name, 'Roles' FROM csm_group cg, csm_user_group cug, csm_user cu WHERE cg.group_id = cug.group_id AND cug.user_id = cu.user_id UNION SELECT cu.login_name,'SiteAdmin', 'Roles' FROM csm_user cu, registry_user ru WHERE cu.user_id = ru.csm_user_id AND ru.affiliated_org_user_type = 'ADMIN' UNION SELECT cu.login_name, 'Abstractor', 'Roles' FROM csm_group cg, csm_user_group cug, csm_user cu WHERE cg.group_id = cug.group_id AND cug.user_id = cu.user_id AND cg.group_name in ('SuAbstractor','AdminAbstractor','ScientificAbstractor','ResultsAbstractor')) AS Roles WHERE login_name = ?") \
+            ] \
+        } \     
+    ] \
+) {allow-resource-service-restart=true}
+
+/subsystem=security/security-domain=accrual/authentication=classic:remove() {allow-resource-service-restart=true}
+/subsystem=security/security-domain=accrual/authentication=classic:add( \
+    login-modules=[ \   
+        { \
+            "code" => "gov.nih.nci.coppa.util.NullPasswordStackingLoginModule", \
+            "flag" => "optional", \
+            "module" => "deployment.accrual.ear",\   
+            "module-options" => [ \
+                ("password-stacking"=>"useFirstPass") \                
+            ] \
+        }, \    
+        {\  
+            "code" => "com.fiveamsolutions.nci.commons.authentication.CommonsGridLoginModule",\ 
+            "flag" => "optional",\  
+            "module" => "deployment.accrual.ear",\   
+            "module-options" => {\  
+                "gridServicePrincipal" => "${grid.security.jndi.principal}",\   
+                "gridServiceCredential" => "${grid.security.jndi.credentials}",\  
+                "gridServicePrincipalSeparator" => "||"\    
+            }\  
+        },\ 
+        {\  
+            "code" => "com.fiveamsolutions.nci.commons.authentication.CommonsDBLoginModule",\   
+            "flag" => "optional",\  
+            "module" => "deployment.accrual.ear",\   
+            "module-options" => {\  
+                "driver" => "org.postgresql.Driver",\   
+                "url" => "jdbc:postgresql://${db.server}:${db.port}/${db.name}",\    
+                "user" => "${db.username}",\   
+                "passwd" => "${db.password}",\ 
+                "query" => "SELECT * FROM csm_user WHERE login_name=? and password=?",\ 
+                "encryption-enabled" => "YES"\  
+            }\  
+        },\ 
+        { \
+            "code" => "Database", \
+            "flag" => "required", \
+            "module-options" => [ \
+                ("password-stacking"=>"useFirstPass"), \
+                ("dsJndiName"=>"java:/pa-ds"), \
+                ("rolesQuery" => "select group_name, 'Roles' FROM (SELECT cu.login_name,cg.group_name, 'Roles' FROM csm_group cg, csm_user_group cug, csm_user cu WHERE cg.group_id = cug.group_id AND cug.user_id = cu.user_id UNION SELECT cu.login_name,'SiteAdmin', 'Roles' FROM csm_user cu, registry_user ru WHERE cu.user_id = ru.csm_user_id AND ru.affiliated_org_user_type = 'ADMIN' UNION SELECT cu.login_name, 'Abstractor', 'Roles' FROM csm_group cg, csm_user_group cug, csm_user cu WHERE cg.group_id = cug.group_id AND cug.user_id = cu.user_id AND cg.group_name in ('SuAbstractor','AdminAbstractor','ScientificAbstractor','ResultsAbstractor')) AS Roles WHERE login_name = ?") \
+            ] \
+        } \     
+    ] \
+) {allow-resource-service-restart=true}
+
+
+# Direct JTA logging into a separate log file.
+if (outcome == success) of /subsystem=logging/logger=com.arjuna:read-resource
+	/subsystem=logging/logger=com.arjuna:remove
+end-if
+if (outcome == success) of /subsystem=logging/periodic-rotating-file-handler=ARJUNA:read-resource
+	/subsystem=logging/periodic-rotating-file-handler=ARJUNA:remove
+end-if
+
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:add(file={"path"=>"arjuna.log", "relative-to"=>"jboss.server.log.dir"},suffix=".yyyy-MM-dd")
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:change-log-level(level="${log.level}")
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:write-attribute(name="append", value="true")
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:write-attribute(name="autoflush", value="true")
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:write-attribute(name="formatter", value="%d{HH:mm:ss,SSS} %s%E%n")
+/subsystem=logging/periodic-rotating-file-handler=ARJUNA:write-attribute(name="suffix", value=".yyyy-MM-dd")
+/subsystem=logging/logger=com.arjuna:add
+/subsystem=logging/logger=com.arjuna:write-attribute(name="level", value="${log.level}")
+/subsystem=logging/logger=com.arjuna:assign-handler(name="ARJUNA")
+/subsystem=logging/logger=com.arjuna:write-attribute(name="use-parent-handlers", value="false")
+
+# Direct Twitter logging into a separate log file.
+if (outcome == success) of /subsystem=logging/logger=Twitter:read-resource
+	/subsystem=logging/logger=Twitter:remove
+end-if
+if (outcome == success) of /subsystem=logging/periodic-rotating-file-handler=Twitter:read-resource
+	/subsystem=logging/periodic-rotating-file-handler=Twitter:remove
+end-if
+
+/subsystem=logging/periodic-rotating-file-handler=Twitter:add(file={"path"=>"twitter.log", "relative-to"=>"jboss.server.log.dir"},suffix=".yyyy-MM-dd")
+/subsystem=logging/periodic-rotating-file-handler=Twitter:change-log-level(level="INFO")
+/subsystem=logging/periodic-rotating-file-handler=Twitter:write-attribute(name="append", value="true")
+/subsystem=logging/periodic-rotating-file-handler=Twitter:write-attribute(name="autoflush", value="true")
+/subsystem=logging/periodic-rotating-file-handler=Twitter:write-attribute(name="formatter", value="%d{HH:mm:ss,SSS} %s%E%n")
+/subsystem=logging/periodic-rotating-file-handler=Twitter:write-attribute(name="suffix", value=".yyyy-MM-dd")
+/subsystem=logging/logger=Twitter:add
+/subsystem=logging/logger=Twitter:write-attribute(name="level", value="INFO")
+/subsystem=logging/logger=Twitter:assign-handler(name="Twitter")
+/subsystem=logging/logger=Twitter:write-attribute(name="use-parent-handlers", value="false")
+
+# Direct Web Service Access logging into a separate log file.
+if (outcome == success) of /subsystem=logging/logger=WebServiceAccessLog:read-resource
+	/subsystem=logging/logger=WebServiceAccessLog:remove
+end-if
+if (outcome == success) of /subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:read-resource
+	/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:remove
+end-if
+
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:add(file={"path"=>"WebServiceAccessLog.log", "relative-to"=>"jboss.server.log.dir"},suffix=".yyyy-MM-dd")
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:change-log-level(level="INFO")
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:write-attribute(name="append", value="true")
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:write-attribute(name="autoflush", value="true")
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:write-attribute(name="formatter", value="%d{HH:mm:ss,SSS} %s%E%n")
+/subsystem=logging/periodic-rotating-file-handler=WebServiceAccessLog:write-attribute(name="suffix", value=".yyyy-MM-dd")
+/subsystem=logging/logger=WebServiceAccessLog:add
+/subsystem=logging/logger=WebServiceAccessLog:write-attribute(name="level", value="INFO")
+/subsystem=logging/logger=WebServiceAccessLog:assign-handler(name="WebServiceAccessLog")
+/subsystem=logging/logger=WebServiceAccessLog:write-attribute(name="use-parent-handlers", value="false")
+
+
+# LDAP Logger
+if (outcome == success) of /subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:read-resource
+	/subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:remove
+end-if
+if (outcome == success) of /subsystem=logging/periodic-rotating-file-handler=LDAP:read-resource
+	/subsystem=logging/periodic-rotating-file-handler=LDAP:remove
+end-if
+/subsystem=logging/periodic-rotating-file-handler=LDAP:add(file={"path"=>"ldap.log", "relative-to"=>"jboss.server.log.dir"},suffix=".yyyy-MM-dd")
+/subsystem=logging/periodic-rotating-file-handler=LDAP:change-log-level(level="INFO")
+/subsystem=logging/periodic-rotating-file-handler=LDAP:write-attribute(name="append", value="true")
+/subsystem=logging/periodic-rotating-file-handler=LDAP:write-attribute(name="autoflush", value="true")
+/subsystem=logging/periodic-rotating-file-handler=LDAP:write-attribute(name="formatter", value="%d{HH:mm:ss,SSS} %s%E%n")
+/subsystem=logging/periodic-rotating-file-handler=LDAP:write-attribute(name="suffix", value=".yyyy-MM-dd")
+/subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:add
+/subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:write-attribute(name="level", value="INFO")
+/subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:assign-handler(name="LDAP")
+/subsystem=logging/logger=gov.nih.nci.coppa.services.ldap:write-attribute(name="use-parent-handlers", value="false")
+
+
+reload
+
+# The next block is here to simply introduce a delay as there is no "sleep" command. This CLI has been failing on a random basis; it appears that
+# sometimes the script procedes while the reload (see above) has not in fact finished. This leads to odd errors such as Management resource '[("subsystem" => "datasources")]' not found
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+/:read-children-names(child-type=subsystem)
+:read-config-as-xml
+# End
+
+/subsystem=logging/logger=stdout:remove
+    
+/subsystem=logging/logger=stdout:add(level=${log.level})
+/subsystem=logging/root-logger=ROOT:change-root-log-level(level=${log.level})
+/subsystem=logging/root-logger=ROOT:remove-handler(name=CONSOLE)
+
+data-source remove --name=paDS
+
+xa-data-source add \
+     --name=paDS \
+     --driver-name=postgresql \
+     --jndi-name=java:/pa-ds \
+     --user-name=${db.username} \
+     --password=${db.password} \    
+     --use-ccm=false \
+     --max-pool-size=30 \     
+	 --exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter" \     
+	 --valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker" \     
+	 --xa-datasource-class="org.postgresql.xa.PGXADataSource" \     
+     --new-connection-sql="select current_timestamp"
+/subsystem=datasources/xa-data-source=paDS/xa-datasource-properties=ServerName:add(value=${db.server})
+/subsystem=datasources/xa-data-source=paDS/xa-datasource-properties=PortNumber:add(value=${db.port})
+/subsystem=datasources/xa-data-source=paDS/xa-datasource-properties=DatabaseName:add(value=${db.name})
+
+xa-data-source enable --name=paDS
+

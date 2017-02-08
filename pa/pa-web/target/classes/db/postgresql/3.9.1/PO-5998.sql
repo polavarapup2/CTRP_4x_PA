@@ -1,0 +1,1 @@
+alter table primary_purpose add column study_type_code varchar(32);

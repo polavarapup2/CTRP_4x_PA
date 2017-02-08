@@ -1,0 +1,1 @@
+insert into pa_properties values ((select max(identifier) + 1 from pa_properties), 'nci.poid',(select assigned_identifier from organization where name='National Cancer Institute' and status_code='ACTIVE' order by assigned_identifier limit 1));

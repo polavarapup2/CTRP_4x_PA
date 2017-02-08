@@ -1,0 +1,2 @@
+update CSM_REMOTE_GROUP set GRID_GROUPER_GROUP_NAME='@gridgrouper.abstractor.group.stem@:ScientificAbstractor' where GROUP_ID = (select group_id from csm_group where group_name = 'ScientificAbstractor');
+update CSM_REMOTE_GROUP set GRID_GROUPER_GROUP_NAME='@gridgrouper.abstractor.group.stem@:AdminAbstractor' where GROUP_ID = (select group_id from csm_group where group_name = 'AdminAbstractor');

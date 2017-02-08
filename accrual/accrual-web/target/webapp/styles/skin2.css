@@ -1,0 +1,38 @@
+header {background: white}
+.navbar-custom, .btn-primary, .table thead, .trial-ownership:before, .btn-group .btn-default.active {background: #6D22A3; box-shadow:none; text-shadow:none;}
+.btn-default, .nav-tabs > li > a, .accordion-heading > .accordion-toggle, h3.notAssigned {background: #f7f7f7; box-shadow: none; text-shadow:none;}
+.btn-default:hover, .nav-tabs > li > a:hover {background: #fff; border-color: #ccc}
+.btn-group .btn-default.active {border-color:#4E0087}
+
+.navbar-custom {box-shadow: none;}
+.navbar-custom .navbar-nav > li > a {border-left: none !important; border-right-color: #3A0063}
+h1, h2, h3, h4 {color:#6D22A3}
+
+.navbar-nav li .open, .navbar-custom .navbar-nav > .active > a, .navbar-custom .navbar-nav > .active > a:hover {background:#9E51D6; box-shadow:none;}
+
+.navbar-nav {border: none; border-left: 1px solid #3A0063}
+
+.navbar-custom .navbar-nav > .dropdown > a .caret {border-color:#3A0063 rgba(0, 0, 0, 0)}
+.navbar-custom .navbar-nav > .dropdown > a .caret:after {border: none}
+.navbar-custom .navbar-nav .dropdown-menu > li > a, a, .nav-tabs > li > a, header .pull-right > .dropdown-menu .account:before, header .pull-right > .dropdown-menu .help:before, header .pull-right > .dropdown-menu > li > a {color:#6D22A3}
+a:hover, .masthead .nav-user:hover, #nci-footer a:hover, .nav-user:active, .dropdown.open .nav-user {color:#9E51D6}
+
+.navbar-custom .navbar-nav .dropdown.active  > a .caret {border-color:#6D22A3 rgba(0, 0, 0, 0)}
+.btn-primary:hover {background: #9E51D6}
+
+button, label {
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	transition: all 0.2s linear;
+	}
+	
+	.navbar-custom .navbar-nav > li > a, .text-sizer a {text-shadow: none; }
+	
+	.text-sizer, #incfont, .btn-primary {box-shadow:none; border-color:#3A0063}
+	#decfont {border-left: none;}
+	.text-sizer a:hover {color: white;}
+#footer, .tab-content > .tab-pane {background: white; box-shadow:none;}	
+	
+.navbar-custom .navbar-nav .dropdown-menu > li > a:hover, header .pull-right > .dropdown-menu > li > a:hover {background:#F9F2FF}	
+
+.form-control:focus {border-color: #9E51D6; box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #9E51D6;}

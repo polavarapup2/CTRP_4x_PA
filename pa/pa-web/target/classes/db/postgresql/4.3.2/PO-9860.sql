@@ -1,0 +1,1 @@
+update study_site_accrual_status set status_date = date(status_date);

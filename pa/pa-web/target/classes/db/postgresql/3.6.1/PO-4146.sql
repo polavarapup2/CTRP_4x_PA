@@ -1,0 +1,1 @@
+update study_overall_status set status_code='COMPLETE' where status_code = 'COMPLETED';
