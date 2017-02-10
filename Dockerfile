@@ -43,6 +43,13 @@ ADD /target/pa/dist/pa.ear $JBOSS_HOME/standalone/deployments/
 COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 RUN cat $JBOSS_HOME/standalone/configuration/standalone.xml
 
+RUN mkdir /local/content/ctrppa/registry_data
+RUN mkdir /local/content/ctrppa/registry_data/pdq
+RUN mkdir /local/content/ctrppa/batch_docs
+RUN mkdir /local/content/ctrppa/accrual_batch
+RUN mkdir /local/content/ctrppa/tooltips
+
+
 # ADD Environment specific properties files
 COPY ctrp.inttest.properties    $JBOSS_HOME/ctrp/ctrp.inttest.properties
 COPY ctrp.uat.properties        $JBOSS_HOME/ctrp/ctrp.uat.properties
