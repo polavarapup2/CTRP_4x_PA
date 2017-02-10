@@ -43,11 +43,11 @@ ADD /target/pa/dist/pa.ear $JBOSS_HOME/standalone/deployments/
 COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 RUN cat $JBOSS_HOME/standalone/configuration/standalone.xml
 
-RUN mkdir /local/content/ctrppa/registry_data
-RUN mkdir /local/content/ctrppa/registry_data/pdq
-RUN mkdir /local/content/ctrppa/batch_docs
-RUN mkdir /local/content/ctrppa/accrual_batch
-RUN mkdir /local/content/ctrppa/tooltips
+RUN mkdir -pv /local/content/ctrppa/registry_data
+RUN mkdir -pv /local/content/ctrppa/registry_data/pdq
+RUN mkdir -pv /local/content/ctrppa/batch_docs
+RUN mkdir -pv /local/content/ctrppa/accrual_batch
+RUN mkdir -pv /local/content/ctrppa/tooltips
 
 
 # ADD Environment specific properties files
