@@ -11,7 +11,10 @@ import gov.nih.nci.pa.util.PaHibernateUtil;
 import gov.nih.nci.pa.util.PoJndiServiceLocator;
 import gov.nih.nci.services.SubscriberUpdateMessage;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -31,6 +34,7 @@ import javax.jms.TopicSubscriber;
 import javax.naming.Context;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Hugh Reinhart
@@ -135,6 +139,9 @@ public class PoJmsMessageReceiver {
                 Context context = PoJndiServiceLocator.getContext();
                 TopicConnectionFactory connectionFactory = (TopicConnectionFactory) context
                         .lookup("jms/PORemoteConnectionFactory");
+                
+                fixConnectionFactoryHostName(connectionFactory);
+                
                 Topic topic = (Topic) context.lookup("jms/topic/POTopic");
                 topicConnection = connectionFactory
                         .createTopicConnection(user, pass);
@@ -154,6 +161,34 @@ public class PoJmsMessageReceiver {
             } catch (Exception e) {
                 LOG.error(e);
             }
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        private void fixConnectionFactoryHostName(
+                TopicConnectionFactory connectionFactory) {
+            try {
+                Field serverLocatorField = ReflectionUtils.findField(
+                        connectionFactory.getClass(), "serverLocator");
+                ReflectionUtils.makeAccessible(serverLocatorField);
+                Object serverLocator = serverLocatorField.get(connectionFactory);
+
+                Field initialConnectorsField = ReflectionUtils.findField(
+                        serverLocator.getClass(), "initialConnectors");
+                ReflectionUtils.makeAccessible(initialConnectorsField);
+                Object initialConnectors = initialConnectorsField
+                        .get(serverLocator);
+
+                Object transportConfiguration = Array.get(initialConnectors, 0);
+                Field paramsField = ReflectionUtils.findField(
+                        transportConfiguration.getClass(), "params");
+                ReflectionUtils.makeAccessible(paramsField);
+                Map params = (Map) paramsField.get(transportConfiguration);
+
+                params.put("host",
+                        PaEarPropertyReader.getPoServerName());
+            } catch (Exception e) {
+                LOG.error(e, e);
+            } 
         }
     }
 
