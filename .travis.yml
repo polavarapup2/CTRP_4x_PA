@@ -31,8 +31,9 @@ before_install:
   - mvn -v
 script:
   ###Run Unit Tests for PA
-  #- cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
-  #- ant -f build.xml clean test
+  - cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
+  - ant -f build.xml clean test > cmd_output.txt
+  - tail -n 100 cmd_output.txt
   ###Build Script for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
   ##- ant -f build-lite.xml dist
