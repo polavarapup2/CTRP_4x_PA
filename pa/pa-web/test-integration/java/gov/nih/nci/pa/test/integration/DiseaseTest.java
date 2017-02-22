@@ -205,7 +205,7 @@ public class DiseaseTest extends AbstractPaSeleniumTest {
         clickAndWait("link=Add");
         waitForElementById("popupContainer", 30);
         //assertFalse(selenium.isElementPresent("id=popupContainer"));
-        pause(5000);
+        pause(10000);
         assertTrue(selenium.isTextPresent("One item found"));  
         
         assertTrue(selenium.isTextPresent("lung cancer"));
