@@ -202,6 +202,17 @@ public class PaEarPropertyReader {
     public static String getLookUpServerInfo() throws PAException {
         return getPropTemplate(PO_SERVER_NAME) + ":" + getPropTemplate(PO_SERVER_PORT);
     }
+    
+    /**
+     * Get the po server name.
+     * 
+     * @return String for po server name
+     * @throws PAException
+     *             on error
+     */
+    public static String getPoServerName() throws PAException {
+        return getPropTemplate(PO_SERVER_NAME);
+    }
 
     /**
      * @return String for the PO principal

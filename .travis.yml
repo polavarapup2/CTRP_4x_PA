@@ -30,7 +30,10 @@ before_install:
   - export ANT_OPTS=-Dhttps.protocols=TLSv1.1,TLSv1.2
   - mvn -v
 script:
-  ###Build Script for PO
+  ###Run Unit Tests for PA
+  #- cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
+  #- ant -f build.xml clean test
+  ###Build Script for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
   ##- ant -f build-lite.xml dist
   - ant -f build-lite.xml get-artifacts
@@ -48,15 +51,15 @@ after_success:
   - docker images
   - docker push $DOCKER_IMAGE # Pushes both date and latest
   #Deploy to AWS IntTest
-  # - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  #   -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
-  #   --cluster CTRP-IntTest-Backend --service-name CTRP-4x_pa-INTTEST 
-  #   -i $DOCKER_IMAGE:$DATE
+  - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
+    --cluster CTRP-IntTest-Backend --service-name CTRP-ctrp_4x_pa-INTTEST 
+    -i $DOCKER_IMAGE:$DATE
   #Trigger Travis bdd tests
-  # - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json" 
-  #   -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN" 
-  #   -d "{\"request\":{\"message\":\"Triggered by CTRP_4x_PA $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=CTRP_4x_PA;TRIGGER_VER=$DATE;CUC_TAG=@pa;AUTHOR=$AUTHOR\"]}}}}" 
-  #   https://api.travis-ci.org/repo/CBIIT%2Fctrp-bddtests/requests
+  - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json" 
+    -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN" 
+    -d "{\"request\":{\"message\":\"Triggered by CTRP_4x_PA $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=ctrp_4x_pa;TRIGGER_VER=$DATE;CUC_TAG=@pa;AUTHOR=$AUTHOR\"]}}}}" 
+    https://api.travis-ci.org/repo/CBIIT%2Fctrp-bddtests/requests
 
 # after_script:
 notifications:
