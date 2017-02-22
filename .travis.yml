@@ -31,21 +31,17 @@ before_install:
   - mvn -v
 script:
   ###Run Unit Tests for PA
-  - cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
-  - ant -f build.xml clean test > cmd_output.txt
-  - tail -n 100 cmd_output.txt
+  # - cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
+  # - ant -f build.xml clean test > cmd_output.txt
+  # - tail -n 100 cmd_output.txt
   ###Build Script for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
-  ##- ant -f build-lite.xml dist
   - ant -f build-lite.xml get-artifacts
-  # - find ~/.m2/
   - find /home/travis/build/CBIIT/CTRP_4x_PA/target/
   #Build Docker image
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/
   - docker build -t $DOCKER_IMAGE:$DATE -t $DOCKER_IMAGE:latest .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  # - aws s3 cp target/pa/dist/exploded/po-ear/standalone.xml s3://ctrp-repos-inttest/Installs/standalone.xml --region us-east-1
-  # - aws s3 cp target/pa/dist/exploded/po-ear/po.ear s3://ctrp-repos-inttest/Installs/po.ear --region us-east-1
 after_success:
   # - bundle exec codeclimate-test-reporter
   #Push Docker image
