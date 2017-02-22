@@ -1,2 +1,0 @@
-update PA_PROPERTIES set value = 'Delayed Posting Indicator value was modified - ${trial_ids}' where name = 'trial.service.amend.subject';
-update PA_PROPERTIES set value = 'Delayed Posting Indicator set to "Yes" - ${trial_ids}' where name = 'trial.service.create.subject';

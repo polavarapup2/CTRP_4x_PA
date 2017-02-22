@@ -1,1 +1,0 @@
-alter table registry_user add column enable_emails bool NOT NULL DEFAULT true;

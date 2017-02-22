@@ -1,1 +1,0 @@
-alter table registry_user alter column csm_user_id drop not null;

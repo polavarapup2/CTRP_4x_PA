@@ -1,1 +1,0 @@
-alter table patient add constraint PATIENT_COUNTRY_FK foreign key (country_identifier) references country;

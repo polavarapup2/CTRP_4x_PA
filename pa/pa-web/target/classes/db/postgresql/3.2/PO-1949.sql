@@ -1,1 +1,0 @@
-update csm_user set password = null where login_name like '/O=%';
