@@ -9,9 +9,12 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @author Purnima, Reshma
  *
  */
-@SuppressWarnings({ "PMD.CyclomaticComplexity" })
-public class PAWebUtil {
+public final class PAWebUtil {
     private static final Logger LOG = Logger.getLogger(PAWebUtil.class);
+    
+    private PAWebUtil() {
+       super();
+    }
     
     /**
      * 
