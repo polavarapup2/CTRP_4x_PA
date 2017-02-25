@@ -1741,5 +1741,4 @@ public class PAUtil {
         list.add(DocumentWorkflowStatusCode.VERIFICATION_PENDING.getCode());
         return list;
     }
-
 }

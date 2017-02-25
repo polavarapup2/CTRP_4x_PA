@@ -96,6 +96,13 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     private String dataMonitoringIndicator;
     private String trialOversgtAuthCountry;
     private String trialOversgtAuthOrgName;
+    private String fdaRegulatedDrug;
+    private String fdaRegulatedDevice;
+    private String postPriorToApproval;
+    private String pedPostmarketSurv;
+    private String exportedFromUs;
+    
+
     /**
      * @return the trialOversgtAuthCountry
      */
@@ -169,4 +176,89 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     public void setDataMonitoringIndicator(String dataMonitoringIndicator) {
         this.dataMonitoringIndicator = dataMonitoringIndicator;
     }
+    /**
+     *  
+     * @return fdaRegulatedDrug
+     */
+    public String getFdaRegulatedDrug() {
+        return fdaRegulatedDrug;
+    }
+
+    /**
+     * 
+     * @param fdaRegulatedDrug
+     *            the fdaRegulatedDrug
+     */
+    public void setFdaRegulatedDrug(String fdaRegulatedDrug) {
+        this.fdaRegulatedDrug = fdaRegulatedDrug;
+    }
+
+    /**
+     * 
+     * @return fdaRegulatedDevice
+     */
+    public String getFdaRegulatedDevice() {
+        return fdaRegulatedDevice;
+    }
+
+    /**
+     * 
+     * @param fdaRegulatedDevice
+     *            the fdaRegulatedDevice
+     */
+    public void setFdaRegulatedDevice(String fdaRegulatedDevice) {
+        this.fdaRegulatedDevice = fdaRegulatedDevice;
+    }
+
+    /**
+     * 
+     * @return postPriorToApproval
+     */
+    public String getPostPriorToApproval() {
+        return postPriorToApproval;
+    }
+
+    /**
+     * 
+     * @param postPriorToApproval
+     *            the postPriorToApproval
+     */
+    public void setPostPriorToApproval(String postPriorToApproval) {
+        this.postPriorToApproval = postPriorToApproval;
+    }
+
+    /**
+     * 
+     * @return pedPostmarketSurv
+     */
+    public String getPedPostmarketSurv() {
+        return pedPostmarketSurv;
+    }
+
+    /**
+     * 
+     * @param pedPostmarketSurv
+     *            the pedPostmarketSurv
+     */
+    public void setPedPostmarketSurv(String pedPostmarketSurv) {
+        this.pedPostmarketSurv = pedPostmarketSurv;
+    }
+
+    /**
+     * 
+     * @return exportedFromUs
+     */
+    public String getExportedFromUs() {
+        return exportedFromUs;
+    }
+
+    /**
+     * 
+     * @param exportedFromUs
+     *            the exportedFromUs
+     */
+    public void setExportedFromUs(String exportedFromUs) {
+        this.exportedFromUs = exportedFromUs;
+    }
+
 }

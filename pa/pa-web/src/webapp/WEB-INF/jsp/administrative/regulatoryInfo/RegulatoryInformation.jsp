@@ -135,9 +135,70 @@
                 <s:actionerror/>
                 <h2><fmt:message key="regulatory.title" /></h2>
                 <table class="form">
-                    <!--  Trial Oversight Authority Country -->
+                    
                     <tr>
                         <td scope="row" class="label">
+                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk}</span>
+                        </td>
+                        <td class=value>
+                            <s:select id="drug" name="webDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.fdaRegulatedDrug</s:param></s:fielderror>
+                            </span>
+                        </td>  
+                      </tr>
+                      <tr>
+                        <td scope="row" class="label">
+                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">${asterisk}</span>
+                        </td>
+                        <td class=value style="padding: 1px 5px 5px 0 ">
+                            <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.fdaRegulatedDevice</s:param></s:fielderror>
+                            </span>
+                        </td>  
+                      </tr>
+                         <tr>
+                        <td scope="row" class="label">
+                            <label for="approval"><fmt:message key="regulatory.approval.clearance"/></label>
+                        </td>
+                        <td class=value style="padding: 1px 5px 5px 0 ">
+                            <s:select id="approval" name="webDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.postPriorToApproval</s:param></s:fielderror>
+                            </span>
+                        </td>  
+                      </tr>
+                       <tr>
+                        <td scope="row" class="label">
+                            <label for="market"><fmt:message key="regulatory.market.surveillance"/></label>
+                        </td>
+                        <td class=value style="padding: 1px 5px 5px 0 ">
+                            <s:select id="market" name="webDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.pedPostmarketSurv</s:param></s:fielderror>
+                            </span>
+                        </td>  
+                      </tr>
+                       <tr>
+                        <td scope="row" class="label">
+                            <label for="export"><fmt:message key="regulatory.usa.export"/></label>
+                        </td>
+                        <td class=value style="padding: 1px 5px 5px 0 ">
+                            <s:select id="export" name="webDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.exportedFromUs</s:param></s:fielderror>
+                            </span>
+                        </td>  
+                      </tr>
+                      <!--  Trial Oversight Authority Country -->
+                    <!--  
+                    <td scope="row" class="label">
                             <label for="countries"><fmt:message key="regulatory.oversight.country.name"/></label><span class="required">${asterisk}</span>
                         </td>
                         <td class="value">
@@ -149,9 +210,10 @@
                                     <s:param>lst</s:param>
                                 </s:fielderror>
                             </span>
-                         </td>      
-                    </tr>
-                    <!--  Trial Oversignt Authority Organization Name -->
+                         </td>
+                         -->       
+                    
+                    <!--  Trial Oversignt Authority Organization Name
                     <tr>
                         <td scope="row" class="label">
                             <label for="auths"><fmt:message key="regulatory.oversight.auth.name"/></label>
@@ -162,7 +224,8 @@
                               <%@ include file="/WEB-INF/jsp/nodecorate/authorityname.jsp" %>
                             </div>
                         </td>
-                    </tr>    
+                    </tr> 
+                     -->   
                     <!--   FDA Regulated Intervention Indicator-->
                     <tr>
                         <td scope="row"  class="label">

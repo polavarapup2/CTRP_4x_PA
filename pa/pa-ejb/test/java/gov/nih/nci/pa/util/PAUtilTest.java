@@ -56,7 +56,7 @@ import org.junit.Test;
 import com.fiveamsolutions.nci.commons.authentication.CommonsGridLoginModule;
 
 /**
- * @author asharma
+ * @author 
  * 
  */
 public class PAUtilTest {
@@ -1040,7 +1040,6 @@ public class PAUtilTest {
     public void isInRange() {
         assertFalse(PAUtil.isInRange(0, null));
         assertFalse(PAUtil.isInRange(0, " "));
-        
         assertTrue(PAUtil.isInRange(0, "<2"));
         assertTrue(PAUtil.isInRange(1, "<2"));
         assertTrue(PAUtil.isInRange(10, ">9"));
@@ -1055,7 +1054,7 @@ public class PAUtilTest {
         assertFalse(PAUtil.isInRange(-1, "sdaf"));
         assertFalse(PAUtil.isInRange(0, "sdfsdf"));
         assertFalse(PAUtil.isInRange(1, "fsdsf"));
-        
-        
     }
+    
+
 }
