@@ -10,6 +10,8 @@ jdk:
   - openjdk7
 before_install:
   - sudo apt-get install -y  awscli 
+  - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-buid-ivy-repos.gz pa-buid-ivy-repos.gz --region us-east-1
+  - tar -xvf pa-buid-ivy-repos.gz
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
   - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
@@ -33,7 +35,7 @@ before_install:
 script:
   ###Build Script for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
-  - travis_wait 30 ant -v -d -f build-lite.xml get-artifacts > PA_build_output.txt
+  - travis_wait 30 ant -v -d -f build-lite.xml get-artifacts >> PA_build_output.txt
   - tail -n 100 PA_build_output.txt
   ###Run Unit Tests for PA
   #- cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
