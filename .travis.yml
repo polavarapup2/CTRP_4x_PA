@@ -21,8 +21,7 @@ before_install:
         echo "TravisBuildID=$TRAVIS_BUILD_ID" >> build_number.html    &&
         echo "Author=$AUTHOR" >> build_number.html              &&
         echo "BuildTime=$DATE" >> build_number.html             &&
-        echo "Docker=$DOCKER_IMAGE:$DATE" >> build_number.html &&
-        echo "PWD=`PWD` >> build_number.html
+        echo "Docker=$DOCKER_IMAGE:$DATE" >> build_number.html
   - cat ./build_number.html
   #Set others
   - wget https://archive.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
@@ -35,9 +34,10 @@ before_install:
   - mvn -v
 script:
   ###Build Script for PA
+  - echo "PWD=`PWD`"
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
   - travis_wait 30 ant -f build-lite.xml get-artifacts
-  - tail -n 100 PA_build_output.txt
+  # - tail -n 100 PA_build_output.txt
   ###Run Unit Tests for PA
   #- cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
   #- travis_wait 20 ant -f build.xml clean test >> PA_build_output.txt
