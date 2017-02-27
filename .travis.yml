@@ -22,7 +22,7 @@ before_install:
         echo "Author=$AUTHOR" >> build_number.html              &&
         echo "BuildTime=$DATE" >> build_number.html             &&
         echo "Docker=$DOCKER_IMAGE:$DATE" >> build_number.html &&
-        echo "PWD=`PWD' >> build_number.html
+        echo "PWD=`PWD` >> build_number.html
   - cat ./build_number.html
   #Set others
   - wget https://archive.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
