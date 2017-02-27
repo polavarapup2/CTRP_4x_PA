@@ -33,7 +33,7 @@ before_install:
 script:
   ###Build Script for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
-  - travis_wait 60 ant -v -d -f build-lite.xml get-artifacts > PA_build_output.txt
+  - travis_retry travis_wait 60 ant -f build-lite.xml get-artifacts > PA_build_output.txt
   - tail -n 100 PA_build_output.txt
   ###Run Unit Tests for PA
   #- cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
