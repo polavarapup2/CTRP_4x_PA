@@ -11,7 +11,7 @@ jdk:
 before_install:
   - sudo apt-get install -y  awscli 
   - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-buid-ivy-repos.gz pa-buid-ivy-repos.gz --region us-east-1
-  - tar -xvf pa-buid-ivy-repos.gz
+  - tar -xvf pa-build-ivy-repos.tar.gz
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
   - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
