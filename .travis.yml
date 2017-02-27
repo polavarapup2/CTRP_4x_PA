@@ -10,7 +10,7 @@ jdk:
   - openjdk7
 before_install:
   - sudo apt-get install -y  awscli 
-  - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-buid-ivy-repos.gz pa-buid-ivy-repos.gz --region us-east-1
+  - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-build-ivy-repos.tar.gz pa-build-ivy-repos.tar.gz --region us-east-1
   - tar -xvf pa-build-ivy-repos.tar.gz
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
