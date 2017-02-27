@@ -22,7 +22,7 @@ public final class PAWebUtil {
      * @return - responseJSONStr String
      * @throws IOException IOException
      */
-    public static String marshallJSON(Object obj)
+    public static <T> String marshallJSON(T obj)
             throws IOException {
 
         String responseJSONStr = "";
@@ -40,7 +40,7 @@ public final class PAWebUtil {
      *            the objClass
      * @return Object
      */
-    public static Object unmarshallJSON(String jsonString, Class objClass) {
+    public static <T> T unmarshallJSON(String jsonString, Class<T> objClass) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             // JSON from String to Object
