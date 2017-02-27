@@ -9,6 +9,7 @@ language: java
 jdk:
   - openjdk7
 before_install:
+  - echo "PWD=`pwd`"
   - sudo apt-get install -y  awscli 
   - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-build-ivy-repos.tar.gz pa-build-ivy-repos.tar.gz --region us-east-1
   - tar -xvf pa-build-ivy-repos.tar.gz
@@ -34,7 +35,6 @@ before_install:
   - mvn -v
 script:
   ###Build Script for PA
-  - echo "PWD=`PWD`"
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
   - travis_wait 30 ant -f build-lite.xml get-artifacts
   # - tail -n 100 PA_build_output.txt
