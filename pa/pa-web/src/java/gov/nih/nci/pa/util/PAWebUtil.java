@@ -15,11 +15,11 @@ public final class PAWebUtil {
     private PAWebUtil() {
        super();
     }
-    
     /**
      * 
-     * @param obj the obj object to convert to JSON
-     * @return - responseJSONStr String
+     * @param <T> the type
+     * @param obj the obj
+     * @return the JSON String for the obj
      * @throws IOException IOException
      */
     public static <T> String marshallJSON(T obj)
@@ -34,11 +34,10 @@ public final class PAWebUtil {
 
     /**
      * 
-     * @param jsonString
-     *            the jsonString
-     * @param objClass
-     *            the objClass
-     * @return Object
+     * @param jsonString the jsonString
+     * @param <T> the <T>
+     * @param objClass the objClass
+     * @return the Object for the JSONString
      */
     public static <T> T unmarshallJSON(String jsonString, Class<T> objClass) {
         try {

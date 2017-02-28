@@ -1,15 +1,22 @@
 package gov.nih.nci.pa.dto;
+
+
 /**
  * 
  * @author Purnima, Reshma
  *
  */
-public class AdditionalRegulatoryInfoDTO {
-    private String fdaRegulatedDrug;
-    private String fdaRegulatedDevice;
-    private String postPriorToApproval;
-    private String pedPostmarketSurv;
-    private String exportedFromUs;
+//CHECKSTYLE:OFF
+@SuppressWarnings("PMD")
+public class AdditionalRegulatoryInfoDTO { // NOPMD
+    private Long study_protocol_id;
+    private String nci_id;
+    private String fda_regulated_drug;
+    private String fda_regulated_device;
+    private String post_prior_to_approval;
+    private String ped_postmarket_surv;
+    private String exported_from_us;
+    private String date_updated;
     /**
      * Constructor 
      */
@@ -18,106 +25,142 @@ public class AdditionalRegulatoryInfoDTO {
     }
     /**
      * 
-     * @param fdaRegulatedDrug the fdaRegulatedDrug
-     * @param fdaRegulatedDevice the fdaRegulatedDevice
-     * @param postPriorToApproval the postPriorToApproval
-     * @param pedPostmarketSurv the  pedPostmarketSurv
-     * @param exportedFromUs the exportedFromUs
+     * @param study_protocol_id the study_protocol_id
+     * @param nci_id the nci_id
+     * @param fda_regulated_drug the fda_regulated_drug
+     * @param fda_regulated_device the fda_regulated_device
+     * @param post_prior_to_approval the post_prior_to_approval
+     * @param ped_postmarket_surv the ped_postmarket_surv
+     * @param exported_from_us the exported_from_us
+     * @param date_updated the date_updated
      */
-    public AdditionalRegulatoryInfoDTO(String fdaRegulatedDrug,
-            String fdaRegulatedDevice, String postPriorToApproval,
-            String pedPostmarketSurv, String exportedFromUs) {
+    public AdditionalRegulatoryInfoDTO(Long study_protocol_id, String nci_id,
+            String fda_regulated_drug, String fda_regulated_device,
+            String post_prior_to_approval, String ped_postmarket_surv,
+            String exported_from_us, String date_updated) {
         super();
-        this.fdaRegulatedDrug = fdaRegulatedDrug;
-        this.fdaRegulatedDevice = fdaRegulatedDevice;
-        this.postPriorToApproval = postPriorToApproval;
-        this.pedPostmarketSurv = pedPostmarketSurv;
-        this.exportedFromUs = exportedFromUs;
+        this.study_protocol_id = study_protocol_id;
+        this.nci_id = nci_id;
+        this.fda_regulated_drug = fda_regulated_drug;
+        this.fda_regulated_device = fda_regulated_device;
+        this.post_prior_to_approval = post_prior_to_approval;
+        this.ped_postmarket_surv = ped_postmarket_surv;
+        this.exported_from_us = exported_from_us;
+        this.date_updated = date_updated;
     }
-
     /**
      * 
-     * @return fdaRegulatedDrug
+     * @return study_protocol_id
      */
-    public String getFdaRegulatedDrug() {
-        return fdaRegulatedDrug;
+    public Long getStudy_protocol_id() {
+        return study_protocol_id;
     }
-
     /**
      * 
-     * @param fdaRegulatedDrug
-     *            the fdaRegulatedDrug
+     * @param study_protocol_id the study_protocol_id
      */
-    public void setFdaRegulatedDrug(String fdaRegulatedDrug) {
-        this.fdaRegulatedDrug = fdaRegulatedDrug;
+    public void setStudy_protocol_id(Long study_protocol_id) {
+        this.study_protocol_id = study_protocol_id;
     }
-
     /**
      * 
-     * @return fdaRegulatedDevice
+     * @return nci_id
      */
-    public String getFdaRegulatedDevice() {
-        return fdaRegulatedDevice;
+    public String getNci_id() {
+        return nci_id;
     }
-
     /**
      * 
-     * @param fdaRegulatedDevice
-     *            the fdaRegulatedDevice
+     * @param nci_id the nci_id
      */
-    public void setFdaRegulatedDevice(String fdaRegulatedDevice) {
-        this.fdaRegulatedDevice = fdaRegulatedDevice;
+    public void setNci_id(String nci_id) {
+        this.nci_id = nci_id;
     }
-
     /**
      * 
-     * @return postPriorToApproval
+     * @return fda_regulated_drug
      */
-    public String getPostPriorToApproval() {
-        return postPriorToApproval;
+    public String getFda_regulated_drug() {
+        return fda_regulated_drug;
     }
-
     /**
      * 
-     * @param postPriorToApproval
-     *            the postPriorToApproval
+     * @param fda_regulated_drug the fda_regulated_drug
      */
-    public void setPostPriorToApproval(String postPriorToApproval) {
-        this.postPriorToApproval = postPriorToApproval;
+    public void setFda_regulated_drug(String fda_regulated_drug) {
+        this.fda_regulated_drug = fda_regulated_drug;
     }
-
     /**
      * 
-     * @return pedPostmarketSurv
+     * @return fda_regulated_device the fda_regulated_device
      */
-    public String getPedPostmarketSurv() {
-        return pedPostmarketSurv;
+    public String getFda_regulated_device() {
+        return fda_regulated_device;
     }
-
     /**
      * 
-     * @param pedPostmarketSurv
-     *            the pedPostmarketSurv
+     * @param fda_regulated_device fda_regulated_device
      */
-    public void setPedPostmarketSurv(String pedPostmarketSurv) {
-        this.pedPostmarketSurv = pedPostmarketSurv;
+    public void setFda_regulated_device(String fda_regulated_device) {
+        this.fda_regulated_device = fda_regulated_device;
     }
-
     /**
      * 
-     * @return exportedFromUs
+     * @return post_prior_to_approval
      */
-    public String getExportedFromUs() {
-        return exportedFromUs;
+    public String getPost_prior_to_approval() {
+        return post_prior_to_approval;
     }
-
     /**
      * 
-     * @param exportedFromUs
-     *            the exportedFromUs
+     * @param post_prior_to_approval the post_prior_to_approval
      */
-    public void setExportedFromUs(String exportedFromUs) {
-        this.exportedFromUs = exportedFromUs;
+    public void setPost_prior_to_approval(String post_prior_to_approval) {
+        this.post_prior_to_approval = post_prior_to_approval;
     }
+    /**
+     * 
+     * @return ped_postmarket_surv
+     */
+    public String getPed_postmarket_surv() {
+        return ped_postmarket_surv;
+    }
+    /**
+     * 
+     * @param ped_postmarket_surv the ped_postmarket_surv
+     */
+    public void setPed_postmarket_surv(String ped_postmarket_surv) {
+        this.ped_postmarket_surv = ped_postmarket_surv;
+    }
+    /**
+     * 
+     * @return exported_from_us 
+     */
+    public String getExported_from_us() {
+        return exported_from_us;
+    }
+    /**
+     * 
+     * @param exported_from_us the exported_from_us
+     */
+    public void setExported_from_us(String exported_from_us) {
+        this.exported_from_us = exported_from_us;
+    }
+    /**
+     * 
+     * @return data_updated
+     */
+    public String getDate_updated() {
+        return date_updated;
+    }
+    /**
+     * 
+     * @param data_updated the data_updated
+     */
+    public void setDate_updated(String date_updated) {
+        this.date_updated = date_updated;
+    }
+  //CHECKSTYLE:ON
 
+   
 }
