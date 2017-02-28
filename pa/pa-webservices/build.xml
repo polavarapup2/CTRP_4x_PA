@@ -381,7 +381,7 @@
     <!-- ====================================================================== -->
     <target name="run-selenium-tests" depends="compile-tests" description="Run integration tests">
         <mkdir dir="${pa-webservices.test.reports}"/>
-        <junit maxmemory="1G" printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="yes" failureproperty="junit.failure">
+        <junit maxmemory="1G" printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="no" failureproperty="junit.failure">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <formatter type="xml"/>
             <formatter type="plain" usefile="false"/>
