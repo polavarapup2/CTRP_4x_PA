@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get install -y  awscli 
   - aws s3 cp s3://ctrp-repos-inttest/Installs/pa-build-ivy-repos.tar.gz $HOME/pa-build-ivy-repos.tar.gz --region us-east-1
   - cd $HOME
-  - tar -xvf pa-build-ivy-repos.tar.gz
+  - tar -xf pa-build-ivy-repos.tar.gz
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
   - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
@@ -27,7 +27,7 @@ before_install:
   - cat ./build_number.html
   #Set others
   - wget https://archive.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
-  - tar xzvf apache-maven-2.2.1-bin.tar.gz
+  - tar xzf apache-maven-2.2.1-bin.tar.gz
   - rm -rf $HOME/.m2
   - export M2_HOME=`pwd`/apache-maven-2.2.1
   - export M2=$M2_HOME/bin
@@ -38,12 +38,12 @@ script:
   ###Build Script for PA
   - touch /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/build-pa
-  - travis_wait 30 ant -f build-lite.xml get-artifacts # >> /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
-  # - tail -n 100 /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
+  - travis_wait 30 ant -f build-lite.xml get-artifacts >> /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
+  - tail -n 100 /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
   ###Run Unit Tests for PA
   - cd /home/travis/build/CBIIT/CTRP_4x_PA/pa
-  - travis_wait 20 ant -f build.xml clean test >> /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
-  #- tail -n 100 /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
+  - travis_wait 20 ant -f build.xml clean test #>> /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
+  - tail -n 100 /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt
   #Send build log to S3
   - aws s3 cp /home/travis/build/CBIIT/CTRP_4x_PA/PA_build_output.txt s3://ctrp-repos-inttest/PA_build_output.txt --region us-east-1
   - find /home/travis/build/CBIIT/CTRP_4x_PA/target/
