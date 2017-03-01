@@ -42,7 +42,7 @@
     <!-- ====================================================================== -->
     <!-- Defining classpaths                                                    -->
     <!-- ====================================================================== -->
- 
+
     <path id="build.classpath">
         <fileset dir="${lib.dir}/build">
             <include name="*.jar"/>
@@ -74,8 +74,8 @@
         <fileset dir="${lib.dir}/test-findbugs">
             <include name="*.jar"/>
         </fileset>
-    </path> 	
-	
+    </path>
+
     <path id="test-simian.classpath">
         <fileset dir="${lib.dir}/test-simian">
             <include name="*.jar"/>
@@ -184,11 +184,11 @@
 
     <target name="runTest" description="Runs the test you specify on the command line with -Dtest=" depends="compile-tests">
         <mkdir dir="${services.test.reports}"/>
-        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no">
+        <junit printSummary="no" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${services.build.outputDir}"/>
             <classpath location="${services.build.testOutputDir}"/>
             <classpath refid="test.classpath"/>
@@ -215,18 +215,18 @@
                 <include name="**/accrual/**/*.class"/>
             	<exclude name="**/PoMockLocator.class"/>
             </fileset>
-            <auxClasspath>            
-                 <path refid="compile.classpath"/>                
+            <auxClasspath>
+                 <path refid="compile.classpath"/>
             </auxClasspath>
         </cobertura-instrument>
 
         <mkdir dir="${services.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
+        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${services.build.dir}/cobertura.ser"/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${services.build.coberturaOutputDir}"/>
             <classpath location="${services.build.outputDir}"/>
             <classpath location="${services.build.testOutputDir}"/>
@@ -276,7 +276,7 @@
             </fileset>
             <classpath location="${services.build.dir}/classes"/>
             <classpath refid="compile.classpath"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
             <formatter type="plain" toFile="${services.report.dir}/checkstyle.txt"/>
             <formatter type="xml" toFile="${services.report.dir}/checkstyle.xml"/>
         </checkstyle>
@@ -291,7 +291,7 @@
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pmdFile}" maxruleviolations="${services.pmd.maxerrors}">
             <classpath refid="compile.classpath"/>
-            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toConsole="false"/>
             <formatter type="text" toFile="${services.report.dir}/pmd.txt"/>
             <formatter type="xml"  toFile="${services.report.dir}/pmd.xml"/>
             <formatter type="html" toFile="${services.report.dir}/pmd.html"/>
@@ -300,7 +300,7 @@
             </fileset>
          <sourceLanguage name="java" version="1.7"/></pmd>
     </target>
-	
+
     <!-- ====================================================================== -->
     <!-- Run Find Bugs                                                             -->
     <!-- ====================================================================== -->
@@ -317,7 +317,7 @@
           <class location="${services.build.outputDir}" />
         </findbugs>
         <fail if="bugsFound" message="Bugs found! See ${services.report.dir}/findbugs.xml for details."/>
-    </target>       
+    </target>
 
 
 
@@ -333,7 +333,7 @@
                </fileset>
             <formatter type="plain" toFile="${services.report.dir}/simian.txt"/>
             <formatter type="xml" toFile="${services.report.dir}/simian.xml"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
         </simian>
     </target>
 

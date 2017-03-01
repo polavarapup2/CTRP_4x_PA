@@ -95,18 +95,18 @@
             <include name="*.jar"/>
         </fileset>
     </path>
-	
+
     <path id="test-jshint.classpath">
         <fileset dir="${basedir}/auxlib">
             <include name="*.jar"/>
         </fileset>
     </path>
-	
+
     <path id="test-findbugs.classpath">
         <fileset dir="${lib.dir}/test-findbugs">
             <include name="*.jar"/>
         </fileset>
-    </path>	
+    </path>
 
     <path id="test-simian.classpath">
         <fileset dir="${lib.dir}/test-simian">
@@ -184,7 +184,7 @@
                 <path refid="ejb.package.classpath"/>
                 <path refid="common.package.classpath"/>
             </classpath>
-        </javac>          	
+        </javac>
         <copy todir="${reg-web.build.outputDir}">
             <filterset>
                 	<filter token="ldap.url" value="${ldap.url}"/>
@@ -202,7 +202,7 @@
 	                <filter token="database.url" value="${jdbc.url}" />
 	                <filter token="database.user" value="${db.username}" />
 	                <filter token="database.password" value="${db.password}" />
-	                <filter token="database.dialect" value="${hibernate.dialect}" />	                
+	                <filter token="database.dialect" value="${hibernate.dialect}" />
             </filterset>
             <fileset dir="${reg-web.build.resourceDir.0}"/>
         </copy>
@@ -212,7 +212,7 @@
     <!-- Configure test compilation target                                      -->
     <!-- ====================================================================== -->
 
-    <target name="configure-tests">       
+    <target name="configure-tests">
     </target>
 
     <!-- ====================================================================== -->
@@ -223,13 +223,13 @@
         <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
-                <pathelement location="${reg-web.build.testDir.0}"/>                
+                <pathelement location="${reg-web.build.testDir.0}"/>
             </src>
             <classpath>
                 <pathelement location="${reg-web.build.outputDir}"/>
                 <path refid="common.package.classpath"/>
                 <path refid="test.classpath"/>
-                <path refid="test-junit.classpath"/>                
+                <path refid="test-junit.classpath"/>
                 <path refid="ejb.package.classpath"/>
             </classpath>
         </javac>
@@ -237,7 +237,7 @@
             <fileset dir="${reg-web.build.testResourceDir.0}"/>
         </copy>
     </target>
-	
+
 	 <target name="compile-selenium-tests" depends="compile-tests" description="Compile the test code">
            <ant target="jar-test" dir="${pa.dir}/pa-ejb" inheritAll="false">
                  <property name="tier" value="${tier}"/>
@@ -247,7 +247,7 @@
            </ant>
 	        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
 	               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
-	            <src>	 
+	            <src>
 	                <pathelement location="${reg-web.build.integrationTestDir.0}"/>
 	            </src>
 	            <classpath>
@@ -271,7 +271,7 @@
         <junit maxmemory="1G" printSummary="no" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="no" failureproperty="junit.failure">
         	<jvmarg value="-XX:-UseSplitVerifier"/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath>
             	<pathelement location="${pa.dir}/pa-web/target/test-classes"/>
             	<pathelement location="${pa.dir}/pa-web/target/classes"/>
@@ -279,7 +279,7 @@
                 <path location="${reg-web.build.testOutputDir}"/>
                 <path refid="selenium.classpath"/>
                 <path refid="common.package.classpath"/>
-            	<path refid="test.classpath"/>   
+            	<path refid="test.classpath"/>
             </classpath>
             <batchtest todir="${reg-web.test.reports}">
                 <fileset dir="${reg-web.build.integrationTestDir.0}">
@@ -292,21 +292,21 @@
          </condition>
          <echo>Selenium tests ${selenium.outcome}</echo>
 
-    </target>	
+    </target>
 	<target name="run-performance-tests" depends="compile-selenium-tests" description="Run performance tests">
 		    <property name="submitter.login" value=""/>
 		    <property name="submitter.password" value=""/>
 		    <property name="server.readonly" value=""/>
 		    <property name="no.duration.assertions" value=""/>
 	        <mkdir dir="${reg-web.test.reports}"/>
-	        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="yes" failureproperty="junit.failure">
+	        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="no" failureproperty="junit.failure">
 	            <jvmarg value="-XX:-UseSplitVerifier"/>
 	        	<jvmarg value="-Dserver.readonly=${server.readonly}"/>
 	        	<jvmarg value="-Dsubmitter.login=${submitter.login}"/>
 	        	<jvmarg value="-Dsubmitter.password=${submitter.password}"/>
 	        	<jvmarg value="-Dno.duration.assertions=${no.duration.assertions}"/>
 	            <formatter type="xml"/>
-	            <formatter type="plain" usefile="false"/>
+	            <!-- <formatter type="plain" usefile="false"/> -->
 	            <classpath>
 	                <pathelement location="${pa.dir}/pa-web/target/test-classes"/>
 	                <pathelement location="${pa.dir}/pa-web/target/classes"/>
@@ -314,7 +314,7 @@
 	                <path location="${reg-web.build.testOutputDir}"/>
 	                <path refid="selenium.classpath"/>
 	                <path refid="common.package.classpath"/>
-	                <path refid="test.classpath"/>   
+	                <path refid="test.classpath"/>
 	            </classpath>
 	            <batchtest todir="${reg-web.test.reports}">
 	                <fileset dir="${reg-web.build.integrationTestDir.0}">
@@ -324,51 +324,51 @@
 	         </junit>
 	         <fail if="junit.failure" message="Performance test(s) failed.  See reports in ${reg-web.test.reports}."/>
 	</target>
-	
+
 	<target name="test-integration" description="Runs integration tests against the automatically deploy application."
-	           depends="database.install,database.update,populate-test-db,pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-selenium-tests,stop-jboss-server">       
+	           depends="database.install,database.update,populate-test-db,pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-selenium-tests,stop-jboss-server">
 	</target>
-	
+
     <target name="test-performance" description="Runs performance tests against the automatically deployed application."
-               depends="pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-performance-tests,stop-jboss-server">       
+               depends="pa-deploy-notest,deploy-notest,start-jboss-server,jar-test,run-performance-tests,stop-jboss-server">
     </target>
-	
+
 	<target name="database.install">
         <ant target="database.install" dir="../pa" inheritAll="false">
             <property name="tier" value="${tier}"/>
         </ant>
 	</target>
-	
+
     <target name="database.update">
         <ant target="database.update" dir="../pa" inheritAll="false">
             <property name="tier" value="${tier}"/>
         </ant>
     </target>
-	
+
 	<target name="populate-test-db">
 	        <ant target="populate-test-db" dir="../pa" inheritAll="false">
 	            <property name="tier" value="${tier}"/>
 	        </ant>
 	</target>
-	
+
 	<target name="pa-deploy-notest">
             <ant target="deploy-notest" dir="../pa" inheritAll="false">
                 <property name="tier" value="${tier}"/>
             </ant>
 	</target>
-	
+
 	<target name="jar-test">
             <ant target="jar-test" dir="../pa" inheritAll="false">
                 <property name="tier" value="${tier}"/>
             </ant>
-	</target>	
-	
+	</target>
+
     <target name="start-jboss-server">
         <ant target="start-jboss-server" dir="../pa" inheritAll="false">
             <property name="tier" value="${tier}"/>
         </ant>
     </target>
-	
+
 	<target name="stop-jboss-server">
 	        <ant target="stop-jboss-server" dir="../pa" inheritAll="false">
 	            <property name="tier" value="${tier}"/>
@@ -389,12 +389,12 @@
                 <path refid="common.package.classpath"/>
             </classpath>
             <fileset dir="src" includes="**/*.java" />
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
             <formatter type="plain" toFile="${pa.report.dir}/reg-web/checkstyle.txt"/>
             <formatter type="xml"   toFile="${pa.report.dir}/reg-web/checkstyle.xml"/>
         </checkstyle>
     </target>
-	
+
     <!-- ====================================================================== -->
     <!-- Run JS Hint                                                             -->
     <!-- ====================================================================== -->
@@ -402,15 +402,15 @@
     <target name="test-jshint">
         <taskdef name="jshint" classname="com.philmander.jshint.JsHintAntTask" classpathref="test-jshint.classpath"/>
         <!-- Lint the code -->
-        <jshint dir="${reg-web.build.src.js}" fail="false" 
+        <jshint dir="${reg-web.build.src.js}" fail="false"
             options="browser=true,devel=true,jquery=true,prototypejs=true,-W099=true,eqeqeq=false,strict=false">
              <include name="**/*.js"/>
-             <exclude name="**/*.min.js"/>             
+             <exclude name="**/*.min.js"/>
              <exclude name="**/jquery*.js"/>
         	 <exclude name="**/bootstrap*.js"/>
              <exclude name="**/select2*.js"/>
         	 <exclude name="**/*dataTables*.js"/>
-             <exclude name="**/prototype.js"/>             
+             <exclude name="**/prototype.js"/>
         	 <exclude name="**/popup.js"/>
              <report type="jslint-xml" destFile="${pa.report.dir}/reg-web/jslint.xml" />
              <report type="plain" destFile="${pa.report.dir}/reg-web/jshint.txt" />
@@ -423,14 +423,14 @@
                       select="\1"
                       casesensitive="false" />
         <condition property="jshintFailure">
-            <scriptcondition language="javascript"><![CDATA[                
+            <scriptcondition language="javascript"><![CDATA[
                 self.setValue(project.getProperty("jshintErrorCount") > project.getProperty("reg-web.jshint.maxerrors"));
                 ]]>
             </scriptcondition>
         </condition>
         <fail if="jshintFailure" message="${jshintErrorCount} JSHint errors exceed the limit of ${reg-web.jshint.maxerrors}! See ${pa.report.dir}/reg-web/jshint.txt for details."/>
-    </target>   
-	
+    </target>
+
 
     <!-- ====================================================================== -->
     <!-- Run PMD                                                                -->
@@ -439,7 +439,7 @@
     <target name="test-pmd">
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pa.pmd}" maxRuleViolations="${reg-web.pmd.maxerrors}">
-            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toConsole="false"/>
             <formatter type="text" toFile="${pa.report.dir}/reg-web/pmd.txt"/>
             <formatter type="xml"  toFile="${pa.report.dir}/reg-web/pmd.xml"/>
             <formatter type="html" toFile="${pa.report.dir}/reg-web/pmd.html"/>
@@ -448,7 +448,7 @@
             </fileset>
          <sourceLanguage name="java" version="1.7"/></pmd>
     </target>
-	
+
     <!-- ====================================================================== -->
     <!-- Run Find Bugs                                                             -->
     <!-- ====================================================================== -->
@@ -467,7 +467,7 @@
           <class location="${reg-web.build.outputDir}" />
         </findbugs>
         <fail if="bugsFound" message="Bugs found! See ${pa.report.dir}/reg-web/findbugs.xml for details."/>
-    </target>   	
+    </target>
 
     <!-- ====================================================================== -->
     <!-- Run Simian                                                             -->
@@ -479,7 +479,7 @@
             <fileset dir="src" includes="**/*.java"/>
             <formatter type="plain" toFile="${pa.report.dir}/reg-web/simian.txt"/>
             <formatter type="xml" toFile="${pa.report.dir}/reg-web/simian.xml"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
         </simian>
     </target>
 
@@ -586,11 +586,11 @@
 
     <target name="runTest" description="Runs the test you specify on the command line with -Dtest=" depends="compile-tests">
         <mkdir dir="${reg-web.test.reports}"/>
-        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no" maxmemory="128m">
+        <junit printSummary="no" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no" maxmemory="128m">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${reg-web.build.outputDir}"/>
             <classpath location="${reg-web.build.testOutputDir}"/>
             <classpath refid="test.classpath"/>
@@ -608,32 +608,32 @@
             </batchtest>
         </junit>
     </target>
-	
+
     <target name="test-jasmine">
         <first id="winexec">
             <fileset dir="${lib.dir}/phantomjs" includes="**/phantomjs.exe" />
         </first>
         <first id="unixexec">
             <fileset dir="${lib.dir}/phantomjs" includes="**/bin/phantomjs" />
-        </first>        
-        <echo message="${toString:winexec}" />      
+        </first>
+        <echo message="${toString:winexec}" />
         <echo message="${toString:unixexec}" />
-        
+
         <!-- Windows -->
         <exec osfamily="windows" executable="${toString:winexec}" dir="${reg-web.build.testDir.js}" timeout="60000" failonerror="true">
             <arg line="run-jasmine.js SpecRunner.html" />
-        </exec>      
-        
+        </exec>
+
         <!-- Linux -->
         <exec executable="chmod" osfamily="unix" spawn="true">
                <arg line="u=rwx ${toString:unixexec}" />
         </exec>
         <exec executable="${toString:unixexec}" osfamily="unix" dir="${reg-web.build.testDir.js}" timeout="60000" failonerror="true">
             <arg line="run-jasmine.js SpecRunner.html" />
-        </exec>     
+        </exec>
 
     </target>
-	
+
 
     <target name="test-cobertura" depends="compile-tests">
         <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
@@ -642,19 +642,19 @@
             <fileset dir="${reg-web.build.outputDir}">
                 <include name="**/*.class" />
             </fileset>
-            <auxClasspath>            	 
+            <auxClasspath>
                   <path refid="ejb.package.classpath"/>
                   <path refid="compile.classpath"/>
                   <path refid="common.package.classpath"/>
              </auxClasspath>
         </cobertura-instrument>
         <mkdir dir="${reg-web.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure" maxmemory="256m">
+        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure" maxmemory="256m">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${reg-web.build.dir}/cobertura.ser" />
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${reg-web.build.coberturaOutputDir}"/>
             <classpath location="${reg-web.build.outputDir}"/>
             <classpath location="${reg-web.build.testOutputDir}"/>

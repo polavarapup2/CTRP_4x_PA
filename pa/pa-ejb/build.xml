@@ -25,7 +25,7 @@
     <property name="java.encoding" value="utf-8"/>
 
     <property name="pa-ejb.build.finalName" value="pa-ejb"/>
-    <property name="pa-ejb.build.dir" value="${pa.dir}/pa-ejb/target"/>	
+    <property name="pa-ejb.build.dir" value="${pa.dir}/pa-ejb/target"/>
     <property name="pa-ejb.build.outputDir" value="${pa-ejb.build.dir}/classes"/>
 	<property name="pa-ejb.build.srcgenDir" value="${pa-ejb.build.dir}/generated-src"/>
     <property name="pa-ejb.build.srcDir.0" value="${pa.dir}/pa-ejb/src/java"/>
@@ -113,7 +113,7 @@
             <include name="*.jar"/>
         </fileset>
     </path>
-	
+
     <path id="test-findbugs.classpath">
         <fileset dir="${lib.dir}/test-findbugs">
             <include name="*.jar"/>
@@ -138,14 +138,14 @@
 	<target name="run-xjc" description="Generates JAXB classes">
 		<!-- <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="build.classpath"/> -->
 		<taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task" classpathref="build.classpath"/>
-		
+
 		<mkdir dir="${pa-ejb.build.srcgenDir}"/>
 		<xjc destdir="${pa-ejb.build.srcgenDir}" extension="true">
 		  <schema  dir="${pa-ejb.build.resourceDir.0}" includes="ctgov_public.xsd"/>
 		  <binding dir="${pa-ejb.build.resourceDir.0}" includes="ctgov_public.xjb"/>
 		</xjc>
 	</target>
-	
+
     <target name="compile" depends="run-xjc" description="Compile the code">
         <mkdir dir="${pa-ejb.build.outputDir}"/>
         <javac destdir="${pa-ejb.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
@@ -170,24 +170,24 @@
                 <filter token="po.server.name" value="${po.server.name}" />
                 <filter token="po.port.number" value="${po.port.number}" />
                 <filter token="po.principal" value="${po.principal}" />
-                <filter token="po.credentials" value="${po.credentials}" /> 
+                <filter token="po.credentials" value="${po.credentials}" />
                 <filter token="po.topic.clientId" value="${po.topic.clientId}" />
                 <filter token="po.topic.userName" value="${po.topic.userName}" />
-                <filter token="po.topic.password" value="${po.topic.password}" />	
+                <filter token="po.topic.password" value="${po.topic.password}" />
             	<filter token="csm.submitter.group" value="${csm.submitter.group}" />
                 <filter token="grid.dorian.url" value="${grid.dorian.url}" />
                 <filter token="gridgrouper.submitter.group" value="${gridgrouper.submitter.group}"/>
                 <filter token="gridgrouper.admin.user" value="${gridgrouper.admin.user}"/>
                 <filter token="gridgrouper.admin.password" value="${gridgrouper.admin.password}"/>
                 <filter token="gridgrouper.url" value="${gridgrouper.url}"/>
-                <filter token="idps.allow.password.editing" value="${idps.allow.password.editing}"/>                
+                <filter token="idps.allow.password.editing" value="${idps.allow.password.editing}"/>
                 <filter token="register.mail.body.url" value="${register.mail.body.url}"/>
                 <filter token="mock.po" value="${mock.po}" />
                 <filter token="nci.ldap.prefix" value="${nci.ldap.prefix}" />
                 <filter token="wikiHelp.baseUrl.pa" value="${wikiHelp.baseUrl.pa}" />
                 <filter token="wikiHelp.baseUrl.registry" value="${wikiHelp.baseUrl.registry}" />
                 <filter token="wikiHelp.baseUrl.accrual" value="${wikiHelp.baseUrl.accrual}" />
-                <filter token="wikiHelp.baseUrl.trialStatusRules" value="${wikiHelp.baseUrl.trialStatusRules}" />            	
+                <filter token="wikiHelp.baseUrl.trialStatusRules" value="${wikiHelp.baseUrl.trialStatusRules}" />
                 <filter token="ctgov.ftp.url" value="${ctgov.ftp.url}"/>
                 <filter token="hibernate.dialect" value="${hibernate.dialect}"/>
                 <filter token="db.username" value="${db.username}"/>
@@ -206,7 +206,7 @@
     <target name="compile-tests" depends="compile" description="Compile the test code">
         <mkdir dir="${pa-ejb.build.testOutputDir}"/>
         <javac destdir="${pa-ejb.build.testOutputDir}" nowarn="false" debug="true" optimize="false"
-            deprecation="true" source="${java.major.version}" target="${java.major.version}" verbose="false" 
+            deprecation="true" source="${java.major.version}" target="${java.major.version}" verbose="false"
             fork="false" encoding="${java.encoding}">
             <src>
                 <pathelement location="${pa-ejb.build.testDir.0}"/>
@@ -233,7 +233,7 @@
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${pa-ejb.build.outputDir}"/>
             <classpath location="${pa-ejb.build.testOutputDir}"/>
             <classpath refid="test.classpath"/>
@@ -253,7 +253,7 @@
         <property name="coverage.branch" value="${pa-ejb.coverage.branch}"/>
         <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
         <delete file="${pa-ejb.build.dir}/cobertura.ser" />
-    	
+
         <cobertura-instrument datafile="${pa-ejb.build.dir}/cobertura.ser" toDir="${pa-ejb.build.coberturaOutputDir}" ignoreTrivial="true">
             <fileset dir="${pa-ejb.build.outputDir}">
                 <include name="**/*.class" />
@@ -261,19 +261,19 @@
             	<exclude name="**/gov/nih/nci/pa/util/pomock/*.class" />
             	<exclude name="**/gov/nih/nci/pa/external/*" />
             </fileset>
-            <auxClasspath>            
+            <auxClasspath>
                  <path refid="compile.classpath"/>
                  <path refid="common.package.classpath"/>
-            </auxClasspath>        	
+            </auxClasspath>
         </cobertura-instrument>
-    	
+
         <mkdir dir="${pa-ejb.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="no" failureproperty="junit.failure">
+        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="no" failureproperty="junit.failure">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${pa-ejb.build.dir}/cobertura.ser" />
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${pa-ejb.build.coberturaOutputDir}"/>
             <classpath location="${pa-ejb.build.outputDir}"/>
             <classpath location="${pa-ejb.build.testOutputDir}"/>
@@ -284,7 +284,7 @@
             <test if="test" name="${test}" haltonerror="false" haltonfailure="false"></test>
             <batchtest todir="${pa-ejb.test.reports}" unless="test">
                 <fileset dir="${pa-ejb.build.testDir.0}">
-                    <include name="**/*Test.java"/>                 
+                    <include name="**/*Test.java"/>
                 </fileset>
             </batchtest>
         </junit>
@@ -322,7 +322,7 @@
                 <path refid="common.package.classpath"/>
             </classpath>
             <fileset dir="src" includes="**/*.java" excludes="**/gov/nih/nci/pa/util/pomock/*.java,**/gov/nih/nci/pa/external/*"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
             <formatter type="plain" toFile="${pa.report.dir}/pa-ejb/checkstyle.txt"/>
             <formatter type="xml"   toFile="${pa.report.dir}/pa-ejb/checkstyle.xml"/>
         </checkstyle>
@@ -335,7 +335,7 @@
     <target name="test-pmd">
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pa.pmd}" maxruleviolations="${pa-ejb.pmd.maxerrors}">
-            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toConsole="false"/>
             <formatter type="text" toFile="${pa.report.dir}/pa-ejb/pmd.txt"/>
             <formatter type="xml"  toFile="${pa.report.dir}/pa-ejb/pmd.xml"/>
             <formatter type="html" toFile="${pa.report.dir}/pa-ejb/pmd.html"/>
@@ -346,7 +346,7 @@
             </fileset>
          <sourceLanguage name="java" version="1.7"/></pmd>
     </target>
-	
+
     <!-- ====================================================================== -->
     <!-- Run Find Bugs                                                             -->
     <!-- ====================================================================== -->
@@ -358,14 +358,14 @@
                       outputFile="${pa.report.dir}/pa-ejb/findbugs.xml">
           <auxClasspath>
             <path refid="compile.classpath"/>
-            <path refid="common.package.classpath" />              
+            <path refid="common.package.classpath" />
           </auxClasspath>
           <sourcePath path="${pa-ejb.build.srcDir.0}" />
           <class location="${pa-ejb.build.dir}/${pa-ejb.jar}" />
         </findbugs>
         <fail if="bugsFound" message="Bugs found! See ${pa.report.dir}/pa-ejb/findbugs.xml for details."/>
     </target>
-	
+
 
     <!-- ====================================================================== -->
     <!-- Run Simian                                                             -->
@@ -377,7 +377,7 @@
             <fileset dir="src" includes="**/*.java" excludes="**/gov/nih/nci/pa/util/pomock/*.java"/>
             <formatter type="plain" toFile="${pa.report.dir}/pa-ejb/simian.txt"/>
             <formatter type="xml"   toFile="${pa.report.dir}/pa-ejb/simian.xml"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
         </simian>
     </target>
 
@@ -426,7 +426,7 @@
                        **/service/*BeanLocal.class
                        **/service/Abstract*.class
                        **/service/BaseLookUpService.class
-                       **/service/ctgov/*                       
+                       **/service/ctgov/*
                        **/domain/*
         	           **/external/*
                        **/iso/convert/*

@@ -70,12 +70,12 @@
         </fileset>
         <fileset dir="${lib.dir}/compile"/>
     </path>
-	
+
     <path id="test-findbugs.classpath">
         <fileset dir="${lib.dir}/test-findbugs">
             <include name="*.jar"/>
         </fileset>
-    </path>	
+    </path>
 
     <path id="test-simian.classpath">
         <fileset dir="${lib.dir}/test-simian"/>
@@ -121,10 +121,10 @@
 	        <taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task" classpathref="build.classpath"/>
 	        <mkdir dir="${web.build.srcgenDir}"/>
 	        <xjc destdir="${web.build.srcgenDir}" extension="true">
-	              <schema  dir="${web.build.resourceDir}" includes="accrual_ws.xsd"/>          
+	              <schema  dir="${web.build.resourceDir}" includes="accrual_ws.xsd"/>
 	        </xjc>
     </target>
-	
+
     <target name="compile"  depends="determine-build-version, run-xjc" description="Compiles the subproject">
         <mkdir dir="${web.build.outputDir}"/>
         <javac destdir="${web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
@@ -179,19 +179,19 @@
         <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
-                <pathelement location="${web.build.testSrcDir}"/>                
+                <pathelement location="${web.build.testSrcDir}"/>
             </src>
             <classpath>
                 <pathelement location="${web.build.outputDir}"/>
                 <path refid="compile.classpath"/>
-                <path refid="test.classpath"/>                
+                <path refid="test.classpath"/>
             </classpath>
         </javac>
         <copy todir="${web.build.testOutputDir}">
             <fileset dir="${web.build.testResourceDir}"/>
         </copy>
     </target>
-	
+
 	<target name="compile-selenium-tests" depends="compile-tests" description="Compile the test code">
         <ant target="jar-test" dir="${pa.dir}/pa-ejb" inheritAll="false">
 	          <property name="tier" value="${tier}"/>
@@ -201,7 +201,7 @@
 		</ant>
         <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
-            <src>                
+            <src>
                 <pathelement location="${web.build.integrationTestSrcDir}"/>
             </src>
             <classpath>
@@ -212,7 +212,7 @@
             	<pathelement location="${pa.dir}/pa-webservices/target/test-classes"/>
             	<pathelement location="${pa.dir}/pa-webservices/target/classes"/>
             </classpath>
-        </javac>       
+        </javac>
    </target>
 
 
@@ -225,21 +225,21 @@
         <delete file="${web.build.dir}/cobertura.ser"/>
         <cobertura-instrument datafile="${web.build.dir}/cobertura.ser" toDir="${web.build.coberturaOutputDir}">
             <fileset dir="${web.build.outputDir}">
-                <include name="**/*.class"/>   
+                <include name="**/*.class"/>
             	<exclude name="**/gov/nih/nci/accrual/webservices/types/*.class"/>
             </fileset>
-            <auxClasspath>            
-                 <path refid="compile.classpath"/>                
+            <auxClasspath>
+                 <path refid="compile.classpath"/>
             </auxClasspath>
         </cobertura-instrument>
 
         <mkdir dir="${web.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
+        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." failureproperty="junit.failure">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${web.build.dir}/cobertura.ser"/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${web.build.coberturaOutputDir}"/>
             <classpath location="${web.build.outputDir}"/>
             <classpath location="${web.build.testOutputDir}"/>
@@ -279,7 +279,7 @@
     <!-- ====================================================================== -->
     <!-- Configure tests target                                                 -->
     <!-- ====================================================================== -->
-    <target name="configure-tests">       
+    <target name="configure-tests">
     </target>
 
     <!-- ====================================================================== -->
@@ -288,10 +288,10 @@
     <target name="run-selenium-tests" depends="compile-selenium-tests" description="Run integration tests">
         <mkdir dir="${web.build.testOutputDir}"/>
         <mkdir dir="${web.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="yes" failureproperty="junit.failure">
+        <junit printSummary="no" haltonerror="false" haltonfailure="false" fork="true" forkMode="once" dir="." showoutput="no" failureproperty="junit.failure">
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath>
             	<path location="${web.build.outputDir}"/>
                 <path location="${web.build.testOutputDir}"/>
@@ -326,7 +326,7 @@
                containing those exceptions - see http://jira.codehaus.org/secure/ViewIssue.jspa?key=MPCHECKSTYLE-20 -->
             <classpath refid="compile.classpath"/>
             <fileset dir="src" includes="**/*.java"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
             <formatter type="plain" toFile="${web.report.dir}/checkstyle.txt"/>
             <formatter type="xml"   toFile="${web.report.dir}/checkstyle.xml"/>
         </checkstyle>
@@ -340,7 +340,7 @@
     <target name="test-pmd">
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pmdFile}" maxruleviolations="${web.pmd.maxerrors}">
-            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toConsole="false"/>
             <formatter type="text" toFile="${web.report.dir}/pmd.txt"/>
             <formatter type="xml"  toFile="${web.report.dir}/pmd.xml"/>
             <formatter type="html" toFile="${web.report.dir}/pmd.html"/>
@@ -349,7 +349,7 @@
             </fileset>
          <sourceLanguage name="java" version="1.7"/></pmd>
     </target>
-	
+
     <!-- ====================================================================== -->
     <!-- Run Find Bugs                                                             -->
     <!-- ====================================================================== -->
@@ -366,7 +366,7 @@
           <class location="${web.build.outputDir}" />
         </findbugs>
         <fail if="bugsFound" message="Bugs found! See ${web.report.dir}/findbugs.xml for details."/>
-    </target>   	
+    </target>
 
 
     <!-- ====================================================================== -->
@@ -379,7 +379,7 @@
             <fileset dir="src" includes="**/*.java"/>
             <formatter type="plain" toFile="${web.report.dir}/simian.txt"/>
             <formatter type="xml" toFile="${web.report.dir}/simian.xml"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
         </simian>
     </target>
 
@@ -455,4 +455,3 @@
         <property name="project.revision" value="${now}"/>
     </target>
 </project>
-

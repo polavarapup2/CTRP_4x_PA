@@ -90,7 +90,7 @@
         </fileset>
     </path>
 
-	
+
     <path id="test-simian.classpath">
         <fileset dir="${lib.dir}/test-simian">
             <include name="*.jar"/>
@@ -140,18 +140,18 @@
     <!-- ====================================================================== -->
     <!-- Compilation target                                                     -->
     <!-- ====================================================================== -->
-	
+
 	<target name="run-xjc" description="Generates JAXB classes">
 		<taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task" classpathref="build.classpath"/>
 		<mkdir dir="${commons.build.srcgenDir}"/>
-	
+
 		<xjc destdir="${commons.build.srcgenDir}" extension="true" package="gov.nih.nci.po.ws.common.types">
 		  <schema  dir="${commons.build.resourceDir.0}" includes="po.xsd"/>
 		  <arg value="-Xfluent-api" />
 		  <arg value="-Xannotate" />
 		</xjc>
 	</target>
-	
+
     <target name="compile" depends="run-xjc" description="Compile the code">
         <mkdir dir="${commons.build.outputDir}"/>
         <!-- Only needed here to keep eclipse happy -->
@@ -172,9 +172,9 @@
         <copy todir="${commons.build.outputDir}" filtering="true">
             <fileset dir="${commons.build.resourceDir.0}"/>
         </copy>
-    	
+
     	<propertyfile file="${commons.build.outputDir}/pa-common.properties">
-    		<entry  key="keystore.password" value="${keystore.password}"/>    		  
+    		<entry  key="keystore.password" value="${keystore.password}"/>
     	</propertyfile>
     </target>
 
@@ -229,7 +229,7 @@
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${commons.build.testOutputDir}"/>
             <classpath location="${commons.build.coberturaOutputDir}"/>
             <classpath location="${commons.build.outputDir}"/>
@@ -255,7 +255,7 @@
         <cobertura-instrument datafile="${commons.build.dir}/cobertura.ser"
                               toDir="${commons.build.coberturaOutputDir}" ignoreTrivial="true">
             <fileset dir="${commons.build.outputDir}">
-                <include name="**/*.class" />	
+                <include name="**/*.class" />
             	<exclude name="**/StudyIdentifierType.class"/>
             	<exclude name="**/StudyProtocolFlag.class"/>
             	<exclude name="**/StudyProtocolFlagDTO.class"/>
@@ -268,17 +268,17 @@
             	<exclude name="**/testsupport/*.class" />
             </fileset>
         	<auxClasspath>
-                 <path refid="compile.classpath"/>                
+                 <path refid="compile.classpath"/>
             </auxClasspath>
         </cobertura-instrument>
 
         <mkdir dir="${commons.test.reports}"/>
-        <junit printSummary="yes" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="no" failureproperty="junit.failure" forkMode="once" >
+        <junit printSummary="off" haltonerror="false" haltonfailure="false" fork="true" dir="." showoutput="false" failureproperty="junit.failure" forkMode="once" >
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${commons.build.dir}/cobertura.ser" />
             <formatter type="xml"/>
-            <formatter type="plain" usefile="false"/>
+            <!-- <formatter type="plain" usefile="false"/> -->
             <classpath location="${commons.build.testOutputDir}"/>
             <classpath location="${commons.build.coberturaOutputDir}"/>
             <classpath location="${commons.build.outputDir}"/>
@@ -326,7 +326,7 @@
                 <path refid="compile.classpath"/>
             </classpath>
             <fileset dir="src" includes="**/*.java" />
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
             <formatter type="plain" toFile="${pa.report.dir}/commons/checkstyle.txt"/>
             <formatter type="xml"   toFile="${pa.report.dir}/commons/checkstyle.xml"/>
         </checkstyle>
@@ -339,7 +339,7 @@
     <target name="test-pmd">
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pa.pmd}" maxRuleViolations="${commons.pmd.maxerrors}">
-            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toConsole="false"/>
             <formatter type="text" toFile="${pa.report.dir}/commons/pmd.txt"/>
             <formatter type="xml"  toFile="${pa.report.dir}/commons/pmd.xml"/>
             <formatter type="html" toFile="${pa.report.dir}/commons/pmd.html"/>
@@ -359,7 +359,7 @@
     	              output="xml:withMessages" warningsProperty="bugsFound" maxrank="14" projectname="pa-commons"
     	              outputFile="${pa.report.dir}/commons/findbugs.xml" >
 		  <auxClasspath>
-		    <path refid="compile.classpath"/>                
+		    <path refid="compile.classpath"/>
 		  </auxClasspath>
 	      <sourcePath path="${commons.build.srcDir.0}" />
 	      <class location="${commons.build.dir}/${commons.jar}" />
@@ -377,7 +377,7 @@
             <fileset dir="src" includes="**/*.java"/>
             <formatter type="plain" toFile="${pa.report.dir}/commons/simian.txt"/>
             <formatter type="xml"   toFile="${pa.report.dir}/commons/simian.xml"/>
-            <formatter type="plain"/>
+            <!-- <formatter type="plain"/> -->
         </simian>
     </target>
 
