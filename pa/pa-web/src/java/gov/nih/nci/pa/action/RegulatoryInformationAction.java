@@ -129,24 +129,22 @@ public class RegulatoryInformationAction extends ActionSupport {
         final HttpServletRequest request = ServletActionContext.getRequest();
         Ii studyProtocolIi = (Ii) request.getSession().getAttribute(
                 Constants.STUDY_PROTOCOL_II);
-        // helper glue code for updating the additional regulatory info\
-        /**
-         * try { fdaaa changes
-         * 
-         * TrialInfoMergeHelper.mergeRegulatoryInfoUpdate(studyProtocolIi,
-         * webDTO); } catch (PAException e) {
-         * request.setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
-         * return query(); }
-         */
-        // Update InterventionalSP
         StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                 .getStudyProtocol(studyProtocolIi);
         validateForm(spDTO);
+        if (hasFieldErrors()) {
+            return query();
+        }
+        // helper glue code for updating the additional regulatory info
         try {
-            if (hasFieldErrors()) {
-                return query();
-            }
-
+            TrialInfoMergeHelper.mergeRegulatoryInfoUpdate(studyProtocolIi,
+                    webDTO);
+        } catch (PAException e) {
+            request.setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
+            return query();
+        }
+        // Update InterventionalSP
+        try {
             if (webDTO.getSection801Indicator() == null) {
                 spDTO.setSection801Indicator(BlConverter.convertToBl(null));
             } else {
@@ -160,7 +158,7 @@ public class RegulatoryInformationAction extends ActionSupport {
                         .valueOf(webDTO.getFdaRegulatedInterventionIndicator())));
             }
             if (webDTO.getDelayedPostingIndicator() == null) {
-                spDTO.setDelayedpostingIndicator(BlConverter.convertToBl(null));
+                spDTO.setDelayedpostingIndicator(null);
             } else {
                 spDTO.setDelayedpostingIndicator(BlConverter
                         .convertToBl(Boolean.valueOf(webDTO
@@ -195,23 +193,8 @@ public class RegulatoryInformationAction extends ActionSupport {
                     .getSession().getAttribute(Constants.STUDY_PROTOCOL_II);
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolIi);
-            // StudyRegulatoryAuthorityDTO authorityDTO =
-            // PaRegistry.getStudyRegulatoryAuthorityService().getCurrentByStudyProtocol(studyProtocolIi);
-            // on error page if country and reg auth are chosen
-            /**
-             * if (getSelectedRegAuth() != null) { regIdAuthOrgList =
-             * PaRegistry.
-             * getRegulatoryInformationService().getRegulatoryAuthorityNameId(
-             * Long.valueOf(getLst()));
-             * setSelectedRegAuth(getSelectedRegAuth()); }
-             */
-            // countryList =
-            // PaRegistry.getRegulatoryInformationService().getDistinctCountryNames();
-            // countryList =
-            // PaRegistry.getRegulatoryInformationService().getDistinctCountryNamesStartWithUSA();
-            if (BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())) { // load
-                                                                                   // values
-                // from database
+            
+            if (BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())) {
                 if (spDTO.getSection801Indicator().getValue() != null) {
                     webDTO.setSection801Indicator(BlConverter
                             .convertToString(spDTO.getSection801Indicator()));
@@ -230,24 +213,6 @@ public class RegulatoryInformationAction extends ActionSupport {
                             .getDataMonitoringCommitteeAppointedIndicator())));
                 }
             }
-            /**
-             * if (authorityDTO != null) { // load values from database
-             * 
-             * StudyRegulatoryAuthorityDTO sraFromDatabaseDTO =
-             * PaRegistry.getStudyRegulatoryAuthorityService
-             * ().getCurrentByStudyProtocol(studyProtocolIi); if
-             * (sraFromDatabaseDTO != null) { Long sraId =
-             * Long.valueOf(sraFromDatabaseDTO
-             * .getRegulatoryAuthorityIdentifier().getExtension()); List<Long>
-             * regInfo = PaRegistry.getRegulatoryInformationService().
-             * getRegulatoryAuthorityInfo(sraId);
-             * setLst(regInfo.get(1).toString()); //set selected the name of the
-             * regulatory authority chosen regIdAuthOrgList =
-             * PaRegistry.getRegulatoryInformationService
-             * ().getRegulatoryAuthorityNameId(
-             * Long.valueOf(regInfo.get(1).toString()));
-             * setSelectedRegAuth(regInfo.get(0).toString()); } }
-             */
             // Call glue code helper class
             TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
 
@@ -260,19 +225,52 @@ public class RegulatoryInformationAction extends ActionSupport {
 
         return SUCCESS;
     }
-
+    
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     private void validateForm(StudyProtocolDTO spDTO) {
-            if (!BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator()) 
-                    && StringUtils.isBlank(webDTO
-                    .getFdaRegulatedInterventionIndicator())) {
-                addFieldError("webDTO.fdaRegulatedInterventionIndicator",
-                        "FDA Regulated Intervention Indicator is required field");
-            }
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) {
+            addFieldError("webDTO.fdaRegulatedDrug",
+                    "Studies a U.S. FDA-regulated Drug Product is required field");
+        }
+
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) {
+            addFieldError("webDTO.fdaRegulatedDevice",
+                    "Studies a U.S. FDA-regulated Device Product is required field");
+        }
+
+        if (StringUtils.isBlank(webDTO.getExportedFromUs())) {
+            addFieldError("webDTO.exportedFromUs",
+                    "Product Exported from the U.S is required field");
+        }
+        if (!BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())
+                && StringUtils.isBlank(webDTO
+                        .getFdaRegulatedInterventionIndicator())) {
+            addFieldError("webDTO.fdaRegulatedInterventionIndicator",
+                    "FDA Regulated Intervention Indicator is required field");
+        }
         if (Boolean.TRUE
                 .equals(Boolean.valueOf(webDTO.getSection801Indicator()))
                 && spDTO instanceof NonInterventionalStudyProtocolDTO) {
             addFieldError("webDTO.section801Indicator",
                     "Section 801 Indicator should be No for Non-interventional trials");
+        }
+
+        // Conditional - required only if 'U.S. FDA-Regulated Device = 'Yes' AND
+        // the newly named 'Unapproved/Uncleared Device' = 'Yes'
+        if (Boolean.TRUE
+                .equals(Boolean.valueOf(webDTO.getFdaRegulatedDevice()))
+                && Boolean.TRUE.equals(Boolean.valueOf(webDTO
+                        .getDelayedPostingIndicator()))) {
+
+            if (StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
+                addFieldError("webDTO.postPriorToApproval",
+                        "Post Prior to U.S. FDA Approval or Clearance is required field");
+            } else if (Boolean.TRUE.equals(Boolean.valueOf(webDTO
+                    .getPostPriorToApproval()))
+                    && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
+                addFieldError("webDTO.pedPostmarketSurv",
+                        "Pediatric Post-market Surveillance is required field");
+            }
         }
     }
 

@@ -18,20 +18,33 @@
             function checkAllonLoad() {
                 if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
                     hideRow($('sec801row'));
-                    hideRow($('delpostindrow'));
-                } else if ($('sec801id').value == '' | $('sec801id').value == 'false') {
-                    hideRow($('delpostindrow'));
-                }            
+                   
+                } 
+               //FDAAA validations
+               if (($('delpostindrow').value == 'false' | $('delpostindrow').value == '') & 
+                    ($('device').value == 'false' | $('device').value == '')) {
+                     hideRow($('approval'));
+                     hideRow($('market'));
+                     $('market').value = ''
+                     
+               } 
+               if ($('approval').value=='false' | $('approval').value=='') {
+            	    hideRow($('market'));
+            	    $('market').value = '';
+               }
+               if ($('device').value == '' | $('device').value == 'false') {
+                   hideRow($('delpostindrow'));
+                   $('delpostindrow').value = '';
+               }   
+
             }
 
             function checkFDADropDown() {
                 if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
-                    input_box=confirm("Section 801 and Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                    input_box=confirm("Section 801 will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                     if (input_box == true) {
                         $('sec801id').value ='';
-                        $('delpostindid').value ='';
                         hideRow($('sec801row'));
-                        hideRow($('delpostindrow'));
                     } else {
                         $('fdaindid').value = 'true';
                     }
@@ -40,14 +53,14 @@
                 }
             }
         
-            function checkSection108DropDown() {
-                if ($('sec801id').value == '' | $('sec801id').value == 'false') {    
-                    input_box = confirm("Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+            function checkDeviceDropDown() {
+                if ($('device').value == '' | $('device').value == 'false') {    
+                    input_box = confirm("Unapproved/Uncleared Device will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                     if (input_box == true){
                         hideRow($('delpostindrow'));
                         $('delpostindid').value ='';
                     } else {
-                        $('sec801id').value = 'true';
+                        $('device').value = 'true';
                     }
                 } else {
                     showRow($('delpostindrow'));
@@ -133,16 +146,18 @@
                 <s:token/>
                 <pa:studyUniqueToken/>
                 <s:actionerror/>
+                <s:hidden id="lastUpdatedDate" name="webDTO.lastUpdatedDate"> </s:hidden>
                 <h2><fmt:message key="regulatory.title" /></h2>
                 <table class="form">
                     
                     <tr>
                         <td scope="row" class="label">
-                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk}</span>
+                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk}</span> 
                         </td>
-                        <td class=value>
+                        <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="drug" name="webDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
+                            <span class="info">Studying one or more U.S. FDA-regulated drug or biologic products?</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.fdaRegulatedDrug</s:param></s:fielderror>
                             </span>
@@ -152,9 +167,10 @@
                         <td scope="row" class="label">
                             <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">${asterisk}</span>
                         </td>
-                        <td class=value style="padding: 1px 5px 5px 0 ">
-                            <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                        <td style="padding: 1px 5px 5px 0 ">
+                            <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
                             &nbsp;&nbsp;&nbsp;
+                            <span class="info">Studying one or more U.S. FDA-regulated device products?</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.fdaRegulatedDevice</s:param></s:fielderror>
                             </span>
@@ -164,9 +180,10 @@
                         <td scope="row" class="label">
                             <label for="approval"><fmt:message key="regulatory.approval.clearance"/></label>
                         </td>
-                        <td class=value style="padding: 1px 5px 5px 0 ">
+                        <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="approval" name="webDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
+                            <span  class="info">Authorize posting of study record on ClinicalTrials.gov prior to U.S. FDA approval/clearance of device product?</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.postPriorToApproval</s:param></s:fielderror>
                             </span>
@@ -176,9 +193,10 @@
                         <td scope="row" class="label">
                             <label for="market"><fmt:message key="regulatory.market.surveillance"/></label>
                         </td>
-                        <td class=value style="padding: 1px 5px 5px 0 ">
+                        <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="market" name="webDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
+                            <span class="info">Required only if this a pediatric postmarket surveillance of a device product ordered by the U.S. FDA.</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.pedPostmarketSurv</s:param></s:fielderror>
                             </span>
@@ -186,9 +204,9 @@
                       </tr>
                        <tr>
                         <td scope="row" class="label">
-                            <label for="export"><fmt:message key="regulatory.usa.export"/></label>
+                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">${asterisk}</span>
                         </td>
-                        <td class=value style="padding: 1px 5px 5px 0 ">
+                        <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="export" name="webDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
                             <span class="formErrorMsg">
@@ -244,7 +262,7 @@
                             <label for="sec801id"><fmt:message key="regulatory.section801.ind"/></label><span class="required">${asterisk}</span>
                         </td>
                         <td class="value">
-                            <s:select id="sec801id" name="webDTO.section801Indicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkSection108DropDown();"/>
+                            <s:select id="sec801id" name="webDTO.section801Indicator" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.section801Indicator</s:param></s:fielderror>
                             </span>

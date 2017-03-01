@@ -101,6 +101,7 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     private String postPriorToApproval;
     private String pedPostmarketSurv;
     private String exportedFromUs;
+    private String lastUpdatedDate;
     
 
     /**
@@ -259,6 +260,20 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
      */
     public void setExportedFromUs(String exportedFromUs) {
         this.exportedFromUs = exportedFromUs;
+    }
+    /**
+     * 
+     * @return lastUpdatedDate
+     */
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+    /**
+     * 
+     * @param lastUpdatedDate the lastUpdatedDate
+     */
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
 }

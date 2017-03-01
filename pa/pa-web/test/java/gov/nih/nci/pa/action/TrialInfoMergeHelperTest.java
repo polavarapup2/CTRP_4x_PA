@@ -23,11 +23,12 @@ public class TrialInfoMergeHelperTest {
     @Before
     public void setUp() throws Exception {
         helper.setClient(client);
-        additionalRegInfoDTO.setExportedFromUs("true");
-        additionalRegInfoDTO.setFdaRegulatedDevice("true");
-        additionalRegInfoDTO.setFdaRegulatedDrug("true");
-        additionalRegInfoDTO.setPedPostmarketSurv("true");
-        additionalRegInfoDTO.setPostPriorToApproval("true");
+        additionalRegInfoDTO.setExported_from_us("true");
+        additionalRegInfoDTO.setFda_regulated_device("true");
+        additionalRegInfoDTO.setFda_regulated_drug("true");
+        additionalRegInfoDTO.setPed_postmarket_surv("true");
+        additionalRegInfoDTO.setPost_prior_to_approval("true");
+        additionalRegInfoDTO.setDate_updated("1234455");
         when(client.sendHTTPRequest("", "GET", null)).thenReturn(
                 PAWebUtil.marshallJSON(additionalRegInfoDTO));
 
@@ -39,15 +40,16 @@ public class TrialInfoMergeHelperTest {
         helper.mergeRegulatoryInfoRead(
                 IiConverter.convertToIi(studyprotocolId), webDto);
         assertEquals(webDto.getFdaRegulatedDevice(),
-                additionalRegInfoDTO.getFdaRegulatedDevice());
+                additionalRegInfoDTO.getFda_regulated_device());
         assertEquals(webDto.getExportedFromUs(),
-                additionalRegInfoDTO.getExportedFromUs());
+                additionalRegInfoDTO.getExported_from_us());
         assertEquals(webDto.getFdaRegulatedDrug(),
-                additionalRegInfoDTO.getFdaRegulatedDrug());
+                additionalRegInfoDTO.getFda_regulated_drug());
         assertEquals(webDto.getPedPostmarketSurv(),
-                additionalRegInfoDTO.getPedPostmarketSurv());
+                additionalRegInfoDTO.getPed_postmarket_surv());
         assertEquals(webDto.getPostPriorToApproval(),
-                additionalRegInfoDTO.getPostPriorToApproval());
+                additionalRegInfoDTO.getPost_prior_to_approval());
+        assertEquals(webDto.getLastUpdatedDate(), additionalRegInfoDTO.getDate_updated());
 
     }
 

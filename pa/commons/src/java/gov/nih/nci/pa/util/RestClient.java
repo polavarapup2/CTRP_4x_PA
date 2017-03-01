@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * @author vpoluri
+ * @author Purnima, Reshma
  *
  */
 public class RestClient {
