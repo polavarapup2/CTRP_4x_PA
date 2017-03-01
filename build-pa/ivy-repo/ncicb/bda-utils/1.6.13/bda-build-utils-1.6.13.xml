@@ -2286,7 +2286,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.6.1
 	<macrodef name="validate-pre-build">
 		<attribute name="application.base.path" default="${application.base.path}"/>
 		<attribute name="require.build.wscore" default="${require.build.wscore}"/>
-		<attribute name="wscore.download.url" default="https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty/ws-core-enum/ws-core-enum/4.0.3/ws-core-enum-4.0.3.zip"/>
+		<attribute name="wscore.download.url" default="https://s3.amazonaws.com/ctrp-repos-inttest/public/thirdparty/ws-core-enum/ws-core-enum/4.0.3/ws-core-enum-4.0.3.zip"/>
 		<attribute name="wscore.relative.dir" default="ws-core-4.0.3"/>
 		<attribute name="cacore-sdk.required" default="${cacore-sdk.required}"/>
 		<attribute name="cacore-sdk.src.url" default="${cacore-sdk.src.url}"/>
