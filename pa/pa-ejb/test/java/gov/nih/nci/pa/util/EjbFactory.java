@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.pa.util;
 
@@ -25,7 +25,7 @@ import org.springframework.util.SystemPropertyUtils;
 
 /**
  * @author dkrylov
- * 
+ *
  */
 @SuppressWarnings("rawtypes")
 public final class EjbFactory {
@@ -79,7 +79,7 @@ public final class EjbFactory {
             Class refEjbClass = refEjb.getClass();
             if (ArrayUtils.contains(refEjbClass.getGenericInterfaces(),
                     refEjbInterface)) {
-                System.out.println(f.toString() + " injected with " + refEjb);
+              //  System.out.println(f.toString() + " injected with " + refEjb);
                 ReflectionUtils.setField(f, ejb, refEjb);
                 return;
             }
