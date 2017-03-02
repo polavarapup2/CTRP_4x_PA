@@ -7,7 +7,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
@@ -15,8 +23,11 @@ import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
+import gov.nih.nci.pa.service.util.LookUpTableServiceRemote;
 import gov.nih.nci.pa.util.Constants;
+import gov.nih.nci.pa.util.PAWebUtil;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
 
 import org.junit.Before;
@@ -30,10 +41,17 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
 
     private static RegulatoryInformationAction regulatoryInformationAction;
     private StudyProtocolServiceLocal studyProtocolServiceLocal;
-
+    private RestClient client = mock(RestClient.class);
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     private Ii id = IiConverter.convertToIi(1L);
+    List<Long> identifiersList = new ArrayList<Long>();
+    private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
+    Map<Long, String> identifierMap = new HashMap<Long, String>();
+    private String url = "http://192.168.99.100:3100/api/v1/data_clinical_trials";
+    private final LookUpTableServiceRemote lookUpTableService = mock(LookUpTableServiceRemote.class);
+    
     @Before
-    public void setUp(){
+    public void setUp() throws PAException, IOException {
         regulatoryInformationAction = new RegulatoryInformationAction();
         regulatoryInformationAction.setLst(null);
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, id);
@@ -41,6 +59,24 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
         PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);
         when(paRegSvcLoc.getStudyProtocolService()).thenReturn(studyProtocolServiceLocal);
+        Long studyprotocolId = IiConverter.convertToLong(id);
+        identifiersList.add(studyprotocolId);
+        identifierMap.put(1L, "NCI-1000-0000");
+        when(PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList)).thenReturn(identifierMap);
+        regulatoryInformationAction.setHelper(helper);
+        additionalRegInfoDTO.setExported_from_us("true");
+        additionalRegInfoDTO.setFda_regulated_device("true");
+        additionalRegInfoDTO.setFda_regulated_drug("true");
+        additionalRegInfoDTO.setPed_postmarket_surv("true");
+        additionalRegInfoDTO.setPost_prior_to_approval("true");
+        additionalRegInfoDTO.setDate_updated("1234455");
+        when(lookUpTableService
+                .getPropertyValue("data-clinicaltrials-api")).thenReturn(url);
+        helper.setLookUpTableService(lookUpTableService);
+        when(client.sendHTTPRequest(url +"/1", "GET", null)).thenReturn(
+                PAWebUtil.marshallJSON(additionalRegInfoDTO));
+        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");
+        helper.setClient(client);
 
     }
     
@@ -64,6 +100,7 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         webDTO.setSection801Indicator("true");
         webDTO.setDelayedPostingIndicator("true");
         regulatoryInformationAction.setWebDTO(webDTO);
+
         spDTO.setDataMonitoringCommitteeAppointedIndicator(BlConverter.convertToBl(false));
         String result = regulatoryInformationAction.update();
         assertEquals("success", result);

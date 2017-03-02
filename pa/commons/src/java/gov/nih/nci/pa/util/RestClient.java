@@ -1,5 +1,7 @@
 package gov.nih.nci.pa.util;
 
+import gov.nih.nci.pa.service.PAException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,15 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
-import gov.nih.nci.pa.service.PAException;
 
 /**
  * @author Purnima, Reshma
@@ -30,47 +25,7 @@ public class RestClient {
     private static final int RETRY_COUNT = 3;
     private static final int HTTP_TIME_OUT = 10000;
     
-    /**
-     * 
-     *
-     * @param allowTrustedSites
-     *            - enables to allow all tursted sites
-     */
 
-    public RestClient(boolean allowTrustedSites) {
-        if (allowTrustedSites) {
-            trustAllCerts();
-        }
-    }
-    
-    /**
-     * trusts all certificates
-     */
-    private void trustAllCerts() {
-
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() { // NOPMD
-                return null;
-            }
-
-            public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-                // TODO
-            }
-
-            public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-                // TODO
-            }
-        } };
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-        }
-    }
 
     /**
      * Invokes REST api to get the
@@ -149,9 +104,7 @@ public class RestClient {
      * @param method the HTTP method GET/POST/PUT/DELETE
      * @param postBody the jsonStr of the post request body
      * @return http connection to the URL 
-     * @throws MalformedURLException
      * @throws IOException
-     * @throws ProtocolException
      */
     private HttpURLConnection makeUrlConnection(String restUrl, String method, String postBody)
             throws IOException {

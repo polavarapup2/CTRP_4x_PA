@@ -1,5 +1,7 @@
 package gov.nih.nci.pa.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 
 /**
  * 
@@ -8,6 +10,7 @@ package gov.nih.nci.pa.dto;
  */
 //CHECKSTYLE:OFF
 @SuppressWarnings("PMD")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AdditionalRegulatoryInfoDTO { // NOPMD
     private Long study_protocol_id;
     private String nci_id;
