@@ -182,16 +182,16 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
        assertTrue(st.contains("<clinical_study>"));
        assertTrue(st.contains("<is_section_801>"));
        assertTrue(st.contains("<id_type>Registry Identifier</id_type>"));
-       assertTrue(st.contains("<primary_compl_date>1969-12</primary_compl_date>"));
+       assertTrue(st.contains("<primary_compl_date>1970-01</primary_compl_date>"));
        assertTrue(st.contains("<primary_compl_date_type>Anticipated</primary_compl_date_type>"));
-       assertTrue(st.contains("<last_follow_up_date>1969-12</last_follow_up_date>"));
+       assertTrue(st.contains("<last_follow_up_date>1970-01</last_follow_up_date>"));
        assertTrue(st.contains("<last_follow_up_date_type>Anticipated</last_follow_up_date_type>"));
-       
+
        st = getBean().generateCTGovXml(spId,CTGovXmlGeneratorOptions.USE_SUBMITTERS_PRS);
        assertTrue(st.contains("<clinical_study>"));
        assertTrue(st.contains("<is_section_801>"));
        assertTrue(st.contains("<id_type>Registry Identifier</id_type>"));
-       
+
     }
 
     @Test
@@ -229,8 +229,8 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         StudyOverallStatusDTO recruitmentStatus = new StudyOverallStatusDTO();
         recruitmentStatus.setStatusCode(CdConverter.convertToCd(StudyStatusCode.ACTIVE));
         when(studyOverallStatusSvc.getCurrentByStudyProtocol(any(Ii.class))).thenReturn(recruitmentStatus);
-        
-        recruitmentStatus.setStatusCode(CdConverter.convertToCd(StudyStatusCode.getByRecruitmentStatus(RecruitmentStatusCode.IN_REVIEW)));        
+
+        recruitmentStatus.setStatusCode(CdConverter.convertToCd(StudyStatusCode.getByRecruitmentStatus(RecruitmentStatusCode.IN_REVIEW)));
         String xml = getBean().generateCTGovXml(spId);
         assertTrue(xml.contains("<overall_status>Not yet recruiting</overall_status>"));
 
@@ -433,7 +433,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         plannedActDto.setSubcategoryCode(null);
         assertFalse(getBean().generateCTGovXml(spId).contains("<intervention_type>"));
     }
-    
+
     @Test
     public void testSecondaryIdOrder() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
@@ -442,7 +442,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         ("<secondary_id><id>AAAAId</id></secondary_id>"
         +"<secondary_id><id>OtherId</id></secondary_id>"));
     }
-    
+
     @Test
     public void testArmsGroupOrder() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
@@ -453,7 +453,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         		 +"<textblock>some description</textblock></arm_group_description>"
         	     +"</arm_group><arm_group><arm_group_label>Bname</arm_group_label>"));
     }
-    
+
     @Test
     public void testOutComeMeasureOrder() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
@@ -462,18 +462,18 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         		("<primary_outcome><outcome_measure>A name</outcome_measure>"
         	     +"<outcome_safety_issue>Yes</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
         		 +"</primary_outcome><primary_outcome><outcome_measure>some name</outcome_measure>"));
-    	         
+
     	         assertTrue(newXML.contains
     	         		("<secondary_outcome><outcome_measure>A name</outcome_measure>"
     	         		+"<outcome_safety_issue>Yes</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
     	         		+"</secondary_outcome><secondary_outcome><outcome_measure>some name</outcome_measure>"));
-    	         
+
     	         assertTrue(newXML.contains
      	         		("<other_outcome><outcome_measure>A name</outcome_measure>"
      	         		+"<outcome_safety_issue>No</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
      	         	    +"</other_outcome><other_outcome><outcome_measure>some name</outcome_measure>"));
     }
-    
+
     @Test
     public void testLongInterventionName() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
@@ -483,7 +483,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         		+"long name to check. Also this string should contains very long name full 200 length string "
         		+ "to check we are setting this string 123</intervention_name>"));
     }
-    
+
     @Test
     public void testInterventionOtherNamesOrder() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
@@ -492,7 +492,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         		("<intervention_other_name>A name starting with A</intervention_other_name><intervention_other_name>"
         		 +"duplicate name</intervention_other_name><intervention_other_name>Z name starting with Z</intervention_other_name>"));
     }
-    
+
     @Test
     public void testPhoneWithExt() throws PAException {
          String xml  = getBean().generateCTGovXml(spId);
@@ -752,7 +752,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         when(studyOutcomeMeasureSvc.getByStudyProtocol(any(Ii.class))).thenReturn(studyOutcomeMeasureDtoList);
         // to test null checks
         String ctGovXml = getBean().generateCTGovXml(spId);
-    	
+
         studyOutcomeMeasureDtoList = new ArrayList<StudyOutcomeMeasureDTO>();
         studyOutcomeMeasureDto = new StudyOutcomeMeasureDTO();
         studyOutcomeMeasureDto.setName(new St());
@@ -767,7 +767,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         assertTrue(ctGovXml.contains("<primary_outcome>"));
         assertFalse(ctGovXml.contains("<secondary_outcome>"));
         assertTrue(ctGovXml.contains("<outcome_description>"));
-        
+
     }
 
     @Test
@@ -888,7 +888,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         assertEquals(expected, result);
 
     }
-    
+
     @Test
     public void applyPrsFormattingFixes() {
         assertNull(bean.applyPrsFormattingFixes(null));
@@ -901,7 +901,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
         assertEquals(
                 "Test:\r  * Level 1\r  * Level2\r  ** Level3",
                 bean.applyPrsFormattingFixes("Test:\r- Level 1\r* Level2\r ** Level3"));
-    }  
+    }
 
     @Test
     public void createValueUnitOperatorString() {
@@ -928,7 +928,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
     	 catch(Exception e) {
     		 throw new PAException(e);
     	 }
-    	 String newXML = sw.toString();	
+    	 String newXML = sw.toString();
     	 return newXML;
     }
 }
