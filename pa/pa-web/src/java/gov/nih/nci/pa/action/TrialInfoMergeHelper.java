@@ -1,11 +1,14 @@
 package gov.nih.nci.pa.action;
 
+import java.util.Properties;
+
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.RestClient;
 
 import org.apache.log4j.Logger;
@@ -20,15 +23,17 @@ public class TrialInfoMergeHelper {
 
     private static final Logger LOG = Logger
             .getLogger(TrialInfoMergeHelper.class);
-//    /**
-//     * GET
-//     */
-//    private static final String GET = "GET";
-//    /**
-//     * POST
-//     */
-//    private static final String POST = "POST";
+    /**
+     * GET
+     */
+    private static final String GET = "GET";
+    /**
+     * POST
+     */
+    private static final String POST = "POST";
     private RestClient client = new RestClient(true);
+    private static final String URL = "http://localhost:3000/api/v1/data_clinical_trials/";
+    //private static final Properties FDAAA_PROPERTIES = PaEarPropertyReader.getProperties();
 
     /**
      * 
@@ -47,10 +52,12 @@ public class TrialInfoMergeHelper {
         String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
         AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
         try {
-            // String response = client.sendHTTPRequest("", GET, null);
-            String response = "{\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
-                    + ",\"post_prior_to_approval\":\"true\""
-                    + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
+            String url = URL + studyProtocolId;
+            
+            String response = client.sendHTTPRequest(url, GET, null);
+           // String response = "{\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
+           //         + ",\"post_prior_to_approval\":\"true\""
+           //         + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
             regulatoryDto = (AdditionalRegulatoryInfoDTO) PAWebUtil
                     .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
         } catch (Exception e) {
@@ -74,7 +81,7 @@ public class TrialInfoMergeHelper {
      * @param webDto the webDto
      * @throws PAException PAException
      */
-    public static void mergeRegulatoryInfoUpdate(Ii studyProtocolIi,
+    public void mergeRegulatoryInfoUpdate(Ii studyProtocolIi, String nciId, 
             RegulatoryAuthorityWebDTO webDto) throws PAException {
         LOG.info("Updating Regulatory data info to new DB"
                 + IiConverter.convertToString(studyProtocolIi));
@@ -85,12 +92,14 @@ public class TrialInfoMergeHelper {
         regulatoryDto.setPed_postmarket_surv(webDto.getPedPostmarketSurv());
         regulatoryDto.setPost_prior_to_approval(webDto.getPostPriorToApproval());
         regulatoryDto.setDate_updated(webDto.getLastUpdatedDate());
+        regulatoryDto.setStudy_protocol_id(IiConverter.convertToLong(studyProtocolIi));
+        regulatoryDto.setNci_id(nciId);
         try {
-          //  String postBody = PAWebUtil.marshallJSON(regulatoryDto);
-            //String response = client.sendHTTPRequest("", POST, postBody);
-            String response = "{\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
-                    + ",\"post_prior_to_approval\":\"true\""
-                    + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
+            String postBody = PAWebUtil.marshallJSON(regulatoryDto);
+            String response = client.sendHTTPRequest(URL, POST, postBody);
+//            String response = "{\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
+//                    + ",\"post_prior_to_approval\":\"true\""
+//                    + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
             regulatoryDto = (AdditionalRegulatoryInfoDTO) PAWebUtil
                     .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
         } catch (Exception e) {

@@ -3,11 +3,16 @@ package gov.nih.nci.pa.action;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.Properties;
+
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.RestClient;
 
 import org.junit.Before;
@@ -19,6 +24,7 @@ public class TrialInfoMergeHelperTest {
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
     private RegulatoryAuthorityWebDTO webDto = new RegulatoryAuthorityWebDTO();
     private RestClient client = mock(RestClient.class);
+    private String url = "http://localhost:3000/api/v1/data_clinical_trials/1";
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +35,8 @@ public class TrialInfoMergeHelperTest {
         additionalRegInfoDTO.setPed_postmarket_surv("true");
         additionalRegInfoDTO.setPost_prior_to_approval("true");
         additionalRegInfoDTO.setDate_updated("1234455");
-        when(client.sendHTTPRequest("", "GET", null)).thenReturn(
+        
+        when(client.sendHTTPRequest(url, "GET", null)).thenReturn(
                 PAWebUtil.marshallJSON(additionalRegInfoDTO));
 
     }
@@ -52,5 +59,6 @@ public class TrialInfoMergeHelperTest {
         assertEquals(webDto.getLastUpdatedDate(), additionalRegInfoDTO.getDate_updated());
 
     }
+    
 
 }
