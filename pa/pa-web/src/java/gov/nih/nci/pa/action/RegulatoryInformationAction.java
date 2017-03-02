@@ -83,14 +83,17 @@ import gov.nih.nci.pa.dto.CountryRegAuthorityDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthOrgDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO;
+import gov.nih.nci.pa.iso.dto.PlannedMarkerDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
+import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PaRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -131,13 +134,18 @@ public class RegulatoryInformationAction extends ActionSupport {
                 Constants.STUDY_PROTOCOL_II);
         StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                 .getStudyProtocol(studyProtocolIi);
+        List<Long> identifiersList = new ArrayList<Long>();
+        Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
+        identifiersList.add(studyprotocolId);
+        Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
         validateForm(spDTO);
         if (hasFieldErrors()) {
             return query();
         }
         // helper glue code for updating the additional regulatory info
         try {
-            TrialInfoMergeHelper.mergeRegulatoryInfoUpdate(studyProtocolIi,
+            TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+            helper.mergeRegulatoryInfoUpdate(studyProtocolIi, identifierMap.get(studyprotocolId), 
                     webDTO);
         } catch (PAException e) {
             request.setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());

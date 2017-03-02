@@ -161,11 +161,11 @@ public class RestClient {
         urlConnection.setReadTimeout(HTTP_TIME_OUT);
         urlConnection.setRequestMethod(method);
         urlConnection.setRequestProperty("Accept", "application/json");
+        urlConnection.setRequestProperty("Content-type", "application/json");
         urlConnection.setDoOutput(true);
 
         if (StringUtils.equals(method, "POST") && postBody != null && postBody.length() > 0) {
             LOG.debug("postBody: " + postBody);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
             setPostBody(urlConnection, postBody);
         }
         return urlConnection;
