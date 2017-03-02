@@ -20,7 +20,7 @@ WORKDIR /opt/jboss
 RUN yum -y install java-1.7.0-openjdk-devel && yum clean all
 
 ADD https://s3.amazonaws.com/ctrp-repos/Installs/jboss-eap-6.2.0.zip /opt/
-RUN unzip /opt/jboss-eap-6.2.0.zip
+RUN unzip -q /opt/jboss-eap-6.2.0.zip
 RUN ln -s /opt/jboss /opt/jboss-eap-6.2
 
 # Set the JAVA_HOME variable to make it clear where Java is located
@@ -30,9 +30,9 @@ ENV JBOSS_HOME /opt/jboss/jboss-eap-6.2
 
 # Add postgres module
 ADD https://s3.amazonaws.com/ctrp-repos/Installs/jboss-postgres-jdbc-module.zip /tmp
-RUN unzip /tmp/jboss-postgres-jdbc-module.zip
+RUN unzip -q /tmp/jboss-postgres-jdbc-module.zip
 RUN mv /opt/jboss/org $JBOSS_HOME/modules/
-RUN find $JBOSS_HOME/modules/ -type d
+#RUN find $JBOSS_HOME/modules/ -type d
 
 ############### Box Build ABOVE ################
 ############### Code/Build output BELOW ########
@@ -41,7 +41,7 @@ RUN find $JBOSS_HOME/modules/ -type d
 ADD target/accrual/dist/accrual.ear $JBOSS_HOME/standalone/deployments/
 ADD /target/pa/dist/pa.ear $JBOSS_HOME/standalone/deployments/
 COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
-RUN cat $JBOSS_HOME/standalone/configuration/standalone.xml
+#RUN cat $JBOSS_HOME/standalone/configuration/standalone.xml
 
 # Commenting out, directories are needed but should be provided by a persistent storage mount at container start
 #RUN mkdir -pv /local/content/ctrppa/registry_data/pdq
