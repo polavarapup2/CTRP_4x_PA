@@ -291,7 +291,7 @@
         <taskdef name="pmd" classpathref="test-pmd.classpath" classname="net.sourceforge.pmd.ant.PMDTask"/>
         <pmd minimumPriority="3" shortFilenames="false" failOnRuleViolation="true" rulesetfiles="${pmdFile}" maxruleviolations="${services.pmd.maxerrors}">
             <classpath refid="compile.classpath"/>
-            <formatter type="text" toConsole="false"/>
+            <!-- <formatter type="text" toConsole="false"/> -->
             <formatter type="text" toFile="${services.report.dir}/pmd.txt"/>
             <formatter type="xml"  toFile="${services.report.dir}/pmd.xml"/>
             <formatter type="html" toFile="${services.report.dir}/pmd.html"/>
