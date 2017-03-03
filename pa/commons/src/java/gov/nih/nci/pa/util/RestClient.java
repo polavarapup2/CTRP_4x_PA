@@ -24,6 +24,7 @@ public class RestClient {
     private static final Integer HTTP_SUCCESS_CODE_201 = 201;
     private static final int RETRY_COUNT = 3;
     private static final int HTTP_TIME_OUT = 10000;
+    private static final Integer HTTP_NOT_FOUND_404 = 404;
     
 
 
@@ -57,7 +58,10 @@ public class RestClient {
                 if (httpResponseCode == HTTP_SUCCESS_CODE_200 || httpResponseCode == HTTP_SUCCESS_CODE_201) {
                     success = true;
                     break;
+                } else if (httpResponseCode == HTTP_NOT_FOUND_404) {
+                    return null;
                 }
+                
             } catch (Exception e) {
                 LOG.error("Error: Unable to get response from Rest server (" + httpResponseCode + ") - "
                         + httpResponseMessage, e);
@@ -65,7 +69,7 @@ public class RestClient {
         }
         if (success) {
             return readResponse(urlConnection);
-        } else {
+        }  else {
             throw new PAException("Error: Unable to get response from Rest server @" + restUrl);
         }
 

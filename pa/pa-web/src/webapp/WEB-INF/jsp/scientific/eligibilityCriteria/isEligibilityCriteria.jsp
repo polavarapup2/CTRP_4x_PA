@@ -220,6 +220,33 @@ BubbleTips.activateTipOn("dfn");
             </c:if>
     </tr> 
     <tr>
+       <td scope="row" class="label">
+            <label for="genderNew"><fmt:message key="isdesign.eligibilitycriteria.Gender"/></label>
+       </td>
+       <td class="value">   
+            <s:select id="genderNew" name="gender" list="#{'':'','false':'No', 'true':'Yes'}" />
+            <span class="info">If applicable, indicate if participant eligibility is based on self-representation of gender identity.</span>
+            <span class="formErrorMsg"> 
+                    <s:fielderror>
+                    <s:param>gender</s:param>
+                   </s:fielderror>                            
+             </span>
+       </td>
+    </tr>
+        <tr>
+       <td scope="row" class="label">
+            <label for="genderDescription"><fmt:message key="isdesign.eligibilitycriteria.GenderDescription"/></label>
+       </td>
+       <td class="value">   
+            <s:textarea id="genderDescription" name="genderEligibilityDescription" rows="3" cssStyle="width:250px" maxlength="1000" cssClass="charcounter" />
+            <span class="formErrorMsg"> 
+                    <s:fielderror>
+                    <s:param>genderEligibilityDescription</s:param>
+                   </s:fielderror>                            
+             </span>
+       </td>
+    </tr>
+    <tr>
          <td scope="row" class="label">
          <label for="minage">
                 <fmt:message key="isdesign.eligibilitycriteria.minimumAge"/><span class="required">${asterisk}</span>
