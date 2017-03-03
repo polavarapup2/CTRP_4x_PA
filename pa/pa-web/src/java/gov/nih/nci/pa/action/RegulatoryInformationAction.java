@@ -271,12 +271,13 @@ public class RegulatoryInformationAction extends ActionSupport {
             if (StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
                 addFieldError("webDTO.postPriorToApproval",
                         "Post Prior to U.S. FDA Approval or Clearance is required field");
-            } else if (Boolean.TRUE.equals(Boolean.valueOf(webDTO
-                    .getPostPriorToApproval()))
-                    && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
-                addFieldError("webDTO.pedPostmarketSurv",
-                        "Pediatric Post-market Surveillance is required field");
             }
+        }
+        
+        if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getPostPriorToApproval()))
+                && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
+            addFieldError("webDTO.pedPostmarketSurv",
+                    "Pediatric Post-market Surveillance is required field");
         }
     }
 
