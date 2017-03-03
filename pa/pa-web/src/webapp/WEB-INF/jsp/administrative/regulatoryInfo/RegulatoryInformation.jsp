@@ -24,7 +24,7 @@
                
                if ($('approval').value=='false' | $('approval').value=='') {
                     hideRow($('survRow'));
-            	    $('surveillance').value = '';
+                    $('surveillance').value = '';
                } 
                if ($('device').value == '' | $('device').value == 'false') {
                    hideRow($('delpostindrow'));
@@ -70,15 +70,15 @@
             }
             
             function checkApprovalDropDown() {
-            	if ($('approval').value=='false' | $('approval').value=='') {
-            		input_box=confirm("Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
-            		   if (input_box == true) {
-            			    $('surveillance').value ='';
+                if ($('approval').value=='false' | $('approval').value=='') {
+                    input_box=confirm("Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                       if (input_box == true) {
+                            $('surveillance').value ='';
                             hideRow($('survRow'));
                        } else {
-                    	   $('approval').value = 'true';
+                           $('approval').value = 'true';
                        }
-            	} else {
+                } else {
                     showRow($('survRow'));
                 }  
             }
@@ -120,20 +120,13 @@
                         alert("The Section801 Indicator cannot be empty");
                         return true;
                     }
-                }
-                if ($('approval').value=='true' & $('surveillance').value == '') {
-                    alert("Pediatric Post-market Surveillance cannot be empty");
-                    return true;
-               } 
-               if ($('device').value == 'true' &$('delpostindid').value == '') {
-                   alert("The Unapproved/Uncleared Device cannot be empty");
-                   $('delpostindrow').value = '';
-                   return true;
-               }   
-               if (($('delpostindrow').value == 'true') & ($('device').value == 'true') & ($('approval').value==''))) {
-            	   alert("Post Prior to U.S. FDA Approval or Clearance cannot be empty");
-                   return true;
-               }
+                    if ($('sec801id').value == 'true'){
+                        if ($('delpostindid').value == ''){
+                             alert("The Delayed posting Indicator cannot be empty");
+                            return true;
+                        }
+                    }
+                }    
                 return false;
             }
             function cancel(url){ 
