@@ -1,6 +1,6 @@
 package gov.nih.nci.pa.action;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
@@ -116,5 +116,49 @@ public class TrialInfoMergeHelperTest {
         helper.mergeRegulatoryInfoUpdate(IiConverter.convertToIi(169939706L), "NCI-2014-02277", webDto);
     }
     
+    @Test
+    public void noDataFromMicroServiceTest() throws PAException {
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("");
+        helper.mergeRegulatoryInfoRead(
+                IiConverter.convertToIi(studyprotocolId), webDto);
+        assertNull(webDto.getFdaRegulatedDevice());
+        assertNull(webDto.getExportedFromUs());
+        assertNull(webDto.getFdaRegulatedDrug());
+        assertNull(webDto.getPedPostmarketSurv());
+        assertNull(webDto.getPostPriorToApproval());
+        assertNull(webDto.getLastUpdatedDate());
+    }
+    
+    @Test(expected=PAException.class)
+    public void microServiceUnavailableTest() throws PAException {
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/1", "GET", null)).thenThrow(new PAException("Error: Unable to get response from Rest server @ " + url));
+        helper.mergeRegulatoryInfoRead(
+                IiConverter.convertToIi(studyprotocolId), webDto);
+    }
+    
+    @Test
+    public void invalidFieldValuesFromMicroserviceTest() throws PAException {
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("{\"study_protocol_id\":\"169939706\",\"nci_id\":\"NCI-2014-02277\",\"fda_regulated_drug\":\"truesed\",\"fda_regulated_device\":\"trueed\"}");
+        helper.mergeRegulatoryInfoRead(
+                IiConverter.convertToIi(studyprotocolId), webDto);
+        assertNull(webDto.getFdaRegulatedDrug());
+        assertNull(webDto.getFdaRegulatedDevice());
+    }
+    
+    @Test
+    public void incompatibleJsonFromMicroServiceTest() throws PAException {
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("{\"study\":\"169939706\",\"nciid\":\"NCI-2014-02277\"}");
+        helper.mergeRegulatoryInfoRead(
+                IiConverter.convertToIi(studyprotocolId), webDto);
+        assertNull(webDto.getFdaRegulatedDrug());
+        assertNull(webDto.getFdaRegulatedDevice());
+        assertNull(webDto.getPedPostmarketSurv());
+        assertNull(webDto.getPostPriorToApproval());
+        assertNull(webDto.getLastUpdatedDate());
+    }
 
 }

@@ -76,11 +76,23 @@ public class TrialInfoMergeHelper {
                             + e.getMessage(), e);
         }
         if (regulatoryDto != null) {
-            webDto.setFdaRegulatedDrug(regulatoryDto.getFda_regulated_drug());
-            webDto.setFdaRegulatedDevice(regulatoryDto.getFda_regulated_device());
-            webDto.setPedPostmarketSurv(regulatoryDto.getPed_postmarket_surv());
-            webDto.setExportedFromUs(regulatoryDto.getExported_from_us());
-            webDto.setPostPriorToApproval(regulatoryDto.getPost_prior_to_approval());
+            if (PAWebUtil.isValidBooleanString(regulatoryDto.getFda_regulated_drug()))
+            {
+                webDto.setFdaRegulatedDrug(regulatoryDto.getFda_regulated_drug());
+            }
+            if (PAWebUtil.isValidBooleanString(regulatoryDto.getFda_regulated_device()))
+            {
+                webDto.setFdaRegulatedDevice(regulatoryDto.getFda_regulated_device());
+            }
+            if (PAWebUtil.isValidBooleanString(regulatoryDto.getPed_postmarket_surv())) {
+                webDto.setPedPostmarketSurv(regulatoryDto.getPed_postmarket_surv());
+            }
+            if (PAWebUtil.isValidBooleanString(regulatoryDto.getExported_from_us())) {
+                webDto.setExportedFromUs(regulatoryDto.getExported_from_us());
+            }
+            if (PAWebUtil.isValidBooleanString(regulatoryDto.getPost_prior_to_approval())) {
+                webDto.setPostPriorToApproval(regulatoryDto.getPost_prior_to_approval());
+            }
             webDto.setLastUpdatedDate(regulatoryDto.getDate_updated());
         }
     }

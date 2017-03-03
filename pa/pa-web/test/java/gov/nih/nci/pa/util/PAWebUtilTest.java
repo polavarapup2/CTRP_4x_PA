@@ -2,6 +2,7 @@ package gov.nih.nci.pa.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 
 import java.io.IOException;
@@ -40,4 +41,16 @@ public class PAWebUtilTest {
         assertTrue(Boolean.valueOf(dto.getPed_postmarket_surv()));
         assertTrue(Boolean.valueOf(dto.getPost_prior_to_approval()));
     }
+    
+    @Test
+    public void isValidBooleanStringTest() {
+        assertTrue(PAWebUtil.isValidBooleanString("true"));
+        assertTrue(PAWebUtil.isValidBooleanString("false"));
+        assertTrue(PAWebUtil.isValidBooleanString("null"));
+        assertFalse(PAWebUtil.isValidBooleanString("trueee"));
+        assertFalse(PAWebUtil.isValidBooleanString("TRUE"));
+        assertFalse(PAWebUtil.isValidBooleanString("falseers"));
+        assertFalse(PAWebUtil.isValidBooleanString(""));
+    }
+
 }
