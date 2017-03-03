@@ -168,7 +168,7 @@
                     
                     <tr>
                         <td scope="row" class="label">
-                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk}</span> 
+                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">*</span> 
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="drug" name="webDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
@@ -181,7 +181,7 @@
                       </tr>
                       <tr>
                         <td scope="row" class="label">
-                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">${asterisk}</span>
+                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">*</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
@@ -220,7 +220,7 @@
                       </tr>
                        <tr>
                         <td scope="row" class="label">
-                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">${asterisk}</span>
+                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">*</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="export" name="webDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}" />
