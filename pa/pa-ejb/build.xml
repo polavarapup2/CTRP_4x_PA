@@ -148,7 +148,7 @@
 
     <target name="compile" depends="run-xjc" description="Compile the code">
         <mkdir dir="${pa-ejb.build.outputDir}"/>
-        <javac destdir="${pa-ejb.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${pa-ejb.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
             	<pathelement location="${pa-ejb.build.srcgenDir}"/>
@@ -205,8 +205,9 @@
 
     <target name="compile-tests" depends="compile" description="Compile the test code">
         <mkdir dir="${pa-ejb.build.testOutputDir}"/>
+        <echo message="build.with.deprecation is ${build.with.deprecation}"/>
         <javac destdir="${pa-ejb.build.testOutputDir}" nowarn="false" debug="true" optimize="false"
-            deprecation="true" source="${java.major.version}" target="${java.major.version}" verbose="false"
+            deprecation="${build.with.deprecation}" source="${java.major.version}" target="${java.major.version}" verbose="false"
             fork="false" encoding="${java.encoding}">
             <src>
                 <pathelement location="${pa-ejb.build.testDir.0}"/>
@@ -233,7 +234,7 @@
             <jvmarg value="-XX:-UseSplitVerifier"/>
             <sysproperty key="basedir" value="."/>
             <formatter type="xml"/>
-            <!-- <formatter type="plain" usefile="false"/> -->
+            <formatter type="plain" usefile="false"/>
             <classpath location="${pa-ejb.build.outputDir}"/>
             <classpath location="${pa-ejb.build.testOutputDir}"/>
             <classpath refid="test.classpath"/>

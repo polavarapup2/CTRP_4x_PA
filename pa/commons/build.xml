@@ -157,7 +157,7 @@
         <!-- Only needed here to keep eclipse happy -->
         <mkdir dir="${commons.build.testOutputDir}"/>
 
-        <javac destdir="${commons.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${commons.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" source="${java.major.version}" verbose="false" fork="false" encoding="${java.encoding}">
             <src>
             	<pathelement location="${commons.build.srcgenDir}"/>
@@ -203,7 +203,7 @@
     <target name="compile-tests" depends="compile, configure-tests" description="Compile the test code">
         <mkdir dir="${commons.build.testOutputDir}"/>
         <javac destdir="${commons.build.testOutputDir}" nowarn="false" debug="true" optimize="false" encoding="${java.encoding}"
-               deprecation="true" target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}">
+               deprecation="${build.with.deprecation}" target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}">
             <src>
                 <pathelement location="${commons.build.testDir.0}"/>
             </src>

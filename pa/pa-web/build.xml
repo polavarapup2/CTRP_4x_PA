@@ -185,7 +185,7 @@
     <target name="compile" description="Compile the code">
         <mkdir dir="${pa-web.build.outputDir}"/>
         <javac destdir="${pa-web.build.outputDir}" nowarn="false" debug="true"
-               optimize="false" deprecation="true" target="${java.major.version}" verbose="false" fork="false"
+               optimize="false" deprecation="${build.with.deprecation}" target="${java.major.version}" verbose="false" fork="false"
                source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${pa-web.build.srcDir.0}"/>
@@ -282,7 +282,7 @@
 
     <target name="compile-tests" depends="compile,configure-tests,create-artifacts" description="Compile the test code">
         <mkdir dir="${pa-web.build.testOutputDir}"/>
-        <javac destdir="${pa-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${pa-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="UTF-8">
             <src>
                 <pathelement location="${pa-web.build.testDir.0}"/>
