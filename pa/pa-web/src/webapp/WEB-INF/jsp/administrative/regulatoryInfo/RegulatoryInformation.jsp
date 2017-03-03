@@ -120,13 +120,20 @@
                         alert("The Section801 Indicator cannot be empty");
                         return true;
                     }
-                    if ($('sec801id').value == 'true'){
-                        if ($('delpostindid').value == ''){
-                             alert("The Delayed posting Indicator cannot be empty");
-                            return true;
-                        }
-                    }
-                }    
+                }
+                if ($('approval').value=='true' & $('surveillance').value == '') {
+                    alert("Pediatric Post-market Surveillance cannot be empty");
+                    return true;
+               } 
+               if ($('device').value == 'true' &$('delpostindid').value == '') {
+                   alert("The Unapproved/Uncleared Device cannot be empty");
+                   $('delpostindrow').value = '';
+                   return true;
+               }   
+               if (($('delpostindrow').value == 'true') & ($('device').value == 'true') & ($('approval').value==''))) {
+            	   alert("Post Prior to U.S. FDA Approval or Clearance cannot be empty");
+                   return true;
+               }
                 return false;
             }
             function cancel(url){ 
