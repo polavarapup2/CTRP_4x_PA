@@ -182,7 +182,7 @@
     <target name="compile" depends="run-xjc" description="Compile the code">
         <mkdir dir="${pa-webservices.build.outputDir}"/>
         <javac destdir="${pa-webservices.build.outputDir}" nowarn="false" debug="true"
-               optimize="false" deprecation="true" target="${java.major.version}" verbose="false" fork="false"
+               optimize="false" deprecation="${build.with.deprecation}" target="${java.major.version}" verbose="false" fork="false"
                source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${pa-webservices.build.srcDir.0}"/>
@@ -266,7 +266,7 @@
 
     <target name="compile-tests" depends="compile,configure-tests,create-artifacts" description="Compile the test code">
         <mkdir dir="${pa-webservices.build.testOutputDir}"/>
-        <javac destdir="${pa-webservices.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${pa-webservices.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${pa-webservices.build.testDir.0}"/>

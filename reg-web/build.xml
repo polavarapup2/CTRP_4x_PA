@@ -174,7 +174,7 @@
 
     <target name="compile" description="Compile the code">
         <mkdir dir="${reg-web.build.outputDir}"/>
-        <javac destdir="${reg-web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${reg-web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${reg-web.build.srcDir.0}"/>
@@ -220,7 +220,7 @@
     <!-- ====================================================================== -->
     <target name="compile-tests" depends="compile,configure-tests" description="Compile the test code">
         <mkdir dir="${reg-web.build.testOutputDir}"/>
-        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${reg-web.build.testDir.0}"/>
@@ -245,7 +245,7 @@
            <ant target="compile-tests" dir="${pa.dir}/pa-web" inheritAll="false">
                  <property name="tier" value="${tier}"/>
            </ant>
-	        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+	        <javac destdir="${reg-web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
 	               target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
 	            <src>
 	                <pathelement location="${reg-web.build.integrationTestDir.0}"/>

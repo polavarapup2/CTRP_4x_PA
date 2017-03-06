@@ -136,7 +136,7 @@
 
     <target name="compile" depends="get-domain" description="Compiles the subproject">
         <mkdir dir="${services.build.outputDir}"/>
-        <javac destdir="${services.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${services.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${services.build.srcDir}"/>
@@ -159,7 +159,7 @@
     <target name="compile-tests" depends="compile" description="Compile the test code">
         <mkdir dir="${services.build.testOutputDir}"/>
         <javac destdir="${services.build.testOutputDir}" nowarn="false" debug="true" optimize="false"
-               deprecation="true" target="${java.major.version}" verbose="false" fork="false"
+               deprecation="${build.with.deprecation}" target="${java.major.version}" verbose="false" fork="false"
                source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${services.build.testSrcDir}"/>

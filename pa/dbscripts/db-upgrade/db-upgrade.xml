@@ -2084,4 +2084,9 @@
        <comment>ClinicalTrials.gov import schedule configurable.</comment>
        <sqlFile path="@db-upgrade.run.dir@/4.4.1/PO-10206.sql"/>
     </changeSet> 
+    <changeSet id="MicroServiceUrl" author="Purnima">       
+       <comment>Micro services URL in pa_properties table </comment>
+       <sqlFile path="@db-upgrade.run.dir@/FdaaaChanges/MicroServiceUrl.sql"/>
+    </changeSet>
+    
 </databaseChangeLog>

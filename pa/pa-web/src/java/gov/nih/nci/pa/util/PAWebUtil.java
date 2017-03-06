@@ -2,6 +2,7 @@ package gov.nih.nci.pa.util;
 
 import java.io.IOException;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 /**
@@ -50,4 +51,21 @@ public final class PAWebUtil {
             return null;
         }
     }
+    
+    /**
+     * 
+     * @param booleanStr the booleanStr
+     * @return Boolean
+     */
+    public static Boolean isValidBooleanString(String booleanStr) {
+        Boolean b = Boolean.FALSE;
+        try {
+            BooleanUtils.toBooleanObject(booleanStr, "true", "false", "null");
+            b = Boolean.TRUE;
+        } catch (IllegalArgumentException ile) {
+            b = Boolean.FALSE;
+        }
+        return b; 
+    }
+
 }

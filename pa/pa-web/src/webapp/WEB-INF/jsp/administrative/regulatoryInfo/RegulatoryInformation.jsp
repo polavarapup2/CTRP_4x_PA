@@ -21,24 +21,23 @@
                    
                 } 
                //FDAAA validations
-               if (($('delpostindrow').value == 'false' | $('delpostindrow').value == '') & 
-                    ($('device').value == 'false' | $('device').value == '')) {
-                     hideRow($('approval'));
-                     hideRow($('market'));
-                     $('market').value = ''
-                     
-               } 
+               
                if ($('approval').value=='false' | $('approval').value=='') {
-            	    hideRow($('market'));
-            	    $('market').value = '';
-               }
+                    hideRow($('survRow'));
+                    $('surveillance').value = '';
+               } 
                if ($('device').value == '' | $('device').value == 'false') {
                    hideRow($('delpostindrow'));
                    $('delpostindrow').value = '';
                }   
+               if (($('delpostindrow').value == 'false' | $('delpostindrow').value == '') & 
+                       ($('device').value == 'false' | $('device').value == '')) {
+                        hideRow($('approvalRow'));
+                        $('approval').value = '';
+                  }
 
             }
-
+            
             function checkFDADropDown() {
                 if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
                     input_box=confirm("Section 801 will be NULLIFIED? \nPlease Click OK to continue or Cancel");
@@ -55,16 +54,33 @@
         
             function checkDeviceDropDown() {
                 if ($('device').value == '' | $('device').value == 'false') {    
-                    input_box = confirm("Unapproved/Uncleared Device will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                    input_box = confirm("Unapproved/Uncleared Device and Post Prior to U.S. FDA Approval or Clearance  will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                     if (input_box == true){
                         hideRow($('delpostindrow'));
+                        hideRow($('approvalRow'));
+                        $('approval').value = '';
                         $('delpostindid').value ='';
                     } else {
                         $('device').value = 'true';
                     }
                 } else {
                     showRow($('delpostindrow'));
+                    showRow($('approvalRow'));
                 }    
+            }
+            
+            function checkApprovalDropDown() {
+                if ($('approval').value=='false' | $('approval').value=='') {
+                    input_box=confirm("Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                       if (input_box == true) {
+                            $('surveillance').value ='';
+                            hideRow($('survRow'));
+                       } else {
+                           $('approval').value = 'true';
+                       }
+                } else {
+                    showRow($('survRow'));
+                }  
             }
             
             function hideRow(row) {            
@@ -152,7 +168,7 @@
                     
                     <tr>
                         <td scope="row" class="label">
-                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk}</span> 
+                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">*</span> 
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="drug" name="webDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
@@ -165,7 +181,7 @@
                       </tr>
                       <tr>
                         <td scope="row" class="label">
-                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">${asterisk}</span>
+                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">*</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
@@ -176,12 +192,12 @@
                             </span>
                         </td>  
                       </tr>
-                         <tr>
+                         <tr id="approvalRow">
                         <td scope="row" class="label">
                             <label for="approval"><fmt:message key="regulatory.approval.clearance"/></label>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
-                            <s:select id="approval" name="webDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            <s:select id="approval" name="webDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkApprovalDropDown();"/>
                             &nbsp;&nbsp;&nbsp;
                             <span  class="info">Authorize posting of study record on ClinicalTrials.gov prior to U.S. FDA approval/clearance of device product?</span>
                             <span class="formErrorMsg">
@@ -189,14 +205,14 @@
                             </span>
                         </td>  
                       </tr>
-                       <tr>
+                       <tr id="survRow">
                         <td scope="row" class="label">
-                            <label for="market"><fmt:message key="regulatory.market.surveillance"/></label>
+                            <label for="surveillance"><fmt:message key="regulatory.market.surveillance"/></label>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
-                            <s:select id="market" name="webDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}" />
+                            <s:select id="surveillance" name="webDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
-                            <span class="info">Required only if this a pediatric postmarket surveillance of a device product ordered by the U.S. FDA.</span>
+                            <span class="info">Required only if Post Prior to Approval/Clearance is set to Yes.</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.pedPostmarketSurv</s:param></s:fielderror>
                             </span>
@@ -204,7 +220,7 @@
                       </tr>
                        <tr>
                         <td scope="row" class="label">
-                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">${asterisk}</span>
+                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">*</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="export" name="webDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}" />

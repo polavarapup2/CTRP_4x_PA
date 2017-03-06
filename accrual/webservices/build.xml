@@ -127,7 +127,7 @@
 
     <target name="compile"  depends="determine-build-version, run-xjc" description="Compiles the subproject">
         <mkdir dir="${web.build.outputDir}"/>
-        <javac destdir="${web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${web.build.outputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${web.build.srcDir}"/>
@@ -176,7 +176,7 @@
 
     <target name="compile-tests" depends="compile,configure-tests" description="Compile the test code">
         <mkdir dir="${web.build.testOutputDir}"/>
-        <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${web.build.testSrcDir}"/>
@@ -199,7 +199,7 @@
 		<ant target="compile-tests" dir="${pa.dir}/pa-webservices" inheritAll="false">
 			  <property name="tier" value="${tier}"/>
 		</ant>
-        <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="true"
+        <javac destdir="${web.build.testOutputDir}" nowarn="false" debug="true" optimize="false" deprecation="${build.with.deprecation}"
                target="${java.major.version}" verbose="false" fork="false" source="${java.major.version}" encoding="${java.encoding}">
             <src>
                 <pathelement location="${web.build.integrationTestSrcDir}"/>

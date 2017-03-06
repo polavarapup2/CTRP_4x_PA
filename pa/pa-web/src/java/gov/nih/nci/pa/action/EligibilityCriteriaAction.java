@@ -164,6 +164,8 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     private static final int TOTAL_COUNT = 3;
     private String minValueUnit;
     private String maxValueUnit;
+    private String gender;
+    private String genderEligibilityDescription;
 
     /**
      *
@@ -1137,6 +1139,34 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
      */
     public void setMaxValueUnit(String maxValueUnit) {
         this.maxValueUnit = maxValueUnit;
+    }
+    /**
+     * 
+     * @return gender
+     */
+    public String getGender() {
+        return gender;
+    }
+    /**
+     * 
+     * @param gender the gender
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    /**
+     * 
+     * @return genderEligibilityDescription
+     */
+    public String getGenderEligibilityDescription() {
+        return genderEligibilityDescription;
+    }
+    /**
+     * 
+     * @param genderEligibilityDescription the genderEligibilityDescription
+     */
+    public void setGenderEligibilityDescription(String genderEligibilityDescription) {
+        this.genderEligibilityDescription = genderEligibilityDescription;
     }
 
  }

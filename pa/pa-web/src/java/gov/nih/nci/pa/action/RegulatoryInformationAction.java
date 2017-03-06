@@ -83,7 +83,6 @@ import gov.nih.nci.pa.dto.CountryRegAuthorityDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthOrgDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO;
-import gov.nih.nci.pa.iso.dto.PlannedMarkerDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
@@ -118,6 +117,7 @@ public class RegulatoryInformationAction extends ActionSupport {
     private RegulatoryAuthorityWebDTO webDTO = new RegulatoryAuthorityWebDTO();
     private List<RegulatoryAuthOrgDTO> regIdAuthOrgList = new ArrayList<RegulatoryAuthOrgDTO>();
     private String selectedRegAuth;
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
 
     /**
      * Method to save the regulatory information to the database.
@@ -144,7 +144,7 @@ public class RegulatoryInformationAction extends ActionSupport {
         }
         // helper glue code for updating the additional regulatory info
         try {
-            TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+            
             helper.mergeRegulatoryInfoUpdate(studyProtocolIi, identifierMap.get(studyprotocolId), 
                     webDTO);
         } catch (PAException e) {
@@ -222,8 +222,6 @@ public class RegulatoryInformationAction extends ActionSupport {
                 }
             }
             // Call glue code helper class
-            TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
-
             helper.mergeRegulatoryInfoRead(studyProtocolIi, webDTO);
         } catch (PAException e) {
             ServletActionContext.getRequest().setAttribute(
@@ -273,12 +271,13 @@ public class RegulatoryInformationAction extends ActionSupport {
             if (StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
                 addFieldError("webDTO.postPriorToApproval",
                         "Post Prior to U.S. FDA Approval or Clearance is required field");
-            } else if (Boolean.TRUE.equals(Boolean.valueOf(webDTO
-                    .getPostPriorToApproval()))
-                    && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
-                addFieldError("webDTO.pedPostmarketSurv",
-                        "Pediatric Post-market Surveillance is required field");
             }
+        }
+        
+        if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getPostPriorToApproval()))
+                && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
+            addFieldError("webDTO.pedPostmarketSurv",
+                    "Pediatric Post-market Surveillance is required field");
         }
     }
 
@@ -368,4 +367,19 @@ public class RegulatoryInformationAction extends ActionSupport {
     public void setSelectedRegAuth(String selectedRegAuth) {
         this.selectedRegAuth = selectedRegAuth;
     }
+    /**
+     * 
+     * @return helper
+     */
+    public TrialInfoMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper the helper
+     */
+    public void setHelper(TrialInfoMergeHelper helper) {
+        this.helper = helper;
+    }
+    
 }
