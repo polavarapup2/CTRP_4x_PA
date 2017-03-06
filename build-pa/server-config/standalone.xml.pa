@@ -210,7 +210,7 @@
                         ${env.DBSERVERPORT}
                     </xa-datasource-property>
                     <xa-datasource-property name="DatabaseName">
-                        pa_ctrpn
+                        ${env.DBSCHEMA}
                     </xa-datasource-property>
                     <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     <driver>postgresql</driver>
@@ -219,7 +219,7 @@
                         <max-pool-size>30</max-pool-size>
                     </xa-pool>
                     <security>
-                        <user-name>pauser</user-name>
+                        <user-name>${env.DBUSER}</user-name>
                         <password>${env.DBPASSWORD}</password>
                     </security>
                     <validation>
@@ -365,8 +365,8 @@
                         </login-module>
                         <login-module code="com.fiveamsolutions.nci.commons.authentication.CommonsDBLoginModule" flag="optional" module="deployment.accrual.ear">
                             <module-option name="driver" value="org.postgresql.Driver"/>
-                            <module-option name="url" value="jdbc:postgresql://${env.DBSERVERHOST}:${env.DBSERVERPORT}/pa_ctrpn"/>
-                            <module-option name="user" value="pauser"/>
+                            <module-option name="url" value="jdbc:postgresql://${env.DBSERVERHOST}:${env.DBSERVERPORT}/${env.DBSCHEMA}"/>
+                            <module-option name="user" value="${env.DBUSER}"/>
                             <module-option name="passwd" value="${env.DBPASSWORD}"/>
                             <module-option name="query" value="SELECT * FROM csm_user WHERE login_name=? and password=?"/>
                             <module-option name="encryption-enabled" value="YES"/>
@@ -390,8 +390,8 @@
                         </login-module>
                         <login-module code="com.fiveamsolutions.nci.commons.authentication.CommonsDBLoginModule" flag="optional"  module="deployment.pa.ear">
                             <module-option name="driver" value="org.postgresql.Driver"/>
-                            <module-option name="url" value="jdbc:postgresql://${env.DBSERVERHOST}:${env.DBSERVERPORT}/pa_ctrpn"/>
-                            <module-option name="user" value="pauser"/>
+                            <module-option name="url" value="jdbc:postgresql://${env.DBSERVERHOST}:${env.DBSERVERPORT}/${env.DBSCHEMA}"/>
+                            <module-option name="user" value="${env.DBUSER}"/>
                             <module-option name="passwd" value="${env.DBPASSWORD}"/>
                             <module-option name="query" value="SELECT * FROM csm_user WHERE login_name=? and password=?"/>
                             <module-option name="encryption-enabled" value="YES"/>
