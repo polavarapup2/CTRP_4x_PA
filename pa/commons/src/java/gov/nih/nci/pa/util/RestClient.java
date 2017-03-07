@@ -61,7 +61,7 @@ public class RestClient {
                 } else if (httpResponseCode == HTTP_NOT_FOUND_404) {
                     return null;
                 }
-                
+                Thread.sleep(0, 10);   
             } catch (Exception e) {
                 LOG.error("Error: Unable to get response from Rest server (" + httpResponseCode + ") - "
                         + httpResponseMessage, e);
