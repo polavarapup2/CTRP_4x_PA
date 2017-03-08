@@ -126,7 +126,8 @@ import org.apache.struts2.ServletActionContext;
  * @author Kalpana Guthikonda
  * @since 11/12/2008
  */
-@SuppressWarnings("PMD.CyclomaticComplexity")
+@SuppressWarnings({ "PMD.ExcessiveClassLength", "PMD.CyclomaticComplexity",  
+    "PMD.TooManyMethods", "PMD.TooManyFields" })
 public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
 
     private static final Logger LOG  = Logger.getLogger(EligibilityCriteriaAction.class);
@@ -166,11 +167,12 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     private String maxValueUnit;
     private String gender;
     private String genderEligibilityDescription;
-
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     /**
      *
      * @return String
      */
+    @SuppressWarnings({ "PMD.NPathComplexity" })
     public String query() {
         try {
             eligibilityList = null;
@@ -181,7 +183,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
             if (CollectionUtils.isNotEmpty(pecList)) {
                 list = new ArrayList<ISDesignDetailsWebDTO>();
                 for (PlannedEligibilityCriterionDTO dto : pecList) {
-                    list.add(setEligibilityDetailsDTO(dto));
+                    list.add(setEligibilityDetailsDTO(dto, studyProtocolIi));
                 }
                 if (list.size() > RECORDSVALUE) {
                     eligibilityList = new ArrayList<ISDesignDetailsWebDTO>();
@@ -395,7 +397,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         if (pecList != null && !pecList.isEmpty()) {
             list = new ArrayList<ISDesignDetailsWebDTO>();
             for (PlannedEligibilityCriterionDTO dto : pecList) {
-                list.add(setEligibilityDetailsDTO(dto));
+                list.add(setEligibilityDetailsDTO(dto, studyProtocolIi));
             }
         }
     }
@@ -482,7 +484,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         try {
             PlannedEligibilityCriterionDTO sgDTO = PaRegistry.getPlannedActivityService()
                 .getPlannedEligibilityCriterion(IiConverter.convertToIi(id));
-            webDTO = setEligibilityDetailsDTO(sgDTO);
+            webDTO = setEligibilityDetailsDTO(sgDTO, IiConverter.convertToIi(id));
         } catch (Exception e) {
             LOG.error(e, e);
             ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
@@ -595,14 +597,16 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         return pecDTO;
     }
 
-    private ISDesignDetailsWebDTO setEligibilityDetailsDTO(PlannedEligibilityCriterionDTO dto) {
+    private ISDesignDetailsWebDTO setEligibilityDetailsDTO(PlannedEligibilityCriterionDTO dto,
+            Ii studyProtocolIi) throws PAException {
         ISDesignDetailsWebDTO webdto = new ISDesignDetailsWebDTO();
         if (dto != null) {
             if (dto.getEligibleGenderCode().getCode() != null) {
                 eligibleGenderCode = dto.getEligibleGenderCode().getCode();
                 eligibleGenderCodeId = dto.getIdentifier().getExtension();
             }
-            if (dto.getCriterionName().getValue() != null && dto.getCriterionName().getValue().equals("AGE")) {
+            if (dto.getCriterionName().getValue() != null && dto
+                    .getCriterionName().getValue().equals("AGE")) {
                 if (dto.getValue().getHigh().getValue() != null) {
                     maximumValue = String.valueOf(dto.getValue().getHigh().getValue());
                     maxValueUnit = dto.getValue().getHigh().getUnit();
@@ -658,9 +662,12 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 webdto.setCdeCategoryCode(dto.getSubcategoryCode().getCode());
             }
         }
+        helper.mergeEligibilityCriteriaRead(studyProtocolIi, webdto);
+        gender = webdto.getGender();
+        genderEligibilityDescription = webDTO.getGenderEligibilityDescription();
         return webdto;
     }
-
+    @SuppressWarnings({ "PMD.NPathComplexity" })
     private void enforceBusinessRules() {
         StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
             .getAttribute(Constants.TRIAL_SUMMARY);
@@ -1168,5 +1175,19 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     public void setGenderEligibilityDescription(String genderEligibilityDescription) {
         this.genderEligibilityDescription = genderEligibilityDescription;
     }
-
+    /**
+     * 
+     * @return helper
+     */
+    public TrialInfoMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper the helper
+     */
+    public void setHelper(TrialInfoMergeHelper helper) {
+        this.helper = helper;
+    }
+    
  }

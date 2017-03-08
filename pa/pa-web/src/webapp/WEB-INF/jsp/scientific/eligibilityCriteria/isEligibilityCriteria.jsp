@@ -75,9 +75,20 @@
 
 // this function is called from body onload in main.jsp (decorator)
 function callOnloadFunctions(){
-    setFocusToFirstControl();         
+    setFocusToFirstControl();
+    checkAllonLoad();
 }
 
+function checkAllonLoad() {
+	 if ($('gender').value == '' | $('gender').value == 'Both') {
+         hideRow($('genderNewRow'));
+         $('genderNew').value == '';
+     } 
+	 if($('genderNew').value =='' | $('genderNew').value =='false') {
+		 hideRow($('genderDescriptionRow'));
+		 $(genderDescription).value='';
+	 }
+}
 function handleAction(){
     document.forms[0].action="eligibilityCriteriasave.action";
     document.forms[0].submit(); 
@@ -87,8 +98,30 @@ function handleReOrderAction(){
     document.forms[0].submit(); 
 } 
 
+function hideRow(row) {            
+    row.style.display = 'none';    
+}
 
+function showRow(row) {
+    row.style.display = '';
+}
+function checkGenderDropDown(){
+	 if ($('gender').value == '' | $('gender').value == 'Both') {
+         hideRow($('genderNewRow'));
+         $('genderNew').value == '';
+     } else {
+    	 showRow($('genderNewRow'));
+     }
+}
 
+function checkGenderDesc(){
+    if ($('genderNew').value == '' | $('genderNew').value == 'false') {
+        hideRow($('genderDescriptionRow'));
+        $(genderDescription).value='';
+    } else {
+        showRow($('genderDescriptionRow'));
+    }
+}
 function tooltip() {
 BubbleTips.activateTipOn("acronym");
 BubbleTips.activateTipOn("dfn"); 
@@ -195,7 +228,7 @@ BubbleTips.activateTipOn("dfn");
             <s:select id="gender" headerKey="" headerValue="" 
                     name="eligibleGenderCode" 
                     list="#genderValues"  
-                    cssStyle="width:75px" /> 
+                    cssStyle="width:75px"  onchange="checkGenderDropDown();"/> 
             <span class="formErrorMsg"> 
                     <s:fielderror>
                     <s:param>eligibleGenderCode</s:param>
@@ -219,12 +252,12 @@ BubbleTips.activateTipOn("dfn");
             </td>            
             </c:if>
     </tr> 
-    <tr>
+    <tr id="genderNewRow">
        <td scope="row" class="label">
             <label for="genderNew"><fmt:message key="isdesign.eligibilitycriteria.Gender"/></label>
        </td>
-       <td class="value">   
-            <s:select id="genderNew" name="gender" list="#{'':'','false':'No', 'true':'Yes'}" />
+       <td colspan="3">   
+            <s:select id="genderNew" name="gender" list="#{'':'','false':'No', 'true':'Yes'}" onchange="checkGenderDesc();"/>
             <span class="info">If applicable, indicate if participant eligibility is based on self-representation of gender identity.</span>
             <span class="formErrorMsg"> 
                     <s:fielderror>
@@ -232,8 +265,9 @@ BubbleTips.activateTipOn("dfn");
                    </s:fielderror>                            
              </span>
        </td>
+ 
     </tr>
-        <tr>
+        <tr id="genderDescriptionRow">
        <td scope="row" class="label">
             <label for="genderDescription"><fmt:message key="isdesign.eligibilitycriteria.GenderDescription"/></label>
        </td>

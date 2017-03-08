@@ -121,7 +121,9 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
     private String toEmail;
     private String subject;
     private String message;
-
+    private String gender;
+    private String genderEligibilityDescription;
+    private String lastUpdatedDate;
     /**
      *
      * @return outcomeMeasure
@@ -440,6 +442,49 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
     public void setExpandedIndicator(boolean expandedIndicator) {
         this.expandedIndicator = expandedIndicator;
     }
+    /**
+     * 
+     * @return gender the gender
+     */
+    public String getGender() {
+        return gender;
+    }
+    /**
+     * 
+     * @param gender 
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
+    /**
+     * 
+     * @return genderEligibilityDescription 
+     */
+    public String getGenderEligibilityDescription() {
+        return genderEligibilityDescription;
+    }
 
+    /**
+     * 
+     * @param genderEligibilityDescription the genderEligibilityDescription
+     */
+    public void setGenderEligibilityDescription(
+            String genderEligibilityDescription) {
+        this.genderEligibilityDescription = genderEligibilityDescription;
+    }
+    /**
+     * 
+     * @return lastUpdatedDate
+     */
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+    /**
+     * 
+     * @param lastUpdatedDate the lastUpdatedDate
+     */
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
 }
