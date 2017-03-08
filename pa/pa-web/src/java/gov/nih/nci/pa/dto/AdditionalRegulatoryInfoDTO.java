@@ -163,7 +163,19 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     public void setDate_updated(String date_updated) {
         this.date_updated = date_updated;
     }
+    /**
+     * return String value
+     */
+    @Override
+    public String toString() {
+        return "AdditionalRegulatoryInfoDTO [study_protocol_id="
+                + study_protocol_id + ", nci_id=" + nci_id
+                + ", fda_regulated_drug=" + fda_regulated_drug
+                + ", fda_regulated_device=" + fda_regulated_device
+                + ", post_prior_to_approval=" + post_prior_to_approval
+                + ", ped_postmarket_surv=" + ped_postmarket_surv
+                + ", exported_from_us=" + exported_from_us + ", date_updated="
+                + date_updated + "]";
+    }
   //CHECKSTYLE:ON
-
-   
 }

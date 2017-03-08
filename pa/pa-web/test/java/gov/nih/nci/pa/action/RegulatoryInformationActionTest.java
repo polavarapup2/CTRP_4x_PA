@@ -72,7 +72,6 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         additionalRegInfoDTO.setDate_updated("1234455");
         when(lookUpTableService
                 .getPropertyValue("data-clinicaltrials-api")).thenReturn(url);
-        helper.setLookUpTableService(lookUpTableService);
         when(client.sendHTTPRequest(url +"/1", "GET", null)).thenReturn(
                 PAWebUtil.marshallJSON(additionalRegInfoDTO));
         when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");

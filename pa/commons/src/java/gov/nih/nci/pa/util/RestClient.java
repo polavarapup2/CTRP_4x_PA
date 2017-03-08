@@ -25,7 +25,7 @@ public class RestClient {
     private static final int RETRY_COUNT = 3;
     private static final int HTTP_TIME_OUT = 10000;
     private static final Integer HTTP_NOT_FOUND_404 = 404;
-    
+    private static final Integer SLEEP_TIME = 10;
 
 
     /**
@@ -61,7 +61,7 @@ public class RestClient {
                 } else if (httpResponseCode == HTTP_NOT_FOUND_404) {
                     return null;
                 }
-                Thread.sleep(0, 10);   
+                Thread.sleep(0, SLEEP_TIME);   
             } catch (Exception e) {
                 LOG.error("Error: Unable to get response from Rest server (" + httpResponseCode + ") - "
                         + httpResponseMessage, e);

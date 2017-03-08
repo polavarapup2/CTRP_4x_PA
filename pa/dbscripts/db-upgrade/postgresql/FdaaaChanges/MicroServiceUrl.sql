@@ -1,2 +1,0 @@
-insert into PA_PROPERTIES values ((select max(identifier) + 1 from pa_properties), 'data-clinicaltrials-api',
-'http://ctrp-inttest-alb-backend-1739456098.us-east-1.elb.amazonaws.com:3100/api/v1/data_clinical_trials');

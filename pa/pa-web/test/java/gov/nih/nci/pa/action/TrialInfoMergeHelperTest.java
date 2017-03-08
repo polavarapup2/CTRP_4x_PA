@@ -7,8 +7,8 @@ import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.service.util.LookUpTableServiceRemote;
 import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.RestClient;
 
 import java.io.IOException;
@@ -22,13 +22,10 @@ public class TrialInfoMergeHelperTest {
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
     private RegulatoryAuthorityWebDTO webDto = new RegulatoryAuthorityWebDTO();
     private RestClient client = mock(RestClient.class);
-    private String url = "http://192.168.99.100:3100/api/v1/data_clinical_trials";
-    private final LookUpTableServiceRemote lookUpTableService = mock(LookUpTableServiceRemote.class);
+    private String url;
     @Before
-    public void setUp() throws Exception {
-        helper.setLookUpTableService(lookUpTableService);
-        when(lookUpTableService
-                .getPropertyValue("data-clinicaltrials-api")).thenReturn(url);
+    public void setUp() throws PAException {
+       url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
     }
 
     @Test

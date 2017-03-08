@@ -266,12 +266,10 @@ public class RegulatoryInformationAction extends ActionSupport {
         if (Boolean.TRUE
                 .equals(Boolean.valueOf(webDTO.getFdaRegulatedDevice()))
                 && Boolean.TRUE.equals(Boolean.valueOf(webDTO
-                        .getDelayedPostingIndicator()))) {
-
-            if (StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
+                        .getDelayedPostingIndicator()))
+               && StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
                 addFieldError("webDTO.postPriorToApproval",
                         "Post Prior to U.S. FDA Approval or Clearance is required field");
-            }
         }
         
         if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getPostPriorToApproval()))
