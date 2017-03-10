@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 /**
  * 
  * @author Purnima, Reshma
@@ -46,6 +47,25 @@ public final class PAWebUtil {
             // JSON from String to Object
              return (mapper.readValue(jsonString, objClass));
 
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            return null;
+        }
+    }
+    
+    /**
+     * 
+     * @param jsonString the jsonString
+     * @param <T> the <T>
+     * @param valueTypeRef the valueTypeRef
+     * @return the Object for the JSONString
+     */
+    public static <T> T unmarshallJSON(String jsonString, TypeReference<T> valueTypeRef) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            // JSON from String to Object
+             return (mapper.readValue(jsonString, valueTypeRef));
+             
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return null;

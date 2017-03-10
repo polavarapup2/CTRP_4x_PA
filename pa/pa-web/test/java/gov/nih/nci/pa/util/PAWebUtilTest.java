@@ -1,36 +1,22 @@
 package gov.nih.nci.pa.util;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 
-import java.io.IOException;
+import java.util.List;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
+import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
+
 public class PAWebUtilTest {
-    @Test
-    public void marshallJSONTest() throws JsonGenerationException, JsonMappingException, IOException {
-        String expectedResult = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
-                + ",\"post_prior_to_approval\":\"true\""
-                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
-        AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
-        additionalRegInfoDTO.setExported_from_us("true");
-        additionalRegInfoDTO.setFda_regulated_device("true");
-        additionalRegInfoDTO.setFda_regulated_drug("true");
-        additionalRegInfoDTO.setPed_postmarket_surv("true");
-        additionalRegInfoDTO.setPost_prior_to_approval("true");
-        additionalRegInfoDTO.setDate_updated("1234455");
-        String jsonStr = PAWebUtil.marshallJSON(additionalRegInfoDTO);
-        assertEquals(jsonStr, expectedResult);
-    }
 
     @Test
     public void unmarshallJSONTest() {
-        String actualString = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\",\"fda_regulated_device\":\"true\""
+        String actualString = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
+                + "\"fda_regulated_device\":\"true\""
                 + ",\"post_prior_to_approval\":\"true\""
                 + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
         AdditionalRegulatoryInfoDTO dto = (AdditionalRegulatoryInfoDTO) PAWebUtil
@@ -43,14 +29,27 @@ public class PAWebUtilTest {
     }
     
     @Test
-    public void isValidBooleanStringTest() {
-        assertTrue(PAWebUtil.isValidBooleanString("true"));
-        assertTrue(PAWebUtil.isValidBooleanString("false"));
-        assertTrue(PAWebUtil.isValidBooleanString("null"));
-        assertFalse(PAWebUtil.isValidBooleanString("trueee"));
-        assertFalse(PAWebUtil.isValidBooleanString("TRUE"));
-        assertFalse(PAWebUtil.isValidBooleanString("falseers"));
-        assertFalse(PAWebUtil.isValidBooleanString(""));
+    public void unmarshallJSONTrialIndIdeTest() {
+        String jsonString = "[{ \"study_protocol_id\":1234567, \"trial_indide_id\":12345, \"expanded_access_indicator\":\"Yes\", "
+                + "\"expanded_access_nct_id\":\"NCT12345678\"}, "
+                + "{\"trial_indide_id\":\"22345\", \"expanded_access_indicator\":\"Unknown\", "
+                + "\"expanded_access_nct_id\":\"NCT22345678\"}, "
+                + "{\"study_protocol_id\":2345646,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
+                        + "\"fda_regulated_device\":\"true\""
+                        + ",\"post_prior_to_approval\":\"true\""
+                        + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\"}]";
+        List<AdditionalTrialIndIdeDTO> trialIndIdeDtoList = (List<AdditionalTrialIndIdeDTO>) PAWebUtil.unmarshallJSON(
+                jsonString, new TypeReference<List<AdditionalTrialIndIdeDTO>>() { });
+        assertTrue(trialIndIdeDtoList != null && trialIndIdeDtoList.size() == 3);
+        assertTrue(trialIndIdeDtoList.get(0).getTrialIndIdeId() == 12345);
+        assertTrue(StringUtils.equals(trialIndIdeDtoList.get(0).getExpandedAccessIndicator(), "Yes"));
+        assertTrue(StringUtils.equals(trialIndIdeDtoList.get(0).getExpandedAccessNctId(), "NCT12345678"));
+        
+        assertTrue(trialIndIdeDtoList.get(1).getTrialIndIdeId() == 22345);
+        assertTrue(StringUtils.equals(trialIndIdeDtoList.get(1).getExpandedAccessIndicator(), "Unknown"));
+        assertTrue(StringUtils.equals(trialIndIdeDtoList.get(1).getExpandedAccessNctId(), "NCT22345678"));
+        
+        assertTrue(trialIndIdeDtoList.get(2).getTrialIndIdeId() == null);
     }
 
 }
