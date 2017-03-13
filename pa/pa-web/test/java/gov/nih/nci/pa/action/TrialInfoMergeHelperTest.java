@@ -1,20 +1,29 @@
 package gov.nih.nci.pa.action;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
+import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
+import gov.nih.nci.pa.dto.StudyIndldeWebDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.PAWebUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.RestClient;
-
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class TrialInfoMergeHelperTest {
     private Long studyprotocolId = 1L;
@@ -28,7 +37,7 @@ public class TrialInfoMergeHelperTest {
        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
     }
 
-    @Test
+/*    @Test
     public void mergeRegulatoryInfoReadTest() throws PAException, IOException {
         additionalRegInfoDTO.setExported_from_us("true");
         additionalRegInfoDTO.setFda_regulated_device("true");
@@ -156,6 +165,89 @@ public class TrialInfoMergeHelperTest {
         assertNull(webDto.getPedPostmarketSurv());
         assertNull(webDto.getPostPriorToApproval());
         assertNull(webDto.getLastUpdatedDate());
+    }
+    
+    @Test
+    public void mergeTrialIndIdeInfoReadTest() throws PAException, IOException {
+        StudyIndldeWebDTO studyIndldeWebDTO = new StudyIndldeWebDTO();
+        studyIndldeWebDTO.setStudyProtocolIi(studyprotocolId + "");
+        studyIndldeWebDTO.setId("123");
+        
+        AdditionalTrialIndIdeDTO addTrialIndIdeDto = new AdditionalTrialIndIdeDTO();
+        addTrialIndIdeDto.setStudyProtocolId(Long.valueOf(studyIndldeWebDTO.getStudyProtocolIi()));
+        addTrialIndIdeDto.setTrialIndIdeId(Long.valueOf(studyIndldeWebDTO.getId()));
+        addTrialIndIdeDto.setExpandedAccessIndicator("Yes");
+        addTrialIndIdeDto.setExpandedAccessNctId("NCT12345678");
+        
+        String responseStr = PAWebUtil.marshallJSON(addTrialIndIdeDto);
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/123", "GET", null)).thenReturn(responseStr);
+        helper.mergeTrialIndIdeInfoRead(IiConverter.convertToIi(studyprotocolId), studyIndldeWebDTO);
+        assertEquals(studyIndldeWebDTO.getStudyProtocolIi(),
+                addTrialIndIdeDto.getStudyProtocolId() + "");
+        assertEquals(studyIndldeWebDTO.getId(),
+                addTrialIndIdeDto.getTrialIndIdeId() + "");
+        assertEquals(studyIndldeWebDTO.getExpandedAccessIndicator(),
+                addTrialIndIdeDto.getExpandedAccessIndicator());
+        assertEquals(studyIndldeWebDTO.getExpandedAccessNctId(),
+                addTrialIndIdeDto.getExpandedAccessNctId());
+    }
+    
+    @Test
+    public void mergeStudyProtocolTrialIndIdeInfoReadTest() throws IOException, PAException {
+        String jsonStr = "[{\"study_protocol_id\":\"1\",\"trial_indide_id\":\"123\","
+                + "\"expanded_access_indicator\":\"Yes\",\"expanded_access_nct_id\":\"NCT12345678\"},"
+                +"{\"study_protocol_id\":\"1\",\"trial_indide_id\":\"223\","
+                        + "\"expanded_access_indicator\":\"No\",\"expanded_access_nct_id\":\"NCT22345678\"}]";
+        
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn(jsonStr);
+        StudyIndldeWebDTO studyIndldeWebDTO = new StudyIndldeWebDTO();
+        studyIndldeWebDTO.setStudyProtocolIi(studyprotocolId + "");
+        studyIndldeWebDTO.setId("123");
+        
+        StudyIndldeWebDTO studyIndldeWebDTO1 = new StudyIndldeWebDTO();
+        studyIndldeWebDTO1.setStudyProtocolIi(studyprotocolId + "");
+        studyIndldeWebDTO1.setId("223");
+        List<StudyIndldeWebDTO> studyIndideList = new ArrayList<StudyIndldeWebDTO>();
+        studyIndideList.add(studyIndldeWebDTO);
+        studyIndideList.add(studyIndldeWebDTO1);
+        helper.mergeStudyProtocolTrialIndIdeInfoRead(IiConverter.convertToIi(studyprotocolId), studyIndideList);
+        
+        assertTrue(StringUtils.equals(studyIndideList.get(0).getId(), 123 + ""));
+        assertTrue(StringUtils.equals(studyIndideList.get(0).getExpandedAccessIndicator(), "Yes"));
+        assertTrue(StringUtils.equals(studyIndideList.get(0).getExpandedAccessNctId(), "NCT12345678"));
+        
+        assertTrue(StringUtils.equals(studyIndideList.get(1).getId(), 223 + ""));
+        assertTrue(StringUtils.equals(studyIndideList.get(1).getExpandedAccessIndicator(), "No"));
+        assertTrue(StringUtils.equals(studyIndideList.get(1).getExpandedAccessNctId(), "NCT22345678"));
+    }
+    
+    @Test
+    public void mergeTrialIndIdeInfoUpdateTest() throws PAException {
+        helper.setClient(client);
+        String jsonStr = "{\"study_protocol_id\":1,\"trial_indide_id\":123,"
+                + "\"expanded_access_indicator\":\"Yes\",\"expanded_access_nct_id\":\"NCT12345678\",\"date_updated\":\"03/12/2017\"}";
+        when(client.sendHTTPRequest(url, "POST", jsonStr)).thenReturn(jsonStr);
+        StudyIndldeWebDTO webDTO = new StudyIndldeWebDTO();
+        webDTO.setStudyProtocolIi(studyprotocolId + "");
+        webDTO.setId("123");
+        webDTO.setExpandedAccessIndicator("Yes");
+        webDTO.setExpandedAccessNctId("NCT12345678");
+        webDTO.setDateUpdated("03/12/2017");
+        AdditionalTrialIndIdeDTO trialIndIdeDto = helper.mergeTrialIndIdeInfoUpdate(
+                IiConverter.convertToIi(studyprotocolId), webDTO);
+        assertEquals(webDTO.getId(), trialIndIdeDto.getTrialIndIdeId() + "");
+        assertEquals(webDTO.getStudyProtocolIi(), trialIndIdeDto.getStudyProtocolId() + "");
+        assertEquals(webDTO.getExpandedAccessNctId(), trialIndIdeDto.getExpandedAccessNctId());
+        assertEquals(webDTO.getExpandedAccessIndicator(), trialIndIdeDto.getExpandedAccessIndicator());
+    }*/
+    
+    @Test(expected=PAException.class)
+    public void microServiceUnavailableTrialIndIdeTest() throws PAException {
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "/null", "GET", null)).thenThrow(new PAException("Error: Unable to get response from Rest server @ " + url));
+        helper.mergeTrialIndIdeInfoRead(IiConverter.convertToIi(studyprotocolId), new StudyIndldeWebDTO());
     }
 
 }

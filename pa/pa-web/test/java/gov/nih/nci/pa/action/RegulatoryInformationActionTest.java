@@ -152,33 +152,6 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
              regulatoryInformationAction.getFieldErrors().get("webDTO.fdaRegulatedDrug").get(0));
         assertEquals("Studies a U.S. FDA-regulated Device Product is required field", 
                 regulatoryInformationAction.getFieldErrors().get("webDTO.fdaRegulatedDevice").get(0));
-        assertEquals("Product Exported from the U.S is required field", 
-                regulatoryInformationAction.getFieldErrors().get("webDTO.exportedFromUs").get(0));
-        
-        webDTO = new RegulatoryAuthorityWebDTO();
-        webDTO.setFdaRegulatedDevice("true");
-        webDTO.setFdaRegulatedDrug("true");
-        webDTO.setExportedFromUs("true");
-        webDTO.setDelayedPostingIndicator("true");
-        webDTO.setPostPriorToApproval("");
-        regulatoryInformationAction.setWebDTO(webDTO);
-        regulatoryInformationAction.update();
-        assertTrue(regulatoryInformationAction.hasFieldErrors());
-        assertEquals("Post Prior to U.S. FDA Approval or Clearance is required field", 
-                regulatoryInformationAction.getFieldErrors().get("webDTO.postPriorToApproval").get(0));
-       
-        webDTO = new RegulatoryAuthorityWebDTO();
-        webDTO.setFdaRegulatedDevice("true");
-        webDTO.setFdaRegulatedDrug("true");
-        webDTO.setExportedFromUs("true");
-        webDTO.setDelayedPostingIndicator("true");
-        webDTO.setPostPriorToApproval("true");
-        webDTO.setPedPostmarketSurv("");
-        regulatoryInformationAction.setWebDTO(webDTO);
-        regulatoryInformationAction.update();
-        assertTrue(regulatoryInformationAction.hasFieldErrors());
-        assertEquals("Pediatric Post-market Surveillance is required field", 
-                regulatoryInformationAction.getFieldErrors().get("webDTO.pedPostmarketSurv").get(0)); 
         
         spDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(false));
         webDTO = new RegulatoryAuthorityWebDTO();

@@ -202,6 +202,11 @@ public class RegulatoryInformationAction extends ActionSupport {
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolIi);
             
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
+            identifiersList.add(studyprotocolId);
+            Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
+            
             if (BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())) {
                 if (spDTO.getSection801Indicator().getValue() != null) {
                     webDTO.setSection801Indicator(BlConverter
@@ -221,8 +226,9 @@ public class RegulatoryInformationAction extends ActionSupport {
                             .getDataMonitoringCommitteeAppointedIndicator())));
                 }
             }
+            
             // Call glue code helper class
-            helper.mergeRegulatoryInfoRead(studyProtocolIi, webDTO);
+            helper.mergeRegulatoryInfoRead(studyProtocolIi, identifierMap.get(studyprotocolId), webDTO);
         } catch (PAException e) {
             ServletActionContext.getRequest().setAttribute(
                     Constants.FAILURE_MESSAGE, e.getMessage());
@@ -234,49 +240,27 @@ public class RegulatoryInformationAction extends ActionSupport {
     
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     private void validateForm(StudyProtocolDTO spDTO) {
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) {
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) { //TODO: only if start date after FDAAA
             addFieldError("webDTO.fdaRegulatedDrug",
-                    "Studies a U.S. FDA-regulated Drug Product is required field");
+                    "Studies a U.S. FDA-regulated Drug Product is required field");            
         }
-
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) {
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) { //TODO: only if start date after FDAAA
             addFieldError("webDTO.fdaRegulatedDevice",
                     "Studies a U.S. FDA-regulated Device Product is required field");
         }
 
-        if (StringUtils.isBlank(webDTO.getExportedFromUs())) {
-            addFieldError("webDTO.exportedFromUs",
-                    "Product Exported from the U.S is required field");
-        }
         if (!BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())
-                && StringUtils.isBlank(webDTO
-                        .getFdaRegulatedInterventionIndicator())) {
+                && StringUtils.isBlank(webDTO.getFdaRegulatedInterventionIndicator())) {
             addFieldError("webDTO.fdaRegulatedInterventionIndicator",
                     "FDA Regulated Intervention Indicator is required field");
         }
-        if (Boolean.TRUE
-                .equals(Boolean.valueOf(webDTO.getSection801Indicator()))
+        
+        if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getSection801Indicator()))
                 && spDTO instanceof NonInterventionalStudyProtocolDTO) {
             addFieldError("webDTO.section801Indicator",
                     "Section 801 Indicator should be No for Non-interventional trials");
         }
-
-        // Conditional - required only if 'U.S. FDA-Regulated Device = 'Yes' AND
-        // the newly named 'Unapproved/Uncleared Device' = 'Yes'
-        if (Boolean.TRUE
-                .equals(Boolean.valueOf(webDTO.getFdaRegulatedDevice()))
-                && Boolean.TRUE.equals(Boolean.valueOf(webDTO
-                        .getDelayedPostingIndicator()))
-               && StringUtils.isBlank(webDTO.getPostPriorToApproval())) {
-                addFieldError("webDTO.postPriorToApproval",
-                        "Post Prior to U.S. FDA Approval or Clearance is required field");
-        }
-        
-        if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getPostPriorToApproval()))
-                && StringUtils.isBlank(webDTO.getPedPostmarketSurv())) {
-            addFieldError("webDTO.pedPostmarketSurv",
-                    "Pediatric Post-market Surveillance is required field");
-        }
+                
     }
 
     /**

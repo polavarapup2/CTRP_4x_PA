@@ -662,7 +662,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 webdto.setCdeCategoryCode(dto.getSubcategoryCode().getCode());
             }
         }
-        helper.mergeEligibilityCriteriaRead(studyProtocolIi, webdto);
+        //helper.mergeEligibilityCriteriaRead(studyProtocolIi, nciId, webdto);
         gender = webdto.getGender();
         genderEligibilityDescription = webDTO.getGenderEligibilityDescription();
         return webdto;

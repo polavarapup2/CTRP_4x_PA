@@ -21,20 +21,18 @@
                    
                 } 
                //FDAAA validations
-               
-               if ($('approval').value=='false' | $('approval').value=='') {
-                    hideRow($('survRow'));
-                    $('surveillance').value = '';
-               } 
                if ($('device').value == '' | $('device').value == 'false') {
                    hideRow($('delpostindrow'));
-                   $('delpostindrow').value = '';
-               }   
+                   $('delpostindid').value = '';
+                   hideRow($('survRow'));
+                   $('surveillance').value = '';
+               }
+                  
                if (($('delpostindrow').value == 'false' | $('delpostindrow').value == '') & 
-                       ($('device').value == 'false' | $('device').value == '')) {
-                        hideRow($('approvalRow'));
-                        $('approval').value = '';
-                  }
+                   ($('device').value == 'false' | $('device').value == '')) {
+                   hideRow($('approvalRow'));
+                   $('approval').value = '';
+               }
 
             }
             
@@ -54,32 +52,39 @@
         
             function checkDeviceDropDown() {
                 if ($('device').value == '' | $('device').value == 'false') {    
-                    input_box = confirm("Unapproved/Uncleared Device and Post Prior to U.S. FDA Approval or Clearance  will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                    input_box = confirm("Unapproved/Uncleared Device and Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                     if (input_box == true){
                         hideRow($('delpostindrow'));
+                        hideRow($('survRow'));
                         hideRow($('approvalRow'));
+                        $('delpostindid').value = '';
+                        $('surveillance').value ='';
                         $('approval').value = '';
-                        $('delpostindid').value ='';
                     } else {
                         $('device').value = 'true';
                     }
                 } else {
                     showRow($('delpostindrow'));
-                    showRow($('approvalRow'));
+                    showRow($('survRow'));
+                    if ($('delpostindrow').value == 'true') {
+                        showRow($('approvalRow'));
+                    }
                 }    
             }
             
-            function checkApprovalDropDown() {
-                if ($('approval').value=='false' | $('approval').value=='') {
-                    input_box=confirm("Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+            function checkDelPostingIndDropDown() {
+                if ($('delpostindid').value=='false' | $('delpostindid').value=='') {
+                    input_box=confirm("Post Prior to U.S. FDA Approval or Clearance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                        if (input_box == true) {
-                            $('surveillance').value ='';
-                            hideRow($('survRow'));
+                            $('approval').value ='';
+                            hideRow($('approvalRow'));
                        } else {
                            $('approval').value = 'true';
                        }
                 } else {
-                    showRow($('survRow'));
+                	if ($('device').value == 'true') {
+                        showRow($('approvalRow'));
+                    }
                 }  
             }
             
@@ -105,22 +110,13 @@
                 }
             }
             
-            function loadDiv() {        
-                var url = '/pa/protected/ajaxgetAuthOrgsgetRegAuthoritiesList.action';
-                var params = { countryid: $('countries').value };
-                var div = $('loadAuthField');
-                div.innerHTML = '<div align="left"><img  src="../images/loading.gif"/>&nbsp;Loading...</div>';           
-                var aj = callAjaxPost(div, url, params);
-                return false;
-            }
-            
             function checkReqFields() {
                 if ($('fdaindid').value == 'true') {
                     if ($('sec801id').value == '') {
                         alert("The Section801 Indicator cannot be empty");
                         return true;
                     }
-                    if ($('sec801id').value == 'true'){
+                    if ($('device').value == 'true'){
                         if ($('delpostindid').value == ''){
                              alert("The Delayed posting Indicator cannot be empty");
                             return true;
@@ -129,10 +125,7 @@
                 }    
                 return false;
             }
-            function cancel(url){ 
-                var element2 = document.getElementById("countries");
-                element2.value='';
-                loadDiv();
+            function cancel(url){
                 $('fdaindid').value ='';
                 $('sec801id').value ='';
                 $('delpostindid').value ='';
@@ -192,7 +185,23 @@
                             </span>
                         </td>  
                       </tr>
-                         <tr id="approvalRow">
+                      
+                      <!--   Delayed Posting Indicator-->
+                      <tr id="delpostindrow">
+                        <td scope="row" class="label">
+                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">${asterisk}</span>
+                        </td>
+                        <td style="padding: 1px 5px 5px 0 ">
+                            <s:select id="delpostindid" name="webDTO.delayedPostingIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDelPostingIndDropDown();" />
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="info">When this is set to "Yes" the trial will not be included in the nightly export to cancer.gov</span>
+                            <span class="formErrorMsg">
+                                <s:fielderror><s:param>webDTO.delayedPostingIndicator</s:param></s:fielderror>
+                            </span>
+                        </td>        
+                     </tr>
+                      
+                      <tr id="approvalRow">
                         <td scope="row" class="label">
                             <label for="approval"><fmt:message key="regulatory.approval.clearance"/></label>
                         </td>
@@ -212,7 +221,7 @@
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="surveillance" name="webDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}" />
                             &nbsp;&nbsp;&nbsp;
-                            <span class="info">Required only if Post Prior to Approval/Clearance is set to Yes.</span>
+                            <span class="info">Required only if this is a pediatric postmarket surveillance of a device product ordered by the U.S. FDA.</span>
                             <span class="formErrorMsg">
                                 <s:fielderror><s:param>webDTO.pedPostmarketSurv</s:param></s:fielderror>
                             </span>
@@ -247,7 +256,7 @@
                          </td>
                          -->       
                     
-                    <!--  Trial Oversignt Authority Organization Name
+                    <%--  Trial Oversignt Authority Organization Name
                     <tr>
                         <td scope="row" class="label">
                             <label for="auths"><fmt:message key="regulatory.oversight.auth.name"/></label>
@@ -259,7 +268,7 @@
                             </div>
                         </td>
                     </tr> 
-                     -->   
+                     --%>   
                     <!--   FDA Regulated Intervention Indicator-->
                     <tr>
                         <td scope="row"  class="label">
@@ -283,21 +292,6 @@
                                 <s:fielderror><s:param>webDTO.section801Indicator</s:param></s:fielderror>
                             </span>
                         </td>
-                    </tr>
-                    
-                    <!--   Delayed Posting Indicator-->
-                    <tr id="delpostindrow">
-                        <td scope="row" class="label">
-                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">${asterisk}</span>
-                        </td>
-                        <td style="padding: 1px 5px 5px 0 ">
-                            <s:select id="delpostindid" name="webDTO.delayedPostingIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" />
-                            &nbsp;&nbsp;&nbsp;
-                            <span class="info">When this is set to "Yes" the trial will not be included in the nightly export to cancer.gov</span>
-                            <span class="formErrorMsg">
-                                <s:fielderror><s:param>webDTO.delayedPostingIndicator</s:param></s:fielderror>
-                            </span>
-                        </td>        
                     </tr>
                     <!--   Data Monitoring Committee Appointed Indicator -->
                     <tr id="datamonrow">

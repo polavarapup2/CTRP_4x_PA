@@ -91,7 +91,7 @@
             	}
             }
             
-            function handleExpandedAccessIndicator() {
+            /* function handleExpandedAccessIndicator() {
             	if ($('group4true').checked) {
             		$('expandedStatus').disabled = false;            		            		
             	}
@@ -102,14 +102,14 @@
                 if (!($('group4true').checked || $('group4false').checked)) {
                 	$('group4false').checked = true;
                 }
-            }
+            } */
             
             Event.observe(window,"load", function(e) {
             	SelectSubCat($('group3IND'));	
             	SelectSubCat($('group3IDE'));
             	selectGrantor('<s:property value="studyIndldeWebDTO.grantor"/>');
             	setProgramCodes($('holderType'));
-            	handleExpandedAccessIndicator();
+            	//handleExpandedAccessIndicator();
             });
             
         </script>
@@ -135,7 +135,7 @@
                 <s:hidden name="cbValue" />
                 <s:set name="phaseCodeValuesNIH" value="@gov.nih.nci.pa.enums.NihInstituteCode@getDisplayNames()" />
                 <s:set name="phaseCodeValuesNCI" value="@gov.nih.nci.pa.enums.NciDivisionProgramCode@getDisplayNames()" />
-                <s:set name="expandedAccessStatusCodeValues" value="@gov.nih.nci.pa.enums.ExpandedAccessStatusCode@getDisplayNames()" />
+                <%-- <s:set name="expandedAccessStatusCodeValues" value="@gov.nih.nci.pa.enums.ExpandedAccessStatusCode@getDisplayNames()" /> --%>
                 <table class="form">   
                     <tr>
                         <td scope="row"  class="label">
@@ -231,7 +231,7 @@
                             </label>
                         </td>
                         <td class="value">
-                            <s:radio name="studyIndldeWebDTO.expandedAccessIndicator" id="group4" list="#{'true':'Yes', 'false':'No'}" onclick="handleExpandedAccessIndicator();"/>
+                            <s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'':'', 'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" />
                             <span class="formErrorMsg"> 
                                 <s:fielderror>
                                     <s:param>studyIndldeWebDTO.expandedAccessIndicator</s:param>
@@ -240,6 +240,22 @@
                         </td>
                     </tr>
                     <tr>
+                        <td scope="row"  class="label">
+                            <label for=expandedAccessNctId>
+                                <fmt:message key="trialIndide.expandedAccessNctId"/>:
+                            </label>
+                        </td>
+                        <td class="value">
+                            <s:textfield id="expandedAccessNctId" name="studyIndldeWebDTO.expandedAccessNctId" size="11"/>                             
+                            <span class="info">ClinicalTrials.gov identifier (NCT number) for the associated Expanded Access record.</span>
+                            <span class="formErrorMsg"> 
+                                <s:fielderror>
+                                    <s:param>studyIndldeWebDTO.expandedAccessNctId</s:param>
+                               </s:fielderror>                            
+                            </span>
+                        </td>
+                    </tr>
+                    <%-- <tr>
                         <td scope="row" class="label">
                             <label for="expandedStatus">
                                 <fmt:message key="trialIndide.expandedAccessStatusCode"/>:<span class="required">*</span>
@@ -264,7 +280,7 @@
                         <td>
                             <s:checkbox name="studyIndldeWebDTO.exemptIndicator" id="exemptIndicator">Yes</s:checkbox>
                         </td>
-                    </tr>
+                    </tr> --%>
                 </table>
                 <div class="actionsrow">
                     <del class="btnwrapper">

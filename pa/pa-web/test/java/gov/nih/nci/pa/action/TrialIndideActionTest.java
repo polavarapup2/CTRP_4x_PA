@@ -75,7 +75,6 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
          trialIndideAction.setStudyIndldeWebDTO(studyIndldeWebDTO);
          assertEquals("query",trialIndideAction.create());
          studyIndldeWebDTO = getStudyIndIdeDTO();
-         studyIndldeWebDTO.setExemptIndicator(Boolean.TRUE);
          trialIndideAction.setStudyIndldeWebDTO(studyIndldeWebDTO);
          assertEquals("query",trialIndideAction.create());
 	}
@@ -89,7 +88,7 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
         StudyIndldeWebDTO studyIndldeWebDTO = getStudyIndIdeDTO();
         studyIndldeWebDTO.setIndldeNumber("!233");
         studyIndldeWebDTO.setExpandedAccessIndicator("true");
-        studyIndldeWebDTO.setExpandedAccessStatus("");
+        studyIndldeWebDTO.setExpandedAccessNctId("NCT12345678");
         trialIndideAction.setStudyIndldeWebDTO(studyIndldeWebDTO);
         assertEquals("edit",trialIndideAction.update());
         studyIndldeWebDTO.setExpandedAccessIndicator("expandedAccessIndicator");
@@ -108,7 +107,6 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
         assertEquals("query",trialIndideAction.update());
         studyIndldeWebDTO = getStudyIndIdeDTO();
         studyIndldeWebDTO.setExpandedAccessIndicator("expandedAccessIndicator");
-        studyIndldeWebDTO.setExemptIndicator(Boolean.FALSE);
         trialIndideAction.setStudyIndldeWebDTO(studyIndldeWebDTO);
         trialIndideAction.setCbValue(1L);
         assertEquals("query",trialIndideAction.update());
@@ -120,7 +118,7 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
     private StudyIndldeWebDTO getStudyIndIdeDTO() {
         StudyIndldeWebDTO studyIndldeWebDTO = new StudyIndldeWebDTO();
         studyIndldeWebDTO.setExpandedAccessIndicator("Yes");
-        studyIndldeWebDTO.setExpandedAccessStatus("Available");
+        studyIndldeWebDTO.setExpandedAccessNctId("NCT12345678");
         studyIndldeWebDTO.setGrantor(GrantorCode.CDRH.getCode());
         studyIndldeWebDTO.setHolderType(HolderTypeCode.INDUSTRY.getCode());
         studyIndldeWebDTO.setIndldeNumber("indldeNumber");

@@ -75,8 +75,8 @@ public class WebDTOTest {
                 //{new TrialHistoryWebDTO() },
                 {new TrialOwner() },
                 {new TrialUpdateWebDTO() },
-                {new AdditionalRegulatoryInfoDTO() }
-                
+                {new AdditionalRegulatoryInfoDTO() },
+                {new AdditionalTrialIndIdeDTO() }
         };
         return Arrays.asList(data);
     }

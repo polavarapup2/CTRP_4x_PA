@@ -79,7 +79,6 @@
 package gov.nih.nci.pa.dto;
 
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
-import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 
 import java.io.Serializable;
@@ -92,7 +91,7 @@ import java.io.Serializable;
 public class StudyIndldeWebDTO implements Serializable {
    private static final long serialVersionUID = -6261047208109210957L;
     private String studyProtocolIi;
-    private String expandedAccessStatus;
+    //private String expandedAccessStatus;
     private String expandedAccessIndicator;
     private String indldeNumber;
     private String indldeType;
@@ -102,31 +101,34 @@ public class StudyIndldeWebDTO implements Serializable {
     private String nihInstHolder;
     private String nciDivProgHolder;
     private String id;
-    private Boolean exemptIndicator;
+    private String expandedAccessNctId;
+    //private String expandedAccessRecord;
+    //private Boolean exemptIndicator;
+    private String dateUpdated;
 
     /**
      * @param iso StudyResourcingDTO object
      */
     public StudyIndldeWebDTO(StudyIndldeDTO iso) {
         super();
-          this.expandedAccessStatus = iso.getExpandedAccessStatusCode().getCode();
+          /*this.expandedAccessStatus = iso.getExpandedAccessStatusCode().getCode();*/
           this.grantor = iso.getGrantorCode().getCode();
 
-          if (iso.getExpandedAccessIndicator().getValue() != null) {
+          /*if (iso.getExpandedAccessIndicator().getValue() != null) {
             if (iso.getExpandedAccessIndicator().getValue().toString().equalsIgnoreCase("true")) {
               this.expandedAccessIndicator = "Yes";
             } else {
               this.expandedAccessIndicator = "No";
             }
           }
-          //this.expandedAccessIndicator = iso.getExpandedAccessIndicator().getValue().toString();
+          this.expandedAccessIndicator = iso.getExpandedAccessIndicator().getValue().toString();*/
           this.indldeNumber = iso.getIndldeNumber().getValue();
           this.indldeType = iso.getIndldeTypeCode().getCode();
           this.holderType = iso.getHolderTypeCode().getCode();
           this.nihInstHolder = CdConverter.convertCdToString(iso.getNihInstHolderCode());
           this.nciDivProgHolder = CdConverter.convertCdToString(iso.getNciDivProgHolderCode());
           this.id = iso.getIdentifier().getExtension();
-          this.exemptIndicator = BlConverter.convertToBoolean(iso.getExemptIndicator());
+          //this.exemptIndicator = BlConverter.convertToBoolean(iso.getExemptIndicator());
     }
 
     /** .
@@ -152,16 +154,32 @@ public class StudyIndldeWebDTO implements Serializable {
 
     /**
      * @return the expandedAccessStatus
-     */
+     *//*
     public String getExpandedAccessStatus() {
         return expandedAccessStatus;
     }
 
-    /**
+    *//**
      * @param expandedAccessStatus the expandedAccessStatus to set
-     */
+     *//*
     public void setExpandedAccessStatus(String expandedAccessStatus) {
         this.expandedAccessStatus = expandedAccessStatus;
+    }*/
+
+    /**
+     * 
+     * @return expandedAccessNctId
+     */
+    public String getExpandedAccessNctId() {
+        return expandedAccessNctId;
+    }
+
+    /**
+     * 
+     * @param expandedAccessNctId the expandedAccessNctId
+     */
+    public void setExpandedAccessNctId(String expandedAccessNctId) {
+        this.expandedAccessNctId = expandedAccessNctId;
     }
 
     /**
@@ -292,16 +310,32 @@ public class StudyIndldeWebDTO implements Serializable {
 
     /**
      * @param exemptIndicator the exemptIndicator to set
-     */
+     *//*
     public void setExemptIndicator(Boolean exemptIndicator) {
         this.exemptIndicator = exemptIndicator;
     }
 
-    /**
+    *//**
      * @return the exemptIndicator
-     */
+     *//*
     public Boolean getExemptIndicator() {
         return exemptIndicator;
+    }*/
+
+    /**
+     * 
+     * @return dateUpdated
+     */
+    public String getDateUpdated() {
+        return dateUpdated;
+    }
+
+    /**
+     * 
+     * @param dateUpdated the dateUpdated
+     */
+    public void setDateUpdated(String dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 
 }

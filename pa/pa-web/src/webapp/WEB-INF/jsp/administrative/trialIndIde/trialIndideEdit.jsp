@@ -24,11 +24,11 @@ function callOnloadFunctions(){
     
 }
 function checkAll(){
-		if (document.getElementById('group4').value == 'Yes'){
+		/* if (document.getElementById('group4').value == 'Yes'){
 			showRow(document.getElementById('expandedStatusRow'));
 		} else {
 			hideRow(document.getElementById('expandedStatusRow'));
-		}
+		} */
 		if (document.getElementById('group3').value == 'IND'){
 			addOption(document.getElementById('SubCat'),"CDER", "CDER");
 			addOption(document.getElementById('SubCat'),"CBER", "CBER");
@@ -57,13 +57,13 @@ function hideRow(row){
 function showRow(row){
 		row.style.display = '';
 }
-function checkIndicator() {
+/* function checkIndicator() {
 	if (document.getElementById('group4').value == 'Yes'){
 		showRow(document.getElementById('expandedStatusRow'));
 	} else {
 		hideRow(document.getElementById('expandedStatusRow'));
 	}
-}
+} */
 function checkCode() {
 var input="studyIndldeWebDTO.nihInstHolder";
 var inputElement = document.forms[0].elements[input];
@@ -86,12 +86,12 @@ function getIndIdeRadioValue(size){
 				return(document.forms[0].group3[i].value);
 		}
 }
-function getExpandedAccessRadioValue(size){
+/* function getExpandedAccessRadioValue(size){
 	for(var i=0; i<size; i++) {
 		if(document.forms[0].group4[i].checked==true) 
 			return(document.forms[0].group4[i].value);
 	}
-}
+} */
 function setProgramCodes(ref){	
 		if (ref.value == 'NCI') {
 			document.getElementById('programcodenciid').style.display = '';
@@ -118,13 +118,14 @@ function resetValues(){
 		document.getElementById('programcodenciselectedvalue').value='';
 		document.getElementById('programcodenihid').style.display = 'none';
 		document.getElementById('programcodenciid').style.display = 'none';
+		document.getElementById('group4').value='';
 		//$('programcoderow').hide();
-		document.forms[0].group4[0].checked = false;
-		document.forms[0].group4[1].checked = true;
-		document.getElementById('expandedStatus').value='';
-		document.getElementById('expandedStatus').disabled=true;
+		/* document.forms[0].group4[0].checked = false;
+		document.forms[0].group4[1].checked = true; */
+		/* document.getElementById('expandedStatus').value='';
+		document.getElementById('expandedStatus').disabled=true; */
 		document.getElementById('addbtn').disabled=true;
-        document.getElementById('exemptIndicator').checked = false;
+        //document.getElementById('exemptIndicator').checked = false;
 }
 function clearRadios( radioname ){
 	   for( i = 0; i < document.forms[0][radioname].length; i++ )
@@ -192,7 +193,8 @@ function tooltip() {
     	<s:hidden name="cbValue" />
     	<s:set name="phaseCodeValuesNIH" value="@gov.nih.nci.pa.enums.NihInstituteCode@getDisplayNames()" />
 		<s:set name="phaseCodeValuesNCI" value="@gov.nih.nci.pa.enums.NciDivisionProgramCode@getDisplayNames()" />
-		<s:set name="expandedAccessStatusCodeValues" value="@gov.nih.nci.pa.enums.ExpandedAccessStatusCode@getDisplayNames()" />
+		<%-- <s:set name="expandedAccessStatusCodeValues" value="@gov.nih.nci.pa.enums.ExpandedAccessStatusCode@getDisplayNames()" /> --%>
+		 <s:hidden id="dateUpdated" name="studyIndldeWebDTO.dateUpdated"> </s:hidden>
     <table class="form">   
   		<tr>
 						<td scope="row"  class="label"><label>
@@ -271,7 +273,7 @@ function tooltip() {
 							<fmt:message key="trialIndide.expandedAccessIndicator"/>:<span class="required">*</span></label>
 						</td>
 						<td class="value">
-							<s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'No':'No', 'Yes':'Yes'}" onclick="checkIndicator();" />
+							<s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" />
 							<span class="formErrorMsg"> 
                                 <s:fielderror>
                                 <s:param>studyIndldeWebDTO.expandedAccessIndicator</s:param>
@@ -279,7 +281,23 @@ function tooltip() {
                          </span>
 						</td>
 					</tr>
-					<tr id="expandedStatusRow">
+                    <tr>
+                        <td scope="row"  class="label">
+                            <label for="expandedAccessNctId">
+                                <fmt:message key="trialIndide.expandedAccessNctId"/>:<span class="required">*</span>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <s:textfield id="expandedAccessNctId" name="studyIndldeWebDTO.expandedAccessNctId" size="11"/>
+                            <span class="info">ClinicalTrials.gov identifier (NCT number) for the associated Expanded Access record.</span>                          
+                            <span class="formErrorMsg"> 
+                                <s:fielderror>
+                                    <s:param>studyIndldeWebDTO.expandedAccessNctId</s:param>
+                               </s:fielderror>                            
+                            </span>
+                        </td>
+                    </tr>
+					<%-- <tr id="expandedStatusRow">
 						<td scope="row"  class="label"><label>
 							<fmt:message key="trialIndide.expandedAccessStatusCode"/>:<span class="required">*</span></label>
 						</td>
@@ -300,7 +318,7 @@ function tooltip() {
                        <td>
                         <s:select name="studyIndldeWebDTO.exemptIndicator" id="exemptIndicator" list="#{'false':'No', 'true':'Yes'}"></s:select>
                         </td>
-                    </tr>
+                    </tr> --%>
     </table>
         <div class="actionsrow">
             <del class="btnwrapper">

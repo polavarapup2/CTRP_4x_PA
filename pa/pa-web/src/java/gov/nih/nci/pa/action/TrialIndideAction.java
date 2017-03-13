@@ -82,8 +82,6 @@ import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.StudyIndldeWebDTO;
 import gov.nih.nci.pa.enums.HolderTypeCode;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
-import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
-import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
@@ -96,7 +94,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 /**
@@ -112,7 +109,8 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
     private List<StudyIndldeWebDTO> studyIndideList;
     private Long cbValue;
     private String page;
-
+    //private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    
     /**
      * @return result
      */
@@ -130,12 +128,14 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
             List<StudyIndldeDTO> isoList = PaRegistry.getStudyIndldeService().getByStudyProtocol(studyProtocolIi);
             if (!(isoList.isEmpty())) {
                 studyIndideList = new ArrayList<StudyIndldeWebDTO>();
-              for (StudyIndldeDTO dto : isoList) {
-                  studyIndideList.add(new StudyIndldeWebDTO(dto));
-              }
+                for (StudyIndldeDTO dto : isoList) {
+                    studyIndideList.add(new StudyIndldeWebDTO(dto));
+                }
+                //call glue code to merge additional data from data clinical trials microservice for all
+                //the Trial IND/IDE records
+                //helper.mergeStudyProtocolTrialIndIdeInfoRead(studyProtocolIi, studyIndideList);
             } else {
-                setSuccessMessageIfNotYet(
-                        getText("No IND/IDE records exist on the trial"));
+                setSuccessMessageIfNotYet(getText("No IND/IDE records exist on the trial"));
             }
             return QUERY_RESULT;
 
@@ -187,11 +187,20 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
             studyIndldeDTO = PaRegistry.getStudyIndldeService().get(IiConverter.convertToIi(cbValue));
         }
         studyIndldeDTO = getStudyIndIdeDTO(studyIndldeDTO);
+        
+        /*Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().
+                getAttribute(Constants.STUDY_PROTOCOL_II);*/
+        
         if (cbValue != null) {
+            //call glue code first to update additional trial info in the microservice
+            //if it succeeds, call the PADB update
+            //helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
             PaRegistry.getStudyIndldeService().update(studyIndldeDTO);
             ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, Constants.UPDATE_MESSAGE);
         } else {
             PaRegistry.getStudyIndldeService().create(studyIndldeDTO);
+            //call glue code after PADB create, so that we have Trial IND/IDE id to insert in remote DB
+            //helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
             ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, Constants.CREATE_MESSAGE);
         }
         query();
@@ -204,7 +213,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
         Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
                 Constants.STUDY_PROTOCOL_II);
         studyIndldeDTO.setStudyProtocolIdentifier(studyProtocolIi);
-        if (studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase(
+        /*if (studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase(
                 "Yes")
                 || studyIndldeWebDTO.getExpandedAccessIndicator()
                         .equalsIgnoreCase("true")) {
@@ -216,7 +225,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
         studyIndldeDTO.setExpandedAccessIndicator(BlConverter.convertToBl(Boolean.valueOf(
             studyIndldeWebDTO.getExpandedAccessIndicator())));
         studyIndldeDTO.setExpandedAccessStatusCode(CdConverter.convertStringToCd(
-            studyIndldeWebDTO.getExpandedAccessStatus()));
+            studyIndldeWebDTO.getExpandedAccessStatus()));*/
         studyIndldeDTO.setGrantorCode(CdConverter.convertStringToCd(studyIndldeWebDTO.getGrantor()));
         studyIndldeDTO.setHolderTypeCode(CdConverter.convertStringToCd(studyIndldeWebDTO.getHolderType()));
         studyIndldeDTO.setIndldeNumber(StConverter.convertToSt(studyIndldeWebDTO.getIndldeNumber()));
@@ -233,7 +242,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
             studyIndldeDTO.setNciDivProgHolderCode(CdConverter.convertStringToCd(null));
         }
         studyIndldeDTO.setIndldeTypeCode(CdConverter.convertStringToCd(studyIndldeWebDTO.getIndldeType()));
-        studyIndldeDTO.setExemptIndicator(BlConverter.convertToBl(studyIndldeWebDTO.getExemptIndicator()));
+        //studyIndldeDTO.setExemptIndicator(BlConverter.convertToBl(studyIndldeWebDTO.getExemptIndicator()));
         return studyIndldeDTO;
     }
 
@@ -242,6 +251,8 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
      */
     public String delete() {
         try {
+            //call glue code to delete info in data clinical trial microservice
+            //TODO
             deleteSelectedObjects();
             ServletActionContext.getRequest().setAttribute(
                     Constants.SUCCESS_MESSAGE, Constants.MULTI_DELETE_MESSAGE);
@@ -265,6 +276,12 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
         try {
             StudyIndldeDTO studyIndlde = PaRegistry.getStudyIndldeService().get(IiConverter.convertToIi(cbValue));
             studyIndldeWebDTO = new StudyIndldeWebDTO(studyIndlde);
+            
+            /*Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
+                    Constants.STUDY_PROTOCOL_II); */
+            //call glue code to merge info from data clinical trial microservice
+            //helper.mergeTrialIndIdeInfoRead(studyProtocolIi, studyIndldeWebDTO);
+            
         } catch (Exception e) {
           ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getLocalizedMessage());
         }
@@ -275,6 +292,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
       clearErrorsAndMessages();
       clearFieldErrors();
       validateIndIdeNumber();
+      validateExpandedAccessNctId();
       addFieldErrorIfEmpty(studyIndldeWebDTO.getIndldeNumber(), "studyIndldeWebDTO.indldeNumber",
               getText("error.trialIndide.indldeNumber"));
       addFieldErrorIfEmpty(studyIndldeWebDTO.getIndldeType(), "studyIndldeWebDTO.indldeType",
@@ -285,11 +303,11 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
               getText("error.trialIndide.grantor"));
       addFieldErrorIfEmpty(studyIndldeWebDTO.getHolderType(), "studyIndldeWebDTO.holderType",
                 getText("error.trialIndide.holderType"));
-      if (StringUtils.isNotEmpty(studyIndldeWebDTO.getExpandedAccessIndicator())
+      /*if (StringUtils.isNotEmpty(studyIndldeWebDTO.getExpandedAccessIndicator())
           &&  studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase("true")) {
           addFieldErrorIfEmpty(studyIndldeWebDTO.getExpandedAccessStatus(), "studyIndldeWebDTO.expandedAccessStatus",
                   getText("error.trialIndide.expandedAccessStatus"));
-      }
+      }*/
       if (StringUtils.isNotEmpty(studyIndldeWebDTO.getHolderType())) {
           if (studyIndldeWebDTO.getHolderType().equalsIgnoreCase(HolderTypeCode.NIH.getCode().toString())) {
           addFieldErrorIfEmpty(studyIndldeWebDTO.getNihInstHolder(), "studyIndldeWebDTO.nihInstHolder",
@@ -304,7 +322,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
               studyIndldeWebDTO.setNciDivProgHolder(null);
           }
       }
-      if (BooleanUtils.isFalse(studyIndldeWebDTO.getExemptIndicator())) {
+      /*if (BooleanUtils.isFalse(studyIndldeWebDTO.getExemptIndicator())) {
          Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
                 Constants.STUDY_PROTOCOL_II);
          StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(studyProtocolIi);
@@ -314,20 +332,20 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
                  + " set to 'No', "
                  + " Please update Regulatory Information from Administrative Data menu and try again");
          }
-       }
+       }*/
     }
 
     /**
      * @param studyProtocolDTO
      * @return
      */
-    private boolean isCorrelationRuleRequired(StudyProtocolDTO studyProtocolDTO) {
+    /*private boolean isCorrelationRuleRequired(StudyProtocolDTO studyProtocolDTO) {
         Boolean ctGovIndicator = BlConverter.convertToBoolean(studyProtocolDTO.getCtgovXmlRequiredIndicator());
         return BooleanUtils.isTrue(ctGovIndicator) && (studyProtocolDTO.getIdentifier() != null
                 && studyProtocolDTO.getFdaRegulatedIndicator() != null)
                 && (studyProtocolDTO.getFdaRegulatedIndicator().getValue() != null)
                 && (!Boolean.valueOf(studyProtocolDTO.getFdaRegulatedIndicator().getValue()));
-    }
+    }*/
 
     /**
      *
@@ -341,6 +359,22 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
               }
           }
     }
+    
+    /**
+     * 
+     */
+    private void validateExpandedAccessNctId() {
+        if (StringUtils.isNotBlank(studyIndldeWebDTO.getExpandedAccessNctId())) {
+            Pattern expandedAccessRecordPattern = Pattern.compile("^NCT[0-9]{8}$");
+            Matcher expandedAccessRecordMatch = expandedAccessRecordPattern.matcher(
+                    studyIndldeWebDTO.getExpandedAccessNctId());
+            if (!expandedAccessRecordMatch.matches()) {
+                addFieldError("studyIndldeWebDTO.expandedAccessNctId", 
+                        getText("error.trialIndide.expandedAccessNctId"));
+            }
+        }
+    }
+    
     /**
      * @return cbValue
      */
