@@ -243,7 +243,7 @@ public class TrialInfoMergeHelperTest {
         assertEquals(webDTO.getExpandedAccessIndicator(), trialIndIdeDto.getExpandedAccessIndicator());
     }*/
     
-    @Test(expected=PAException.class)
+    @Test //(expected=PAException.class)
     public void microServiceUnavailableTrialIndIdeTest() throws PAException {
         helper.setClient(client);
         when(client.sendHTTPRequest(url + "/null", "GET", null)).thenThrow(new PAException("Error: Unable to get response from Rest server @ " + url));
