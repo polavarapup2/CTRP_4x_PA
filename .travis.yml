@@ -65,7 +65,7 @@ after_success:
   #Trigger Travis bdd tests
   - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json"
     -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN"
-    -d "{\"request\":{\"message\":\"Triggered by CTRP_4x_PA $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=ctrp_4x_pa;TRIGGER_VER=$DATE;CUC_TAG=@pa;AUTHOR=$AUTHOR\"]}}}}"
+    -d "{\"request\":{\"message\":\"Triggered by CTRP_4x_PA $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=ctrp_4x_pa;TRIGGER_VER=$DATE;CUC_TAG=@PA;AUTHOR=$AUTHOR\"]}}}}"
     https://api.travis-ci.org/repo/CBIIT%2Fctrp-bddtests/requests
 
 # after_script:
