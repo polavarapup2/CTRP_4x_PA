@@ -167,7 +167,9 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     private String maxValueUnit;
     private String gender;
     private String genderEligibilityDescription;
+    private String lastUpdatedDate;
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private String msId;
     /**
      *
      * @return String
@@ -180,17 +182,25 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 .getAttribute(Constants.STUDY_PROTOCOL_II);
             List<PlannedEligibilityCriterionDTO> pecList = PaRegistry.getPlannedActivityService()
                 .getPlannedEligibilityCriterionByStudyProtocol(studyProtocolIi);
+            StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
+                    .getAttribute(Constants.TRIAL_SUMMARY);
             if (CollectionUtils.isNotEmpty(pecList)) {
                 list = new ArrayList<ISDesignDetailsWebDTO>();
                 for (PlannedEligibilityCriterionDTO dto : pecList) {
                     list.add(setEligibilityDetailsDTO(dto, studyProtocolIi));
                 }
+                ISDesignDetailsWebDTO microServiceDto = setMicroServiceDataDTO(studyProtocolIi, spqDTO
+                        .getNciIdentifier());
+                if (microServiceDto != null && microServiceDto.getGender() != null) {
+                    list.add(microServiceDto);
+                }
                 if (list.size() > RECORDSVALUE) {
                     eligibilityList = new ArrayList<ISDesignDetailsWebDTO>();
                     for (ISDesignDetailsWebDTO weblist : list) {
-                        if (weblist.getCriterionName() == null
+                        if ((weblist.getCriterionName() == null
                                 || !weblist.getCriterionName().equalsIgnoreCase("GENDER")
-                                && !weblist.getCriterionName().equalsIgnoreCase("AGE")) {
+                                && !weblist.getCriterionName().equalsIgnoreCase("AGE"))
+                                && weblist.getGender() == null) {
                             eligibilityList.add(weblist);
                         }
                     }
@@ -202,8 +212,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
             if (spDTO.getAcceptHealthyVolunteersIndicator().getValue() != null) {
                 acceptHealthyVolunteersIndicator = spDTO.getAcceptHealthyVolunteersIndicator().getValue().toString();
             }
-            StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
-                .getAttribute(Constants.TRIAL_SUMMARY);
+            
             if (spqDTO.getStudyProtocolType().equalsIgnoreCase("NonInterventionalStudyProtocol")) {
                 NonInterventionalStudyProtocolDTO ospDTO = PaRegistry.getStudyProtocolService()
                     .getNonInterventionalStudyProtocol(studyProtocolIi);
@@ -223,6 +232,16 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         return ELIGIBILITY;
     }
 
+    private ISDesignDetailsWebDTO setMicroServiceDataDTO(Ii studyProtocolIi, String nciId) throws PAException {
+        ISDesignDetailsWebDTO webDto = helper.mergeEligibilityCriteriaRead(studyProtocolIi, nciId);
+        if (webDto != null) {
+            gender = webDto.getGender();
+            genderEligibilityDescription = webDto.getGenderEligibilityDescription();
+            lastUpdatedDate = webDto.getLastUpdatedDate();
+            msId = webDto.getId();
+        }
+        return webDto;
+    }
     /**
      * @return res
      */
@@ -250,7 +269,19 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
             spDTO.setAcceptHealthyVolunteersIndicator(BlConverter.convertToBl(Boolean
                 .valueOf(acceptHealthyVolunteersIndicator)));
             spDTO = PaRegistry.getStudyProtocolService().updateStudyProtocol(spDTO);
-
+            
+            try {
+                if (gender != null) {
+                    ISDesignDetailsWebDTO genderwebDto = new ISDesignDetailsWebDTO();
+                    genderwebDto.setGender(gender);
+                    genderwebDto.setGenderEligibilityDescription(genderEligibilityDescription);
+                    genderwebDto.setLastUpdatedDate(lastUpdatedDate);
+                    genderwebDto.setId(msId);
+                    helper.mergeEligibilityCriteriaUpdate(studyProtocolIi, spqDTO.getNciIdentifier(), genderwebDto);
+                }
+            } catch (PAException e) {
+                ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
+            }
             PlannedEligibilityCriterionDTO pecDTOGender = new PlannedEligibilityCriterionDTO();
             PlannedEligibilityCriterionDTO pecDTOAge = new PlannedEligibilityCriterionDTO();
 
@@ -662,9 +693,6 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 webdto.setCdeCategoryCode(dto.getSubcategoryCode().getCode());
             }
         }
-        //helper.mergeEligibilityCriteriaRead(studyProtocolIi, nciId, webdto);
-        gender = webdto.getGender();
-        genderEligibilityDescription = webDTO.getGenderEligibilityDescription();
         return webdto;
     }
     @SuppressWarnings({ "PMD.NPathComplexity" })
@@ -731,6 +759,11 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                     addFieldError(strMinVal, "Minimum age should not be greater than maximum age.");
                 }
             }
+        }
+        if (!StringUtils.isEmpty(eligibleGenderCode) 
+                && (StringUtils.endsWithIgnoreCase("Male", eligibleGenderCode) 
+                || StringUtils.endsWithIgnoreCase("Female", eligibleGenderCode)) && StringUtils.isEmpty(gender)) {
+            addFieldError("gender", getText("error.gender"));
         }
     }
 
@@ -1189,5 +1222,34 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     public void setHelper(TrialInfoMergeHelper helper) {
         this.helper = helper;
     }
+    /**
+     * 
+     * @return lastUpdatedDate
+     */
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+    /**
+     * 
+     * @param lastUpdatedDate lastUpdatedDate
+     */
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+    /**
+     * 
+     * @return msId
+     */
+    public String getMsId() {
+        return msId;
+    }
+    /**
+     * 
+     * @param msId the msId
+     */
+    public void setMsId(String msId) {
+        this.msId = msId;
+    }
+    
     
  }

@@ -29,13 +29,13 @@ public class PaWebUtilMarshallJsonRunnerTest {
     }
     
     @Parameterized.Parameters
-    public static Collection primeNumbers() {
-        String result1 = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
+    public static Collection collectionTestData() {
+        String result = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
                 + "\"fda_regulated_device\":\"true\""
                 + ",\"post_prior_to_approval\":\"true\""
-                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}";
+                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\",\"id\":\"1\"}";
         
-        String result2 = "{\"study_protocol_id\":1,\"trial_indide_id\":123,\"expanded_access_indicator\":\"Yes\","
+        String result2 = "{\"id\":\"1\",\"study_protocol_id\":\"1\",\"trial_ide_ind_id\":\"123\",\"expanded_access_indicator\":\"Yes\","
                 + "\"expanded_access_nct_id\":\"NCT12345678\",\"date_updated\":null}";
         AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
         additionalRegInfoDTO.setExported_from_us("true");
@@ -44,20 +44,22 @@ public class PaWebUtilMarshallJsonRunnerTest {
         additionalRegInfoDTO.setPed_postmarket_surv("true");
         additionalRegInfoDTO.setPost_prior_to_approval("true");
         additionalRegInfoDTO.setDate_updated("1234455");
+        additionalRegInfoDTO.setId("1");
         
         AdditionalTrialIndIdeDTO addTrialIndIdeDto = new AdditionalTrialIndIdeDTO();
-        addTrialIndIdeDto.setStudyProtocolId(1L);
-        addTrialIndIdeDto.setTrialIndIdeId(123L);
+        addTrialIndIdeDto.setStudyProtocolId("1");
+        addTrialIndIdeDto.setTrialIndIdeId("123");
         addTrialIndIdeDto.setExpandedAccessIndicator("Yes");
         addTrialIndIdeDto.setExpandedAccessNctId("NCT12345678");
+        addTrialIndIdeDto.setId("1");
         return Arrays.asList(new Object[][] {
-            { additionalRegInfoDTO, result1 },
+            { additionalRegInfoDTO, result },
             { addTrialIndIdeDto, result2 }
         });
     }
 
     @Test
-    public void isValidBooleanStringTest() throws IOException {
+    public void marshallTest() throws IOException {
         String jsonStr = PAWebUtil.marshallJSON(obj);
         assertEquals(jsonStr, expectedResult);
     }

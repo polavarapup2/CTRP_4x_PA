@@ -124,6 +124,10 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
     private String gender;
     private String genderEligibilityDescription;
     private String lastUpdatedDate;
+    private String modelDescription;
+    private String maskingDescription;
+    private String id;
+    
     /**
      *
      * @return outcomeMeasure
@@ -487,4 +491,49 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
     public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
+    
+    /**
+     * 
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * 
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+    /**
+     * 
+     * @return modelDescription
+     */
+    public String getModelDescription() {
+        return modelDescription;
+    }
+    /**
+     * 
+     * @param modelDescription the modelDescription
+     */
+    public void setModelDescription(String modelDescription) {
+        this.modelDescription = modelDescription;
+    }
+    /**
+     * 
+     * @return maskingDescription
+     */
+    public String getMaskingDescription() {
+        return maskingDescription;
+    }
+    /**
+     * 
+     * @param maskingDescription the maskingDescription
+     */
+    public void setMaskingDescription(String maskingDescription) {
+        this.maskingDescription = maskingDescription;
+    }
+    
+    
 }

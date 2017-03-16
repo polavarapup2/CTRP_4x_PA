@@ -1,8 +1,6 @@
 package gov.nih.nci.pa.dto;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-
 /**
  * 
  * @author Purnima, Reshma
@@ -12,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @SuppressWarnings("PMD")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdditionalRegulatoryInfoDTO { // NOPMD
-    private Long study_protocol_id;
+    private String study_protocol_id;
     private String nci_id;
     private String fda_regulated_drug;
     private String fda_regulated_device;
@@ -20,6 +18,8 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     private String ped_postmarket_surv;
     private String exported_from_us;
     private String date_updated;
+    private String id;
+    
     /**
      * Constructor 
      */
@@ -36,11 +36,12 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
      * @param ped_postmarket_surv the ped_postmarket_surv
      * @param exported_from_us the exported_from_us
      * @param date_updated the date_updated
+     * @param id the id
      */
-    public AdditionalRegulatoryInfoDTO(Long study_protocol_id, String nci_id,
+    public AdditionalRegulatoryInfoDTO(String study_protocol_id, String nci_id,
             String fda_regulated_drug, String fda_regulated_device,
             String post_prior_to_approval, String ped_postmarket_surv,
-            String exported_from_us, String date_updated) {
+            String exported_from_us, String date_updated, String id) {
         super();
         this.study_protocol_id = study_protocol_id;
         this.nci_id = nci_id;
@@ -50,19 +51,20 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
         this.ped_postmarket_surv = ped_postmarket_surv;
         this.exported_from_us = exported_from_us;
         this.date_updated = date_updated;
+        this.id = id;
     }
     /**
      * 
      * @return study_protocol_id
      */
-    public Long getStudy_protocol_id() {
+    public String getStudy_protocol_id() {
         return study_protocol_id;
     }
     /**
      * 
      * @param study_protocol_id the study_protocol_id
      */
-    public void setStudy_protocol_id(Long study_protocol_id) {
+    public void setStudy_protocol_id(String study_protocol_id) {
         this.study_protocol_id = study_protocol_id;
     }
     /**
@@ -163,19 +165,20 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     public void setDate_updated(String date_updated) {
         this.date_updated = date_updated;
     }
+    
     /**
-     * return String value
+     * 
+     * @return id
      */
-    @Override
-    public String toString() {
-        return "AdditionalRegulatoryInfoDTO [study_protocol_id="
-                + study_protocol_id + ", nci_id=" + nci_id
-                + ", fda_regulated_drug=" + fda_regulated_drug
-                + ", fda_regulated_device=" + fda_regulated_device
-                + ", post_prior_to_approval=" + post_prior_to_approval
-                + ", ped_postmarket_surv=" + ped_postmarket_surv
-                + ", exported_from_us=" + exported_from_us + ", date_updated="
-                + date_updated + "]";
+    public String getId() {
+        return id;
+    }
+    /**
+     * 
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
   //CHECKSTYLE:ON
 }

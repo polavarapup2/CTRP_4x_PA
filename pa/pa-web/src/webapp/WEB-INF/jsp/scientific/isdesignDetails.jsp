@@ -295,6 +295,21 @@ function initialize() {
         </td>
 	</tr>
 	<tr>
+	   <td scope="row" class="label"> 
+	       <label for="modelDesc"><fmt:message key="isdesign.details.intervention.model.desc"/></label>
+	   </td>
+	   <td class="value">
+            <s:textarea id="modelDesc" name="webDTO.modelDescription" rows="3" cssStyle="width:250px" maxlength="1000" cssClass="charcounter" />
+            <span class="formErrorMsg"> 
+                    <s:fielderror>
+                    <s:param>webDTO.modelDescription</s:param>
+                   </s:fielderror>                            
+             </span>
+	   </td>
+	</tr>
+	
+	
+	<tr>
 		<td scope="row" class="label"><label for="interventionGroup">
 	 		<fmt:message key="isdesign.details.no.arms"/><span class="required">${asterisk}</span></label></td>
 		<td>
@@ -306,6 +321,7 @@ function initialize() {
           </span>
         </td>
 	</tr>
+	<!-- 
     <tr>
 		<td scope="row" class="label"><label for="masking">
 	 		<fmt:message key="isdesign.details.masking"/><span class="required">${asterisk}</span></label></td>
@@ -320,6 +336,7 @@ function initialize() {
           </span>
          </td>
 	</tr>
+	 -->
 	<tr id="blindingRoleCode">
 		<td   scope="row" class="label"><fmt:message key="isdesign.details.masking.role"/></td>
 		<td>
@@ -327,13 +344,15 @@ function initialize() {
 		      <tr>
 		          <td style="padding: 0 0 0 0;" nowrap="nowrap">
 			           <s:checkbox id="subject" name="subject" fieldValue="Subject"  value="%{subjectChecked}" />
-			           <label for="subject">Subject</label>
+			           <label for="subject">Participant</label>
 					   <s:checkbox id="investigator" name="investigator" fieldValue="Investigator"  value="%{investigatorChecked}" />
 					   <label for="investigator">Investigator</label>
 					   <s:checkbox id="caregiver" name="caregiver" fieldValue="Caregiver"  value="%{caregiverChecked}" />
-					   <label for="caregiver">Caregiver</label>
+					   <label for="caregiver">Care Provider</label>
 					   <s:checkbox id="outcomesassessor" name="outcomesassessor" fieldValue="Outcomes Assessor"  value="%{outcomesAssessorChecked}" />
 					   <label for="outcomesassessor">Outcomes Assessor</label>
+					   <s:checkbox id="nomasking" name="nomasking" fieldValue="No Masking"  value="%{nomaskingChecked}" />
+                       <label for="outcomesassessor">No Masking</label>
 				   </td>
 			  </tr>  
 			  <tr>                
@@ -346,6 +365,20 @@ function initialize() {
           </table>
          </td>
 	</tr>	
+	   <tr>
+       <td scope="row" class="label"> 
+           <label for="maskingDesc"><fmt:message key="isdesign.details.intervention.masking.desc"/></label>
+       </td>
+       <td class="value">
+            <s:textarea id="maskingDesc" name="webDTO.maskingDescription" rows="3" cssStyle="width:250px" maxlength="1000" cssClass="charcounter" />
+            <span class="formErrorMsg"> 
+                    <s:fielderror>
+                    <s:param>webDTO.maskingDescription</s:param>
+                   </s:fielderror>                            
+             </span>
+       </td>
+    </tr>
+    <!-- 
 	<tr> 
         <td scope="row" class="label"><label for="allocation">
 	 		<fmt:message key="isdesign.details.allocation"/><span class="required">${asterisk}</span></label> </td>
@@ -359,6 +392,7 @@ function initialize() {
           </span>
         </td>
     </tr>
+     -->
     <tr>
 		<td scope="row" class="label"><label for="classification">
 	 		<fmt:message key="isdesign.details.trial.classification"/></label></td>

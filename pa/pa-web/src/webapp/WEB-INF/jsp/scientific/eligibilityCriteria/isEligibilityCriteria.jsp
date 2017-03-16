@@ -187,6 +187,8 @@ BubbleTips.activateTipOn("dfn");
 	       </td>
 	    </tr>
     </c:if>
+    <s:hidden id="lastUpdatedDate" name="lastUpdatedDate"> </s:hidden>
+    <s:hidden id="msId" name="msId"> </s:hidden>
     <tr>
         <td scope="row"  class="label"><label for="acceptHealthy">
             <fmt:message key="isdesign.eligibilitycriteria.ahv"/><span class="required">${asterisk}</span></label>

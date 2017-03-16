@@ -105,7 +105,7 @@ public class StudyIndldeWebDTO implements Serializable {
     //private String expandedAccessRecord;
     //private Boolean exemptIndicator;
     private String dateUpdated;
-
+    private String msId;
     /**
      * @param iso StudyResourcingDTO object
      */
@@ -337,6 +337,20 @@ public class StudyIndldeWebDTO implements Serializable {
     public void setDateUpdated(String dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
-
+    /**
+     * 
+     * @return msId
+     */
+    public String getMsId() {
+        return msId;
+    }
+    /**
+     * 
+     * @param msId the msId
+     */
+    public void setMsId(String msId) {
+        this.msId = msId;
+    }
+    
 }
 

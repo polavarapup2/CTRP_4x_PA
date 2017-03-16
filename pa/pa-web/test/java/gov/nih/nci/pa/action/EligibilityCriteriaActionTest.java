@@ -3,13 +3,20 @@ package gov.nih.nci.pa.action;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import gov.nih.nci.pa.dto.AdditionalEligibilityCriteriaDTO;
 import gov.nih.nci.pa.dto.ISDesignDetailsWebDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.enums.UnitsCode;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
+import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
+import gov.nih.nci.pa.util.RestClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +28,13 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     EligibilityCriteriaAction eligibilityCriteriaAction;
     StudyProtocolQueryDTO spDTO;  
     ISDesignDetailsWebDTO dto;
+    private AdditionalEligibilityCriteriaDTO additionalDTO = new AdditionalEligibilityCriteriaDTO();
+    private String url;
+    private RestClient client = mock(RestClient.class);
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private List<AdditionalEligibilityCriteriaDTO> eligibilityDtoList = new ArrayList<AdditionalEligibilityCriteriaDTO>();
     @Before
-    public void setUp(){
+    public void setUp() throws PAException, IOException{
         eligibilityCriteriaAction = new EligibilityCriteriaAction();
        
         spDTO = new StudyProtocolQueryDTO();
@@ -32,6 +44,19 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
         
         dto = new ISDesignDetailsWebDTO();
         eligibilityCriteriaAction.setWebDTO(dto);
+        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        additionalDTO.setGender("Yes");
+        additionalDTO.setGenderEligibilityDescription("Desc1");
+        additionalDTO.setStudyProtocolId("1");
+        additionalDTO.setNciId("NCI-2000-12222");
+        eligibilityDtoList.add(additionalDTO);
+        
+        String responseStr = PAWebUtil.marshallJSON(eligibilityDtoList);
+        when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(responseStr);
+        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalDTO))).thenReturn("");
+        when(client.sendHTTPRequest(url + "/1", "PUT",  PAWebUtil.marshallJSON(additionalDTO))).thenReturn("");
+        helper.setClient(client);    
+        eligibilityCriteriaAction.setHelper(helper);
     }
     
     @Test
@@ -56,9 +81,13 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     	eligibilityCriteriaAction.setEligibleGenderCode("male");
     	eligibilityCriteriaAction.setEligibleGenderCodeId("1");
     	eligibilityCriteriaAction.setMaximumValue("45");
+    	eligibilityCriteriaAction.setMaxValueUnit("Years");
     	eligibilityCriteriaAction.setMinimumValue("23");
-    	eligibilityCriteriaAction.setValueUnit("years");
+    	eligibilityCriteriaAction.setMinValueUnit("Years");
+    	eligibilityCriteriaAction.setValueUnit("10");
     	eligibilityCriteriaAction.setValueId("1");
+    	eligibilityCriteriaAction.setGender("Yes");
+    	eligibilityCriteriaAction.setGenderEligibilityDescription("Desc1");
     	assertEquals("eligibility",eligibilityCriteriaAction.save());
     }
     @Test

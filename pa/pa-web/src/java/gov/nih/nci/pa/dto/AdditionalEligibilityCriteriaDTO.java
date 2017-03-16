@@ -17,9 +17,11 @@ public class AdditionalEligibilityCriteriaDTO {
     @JsonProperty("date_updated")
     private String dateUpdated;
     @JsonProperty("study_protocol_id")
-    private Long studyProtocolId;
+    private String studyProtocolId;
     @JsonProperty("nci_id")
     private String nciId;
+    @JsonProperty("id")
+    private String id;
     
     /**
      * constructor
@@ -89,14 +91,14 @@ public class AdditionalEligibilityCriteriaDTO {
      * 
      * @return studyProtocolId
      */
-    public Long getStudyProtocolId() {
+    public String getStudyProtocolId() {
         return studyProtocolId;
     }
     /**
      * 
      * @param studyProtocolId the studyProtocolId
      */
-    public void setStudyProtocolId(Long studyProtocolId) {
+    public void setStudyProtocolId(String studyProtocolId) {
         this.studyProtocolId = studyProtocolId;
     }
     /**
@@ -112,6 +114,20 @@ public class AdditionalEligibilityCriteriaDTO {
      */
     public void setNciId(String nciId) {
         this.nciId = nciId;
+    }
+    /**
+     * 
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * 
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
     /**
      * @return String value

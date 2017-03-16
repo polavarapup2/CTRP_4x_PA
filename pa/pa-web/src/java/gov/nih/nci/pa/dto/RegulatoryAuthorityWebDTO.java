@@ -102,7 +102,7 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     private String pedPostmarketSurv;
     private String exportedFromUs;
     private String lastUpdatedDate;
-    
+    private String id;
 
     /**
      * @return the trialOversgtAuthCountry
@@ -275,5 +275,19 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
-
+    
+    /**
+     * 
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * 
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 }

@@ -118,13 +118,15 @@ public class RestClient {
         urlConnection.setReadTimeout(HTTP_TIME_OUT);
         urlConnection.setRequestMethod(method);
         urlConnection.setRequestProperty("Accept", "application/json");
-        urlConnection.setRequestProperty("Content-type", "application/json");
+        urlConnection.setRequestProperty("Content-Type", "application/json");
         urlConnection.setDoOutput(true);
 
-        if (StringUtils.equals(method, "POST") && postBody != null && postBody.length() > 0) {
+        if ((StringUtils.equals(method, "POST") || StringUtils.equals(method, "PUT") 
+                || StringUtils.equals(method, "DELETE"))
+                && postBody != null && postBody.length() > 0) {
             LOG.debug("postBody: " + postBody);
             setPostBody(urlConnection, postBody);
-        }
+        } 
         return urlConnection;
     }
 

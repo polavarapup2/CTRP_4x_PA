@@ -11,10 +11,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdditionalTrialIndIdeDTO {
     @JsonProperty("study_protocol_id")
-    private Long studyProtocolId;
+    private String studyProtocolId;
     
-    @JsonProperty("trial_indide_id")
-    private Long trialIndIdeId;
+    @JsonProperty("trial_ide_ind_id")
+    private String trialIndIdeId;
     
     @JsonProperty("expanded_access_indicator")
     private String expandedAccessIndicator;
@@ -24,6 +24,9 @@ public class AdditionalTrialIndIdeDTO {
     
     @JsonProperty("date_updated")
     private String dateUpdated;
+    
+    @JsonProperty("id")
+    private String id;
 
     /**
      * Constructor 
@@ -39,7 +42,7 @@ public class AdditionalTrialIndIdeDTO {
      * @param expandedAccessIndicator the expandedAccessIndicator
      * @param expandedAccessNctId the expandedAccessNctId
      */
-    public AdditionalTrialIndIdeDTO(Long studyProtocolId, Long trialIndIdeId, String expandedAccessIndicator,
+    public AdditionalTrialIndIdeDTO(String studyProtocolId, String trialIndIdeId, String expandedAccessIndicator,
             String expandedAccessNctId) {
         super();
         this.studyProtocolId = studyProtocolId;
@@ -52,7 +55,7 @@ public class AdditionalTrialIndIdeDTO {
      * 
      * @return studyProtocolId
      */
-    public Long getStudyProtocolId() {
+    public String getStudyProtocolId() {
         return studyProtocolId;
     }
 
@@ -60,7 +63,7 @@ public class AdditionalTrialIndIdeDTO {
      * 
      * @param studyProtocolId the studyProtocolId
      */
-    public void setStudyProtocolId(Long studyProtocolId) {
+    public void setStudyProtocolId(String studyProtocolId) {
         this.studyProtocolId = studyProtocolId;
     }
     
@@ -68,7 +71,7 @@ public class AdditionalTrialIndIdeDTO {
      * 
      * @return trialIndIdeId
      */
-    public Long getTrialIndIdeId() {
+    public String getTrialIndIdeId() {
         return trialIndIdeId;
     }
 
@@ -76,7 +79,7 @@ public class AdditionalTrialIndIdeDTO {
      * 
      * @param trialIndIdeId the trialIndIdeId
      */
-    public void setTrialIndIdeId(Long trialIndIdeId) {
+    public void setTrialIndIdeId(String trialIndIdeId) {
         this.trialIndIdeId = trialIndIdeId;
     }
 
@@ -128,6 +131,20 @@ public class AdditionalTrialIndIdeDTO {
         this.dateUpdated = dateUpdated;
     }
 
+    /**
+     * 
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+    /**
+     * 
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
     /**
      * @return String the concatenated String of all the fields
      */

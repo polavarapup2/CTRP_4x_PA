@@ -26,6 +26,7 @@ import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.service.util.LookUpTableServiceRemote;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
@@ -47,8 +48,8 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
     List<Long> identifiersList = new ArrayList<Long>();
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
     Map<Long, String> identifierMap = new HashMap<Long, String>();
-    private String url = "http://192.168.99.100:3100/api/v1/data_clinical_trials";
-    private final LookUpTableServiceRemote lookUpTableService = mock(LookUpTableServiceRemote.class);
+    private String url;
+    private List<AdditionalRegulatoryInfoDTO> regulatoryDtoList = new ArrayList<AdditionalRegulatoryInfoDTO>();
     
     @Before
     public void setUp() throws PAException, IOException {
@@ -70,10 +71,10 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         additionalRegInfoDTO.setPed_postmarket_surv("true");
         additionalRegInfoDTO.setPost_prior_to_approval("true");
         additionalRegInfoDTO.setDate_updated("1234455");
-        when(lookUpTableService
-                .getPropertyValue("data-clinicaltrials-api")).thenReturn(url);
-        when(client.sendHTTPRequest(url +"/1", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(additionalRegInfoDTO));
+        regulatoryDtoList.add(additionalRegInfoDTO);
+        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        when(client.sendHTTPRequest(url +"?study_protocol_id=1&nci_id=\" + \"NCI-1000-0000\"", "GET", null)).thenReturn(
+                PAWebUtil.marshallJSON(regulatoryDtoList));
         when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");
         helper.setClient(client);
 
@@ -180,7 +181,6 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         assertTrue(regulatoryInformationAction.hasFieldErrors());
         assertEquals("Section 801 Indicator should be No for Non-interventional trials", 
                 regulatoryInformationAction.getFieldErrors().get("webDTO.section801Indicator").get(0)); 
-        
     }
     
     

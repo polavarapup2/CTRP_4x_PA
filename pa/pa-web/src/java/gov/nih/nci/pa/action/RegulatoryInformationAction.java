@@ -264,18 +264,6 @@ public class RegulatoryInformationAction extends ActionSupport {
     }
 
     /**
-     * public String getRegAuthoritiesList() { try { String countryId =
-     * ServletActionContext.getRequest().getParameter("countryid"); if
-     * (countryId != null && !("".equals(countryId))) { regIdAuthOrgList =
-     * PaRegistry
-     * .getRegulatoryInformationService().getRegulatoryAuthorityNameId(
-     * Long.valueOf(countryId)); } else { RegulatoryAuthOrgDTO defaultVal = new
-     * RegulatoryAuthOrgDTO(); defaultVal.setName("-Select Country-");
-     * regIdAuthOrgList.add(defaultVal); }
-     * 
-     * } catch (PAException e) { return SUCCESS; } return SUCCESS; }
-     */
-    /**
      * @return the countryList
      */
     public List<CountryRegAuthorityDTO> getCountryList() {

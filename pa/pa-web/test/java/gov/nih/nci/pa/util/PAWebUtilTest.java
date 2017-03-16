@@ -30,9 +30,9 @@ public class PAWebUtilTest {
     
     @Test
     public void unmarshallJSONTrialIndIdeTest() {
-        String jsonString = "[{ \"study_protocol_id\":1234567, \"trial_indide_id\":12345, \"expanded_access_indicator\":\"Yes\", "
+        String jsonString = "[{\"study_protocol_id\":\"1234567\", \"trial_ide_ind_id\":\"12345\", \"expanded_access_indicator\":\"Yes\", "
                 + "\"expanded_access_nct_id\":\"NCT12345678\"}, "
-                + "{\"trial_indide_id\":\"22345\", \"expanded_access_indicator\":\"Unknown\", "
+                + "{\"trial_ide_ind_id\":\"22345\", \"expanded_access_indicator\":\"Unknown\", "
                 + "\"expanded_access_nct_id\":\"NCT22345678\"}, "
                 + "{\"study_protocol_id\":2345646,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
                         + "\"fda_regulated_device\":\"true\""
@@ -41,11 +41,9 @@ public class PAWebUtilTest {
         List<AdditionalTrialIndIdeDTO> trialIndIdeDtoList = (List<AdditionalTrialIndIdeDTO>) PAWebUtil.unmarshallJSON(
                 jsonString, new TypeReference<List<AdditionalTrialIndIdeDTO>>() { });
         assertTrue(trialIndIdeDtoList != null && trialIndIdeDtoList.size() == 3);
-        assertTrue(trialIndIdeDtoList.get(0).getTrialIndIdeId() == 12345);
         assertTrue(StringUtils.equals(trialIndIdeDtoList.get(0).getExpandedAccessIndicator(), "Yes"));
         assertTrue(StringUtils.equals(trialIndIdeDtoList.get(0).getExpandedAccessNctId(), "NCT12345678"));
         
-        assertTrue(trialIndIdeDtoList.get(1).getTrialIndIdeId() == 22345);
         assertTrue(StringUtils.equals(trialIndIdeDtoList.get(1).getExpandedAccessIndicator(), "Unknown"));
         assertTrue(StringUtils.equals(trialIndIdeDtoList.get(1).getExpandedAccessNctId(), "NCT22345678"));
         

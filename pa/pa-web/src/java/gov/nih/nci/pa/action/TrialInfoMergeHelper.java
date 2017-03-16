@@ -37,6 +37,15 @@ public class TrialInfoMergeHelper {
      */
     private static final String POST = "POST";
     /**
+     * PUT
+     */
+    private static final String PUT = "PUT";
+    
+    /**
+     * DELETE
+     */
+    private static final String DELETE = "DELETE";
+    /**
      * ERROR_MESSAGE
      */
     private static final String ERROR_MESSAGE = "Error in getting the response from microservices.";
@@ -97,6 +106,7 @@ public class TrialInfoMergeHelper {
                 webDto.setPostPriorToApproval(regulatoryDto.getPost_prior_to_approval());
             }
             webDto.setLastUpdatedDate(regulatoryDto.getDate_updated());
+            webDto.setId(regulatoryDto.getId());
         }
     }
 
@@ -126,14 +136,23 @@ public class TrialInfoMergeHelper {
                 .setPost_prior_to_approval(webDto.getPostPriorToApproval());
         regulatoryDto.setDate_updated(webDto.getLastUpdatedDate());
         regulatoryDto.setStudy_protocol_id(IiConverter
-                .convertToLong(studyProtocolIi));
+                .convertToString(studyProtocolIi));
         regulatoryDto.setNci_id(nciId);
+        regulatoryDto.setId(webDto.getId());
         try {
             String postBody = PAWebUtil.marshallJSON(regulatoryDto);
-            String response = client.sendHTTPRequest(PaEarPropertyReader
-                    .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
-            regulatoryDto = (AdditionalRegulatoryInfoDTO) PAWebUtil
+            String response = "";
+            if (webDto.getId() == null) {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            } else {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl() + "/" + webDto.getId(), PUT, postBody);
+            }
+            if (response != null) {
+                regulatoryDto = (AdditionalRegulatoryInfoDTO) PAWebUtil
                     .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
+            }
         } catch (Exception e) {
             LOG.error(
                     "Error in updating additional Regulatory info in rest service for the study protocol id: "
@@ -157,27 +176,54 @@ public class TrialInfoMergeHelper {
                 + "?study_protocol_id=" + studyProtocolId + "&nci_id=" + nciId;
         return (client.sendHTTPRequest(url, GET, null));
     }
+
+    /**
+     * 
+     * @param studyProtocolId the studyProtocolId
+     * @param trialINDId the trialINDId
+     * @return String response
+     * @throws PAException exception
+     */
+    public String getHTTPResponseForStudyWithTrialInd(String studyProtocolId, String trialINDId) throws PAException {
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl()
+                + "?study_protocol_id=" + studyProtocolId + "&trial_ide_ind_id=" + trialINDId;
+        return (client.sendHTTPRequest(url, GET, null));
+    } 
+    
+    
+    /**
+     * 
+     * @param studyProtocolId the studyProtocolId
+     * @return String response
+     * @throws PAException exception
+     */
+    public String getHTTPResponseWithSPID(String studyProtocolId) throws PAException {
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl()
+                + "?study_protocol_id=" + studyProtocolId;
+        return (client.sendHTTPRequest(url, GET, null));
+    }
     /**
      * 
      * @param studyProtocolIi the studyProtocolIi
-     * @param nciId the nciId
-     * @param webDto the webDto
+     * @param nciId nciId
+     * @return webDto
      * @throws PAException the exception
      */
-    public void mergeEligibilityCriteriaRead(Ii studyProtocolIi, String nciId,
-            ISDesignDetailsWebDTO webDto) throws PAException {
+    public ISDesignDetailsWebDTO mergeEligibilityCriteriaRead(Ii studyProtocolIi, String nciId) throws PAException {
         LOG.info("Getting Eligibility Criteria data info from new DB"
                 + IiConverter.convertToString(studyProtocolIi));
         String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
+        ISDesignDetailsWebDTO webDto = new ISDesignDetailsWebDTO();
         AdditionalEligibilityCriteriaDTO eligibilityDto = new AdditionalEligibilityCriteriaDTO();
         try {
             String response = getHTTPResponseForStudyProtocol(studyProtocolId, nciId);
+            
             if (response != null) {
-                List<AdditionalEligibilityCriteriaDTO> eligDtoList = 
-                        (List<AdditionalEligibilityCriteriaDTO>) PAWebUtil.unmarshallJSON(response, 
-                                new TypeReference<List<AdditionalEligibilityCriteriaDTO>>() { });
-                if (eligDtoList != null && eligDtoList.size() == 1) {
-                    eligibilityDto = eligDtoList.get(0);
+                List<AdditionalEligibilityCriteriaDTO> eligibilityDtoList = 
+                        (List<AdditionalEligibilityCriteriaDTO>) PAWebUtil
+                    .unmarshallJSON(response, new TypeReference<List<AdditionalEligibilityCriteriaDTO>>() { });
+                if (eligibilityDtoList != null && eligibilityDtoList.size() == 1) {
+                    eligibilityDto = eligibilityDtoList.get(0);
                 }
             }
         } catch (Exception e) {
@@ -190,9 +236,53 @@ public class TrialInfoMergeHelper {
             }
             webDto.setGenderEligibilityDescription(eligibilityDto.getGenderEligibilityDescription());
             webDto.setLastUpdatedDate(eligibilityDto.getDateUpdated());
+            webDto.setId(eligibilityDto.getId());
         }
-        
+        return webDto;
     }
+    
+    /**
+     * 
+     * @param studyProtocolIi studyProtocolIi
+     * @param nciId nciId
+     * @param webDto webDto
+     * @return eligibilityDto 
+     * @throws PAException PAException
+     */
+    public AdditionalEligibilityCriteriaDTO mergeEligibilityCriteriaUpdate(
+            Ii studyProtocolIi, String nciId, ISDesignDetailsWebDTO webDto) throws PAException {
+        LOG.info("Updating Eligibility criteria to new DB"
+                + IiConverter.convertToString(studyProtocolIi));
+        AdditionalEligibilityCriteriaDTO eligibilityDto = new AdditionalEligibilityCriteriaDTO();
+        eligibilityDto.setGender(webDto.getGender());
+        eligibilityDto.setGenderEligibilityDescription(webDto.getGenderEligibilityDescription());
+        eligibilityDto.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
+        eligibilityDto.setNciId(nciId);
+        eligibilityDto.setDateUpdated(webDto.getLastUpdatedDate());
+        eligibilityDto.setId(webDto.getId());
+        try {
+            String postBody = PAWebUtil.marshallJSON(eligibilityDto);
+            String response = "";
+            if (webDto.getId() == null) {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            } else {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl() + "/" + webDto.getId(), PUT, postBody);
+            }
+            eligibilityDto = (AdditionalEligibilityCriteriaDTO) PAWebUtil
+                    .unmarshallJSON(response, AdditionalEligibilityCriteriaDTO.class);
+        } catch (Exception e) {
+            LOG.error(
+                    "Error in updating additional Eligibility Criteria in rest service for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+            throw new PAException(
+                    "Error in updating additional Eligibility Criteria in rest service for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+        }
+        return eligibilityDto;
+    }
+    
     
     /**
      * 
@@ -203,19 +293,24 @@ public class TrialInfoMergeHelper {
     public void mergeTrialIndIdeInfoRead(Ii studyProtocolIi, StudyIndldeWebDTO webDto) throws PAException {
         LOG.info("Getting additional Trial IND/IDE info for IND/IDE id: " + webDto.getId());
         AdditionalTrialIndIdeDTO trialIndIdeDto = new AdditionalTrialIndIdeDTO();
-        /*try {
-            String response = getHTTPResponse(webDto.getId());
+        try {
+            String response = getHTTPResponseForStudyWithTrialInd(IiConverter
+                    .convertToString(studyProtocolIi), webDto.getId());
             if (response != null) {
-                trialIndIdeDto = (AdditionalTrialIndIdeDTO) PAWebUtil.unmarshallJSON(
-                        response, AdditionalTrialIndIdeDTO.class);
+                List<AdditionalTrialIndIdeDTO> trialIndIdeDtoList = (List<AdditionalTrialIndIdeDTO>) PAWebUtil
+                        .unmarshallJSON(response, new TypeReference<List<AdditionalTrialIndIdeDTO>>() { });
+                    if (trialIndIdeDtoList != null && trialIndIdeDtoList.size() == 1) {
+                        trialIndIdeDto = trialIndIdeDtoList.get(0);
+                    }
             }
         } catch (Exception e) {
             LOG.error(ERROR_MESSAGE + " for Trial IND/IDE id : " + webDto.getId());
             throw new PAException(ERROR_MESSAGE + " for Trial IND/IDE id : " + webDto.getId() + e.getMessage(), e);
-        }*/
+        }
         if (trialIndIdeDto != null) {
             webDto.setExpandedAccessIndicator(trialIndIdeDto.getExpandedAccessIndicator());
             webDto.setExpandedAccessNctId(trialIndIdeDto.getExpandedAccessNctId());
+            webDto.setMsId(trialIndIdeDto.getId());
         }
     }
     
@@ -231,8 +326,8 @@ public class TrialInfoMergeHelper {
         LOG.info("Getting additional Trial IND/IDE info for all the IND/IDE records of study protocol id: " 
                         + studyProtocolIdStr);
         List<AdditionalTrialIndIdeDTO> trialIndIdeDtoList = new ArrayList<AdditionalTrialIndIdeDTO>();
-        /*try {
-            String response = getHTTPResponse(studyProtocolIdStr);
+        try {
+            String response = getHTTPResponseWithSPID(studyProtocolIdStr);
             if (response != null) {
                 trialIndIdeDtoList = (List<AdditionalTrialIndIdeDTO>) PAWebUtil.unmarshallJSON(
                         response, new TypeReference<List<AdditionalTrialIndIdeDTO>>() { });
@@ -240,7 +335,7 @@ public class TrialInfoMergeHelper {
         } catch (Exception e) {
             LOG.error(ERROR_MESSAGE + " for Study Protocol id : " + studyProtocolIdStr);
             throw new PAException(ERROR_MESSAGE + " for Study Protocol id : " + studyProtocolIdStr + e.getMessage(), e);
-        }*/
+        }
         if (trialIndIdeDtoList != null && !trialIndIdeDtoList.isEmpty()) {
             for (StudyIndldeWebDTO studyIndide : studyIndideList) {
                 String studyIndIdeId = studyIndide.getId();
@@ -249,13 +344,13 @@ public class TrialInfoMergeHelper {
                             && StringUtils.equals(studyIndIdeId, trialDto.getTrialIndIdeId() + "")) {
                         studyIndide.setExpandedAccessIndicator(trialDto.getExpandedAccessIndicator());
                         studyIndide.setExpandedAccessNctId(trialDto.getExpandedAccessNctId());
+                        studyIndide.setMsId(trialDto.getId());
                         break;
                     }
                 }
             }
         }
     }
-    
     /**
      * 
      * @param studyProtocolIi the studyProtocolIi
@@ -265,32 +360,60 @@ public class TrialInfoMergeHelper {
      */
     public AdditionalTrialIndIdeDTO mergeTrialIndIdeInfoUpdate(Ii studyProtocolIi, 
             StudyIndldeWebDTO webDto) throws PAException {
-        Long studyProtocolIdL = IiConverter.convertToLong(studyProtocolIi);
+        String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
         LOG.info("Updating Trial IND/IDE info to new DB for :"
-                + studyProtocolIdL + ", Trial IND/IDE id: " + webDto.getId());
+                + studyProtocolId + ", Trial IND/IDE id: " + webDto.getId());
         AdditionalTrialIndIdeDTO trialIndIdeDto = new AdditionalTrialIndIdeDTO();
-        trialIndIdeDto.setTrialIndIdeId(Long.valueOf(webDto.getId()));
+        trialIndIdeDto.setTrialIndIdeId(webDto.getId());
         trialIndIdeDto.setExpandedAccessIndicator(webDto.getExpandedAccessIndicator());
         trialIndIdeDto.setExpandedAccessNctId(webDto.getExpandedAccessNctId());
         trialIndIdeDto.setDateUpdated(webDto.getDateUpdated());
-        trialIndIdeDto.setStudyProtocolId(studyProtocolIdL);
+        trialIndIdeDto.setStudyProtocolId(studyProtocolId);
+        trialIndIdeDto.setId(webDto.getMsId());
         try {
             String postBody = PAWebUtil.marshallJSON(trialIndIdeDto);
-            String response = client.sendHTTPRequest(PaEarPropertyReader
-                    .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            String response = "";
+            if (webDto.getMsId() == null) {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            } else {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl() + "/" + webDto.getMsId(), PUT, postBody);
+            }
+            
             trialIndIdeDto = (AdditionalTrialIndIdeDTO) PAWebUtil
                     .unmarshallJSON(response, AdditionalTrialIndIdeDTO.class);
         } catch (Exception e) {
             LOG.error(
                     "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
-                            + studyProtocolIdL, e);
+                            + studyProtocolId, e);
             throw new PAException(
                     "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
-                            + studyProtocolIdL, e);
+                            + studyProtocolId, e);
         }
         return trialIndIdeDto;
     }
-
+    /**
+     * 
+     * @param msId msId
+     * @throws PAException the PAException
+     */
+    public void deleteTrialIndIdeInfo(String msId) throws PAException {
+       
+        LOG.info("Deleting Trial IND/IDE info in the new DB for :" + msId);
+        try {
+            client.sendHTTPRequest(PaEarPropertyReader
+                .getFdaaaDataClinicalTrialsUrl() + "/" + msId, DELETE, null);
+        } catch (Exception e) {
+            LOG.error(
+                    "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
+                            + msId, e);
+            throw new PAException(
+                    "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
+                            + msId, e);
+        }
+    }
+    
     /**
      * 
      * @return client

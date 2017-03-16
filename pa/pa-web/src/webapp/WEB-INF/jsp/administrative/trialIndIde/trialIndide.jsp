@@ -55,10 +55,7 @@ function handleAction(studyProtocolIi){
     	<display:column escapeXml="true" titleKey="trialIndide.nihInstHolderCode" property="nihInstHolder"   sortable="true" headerClass="sortable"/>
     	<display:column escapeXml="true" titleKey="trialIndide.nciDivProgHolderCode" property="nciDivProgHolder"   sortable="true" headerClass="sortable"/>
     	<display:column escapeXml="true" titleKey="trialIndide.expandedAccessIndicator" property="expandedAccessIndicator"   sortable="true" headerClass="sortable"/>
-    	<display:column escapeXml="true" titleKey="trialIndide.expandedAccessStatusCode" property="expandedAccessStatus"   sortable="true" headerClass="sortable"/>
-        <display:column escapeXml="true" titleKey="trialIndide.exemptIndicator">
-            <pa:displayBoolean value="${row.exemptIndicator}"/>
-        </display:column>
+    	<display:column escapeXml="true" titleKey="trialIndide.expandedAccessNctId" property="expandedAccessNctId"   sortable="true" headerClass="sortable"/>
         
         <pa:adminAbstractorDisplayWhenCheckedOut>
             <display:column title="Edit" class="action">

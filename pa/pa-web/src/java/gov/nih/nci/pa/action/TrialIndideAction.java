@@ -109,7 +109,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
     private List<StudyIndldeWebDTO> studyIndideList;
     private Long cbValue;
     private String page;
-    //private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     
     /**
      * @return result
@@ -133,7 +133,7 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
                 }
                 //call glue code to merge additional data from data clinical trials microservice for all
                 //the Trial IND/IDE records
-                //helper.mergeStudyProtocolTrialIndIdeInfoRead(studyProtocolIi, studyIndideList);
+                helper.mergeStudyProtocolTrialIndIdeInfoRead(studyProtocolIi, studyIndideList);
             } else {
                 setSuccessMessageIfNotYet(getText("No IND/IDE records exist on the trial"));
             }
@@ -188,19 +188,25 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
         }
         studyIndldeDTO = getStudyIndIdeDTO(studyIndldeDTO);
         
-        /*Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().
-                getAttribute(Constants.STUDY_PROTOCOL_II);*/
+        Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().
+                getAttribute(Constants.STUDY_PROTOCOL_II);
         
         if (cbValue != null) {
             //call glue code first to update additional trial info in the microservice
             //if it succeeds, call the PADB update
-            //helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
+            studyIndldeWebDTO.setId(IiConverter.convertToString(studyIndldeDTO.getIdentifier()));
+            helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
             PaRegistry.getStudyIndldeService().update(studyIndldeDTO);
             ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, Constants.UPDATE_MESSAGE);
         } else {
-            PaRegistry.getStudyIndldeService().create(studyIndldeDTO);
-            //call glue code after PADB create, so that we have Trial IND/IDE id to insert in remote DB
-            //helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
+            StudyIndldeDTO dto = PaRegistry.getStudyIndldeService().create(studyIndldeDTO);
+            if (dto != null) {
+                studyIndldeWebDTO.setId(IiConverter.convertToString(dto.getIdentifier()));
+                //call glue code after PADB create, so that we have Trial IND/IDE id to insert in remote DB
+                helper.mergeTrialIndIdeInfoUpdate(studyProtocolIi, studyIndldeWebDTO);
+            } else {
+                throw new PAException(Constants.FAILURE_MESSAGE + "Unable to create Data in micro service");
+            }
             ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, Constants.CREATE_MESSAGE);
         }
         query();
@@ -252,8 +258,8 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
     public String delete() {
         try {
             //call glue code to delete info in data clinical trial microservice
-            //TODO
             deleteSelectedObjects();
+            helper.deleteTrialIndIdeInfo(studyIndldeWebDTO.getMsId());
             ServletActionContext.getRequest().setAttribute(
                     Constants.SUCCESS_MESSAGE, Constants.MULTI_DELETE_MESSAGE);
         } catch (Exception e) {
@@ -277,10 +283,10 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
             StudyIndldeDTO studyIndlde = PaRegistry.getStudyIndldeService().get(IiConverter.convertToIi(cbValue));
             studyIndldeWebDTO = new StudyIndldeWebDTO(studyIndlde);
             
-            /*Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
-                    Constants.STUDY_PROTOCOL_II); */
+            Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
+                    Constants.STUDY_PROTOCOL_II); 
             //call glue code to merge info from data clinical trial microservice
-            //helper.mergeTrialIndIdeInfoRead(studyProtocolIi, studyIndldeWebDTO);
+            helper.mergeTrialIndIdeInfoRead(studyProtocolIi, studyIndldeWebDTO);
             
         } catch (Exception e) {
           ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getLocalizedMessage());
@@ -435,5 +441,18 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
            addFieldError(errorField, msg);
         }
    }
-
+    /**
+     * 
+     * @return helper
+     */
+    public TrialInfoMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper the helper
+     */
+    public void setHelper(TrialInfoMergeHelper helper) {
+        this.helper = helper;
+    }
 }

@@ -6,7 +6,6 @@ package gov.nih.nci.pa.service;
 import gov.nih.nci.coppa.services.interceptor.RemoteAuthorizationInterceptor;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.StudyIndlde;
-import gov.nih.nci.pa.enums.ExpandedAccessStatusCode;
 import gov.nih.nci.pa.enums.GrantorCode;
 import gov.nih.nci.pa.enums.HolderTypeCode;
 import gov.nih.nci.pa.enums.IndldeTypeCode;
@@ -14,8 +13,6 @@ import gov.nih.nci.pa.enums.NciDivisionProgramCode;
 import gov.nih.nci.pa.enums.NihInstituteCode;
 import gov.nih.nci.pa.iso.convert.StudyIndldeConverter;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
-import gov.nih.nci.pa.iso.util.BlConverter;
-import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.service.exception.PADuplicateException;
 import gov.nih.nci.pa.service.exception.PAValidationException;
 import gov.nih.nci.pa.service.util.PAServiceUtils;
@@ -137,13 +134,6 @@ public class StudyIndldeBeanLocal extends AbstractStudyIsoService<StudyIndldeDTO
         if (!isIndIdeContainsAllInfo(studyIndldeDTO)) {
           errorMsg.append("All IND/IDE values are required.\n");
         } else {
-        if (!ISOUtil.isBlNull(studyIndldeDTO.getExpandedAccessIndicator())
-            && BlConverter.convertToBool(studyIndldeDTO.getExpandedAccessIndicator())
-            && (ISOUtil.isCdNull(studyIndldeDTO.getExpandedAccessStatusCode())
-            || StringUtils.isBlank(CdConverter.convertCdToString(studyIndldeDTO.getExpandedAccessStatusCode())))) {
-           errorMsg.append("Expanded Access Status value is required.\n");
-        }
-
         if (!ISOUtil.isCdNull(studyIndldeDTO.getHolderTypeCode())
             && HolderTypeCode.NIH.getCode().equalsIgnoreCase(studyIndldeDTO.getHolderTypeCode().getCode())
             && ISOUtil.isCdNull(studyIndldeDTO.getNihInstHolderCode())) {
@@ -174,10 +164,6 @@ public class StudyIndldeBeanLocal extends AbstractStudyIsoService<StudyIndldeDTO
         if (!isIndGrantorValid(studyIndldeDTO)) {
                   errorMsg.append("IND Grantor must have either CBER or CDER value.\n");
         }
-        if (!ISOUtil.isCdNull(studyIndldeDTO.getExpandedAccessStatusCode())
-            && null == ExpandedAccessStatusCode.getByCode(studyIndldeDTO.getExpandedAccessStatusCode().getCode())) {
-              errorMsg.append("Please enter valid value for IND/IDE Expanded Access Status.\n");
-        }
         //validate NIH Institution values
         if (!ISOUtil.isCdNull(studyIndldeDTO.getHolderTypeCode())
             && studyIndldeDTO.getHolderTypeCode().getCode().equalsIgnoreCase(HolderTypeCode.NIH.getCode())
@@ -200,12 +186,12 @@ public class StudyIndldeBeanLocal extends AbstractStudyIsoService<StudyIndldeDTO
         if (ISOUtil.isStNull(dto.getIndldeNumber())) {
           nullCount += 1;
         }
-        if (ISOUtil.isBlNull(dto.getExpandedAccessIndicator())) {
-          nullCount += 1;
-        }
-        if (ISOUtil.isBlNull(dto.getExemptIndicator())) {
-            nullCount += 1;
-        }
+//        if (ISOUtil.isBlNull(dto.getExpandedAccessIndicator())) {
+//          nullCount += 1;
+//        }
+//        if (ISOUtil.isBlNull(dto.getExemptIndicator())) {
+//            nullCount += 1;
+//        }
         if (nullCount == 0 || nullCount == IND_FIELD_COUNT) {
           return true;
         }

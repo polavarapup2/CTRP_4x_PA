@@ -195,6 +195,7 @@ function tooltip() {
 		<s:set name="phaseCodeValuesNCI" value="@gov.nih.nci.pa.enums.NciDivisionProgramCode@getDisplayNames()" />
 		<%-- <s:set name="expandedAccessStatusCodeValues" value="@gov.nih.nci.pa.enums.ExpandedAccessStatusCode@getDisplayNames()" /> --%>
 		 <s:hidden id="dateUpdated" name="studyIndldeWebDTO.dateUpdated"> </s:hidden>
+		 <s:hidden id="msId" name="studyIndldeWebDTO.msId"></s:hidden>
     <table class="form">   
   		<tr>
 						<td scope="row"  class="label"><label>

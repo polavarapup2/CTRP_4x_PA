@@ -156,6 +156,7 @@
                 <pa:studyUniqueToken/>
                 <s:actionerror/>
                 <s:hidden id="lastUpdatedDate" name="webDTO.lastUpdatedDate"> </s:hidden>
+                <s:hidden id="msId" name="webDTO.id"> </s:hidden>
                 <h2><fmt:message key="regulatory.title" /></h2>
                 <table class="form">
                     
