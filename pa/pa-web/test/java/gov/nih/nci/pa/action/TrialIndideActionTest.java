@@ -44,7 +44,6 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
 	TrialIndideAction trialIndideAction;
 	private AdditionalTrialIndIdeDTO additionalTrialIndIdeDTO = new AdditionalTrialIndIdeDTO();
 	private List<AdditionalTrialIndIdeDTO> list = new ArrayList<AdditionalTrialIndIdeDTO>();
-    private String url;
     private RestClient client = mock(RestClient.class);
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     private StudyIndldeServiceLocal studyIndldeServiceLocal = mock(StudyIndldeServiceLocal.class);
@@ -53,7 +52,7 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
 	public void setUp() throws PAException, IOException {
 		trialIndideAction =  new TrialIndideAction();
 		getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
-        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
  
         ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
         PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);

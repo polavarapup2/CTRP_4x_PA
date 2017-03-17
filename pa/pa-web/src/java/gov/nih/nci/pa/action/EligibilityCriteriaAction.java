@@ -245,6 +245,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     /**
      * @return res
      */
+    @SuppressWarnings({ "PMD.NPathComplexity" })
     public String save() {
         enforceBusinessRules();
         if (hasFieldErrors()) {

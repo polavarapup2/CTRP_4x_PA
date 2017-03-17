@@ -4,6 +4,7 @@
 package gov.nih.nci.pa.action;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,7 +24,6 @@ import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
-import gov.nih.nci.pa.service.util.LookUpTableServiceRemote;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAWebUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
@@ -31,6 +31,7 @@ import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +49,6 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
     List<Long> identifiersList = new ArrayList<Long>();
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
     Map<Long, String> identifierMap = new HashMap<Long, String>();
-    private String url;
     private List<AdditionalRegulatoryInfoDTO> regulatoryDtoList = new ArrayList<AdditionalRegulatoryInfoDTO>();
     
     @Before
@@ -72,7 +72,7 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         additionalRegInfoDTO.setPost_prior_to_approval("true");
         additionalRegInfoDTO.setDate_updated("1234455");
         regulatoryDtoList.add(additionalRegInfoDTO);
-        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
         when(client.sendHTTPRequest(url +"?study_protocol_id=1&nci_id=\" + \"NCI-1000-0000\"", "GET", null)).thenReturn(
                 PAWebUtil.marshallJSON(regulatoryDtoList));
         when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");
@@ -183,5 +183,32 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
                 regulatoryInformationAction.getFieldErrors().get("webDTO.section801Indicator").get(0)); 
     }
     
-    
+    @Test
+    public void updateTestExceptionMicroService() throws PAException {
+        StudyProtocolDTO spDTO = new StudyProtocolDTO();
+        spDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(true));
+        spDTO.setSection801Indicator(BlConverter.convertToBl(true));
+        spDTO.setFdaRegulatedIndicator(BlConverter.convertToBl(true));
+        spDTO.setDelayedpostingIndicator(BlConverter.convertToBl(true));
+        spDTO.setDataMonitoringCommitteeAppointedIndicator(BlConverter.convertToBl(true));
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(id)).thenReturn(spDTO);
+        RegulatoryAuthorityWebDTO webDTO = new RegulatoryAuthorityWebDTO();
+        webDTO.setFdaRegulatedDevice("true");
+        webDTO.setFdaRegulatedDrug("true");
+        webDTO.setExportedFromUs("true");
+        webDTO.setPedPostmarketSurv("true");
+        webDTO.setPostPriorToApproval("true");
+        webDTO.setDataMonitoringIndicator("true");
+        webDTO.setFdaRegulatedInterventionIndicator("true");
+        webDTO.setSection801Indicator("true");
+        webDTO.setDelayedPostingIndicator("true");
+        regulatoryInformationAction.setWebDTO(webDTO);
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
+        String result = regulatoryInformationAction.update();
+        assertEquals("success", result);
+        assertNotNull(getRequest().getAttribute("failureMessage"));
+        assertTrue(StringUtils.containsIgnoreCase(getRequest().getAttribute("failureMessage")
+                .toString(), "Error: Unable to get response from Rest server"));
+    }
 }

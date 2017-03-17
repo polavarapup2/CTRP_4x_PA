@@ -29,14 +29,14 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     StudyProtocolQueryDTO spDTO;  
     ISDesignDetailsWebDTO dto;
     private AdditionalEligibilityCriteriaDTO additionalDTO = new AdditionalEligibilityCriteriaDTO();
-    private String url;
+
     private RestClient client = mock(RestClient.class);
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     private List<AdditionalEligibilityCriteriaDTO> eligibilityDtoList = new ArrayList<AdditionalEligibilityCriteriaDTO>();
     @Before
     public void setUp() throws PAException, IOException{
         eligibilityCriteriaAction = new EligibilityCriteriaAction();
-       
+        
         spDTO = new StudyProtocolQueryDTO();
         spDTO.setStudyProtocolType("NonInterventionalStudyProtocol");
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
@@ -44,7 +44,7 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
         
         dto = new ISDesignDetailsWebDTO();
         eligibilityCriteriaAction.setWebDTO(dto);
-        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
         additionalDTO.setGender("Yes");
         additionalDTO.setGenderEligibilityDescription("Desc1");
         additionalDTO.setStudyProtocolId("1");

@@ -241,7 +241,7 @@ public class TrialInfoMergeHelperTest {
         webDTO.setExpandedAccessIndicator("Yes");
         webDTO.setExpandedAccessNctId("NCT12345678");
         webDTO.setDateUpdated("03/12/2017");
-        AdditionalTrialIndIdeDTO trialIndIdeDto = helper.mergeTrialIndIdeInfoUpdate(studyId, webDTO);
+        helper.mergeTrialIndIdeInfoUpdate(studyId, webDTO);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&trial_ide_ind_id=123", "GET", null)).thenReturn(jsonStr);
         helper.mergeTrialIndIdeInfoRead(studyId, webDTO);
         assertEquals(webDTO.getStudyProtocolIi(), "1");
@@ -254,6 +254,37 @@ public class TrialInfoMergeHelperTest {
         helper.setClient(client1);
         helper.mergeTrialIndIdeInfoRead(studyId, new StudyIndldeWebDTO());
     }
+    
+    
+    @Test(expected=PAException.class)
+    public void mergeTrialINDUpdateExceptionTest() throws PAException {
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
+        StudyIndldeWebDTO webDTO = new StudyIndldeWebDTO();
+        webDTO.setStudyProtocolIi(studyprotocolId.toString());
+        webDTO.setId("123");
+        webDTO.setExpandedAccessIndicator("Yes");
+        webDTO.setExpandedAccessNctId("NCT12345678");
+        webDTO.setDateUpdated("03/12/2017");
+        helper.mergeTrialIndIdeInfoUpdate(IiConverter.convertToIi(169939706L), webDTO);
+    }
+    
+    
+    
+    @Test(expected=PAException.class)
+    public void mergeTrialINDDeleteExceptionTest() throws PAException {
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
+        StudyIndldeWebDTO webDTO = new StudyIndldeWebDTO();
+        webDTO.setStudyProtocolIi(studyprotocolId.toString());
+        webDTO.setId("123");
+        webDTO.setExpandedAccessIndicator("Yes");
+        webDTO.setExpandedAccessNctId("NCT12345678");
+        webDTO.setDateUpdated("03/12/2017");
+        webDTO.setMsId("1");
+        helper.deleteTrialIndIdeInfo("1");
+    }
+    
     
     @Test
     public void mergeEligibilityCriteriaReadTest() throws PAException, IOException {
