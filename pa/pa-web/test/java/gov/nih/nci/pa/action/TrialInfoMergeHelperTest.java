@@ -43,8 +43,7 @@ public class TrialInfoMergeHelperTest {
        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
        studyId = IiConverter.convertToIi(studyprotocolId);
     }
-
-    
+ 
     @Test
     public void mergeRegulatoryInfoReadTest() throws PAException, IOException {
         additionalRegInfoDTO.setExported_from_us("true");
