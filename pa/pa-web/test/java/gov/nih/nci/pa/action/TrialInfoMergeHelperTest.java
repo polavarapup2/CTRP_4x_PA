@@ -44,6 +44,7 @@ public class TrialInfoMergeHelperTest {
        studyId = IiConverter.convertToIi(studyprotocolId);
     }
 
+    
     @Test
     public void mergeRegulatoryInfoReadTest() throws PAException, IOException {
         additionalRegInfoDTO.setExported_from_us("true");
