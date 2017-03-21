@@ -6,20 +6,38 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.ISDesignDetailsWebDTO;
 import gov.nih.nci.pa.dto.OutcomeMeasureWebDTO;
 import gov.nih.nci.pa.enums.OutcomeMeasureTypeCode;
 import gov.nih.nci.pa.enums.PhaseAdditionalQualifierCode;
 import gov.nih.nci.pa.enums.PhaseCode;
+import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
+import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.iso.util.IntConverter;
+import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.lov.PrimaryPurposeCode;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyOutcomeMeasureServiceLocal;
+import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.util.Constants;
+import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
+import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.RestClient;
+import gov.nih.nci.pa.util.ServiceLocator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,8 +49,12 @@ import org.junit.Test;
 public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
     InterventionalStudyDesignAction action ;
     private final String TEN_CHARACTERS = "abcdefghij";
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private StudyProtocolServiceLocal studyProtocolServiceLocal;
+    private Ii id = IiConverter.convertToIi(1L);
+    
     @Before
-    public void prepare(){
+    public void prepare() {
         action = new InterventionalStudyDesignAction();
     }
     @Test
@@ -96,9 +118,13 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         assertNotNull(action.getPage());
     }
     @Test
-    public void testDetailsQuery(){
+    public void testDetailsQuery() throws PAException, IOException{
+     setMockValues();
      getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
      assertEquals("details",action.detailsQuery());
+     assertEquals(action.getWebDTO().getMaskingDescription(), "Desc1");
+     assertEquals(action.getWebDTO().getModelDescription(), "ModelDesc1");
+     assertEquals(action.getWebDTO().getNoMasking(), "True");
     }
     @Test
     public void testOutcomeinput(){
@@ -247,7 +273,8 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
 
     }
     @Test
-    public void testUpdate() throws PAException{
+    public void testUpdate() throws PAException, IOException{
+        setMockValues();
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         OutcomeMeasureWebDTO omDto = new OutcomeMeasureWebDTO();
@@ -263,6 +290,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         webDTO.getOutcomeMeasure().setName("Name");
         webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
         webDTO.getOutcomeMeasure().setSafetyIndicator(true);
+        webDTO.setNoMasking("Ture");
         action.setWebDTO(webDTO);
         action.setInvestigator("Investigator");
         action.setOutcomesassessor("Outcomes Assessor");
@@ -351,5 +379,41 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         verify(mock).reorderOutcomes(IiConverter.convertToIi(1L),
                 Arrays.asList(new String[] { "3", "2", "1" }));
 
+    }
+    
+    private void setMockValues() throws PAException, IOException {
+        studyProtocolServiceLocal =  mock(StudyProtocolServiceLocal.class);
+        
+        InterventionalStudyProtocolDTO ispDTO = new InterventionalStudyProtocolDTO();
+        ispDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(false));
+        ispDTO.setNumberOfInterventionGroups(IntConverter.convertToInt(1));
+        ispDTO.setTargetAccrualNumber(IvlConverter.convertInt().convertToIvl(
+                10, null));
+        Map<Long, String> identifierMap = new HashMap<Long, String>();
+        List<Long> identifiersList = new ArrayList<Long>();
+        ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
+        PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);
+        when(paRegSvcLoc.getStudyProtocolService()).thenReturn(studyProtocolServiceLocal);
+        Long studyprotocolId = IiConverter.convertToLong(id);
+        identifiersList.add(studyprotocolId);
+        identifierMap.put(1L, "NCI-1000-0000");
+        when(PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList)).thenReturn(identifierMap);
+        when(PaRegistry.getStudyProtocolService().getInterventionalStudyProtocol(any(Ii.class))).thenReturn(ispDTO);
+        RestClient client = mock(RestClient.class);
+        List<AdditionalDesignDetailsDTO> designDetailsDtoList = new ArrayList<AdditionalDesignDetailsDTO>();
+        AdditionalDesignDetailsDTO designDetailsDto = new AdditionalDesignDetailsDTO();
+        designDetailsDto.setMaskingDescription("Desc1");
+        designDetailsDto.setModelDescription("ModelDesc1");
+        designDetailsDto.setNoMasking("True");
+        designDetailsDto.setStudyProtocolId("1");
+        designDetailsDto.setNciId("NCI-1000-0000");
+        designDetailsDtoList.add(designDetailsDto);
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        String responseStr = PAWebUtil.marshallJSON(designDetailsDtoList);
+        when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-1000-0000", "GET", null)).thenReturn(responseStr);
+        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(designDetailsDto))).thenReturn("");
+        when(client.sendHTTPRequest(url + "/1", "PUT",  PAWebUtil.marshallJSON(designDetailsDto))).thenReturn("");
+        helper.setClient(client);
+        action.setHelper(helper);
     }
 }

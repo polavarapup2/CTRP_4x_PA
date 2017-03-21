@@ -100,7 +100,9 @@ public enum DesignConfigurationCode implements CodedEnum<String> {
     /** Crossover Design. */
     CROSSOVER("Cross-over"),
     /** Factorial. */
-    FACTORIAL("Factorial");
+    FACTORIAL("Factorial"),
+    /** Sequential Assignment. */
+    SEQUENTIAL_ASSIGNMENT("Sequential Assignment");
 
     private String code;
 

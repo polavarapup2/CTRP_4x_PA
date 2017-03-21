@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 
@@ -48,6 +49,16 @@ public class PAWebUtilTest {
         assertTrue(StringUtils.equals(trialIndIdeDtoList.get(1).getExpandedAccessNctId(), "NCT22345678"));
         
         assertTrue(trialIndIdeDtoList.get(2).getTrialIndIdeId() == null);
+    }
+    
+    @Test
+    public void unMarshallJsonDesignDetailsTest() {
+        String jsonString = "[{\"model_description\":\"Desc1\",\"date_updated\":\"2017-03-20 17:17:14 -0400\",\"nci_id\":\"NCI-2014-00342\","
+                + "\"no_masking\":\"true\",\"date_created\":\"2017-03-20 17:17:14 -0400\",\"study_protocol_id\":\"135258099\","
+                + "\"id\":\"d0a9ba51bc6424a6f2a2\",\"masking_description\":\"no masking\"}]";
+        List<AdditionalDesignDetailsDTO> dtoList = (List<AdditionalDesignDetailsDTO>) PAWebUtil.unmarshallJSON(
+                jsonString, new TypeReference<List<AdditionalDesignDetailsDTO>>() { });
+        assertTrue(dtoList != null && dtoList.size() == 1);
     }
 
 }

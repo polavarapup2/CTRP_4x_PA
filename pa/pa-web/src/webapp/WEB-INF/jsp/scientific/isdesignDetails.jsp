@@ -133,6 +133,27 @@ function initialize() {
     displaySecondaryPurposeOtherText();
     displayPhaseAdditonalCode();
 }
+
+function noMaskingRules() {
+	alert("i am here")
+	var noMaskingValue = $('noMasking').checked;
+	 if (noMaskingValue) {
+		 $('subject').checked = false;
+		 $('investigator').checked = false;
+		 $('caregiver').checked = false;
+		 $('outcomesassessor').checked = false;
+     }
+}
+
+function maskingRules() {
+	var subjectValue = $('subject').checked;
+	var investigatorValue = $('investigator').checked;
+	var caregiverValue = $('caregiver').checked;
+	var outcomesassessorValue = $('outcomesassessor').checked;
+	if (subjectValue || investigatorValue || caregiverValue || outcomesassessorValue) {
+		$('noMasking').checked = false;
+	}
+}
 </SCRIPT>
 <body>
 <h1><fmt:message key="isdesign.details.title"/></h1>
@@ -148,6 +169,8 @@ function initialize() {
     <pa:studyUniqueToken/>
 <s:actionerror/>
 <h2><fmt:message key="isdesign.details.title"/></h2>
+    <s:hidden id="lastUpdatedDate" name="webDTO.lastUpdatedDate"> </s:hidden>
+    <s:hidden id="msId" name="webDTO.id"> </s:hidden>
 <table class="form">
 
     <tr>
@@ -338,21 +361,22 @@ function initialize() {
 	</tr>
 	 -->
 	<tr id="blindingRoleCode">
-		<td   scope="row" class="label"><fmt:message key="isdesign.details.masking.role"/></td>
+		<td   scope="row" class="label"><fmt:message key="isdesign.details.masking.role"/><span class="required">${asterisk}</span></td>
 		<td>
 		  <table cellpadding="0" cellspacing="0">
 		      <tr>
 		          <td style="padding: 0 0 0 0;" nowrap="nowrap">
-			           <s:checkbox id="subject" name="subject" fieldValue="Subject"  value="%{subjectChecked}" />
+			           <s:checkbox id="subject" name="subject" fieldValue="Subject"  value="%{subjectChecked}" onclick="maskingRules();"/>
 			           <label for="subject">Participant</label>
-					   <s:checkbox id="investigator" name="investigator" fieldValue="Investigator"  value="%{investigatorChecked}" />
+					   <s:checkbox id="investigator" name="investigator" fieldValue="Investigator"  value="%{investigatorChecked}" onclick="maskingRules();"/>
 					   <label for="investigator">Investigator</label>
-					   <s:checkbox id="caregiver" name="caregiver" fieldValue="Caregiver"  value="%{caregiverChecked}" />
+					   <s:checkbox id="caregiver" name="caregiver" fieldValue="Caregiver"  value="%{caregiverChecked}"  onclick="maskingRules();"/>
 					   <label for="caregiver">Care Provider</label>
-					   <s:checkbox id="outcomesassessor" name="outcomesassessor" fieldValue="Outcomes Assessor"  value="%{outcomesAssessorChecked}" />
+					   <s:checkbox id="outcomesassessor" name="outcomesassessor" fieldValue="Outcomes Assessor"  value="%{outcomesAssessorChecked}" onclick="maskingRules();"/>
 					   <label for="outcomesassessor">Outcomes Assessor</label>
-					   <s:checkbox id="nomasking" name="nomasking" fieldValue="No Masking"  value="%{nomaskingChecked}" />
-                       <label for="outcomesassessor">No Masking</label>
+					   <s:checkbox id="noMasking" name="webDTO.noMasking" fieldValue="true"  value="%{webDTO.noMasking}" onclick="noMaskingRules();"/>
+                       <label for="noMasking">No Masking</label>
+                        <span class="info">Check all the roles that are masked or check No Masking.</span>
 				   </td>
 			  </tr>  
 			  <tr>                
@@ -378,7 +402,6 @@ function initialize() {
              </span>
        </td>
     </tr>
-    <!-- 
 	<tr> 
         <td scope="row" class="label"><label for="allocation">
 	 		<fmt:message key="isdesign.details.allocation"/><span class="required">${asterisk}</span></label> </td>
@@ -392,7 +415,7 @@ function initialize() {
           </span>
         </td>
     </tr>
-     -->
+    <!--  
     <tr>
 		<td scope="row" class="label"><label for="classification">
 	 		<fmt:message key="isdesign.details.trial.classification"/></label></td>
@@ -406,6 +429,7 @@ function initialize() {
           </span>
         </td>
 	</tr>
+	-->
 	<tr>
 		<td scope="row" class="label"><label for="enrollment">
 	 		<fmt:message key="isdesign.details.target.enrollment"/><span class="required">${asterisk}</span></label></td>

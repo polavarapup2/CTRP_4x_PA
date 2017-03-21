@@ -84,12 +84,10 @@ import gov.nih.nci.pa.dto.ISDesignDetailsWebDTO;
 import gov.nih.nci.pa.dto.OutcomeMeasureWebDTO;
 import gov.nih.nci.pa.enums.AllocationCode;
 import gov.nih.nci.pa.enums.BlindingRoleCode;
-import gov.nih.nci.pa.enums.BlindingSchemaCode;
 import gov.nih.nci.pa.enums.DesignConfigurationCode;
 import gov.nih.nci.pa.enums.PhaseAdditionalQualifierCode;
 import gov.nih.nci.pa.enums.PhaseCode;
 import gov.nih.nci.pa.enums.PrimaryPurposeAdditionalQualifierCode;
-import gov.nih.nci.pa.enums.StudyClassificationCode;
 import gov.nih.nci.pa.enums.StudyTypeCode;
 import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.dto.StudyOutcomeMeasureDTO;
@@ -114,6 +112,7 @@ import gov.nih.nci.pa.util.PaRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -145,12 +144,14 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
     private String investigator;
     private String caregiver;
     private String outcomesassessor;
+    private boolean noMasking;
     private List<ISDesignDetailsWebDTO> outcomeList;
     private Long id = null;
     private String page;
     private String orderString;
     private StudyOutcomeMeasureServiceLocal studyOutcomeMeasureService;
-
+    private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private String msId;
     /**
      * @return res
      */
@@ -160,7 +161,13 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
                     Constants.STUDY_PROTOCOL_II);
             InterventionalStudyProtocolDTO ispDTO = new InterventionalStudyProtocolDTO();
             ispDTO = PaRegistry.getStudyProtocolService().getInterventionalStudyProtocol(studyProtocolIi);
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
+            identifiersList.add(studyprotocolId);
+            Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
             webDTO = setDesignDetailsDTO(ispDTO);
+            // call the glue code 
+            helper.mergeDesignDetailsRead(studyProtocolIi, webDTO, identifierMap.get(studyprotocolId));
         } catch (PAException e) {
             ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
         }
@@ -187,9 +194,13 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             return "details";
         }
         try {            
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
+            identifiersList.add(studyprotocolId);
+            Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
             setPhaseAndPurpose(ispDTO);
-            ispDTO.setBlindingSchemaCode(CdConverter.convertToCd(BlindingSchemaCode.getByCode(
-                    webDTO.getBlindingSchemaCode())));
+           // ispDTO.setBlindingSchemaCode(CdConverter.convertToCd(BlindingSchemaCode.getByCode(
+            //        webDTO.getBlindingSchemaCode())));
             ispDTO.setExpandedAccessIndicator(BlConverter.convertToBl(webDTO.isExpandedIndicator()));
             ispDTO.setDesignConfigurationCode(CdConverter.convertToCd(DesignConfigurationCode.getByCode(
                     webDTO.getDesignConfigurationCode())));
@@ -198,16 +209,21 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             ispDTO.setTargetAccrualNumber(IvlConverter.convertInt().convertToIvl(
                     webDTO.getMinimumTargetAccrualNumber(), null));
             ispDTO.setFinalAccrualNumber(IntConverter.convertToInt(webDTO.getFinalAccrualNumber()));
-            ispDTO.setStudyClassificationCode(CdConverter.convertToCd(StudyClassificationCode.getByCode(
-                    webDTO.getStudyClassificationCode())));
+            //ispDTO.setStudyClassificationCode(CdConverter.convertToCd(StudyClassificationCode.getByCode(
+             //       webDTO.getStudyClassificationCode())));
             List<Cd> cds = new ArrayList<Cd>();
-            if (webDTO.getBlindingSchemaCode() != null && !webDTO.getBlindingSchemaCode().equalsIgnoreCase("open")) {
+            if (webDTO.getNoMasking() == null || StringUtils.equalsIgnoreCase(webDTO.getNoMasking(), "False")) {
                 addToCdToList(caregiver, cds);
                 addToCdToList(investigator, cds);
                 addToCdToList(outcomesassessor, cds);
                 addToCdToList(subject, cds);
             }
             ispDTO.setBlindedRoleCode(DSetConverter.convertCdListToDSet(cds));
+            try {
+                helper.mergeDesignDetailsUpdate(studyProtocolIi, identifierMap.get(studyprotocolId), webDTO);
+            } catch (PAException e) {
+                ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
+            } 
             PaRegistry.getStudyProtocolService().updateInterventionalStudyProtocol(ispDTO, "DesignDetails");
             ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, Constants.UPDATE_MESSAGE);
             detailsQuery();           
@@ -300,7 +316,6 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         if (!abbr) {
             addErrors(webDTO.getDesignConfigurationCode(), "webDTO.designConfigurationCode", "error.intervention");
             addErrors(arms, "webDTO.numberOfInterventionGroups", "error.arms");
-            addErrors(webDTO.getBlindingSchemaCode(), "webDTO.blindingSchemaCode", "error.masking");
             addErrors(webDTO.getAllocationCode(), "webDTO.allocationCode", "error.allocation");
             addErrors(webDTO.getMinimumTargetAccrualNumber(), "webDTO.minimumTargetAccrualNumber",
                     "error.target.enrollment");
@@ -308,6 +323,9 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         validateTragetAccrualNumber();
         if (StringUtils.isNotBlank(arms) && !NumberUtils.isDigits(arms)) {
             addFieldError("webDTO.numberOfInterventionGroups", getText("error.numeric"));
+        }
+        if (StringUtils.isEmpty(webDTO.getBlindingRoleCode()) && StringUtils.isEmpty(webDTO.getNoMasking())) {
+            addFieldError("webDTO.getBlindingRoleCode", "error.masking");
         }
         if (NumberUtils.isNumber(arms)
                 && NumberUtils.toInt(arms) < 1) {
@@ -369,7 +387,7 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             convertNumInterventionGroups(ispDTO, dto);
             convertBlindedRoleCodes(ispDTO);
             convertTargetAccrualNumber(ispDTO, dto);
-            convertStudyClassificationCode(ispDTO, dto);
+           // convertStudyClassificationCode(ispDTO, dto);
             if (!ISOUtil.isBlNull(ispDTO.getExpandedAccessIndicator())) {
                 dto.setExpandedIndicator(BlConverter.convertToBoolean(ispDTO
                         .getExpandedAccessIndicator()));
@@ -379,11 +397,11 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         return dto;
     }
 
-    private void convertStudyClassificationCode(InterventionalStudyProtocolDTO ispDTO, ISDesignDetailsWebDTO dto) {
-        if (ispDTO.getStudyClassificationCode() != null) {
-            dto.setStudyClassificationCode(ispDTO.getStudyClassificationCode().getCode());
-        }
-    }
+//    private void convertStudyClassificationCode(InterventionalStudyProtocolDTO ispDTO, ISDesignDetailsWebDTO dto) {
+//        if (ispDTO.getStudyClassificationCode() != null) {
+//            dto.setStudyClassificationCode(ispDTO.getStudyClassificationCode().getCode());
+//        }
+//    }
 
     private void convertTargetAccrualNumber(InterventionalStudyProtocolDTO ispDTO, ISDesignDetailsWebDTO dto) {
         if (ispDTO.getTargetAccrualNumber().getLow().getValue() != null) {
@@ -781,6 +799,7 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         }
         return false;
     }
+    
     /**
      *
      * @return boolean value
@@ -838,5 +857,49 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
     public void setStudyOutcomeMeasureService(
             StudyOutcomeMeasureServiceLocal studyOutcomeMeasureService) {
         this.studyOutcomeMeasureService = studyOutcomeMeasureService;
+    }
+    /**
+     * 
+     * @return noMasking
+     */
+    public boolean isNoMasking() {
+        return noMasking;
+    }
+    /**
+     * 
+     * @param noMasking noMasking
+     */
+    public void setNoMasking(boolean noMasking) {
+        this.noMasking = noMasking;
+    }
+    
+    /**
+     * 
+     * @return helper
+     */
+    public TrialInfoMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper the helper
+     */
+    public void setHelper(TrialInfoMergeHelper helper) {
+        this.helper = helper;
+    }
+    
+    /**
+     * 
+     * @return msId
+     */
+    public String getMsId() {
+        return msId;
+    }
+    /**
+     * 
+     * @param msId the msId
+     */
+    public void setMsId(String msId) {
+        this.msId = msId;
     }
 }

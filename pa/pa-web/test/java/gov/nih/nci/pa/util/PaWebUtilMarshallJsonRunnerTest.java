@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 
@@ -37,6 +38,8 @@ public class PaWebUtilMarshallJsonRunnerTest {
         
         String result2 = "{\"id\":\"1\",\"study_protocol_id\":\"1\",\"trial_ide_ind_id\":\"123\",\"expanded_access_indicator\":\"Yes\","
                 + "\"expanded_access_nct_id\":\"NCT12345678\",\"date_updated\":null}";
+        String result3 ="{\"id\":\"12\",\"nci_id\":\"NCI-2014-00342\",\"study_protocol_id\":\"135258099\",\"date_updated\":\"2017-03-20 17:17:14 -0400\","
+                + "\"model_description\":\"Desc1\",\"masking_description\":\"no masking\",\"no_masking\":\"true\"}";
         AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
         additionalRegInfoDTO.setExported_from_us("true");
         additionalRegInfoDTO.setFda_regulated_device("true");
@@ -52,9 +55,20 @@ public class PaWebUtilMarshallJsonRunnerTest {
         addTrialIndIdeDto.setExpandedAccessIndicator("Yes");
         addTrialIndIdeDto.setExpandedAccessNctId("NCT12345678");
         addTrialIndIdeDto.setId("1");
+        
+        AdditionalDesignDetailsDTO  addDesignDetailsDto = new AdditionalDesignDetailsDTO();
+        addDesignDetailsDto.setId("12");
+        addDesignDetailsDto.setMaskingDescription("no masking");
+        addDesignDetailsDto.setModelDescription("Desc1");
+        addDesignDetailsDto.setDateUpdated("2017-03-20 17:17:14 -0400");
+        addDesignDetailsDto.setNciId("NCI-2014-00342");
+        addDesignDetailsDto.setNoMasking("true");
+        addDesignDetailsDto.setStudyProtocolId("135258099");
+        
         return Arrays.asList(new Object[][] {
             { additionalRegInfoDTO, result },
-            { addTrialIndIdeDto, result2 }
+            { addTrialIndIdeDto, result2 },
+            { addDesignDetailsDto, result3}
         });
     }
 

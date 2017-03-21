@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.type.TypeReference;
 
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.AdditionalEligibilityCriteriaDTO;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
@@ -413,6 +414,86 @@ public class TrialInfoMergeHelper {
                             + msId, e);
         }
     }
+    /**
+     * 
+     * @param studyProtocolIi the studyProtocolIi
+     * @param webDTO webDTO
+     * @param nciId nciId
+     * @throws PAException the exception
+     */
+    public void mergeDesignDetailsRead(Ii studyProtocolIi, 
+            ISDesignDetailsWebDTO webDTO, String nciId) throws PAException {
+        LOG.info("Getting Design Details data info from new DB"
+                + IiConverter.convertToString(studyProtocolIi));
+        String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
+        AdditionalDesignDetailsDTO designDetailsDto = new AdditionalDesignDetailsDTO();
+        try {
+            String response = getHTTPResponseForStudyProtocol(studyProtocolId, nciId);
+            
+            if (response != null) {
+                List<AdditionalDesignDetailsDTO> designDetailsDtoList = 
+                        (List<AdditionalDesignDetailsDTO>) PAWebUtil
+                    .unmarshallJSON(response, new TypeReference<List<AdditionalDesignDetailsDTO>>() { });
+                if (designDetailsDtoList != null && designDetailsDtoList.size() == 1) {
+                    designDetailsDto = designDetailsDtoList.get(0);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error(ERROR_MESSAGE + studyProtocolId);
+            throw new PAException(ERROR_MESSAGE + e.getMessage(), e);
+        }
+        if (designDetailsDto != null) {
+            webDTO.setMaskingDescription(designDetailsDto.getMaskingDescription());
+            webDTO.setModelDescription(designDetailsDto.getModelDescription());
+            webDTO.setNoMasking(designDetailsDto.getNoMasking());
+            webDTO.setLastUpdatedDate(designDetailsDto.getDateUpdated());
+            webDTO.setId(designDetailsDto.getId());
+        }
+    }
+    
+    /**
+     * 
+     * @param studyProtocolIi studyProtocolIi
+     * @param nciId nciId
+     * @param webDto webDto
+     * @return eligibilityDto 
+     * @throws PAException PAException
+     */
+    public AdditionalDesignDetailsDTO mergeDesignDetailsUpdate(
+            Ii studyProtocolIi, String nciId, ISDesignDetailsWebDTO webDto) throws PAException {
+        LOG.info("Updating Design Details to new DB"
+                + IiConverter.convertToString(studyProtocolIi));
+        AdditionalDesignDetailsDTO designDetailsDto = new AdditionalDesignDetailsDTO();
+        designDetailsDto.setMaskingDescription(webDto.getMaskingDescription());
+        designDetailsDto.setModelDescription(webDto.getModelDescription());
+        designDetailsDto.setNoMasking(webDto.getNoMasking());
+        designDetailsDto.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
+        designDetailsDto.setNciId(nciId);
+        designDetailsDto.setDateUpdated(webDto.getLastUpdatedDate());
+        designDetailsDto.setId(webDto.getId());
+        try {
+            String postBody = PAWebUtil.marshallJSON(designDetailsDto);
+            String response = "";
+            if (webDto.getId() == null) {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            } else {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl() + "/" + webDto.getId(), PUT, postBody);
+            }
+            designDetailsDto = (AdditionalDesignDetailsDTO) PAWebUtil
+                    .unmarshallJSON(response, AdditionalDesignDetailsDTO.class);
+        } catch (Exception e) {
+            LOG.error(
+                    "Error in updating Design Details in rest service for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+            throw new PAException(
+                    "Error in updating Design Details in rest service for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+        }
+        return designDetailsDto;
+    }
+    
     
     /**
      * 

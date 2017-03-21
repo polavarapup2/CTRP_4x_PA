@@ -126,6 +126,7 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
     private String lastUpdatedDate;
     private String modelDescription;
     private String maskingDescription;
+    private String noMasking;
     private String id;
     
     /**
@@ -533,6 +534,20 @@ public class ISDesignDetailsWebDTO extends BaseISDesignDetailsWebDTO { //NOPMD
      */
     public void setMaskingDescription(String maskingDescription) {
         this.maskingDescription = maskingDescription;
+    }
+    /**
+     * 
+     * @return noMasking
+     */
+    public String getNoMasking() {
+        return noMasking;
+    }
+    /**
+     * 
+     * @param noMasking the noMasking
+     */
+    public void setNoMasking(String noMasking) {
+        this.noMasking = noMasking;
     }
     
     

@@ -230,7 +230,7 @@
                       </tr>
                        <tr>
                         <td scope="row" class="label">
-                            <label for="export"><fmt:message key="regulatory.usa.export"/></label><span class="required">*</span>
+                            <label for="export"><fmt:message key="regulatory.usa.export"/>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="export" name="webDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}" />

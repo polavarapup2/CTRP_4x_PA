@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.AdditionalEligibilityCriteriaDTO;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
@@ -37,6 +38,7 @@ public class TrialInfoMergeHelperTest {
     private List<AdditionalRegulatoryInfoDTO> regulatoryDtoList = new ArrayList<AdditionalRegulatoryInfoDTO>();
     private List<AdditionalTrialIndIdeDTO> trialIndIdeDtoList = new ArrayList<AdditionalTrialIndIdeDTO>();
     private List<AdditionalEligibilityCriteriaDTO> eligibilityDtoList = new ArrayList<AdditionalEligibilityCriteriaDTO>();
+    private List<AdditionalDesignDetailsDTO> designDetailsDtoList = new ArrayList<AdditionalDesignDetailsDTO>();
     private Ii studyId;
     @Before
     public void setUp() throws PAException {
@@ -377,4 +379,74 @@ public class TrialInfoMergeHelperTest {
         webDTO.setLastUpdatedDate("2017-03-01 23:30:38 -0500");
         helper.mergeEligibilityCriteriaUpdate(IiConverter.convertToIi(169939706L), "NCI-2014-02277", webDTO);
     }
+    
+    @Test
+    public void mergeDesignDetailsReadTest() throws PAException, IOException {
+        AdditionalDesignDetailsDTO dto = new AdditionalDesignDetailsDTO();
+        dto.setDateUpdated("2017-03-01 23:30:38 -0500");
+        dto.setMaskingDescription("maskingDescription");
+        dto.setModelDescription("modelDescription");
+        dto.setNciId("NCI-2000-12222");
+        dto.setNoMasking("True");
+        dto.setStudyProtocolId("1");
+        designDetailsDtoList.add(dto);
+        helper.setClient(client);
+        when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(
+                PAWebUtil.marshallJSON(designDetailsDtoList));
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        helper.mergeDesignDetailsRead(studyId, webDTO, "NCI-2000-12222");
+        assertEquals(webDTO.getMaskingDescription(),
+                dto.getMaskingDescription());
+        assertEquals(webDTO.getModelDescription(),
+                dto.getModelDescription());
+        assertEquals(webDTO.getNoMasking(),
+                dto.getNoMasking());
+    }
+    
+    @Test(expected=PAException.class)
+    public void mergeDesignDetailsExceptionTest() throws PAException {
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        helper.mergeDesignDetailsRead(studyId, webDTO, "NCI-2000-12222");
+    }
+    
+    @Test
+    public void mergeDesignDetailsUpdateTest() throws PAException, IOException {
+        AdditionalDesignDetailsDTO dto = new AdditionalDesignDetailsDTO();
+        dto.setDateUpdated("2017-03-01 23:30:38 -0500");
+        dto.setMaskingDescription("Desc1");
+        dto.setModelDescription("ModelDesc1");
+        dto.setNciId("NCI-2000-12222");
+        dto.setNoMasking("True");
+        dto.setStudyProtocolId("1");
+        
+        helper.setClient(client);
+        String reponse ="{\"id\":null,\"nci_id\":\"NCI-2000-12222\",\"study_protocol_id\":\"1\",\"date_updated\":null,"
+                + "\"model_description\":\"ModelDesc1\",\"masking_description\":\"Desc1\",\"no_masking\":\"True\"}";
+        when(client.sendHTTPRequest(url, "POST", 
+                PAWebUtil.marshallJSON(dto))).thenReturn(reponse);
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        webDTO.setLastUpdatedDate("2017-03-01 23:30:38 -0500");
+        webDTO.setMaskingDescription("Desc1");
+        webDTO.setModelDescription("ModelDesc1");
+        webDTO.setNoMasking("True");
+        dto = helper.mergeDesignDetailsUpdate(studyId, "NCI-2000-12222", webDTO);
+        assertEquals(webDTO.getMaskingDescription(),
+                dto.getMaskingDescription());
+        assertEquals(webDTO.getModelDescription(),
+                dto.getModelDescription());
+    }
+    @Test(expected=PAException.class)
+    public void mergeDesignDetailsUpdateExceptionTest() throws PAException {
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        webDTO.setLastUpdatedDate("2017-03-01 23:30:38 -0500");
+        webDTO.setMaskingDescription("Desc1");
+        webDTO.setModelDescription("ModelDesc1");
+        webDTO.setNoMasking("True");
+        helper.mergeDesignDetailsUpdate(IiConverter.convertToIi(169939706L), "NCI-2014-02277", webDTO);
+    }
+    
 }
