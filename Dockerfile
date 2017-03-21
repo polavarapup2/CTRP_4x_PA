@@ -52,6 +52,7 @@ COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 
 # ADD Environment specific properties files
 COPY ctrp.inttest.properties    $JBOSS_HOME/ctrp/ctrp.inttest.properties
+COPY ctrp.inttest2.properties    $JBOSS_HOME/ctrp/ctrp.inttest2.properties
 COPY ctrp.uat.properties        $JBOSS_HOME/ctrp/ctrp.uat.properties
 COPY ctrp.production.properties $JBOSS_HOME/ctrp/ctrp.production.properties
 
