@@ -1345,7 +1345,7 @@ public class TrialRegistrationValidatorTest {
      */
     @Test
     public void testvalidatePhaseValid() {
-        studyProtocolDTO.setPhaseCode(CdConverter.convertStringToCd("0"));
+        studyProtocolDTO.setPhaseCode(CdConverter.convertStringToCd("Early Phase 1"));
         validator.validatePhase(studyProtocolDTO, errorMsg);
         checkErrorMsg("");
     }

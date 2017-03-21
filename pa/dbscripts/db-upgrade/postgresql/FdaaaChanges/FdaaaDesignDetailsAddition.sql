@@ -1,0 +1,1 @@
+INSERT INTO primary_purpose (name,code) VALUES ('DEVICE','Device Feasibility');

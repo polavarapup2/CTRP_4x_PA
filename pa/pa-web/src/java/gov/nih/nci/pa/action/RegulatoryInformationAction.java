@@ -137,16 +137,17 @@ public class RegulatoryInformationAction extends ActionSupport {
         List<Long> identifiersList = new ArrayList<Long>();
         Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
         identifiersList.add(studyprotocolId);
-        Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
+        Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService()
+                .getTrialNciId(identifiersList);
         validateForm(spDTO);
         if (hasFieldErrors()) {
             return query();
         }
         // helper glue code for updating the additional regulatory info
         try {
-            
-            helper.mergeRegulatoryInfoUpdate(studyProtocolIi, identifierMap.get(studyprotocolId), 
-                    webDTO);
+
+            helper.mergeRegulatoryInfoUpdate(studyProtocolIi,
+                    identifierMap.get(studyprotocolId), webDTO);
         } catch (PAException e) {
             request.setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
             return query();
@@ -201,34 +202,33 @@ public class RegulatoryInformationAction extends ActionSupport {
                     .getSession().getAttribute(Constants.STUDY_PROTOCOL_II);
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolIi);
-            
+
             List<Long> identifiersList = new ArrayList<Long>();
             Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
             identifiersList.add(studyprotocolId);
-            Map<Long, String> identifierMap = PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList);
-            
-            if (BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())) {
-                if (spDTO.getSection801Indicator().getValue() != null) {
-                    webDTO.setSection801Indicator(BlConverter
-                            .convertToString(spDTO.getSection801Indicator()));
-                }
-                if (spDTO.getFdaRegulatedIndicator().getValue() != null) {
-                    webDTO.setFdaRegulatedInterventionIndicator(BlConverter
-                            .convertToString(spDTO.getFdaRegulatedIndicator()));
-                }
-                if (spDTO.getDelayedpostingIndicator().getValue() != null) {
-                    webDTO.setDelayedPostingIndicator(BlConverter
-                            .convertToString(spDTO.getDelayedpostingIndicator()));
-                }
-                if (spDTO.getDataMonitoringCommitteeAppointedIndicator()
-                        .getValue() != null) {
-                    webDTO.setDataMonitoringIndicator((BlConverter.convertToString(spDTO
-                            .getDataMonitoringCommitteeAppointedIndicator())));
-                }
+            Map<Long, String> identifierMap = PaRegistry
+                    .getStudyProtocolService().getTrialNciId(identifiersList);
+
+            if (spDTO.getSection801Indicator().getValue() != null) {
+                webDTO.setSection801Indicator(BlConverter.convertToString(spDTO
+                        .getSection801Indicator()));
             }
-            
+            if (spDTO.getFdaRegulatedIndicator().getValue() != null) {
+                webDTO.setFdaRegulatedInterventionIndicator(BlConverter
+                        .convertToString(spDTO.getFdaRegulatedIndicator()));
+            }
+            if (spDTO.getDelayedpostingIndicator().getValue() != null) {
+                webDTO.setDelayedPostingIndicator(BlConverter
+                        .convertToString(spDTO.getDelayedpostingIndicator()));
+            }
+            if (spDTO.getDataMonitoringCommitteeAppointedIndicator().getValue() != null) {
+                webDTO.setDataMonitoringIndicator((BlConverter.convertToString(spDTO
+                        .getDataMonitoringCommitteeAppointedIndicator())));
+            }
+
             // Call glue code helper class
-            helper.mergeRegulatoryInfoRead(studyProtocolIi, identifierMap.get(studyprotocolId), webDTO);
+            helper.mergeRegulatoryInfoRead(studyProtocolIi,
+                    identifierMap.get(studyprotocolId), webDTO);
         } catch (PAException e) {
             ServletActionContext.getRequest().setAttribute(
                     Constants.FAILURE_MESSAGE, e.getMessage());
@@ -237,30 +237,38 @@ public class RegulatoryInformationAction extends ActionSupport {
 
         return SUCCESS;
     }
-    
+
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     private void validateForm(StudyProtocolDTO spDTO) {
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) { //TODO: only if start date after FDAAA
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) { // TODO: only
+                                                                 // if start
+                                                                 // date after
+                                                                 // FDAAA
             addFieldError("webDTO.fdaRegulatedDrug",
-                    "Studies a U.S. FDA-regulated Drug Product is required field");            
+                    "Studies a U.S. FDA-regulated Drug Product is required field");
         }
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) { //TODO: only if start date after FDAAA
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) { // TODO: only
+                                                                   // if start
+                                                                   // date after
+                                                                   // FDAAA
             addFieldError("webDTO.fdaRegulatedDevice",
                     "Studies a U.S. FDA-regulated Device Product is required field");
         }
 
         if (!BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())
-                && StringUtils.isBlank(webDTO.getFdaRegulatedInterventionIndicator())) {
+                && StringUtils.isBlank(webDTO
+                        .getFdaRegulatedInterventionIndicator())) {
             addFieldError("webDTO.fdaRegulatedInterventionIndicator",
                     "FDA Regulated Intervention Indicator is required field");
         }
-        
-        if (Boolean.TRUE.equals(Boolean.valueOf(webDTO.getSection801Indicator()))
+
+        if (Boolean.TRUE
+                .equals(Boolean.valueOf(webDTO.getSection801Indicator()))
                 && spDTO instanceof NonInterventionalStudyProtocolDTO) {
             addFieldError("webDTO.section801Indicator",
                     "Section 801 Indicator should be No for Non-interventional trials");
         }
-                
+
     }
 
     /**
@@ -337,6 +345,7 @@ public class RegulatoryInformationAction extends ActionSupport {
     public void setSelectedRegAuth(String selectedRegAuth) {
         this.selectedRegAuth = selectedRegAuth;
     }
+
     /**
      * 
      * @return helper
@@ -344,12 +353,14 @@ public class RegulatoryInformationAction extends ActionSupport {
     public TrialInfoMergeHelper getHelper() {
         return helper;
     }
+
     /**
      * 
-     * @param helper the helper
+     * @param helper
+     *            the helper
      */
     public void setHelper(TrialInfoMergeHelper helper) {
         this.helper = helper;
     }
-    
+
 }

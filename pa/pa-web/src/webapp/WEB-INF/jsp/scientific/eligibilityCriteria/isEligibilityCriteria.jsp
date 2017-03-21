@@ -108,9 +108,9 @@ function showRow(row) {
 function checkGenderDropDown(){
 	 if ($('gender').value == '' | $('gender').value == 'Both') {
          hideRow($('genderNewRow'));
-         $('genderNew').value == '';
          hideRow($('genderDescriptionRow'));
          $(genderDescription).value='';
+         $('genderNew').value = '';
      } else {
     	 showRow($('genderNewRow'));
      }

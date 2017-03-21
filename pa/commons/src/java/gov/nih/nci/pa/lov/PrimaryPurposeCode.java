@@ -124,11 +124,7 @@ public class PrimaryPurposeCode extends AbstractLov {
      */
     public static final PrimaryPurposeCode OTHER = new PrimaryPurposeCode(
             "OTHER", "Other");
-    /**
-     * DEVICE.
-     */
-    public static final PrimaryPurposeCode DEVICE = new PrimaryPurposeCode("DEVICE", "Device Feasibility");
-
+    
     private String name;
 
     private String code;

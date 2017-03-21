@@ -190,7 +190,7 @@
                       <!--   Delayed Posting Indicator-->
                       <tr id="delpostindrow">
                         <td scope="row" class="label">
-                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">${asterisk}</span>
+                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">*</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="delpostindid" name="webDTO.delayedPostingIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDelPostingIndDropDown();" />

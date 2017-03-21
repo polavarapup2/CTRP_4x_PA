@@ -11,8 +11,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 // this function is called from body onload in main.jsp (decorator)
 function callOnloadFunctions(){
-    setFocusToFirstControl();
-    displayMaskingRoles();         
+    setFocusToFirstControl();       
 }
 
 function displayMaskingRoles() {	
