@@ -52,7 +52,7 @@ COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 
 
 RUN echo $LDAP_PASS>ctrp_ldap_password
-COPY ctrp_ldap_password $JBOSS_HOME/ctrp_ldap_password
+COPY ctrp_ldap_password $JBOSS_HOME/.ctrp_ldap_password
 # ADD Environment specific properties files
 COPY ctrp.inttest.properties    $JBOSS_HOME/ctrp/ctrp.inttest.properties
 COPY ctrp.inttest2.properties    $JBOSS_HOME/ctrp/ctrp.inttest2.properties
