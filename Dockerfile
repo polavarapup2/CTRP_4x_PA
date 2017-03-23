@@ -2,7 +2,6 @@
 FROM centos:7
 MAINTAINER Jeremy Pumphrey <jeremypumphrey@gmail.com>
 ARG LDAP_PASS
-#ENV LDAP_PASS ${LDAP_PASS}
 
 # Install packages necessary to run EAP
 RUN yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
@@ -51,7 +50,7 @@ COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 #RUN mkdir -pv /local/content/ctrppa/accrual_batch
 #RUN mkdir -pv /local/content/ctrppa/tooltips
 
-RUN touch ctrp_ldap_password
+#RUN touch ctrp_ldap_password
 RUN echo "${LDAP_PASS}" >ctrp_ldap_password
 RUN ls -alh
 COPY ctrp_ldap_password "$JBOSS_HOME"/.ctrp_ldap_password
