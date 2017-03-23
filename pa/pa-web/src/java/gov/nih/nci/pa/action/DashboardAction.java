@@ -446,7 +446,7 @@ public class DashboardAction extends AbstractCheckInOutAction implements
 
         try {
             StudyProtocolQueryCriteria criteria = buildCriteria();
-            return search(criteria);
+            return searchTrials(criteria);
         } catch (PAException e) {
             LOG.error(e, e);
             request.setAttribute(Constants.FAILURE_MESSAGE,
@@ -459,7 +459,7 @@ public class DashboardAction extends AbstractCheckInOutAction implements
      * @param criteria
      * @return
      */
-    private String search(StudyProtocolQueryCriteria... criteriaList) {
+    private String searchTrials(StudyProtocolQueryCriteria... criteriaList) {
         try {
             List<StudyProtocolQueryDTO> results = new ArrayList<StudyProtocolQueryDTO>();
             for (StudyProtocolQueryCriteria criteria : criteriaList) {

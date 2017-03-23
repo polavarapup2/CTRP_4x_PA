@@ -112,7 +112,7 @@ import org.junit.runners.Suite.SuiteClasses;
         DashboardMenuTest.class, RssOwnershipTest.class,
         ManageUserGroupsTest.class, AbstractionValidationTest.class,
         ResultsAbstractorRoleActionsTest.class, TrialFundingTest.class,
-        TrialValidationTest.class, GeneralTrialDetailsTest.class,
+        TrialValidationTest.class, GeneralTrialDetailsTest.class, DesignDetailsTest.class,
         ResultsPublishedDateTest.class
 
 })
