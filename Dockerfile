@@ -2,7 +2,7 @@
 FROM centos:7
 MAINTAINER Jeremy Pumphrey <jeremypumphrey@gmail.com>
 ARG LDAP_PASS
-ENV LDAP_PASS ${LDAP_PASS}
+#ENV LDAP_PASS ${LDAP_PASS}
 
 # Install packages necessary to run EAP
 RUN yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
