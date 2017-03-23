@@ -1,6 +1,7 @@
 # Base image 
 FROM centos:7
 MAINTAINER Jeremy Pumphrey <jeremypumphrey@gmail.com>
+ARG LDAP_PASS
 
 # Install packages necessary to run EAP
 RUN yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
@@ -49,12 +50,15 @@ COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 #RUN mkdir -pv /local/content/ctrppa/accrual_batch
 #RUN mkdir -pv /local/content/ctrppa/tooltips
 
-
+#RUN touch ctrp_ldap_password
+RUN echo "${LDAP_PASS}" >ctrp_ldap_password
+RUN ls -alh
+RUN cp ctrp_ldap_password "$JBOSS_HOME"/.ctrp_ldap_password
 # ADD Environment specific properties files
-COPY ctrp.inttest.properties    $JBOSS_HOME/ctrp/ctrp.inttest.properties
-COPY ctrp.inttest2.properties    $JBOSS_HOME/ctrp/ctrp.inttest2.properties
-COPY ctrp.uat.properties        $JBOSS_HOME/ctrp/ctrp.uat.properties
-COPY ctrp.production.properties $JBOSS_HOME/ctrp/ctrp.production.properties
+COPY ctrp.inttest.properties    "$JBOSS_HOME"/ctrp/ctrp.inttest.properties
+COPY ctrp.inttest2.properties    "$JBOSS_HOME"/ctrp/ctrp.inttest2.properties
+COPY ctrp.uat.properties        "$JBOSS_HOME"/ctrp/ctrp.uat.properties
+COPY ctrp.production.properties "$JBOSS_HOME"/ctrp/ctrp.production.properties
 
 USER root
 CMD $JBOSS_HOME/bin/standalone.sh
