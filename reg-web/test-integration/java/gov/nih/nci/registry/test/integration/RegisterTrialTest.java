@@ -115,6 +115,12 @@ import com.thoughtworks.selenium.SeleniumException;
 @Batch(number = 1)
 public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
 
+    @Override
+    public void setUp() throws  Exception {
+        super.setUp();
+        setupFamilies();
+    }
+
     /**
      * Tests registering a trial.
      * 
@@ -993,7 +999,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+        //associateProgramCodes();
         
         loginAndAcceptDisclaimer();
         hoverLink("Register Trial");
@@ -1065,7 +1071,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+       // associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1123,7 +1129,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+       // associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1175,7 +1181,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+        //associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1249,7 +1255,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+        //associateProgramCodes();
         
         loginAndAcceptDisclaimer();
         hoverLink("Register Trial");
@@ -1290,7 +1296,7 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        associateProgramCodes();
+        //associateProgramCodes();
         loginAndAcceptDisclaimer();
 
         String rand = RandomStringUtils.randomNumeric(10);
@@ -1325,20 +1331,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
         assertOptionSelected("PG1-Cancer Program1");
         assertOptionSelected("PG2-Cancer Program2");        
     }
-    
-    private void associateProgramCodes() throws Exception {
-        QueryRunner qr = new QueryRunner();
-        qr.update(connection, "delete from program_code");
-        qr.update(connection, "insert into program_code (family_id, program_code, program_name, status_code) " +
-                "values (1,'PG1', 'Cancer Program1', 'ACTIVE')");
-        qr.update(connection, "insert into program_code (family_id, program_code, program_name, status_code) " +
-                "values (1,'PG2', 'Cancer Program2', 'ACTIVE')");
-        qr.update(connection, "insert into program_code ( family_id, program_code, program_name, status_code) " +
-                "values (1,'PG3', 'Cancer Program3', 'ACTIVE')");
-        qr.update(connection, "insert into program_code ( family_id, program_code, program_name, status_code) " +
-                "values (1,'PG4', 'Cancer Program4', 'ACTIVE')");
-    }
-    
     
     private long getProgramCodesCount(long trialId) throws SQLException {
         
