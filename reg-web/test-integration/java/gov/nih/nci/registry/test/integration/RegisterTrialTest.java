@@ -999,8 +999,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        //associateProgramCodes();
-        
         loginAndAcceptDisclaimer();
         hoverLink("Register Trial");
         pause(500);
@@ -1071,7 +1069,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-       // associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1129,7 +1126,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-       // associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1181,7 +1177,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        //associateProgramCodes();
         String category ="National";
         String rand = RandomStringUtils.randomNumeric(10);
         String trialName ="Name"+rand;
@@ -1255,8 +1250,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        //associateProgramCodes();
-        
         loginAndAcceptDisclaimer();
         hoverLink("Register Trial");
         pause(500);
@@ -1296,7 +1289,6 @@ public class RegisterTrialTest extends AbstractRegistrySeleniumTest {
             return;
         }
         
-        //associateProgramCodes();
         loginAndAcceptDisclaimer();
 
         String rand = RandomStringUtils.randomNumeric(10);
