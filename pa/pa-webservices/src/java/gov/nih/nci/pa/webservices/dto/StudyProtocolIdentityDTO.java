@@ -17,7 +17,7 @@ public class StudyProtocolIdentityDTO {
     private String userLastCreated;
     private String trialType;
     private String currentUser;
-    private boolean isUpdate;
+    private boolean updateIndicator;
     private List<String> secondaryIdentifiers;
     /**
      * 
@@ -105,17 +105,17 @@ public class StudyProtocolIdentityDTO {
     }
     /**
      * 
-     * @return isUpdate
+     * @return updateIndicator
      */
-    public boolean isUpdate() {
-        return isUpdate;
+    public boolean isUpdateIndicator() {
+        return updateIndicator;
     }
     /**
      * 
-     * @param isUpdate the isUpdate
+     * @param updateIndicator the updateIndicator
      */
-    public void setUpdate(boolean isUpdate) {
-        this.isUpdate = isUpdate;
+    public void setUpdateIndicator(boolean updateIndicator) {
+        this.updateIndicator = updateIndicator;
     }
     /**
      * 
