@@ -455,7 +455,8 @@ function maskingRules() {
     <tr>
         <td scope="row" class="label"><fmt:message key="isdesign.details.accrualNum"/></td>
         <td id="isdesign.details.accrualNum">
-            <s:property value="(new gov.nih.nci.pa.service.util.PAServiceUtils()).getTrialAccruals(#session.studyProtocolIi)"/>
+            <jsp:useBean id="paServiceUtils" scope="request" class="gov.nih.nci.pa.service.util.PAServiceUtils"/>
+            <s:property value="%{#request.paServiceUtils.getTrialAccruals(#session.studyProtocolIi)}"/>
         </td>
     </tr>
 </table>

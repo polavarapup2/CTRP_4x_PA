@@ -6,7 +6,7 @@
 <head>
 <title><fmt:message key="addSites.title" /></title>
 <s:head />
-<c:url value="/protected/addSites" var="backendUrlTemplate"/>  
+<c:url value="/protected/addSites" var="backendUrlTemplate"/>
 <c:url value="/protected/popuplookuppersons.action" var="lookupPersUrl" />
 <c:url value="/protected/addSitesvalidateSiteData.action"
     var="validateUrl" />
@@ -108,8 +108,8 @@ th#th3 {
         $('identifier').value = '';
         $('officialTitle').value = '';
     }
-    
-    function cancel() {       
+
+    function cancel() {
         $('addSitesForm').action = 'addSites.action';
         $('addSitesForm').submit();
     }
@@ -119,47 +119,47 @@ th#th3 {
         $('addSitesForm').action = 'addSitessearch.action';
         $('addSitesForm').submit();
     }
-    
+
     function beginAddingSites(spID) {
         disableSorting();
         $('plussign_'+spID).hide();
         $('saveCancelDiv').show();
         if ($('s2div_' + spID)!=null) {
-            $('s2div_' + spID).show();  
+            $('s2div_' + spID).show();
         }
         prepareSiteEntryRow(spID);
         prepareSiteInformationFormControls(spID);
         showPopover(spID);
     }
-    
+
     var popoverShownOnce = false;
     function showPopover(spID) {
         if (!popoverShownOnce) {
-              popoverShownOnce = true;           
+              popoverShownOnce = true;
               jQuery("#trial_"+spID+"_info").popover({
                   'animation' : true,
-                  'trigger': 'manual' 
+                  'trigger': 'manual'
               });
               jQuery("#trial_"+spID+"_info").popover('show');
         }
     }
-    
+
     function prepareSiteInformationFormControls(spID) {
         var div = $('addSitesDiv_'+spID);
         var col = $('addSitesCol_'+spID);
-        col.appendChild(div.parentNode.removeChild(div));   
+        col.appendChild(div.parentNode.removeChild(div));
         jQuery(div).show("blind");
     }
-    
+
     function prepareSiteEntryRow(spID) {
         var trialRow = $('trialrow_'+spID);
         trialRow.addClassName('no-border-row');
-        
+
         var addSiteRow = document.createElement('tr');
         addSiteRow.setAttribute('id','addSitesRow_'+spID);
         addSiteRow.setAttribute('class',trialRow.getAttribute('class'));
         $(addSiteRow).addClassName('bottom-border-only');
-        
+
         var addSiteCol = document.createElement('td');
         addSiteCol.setAttribute('id','addSitesCol_'+spID);
         addSiteCol.setAttribute('colspan','3');
@@ -167,7 +167,7 @@ th#th3 {
         addSiteRow.appendChild(addSiteCol);
         trialRow.parentNode.insertBefore(addSiteRow, trialRow.nextSibling);
     }
-    
+
     var persid;
     var chosenname;
     function setpersid(persIdentifier, sname, email, phone) {
@@ -178,29 +178,29 @@ th#th3 {
          showPopup('${lookupPersUrl}', function () {
              if (persid!=null) {
                  $("trial_"+spID+"_site_"+index+"_pi_poid").value = persid;
-                 $("trial_"+spID+"_site_"+index+"_pi_name").innerHTML = chosenname;     
+                 $("trial_"+spID+"_site_"+index+"_pi_name").innerHTML = chosenname;
                  persid = null;
                  chosenname = null;
              }
-         }, 'Select Principal Investigator');       
+         }, 'Select Principal Investigator');
     }
-    
+
     function addAnotherSiteRow(spID, index) {
         $('trial_'+spID+'_site_'+index+'_btnrow').hide();
         index++;
-        
+
         jQuery('#trial_'+spID+'_site_'+index+'_row').show('highlight');
         $('trial_'+spID+'_site_'+index+'_stathistrow').show();
         $('trial_'+spID+'_site_'+index+'_header').show();
         if ($('trial_'+spID+'_site_'+index+'_btnrow')!=null) {
             $('trial_'+spID+'_site_'+index+'_btnrow').show();
         }
-        
+
         preSelectSiteOrgToBeDifferentFromPreviousRows(spID, index);
-        
-        
+
+
     }
-    
+
     function preSelectSiteOrgToBeDifferentFromPreviousRows(spID, index) {
         var orgDD = $('trial_'+spID+'_site_'+index+'_org_poid');
         for (var i = 0; i < orgDD.length; i++) {
@@ -209,9 +209,9 @@ th#th3 {
                 orgDD.setValue(poOrgID);
                 return;
             }
-        }       
+        }
     }
-    
+
     function isPoOrgIdNotSelectedInPreviousRows(poOrgID, spID, index) {
         for (var i = index-1; i >= 0; i--) {
              if ($F('trial_'+spID+'_site_'+i+'_org_poid')==poOrgID) {
@@ -220,7 +220,7 @@ th#th3 {
         }
         return true;
     }
-    
+
     function copySiteDataFromRowAbove(spID, index) {
         if (index <= 0) {
             return;
@@ -230,7 +230,7 @@ th#th3 {
         $('trial_'+spID+'_site_'+index+'_localID').setValue($('trial_'+spID+'_site_'+(index-1)+'_localID').getValue());
         $('trial_'+spID+'_site_'+index+'_status').setValue($('trial_'+spID+'_site_'+(index-1)+'_status').getValue());
         $('trial_'+spID+'_site_'+index+'_statusDate').setValue($('trial_'+spID+'_site_'+(index-1)+'_statusDate').getValue());
-        
+
         (function($) {
              if ($.fn.DataTable.isDataTable( '#trial_'+spID+'_site_'+(index-1)+'_trialStatusHistoryTable' ) ) {
                  var copyFromTable = $('#trial_'+spID+'_site_'+(index-1)+'_trialStatusHistoryTable').DataTable();
@@ -242,7 +242,7 @@ th#th3 {
                                     type : "POST",
                                     url : backendUrlTemplate
                                             + "clearStatusHistory.action",
-                                    data : {                                       
+                                    data : {
                                         discriminator : 'trial_'+spID+'_site_'+index+'.statusHistory.'
                                     },
                                     timeout : 30000
@@ -264,9 +264,9 @@ th#th3 {
                         });
                  }
              }
-        })(jQuery);   
+        })(jQuery);
     }
-    
+
     function addSiteStatus(spID, index) {
         (function($) {
             var statusCode = $('#trial_'+spID+'_site_'+index+'_status').val();
@@ -278,8 +278,8 @@ th#th3 {
                 alert('Please provide a status code.');
                 return;
             }
-            
-            $('#trial_'+spID+'_site_'+index+'_statusHistoryDiv').show(); 
+
+            $('#trial_'+spID+'_site_'+index+'_statusHistoryDiv').show();
             if (!$.fn.DataTable.isDataTable( '#trial_'+spID+'_site_'+index+'_trialStatusHistoryTable' ) ) {
                    $('#trial_'+spID+'_site_'+index+'_trialStatusHistoryTable').DataTable({
                        "bPaginate" : false,
@@ -301,7 +301,7 @@ th#th3 {
                        "columnDefs" : [ {
                            "targets" : 4,
                            "render" : function(data, type, r, meta) {
-                               var content = '<i class="fa fa-edit" title="Edit '+r.statusCode+' recruitment status" data-toggle="tooltip" ></i><i title="Delete '+r.statusCode+' recruitment status" data-toggle="tooltip" class="fa fa-trash-o"></i>';                               
+                               var content = '<i class="fa fa-edit" title="Edit '+r.statusCode+' recruitment status" data-toggle="tooltip" ></i><i title="Delete '+r.statusCode+' recruitment status" data-toggle="tooltip" class="fa fa-trash-o"></i>';
                                return content;
                            }
                        } ],
@@ -325,7 +325,7 @@ th#th3 {
                    }).on('xhr', function() {
                        $('#trial_'+spID+'_site_'+index+'_indicator').hide();
                    });
-                   
+
 
                    $('#trial_'+spID+'_site_'+index+'_trialStatusHistoryTable tbody')
                            .on(
@@ -337,8 +337,8 @@ th#th3 {
                                        var statusDate = table.row(
                                                $(this).parents('tr')).data().statusDate;
                                        var statusCode = table.row(
-                                               $(this).parents('tr')).data().statusCode;   
-                                       
+                                               $(this).parents('tr')).data().statusCode;
+
                                        if ($("#dialog-edit").dialog("instance")) {
                                            $("#dialog-edit").dialog("destroy");
                                        }
@@ -353,7 +353,7 @@ th#th3 {
                                                            if ($('#statusDate').val() == '') {
                                                                alert('Please provide a valid status date.');
                                                                return;
-                                                           }                                                                                  
+                                                           }
                                                            $(this).dialog("close");
                                                            $('#trial_'+spID+'_site_'+index+'_indicator').show();
                                                            $
@@ -365,7 +365,7 @@ th#th3 {
                                                                                data : {
                                                                                    statusDate : $(
                                                                                            '#statusDate')
-                                                                                           .val(),                                                                               
+                                                                                           .val(),
                                                                                    statusCode : $(
                                                                                            '#statusCode')
                                                                                            .val(),
@@ -400,14 +400,14 @@ th#th3 {
                                                        }
                                                    }
                                                });
-                                       
+
                                        $("#dialog-edit").dialog('open');
                                        $('#uuid').val(uuid);
                                        $('#statusDate').val(statusDate);
-                                       $('#statusCode').val(statusCode);                                       
+                                       $('#statusCode').val(statusCode);
                                        $('#editComment').val('');
                                    });
-                   
+
                    $('#trial_'+spID+'_site_'+index+'_trialStatusHistoryTable tbody')
                    .on(
                            'click',
@@ -448,7 +448,7 @@ th#th3 {
 
             }
             var table = $('#trial_'+spID+'_site_'+index+'_trialStatusHistoryTable').DataTable();
-            
+
             $('#trial_'+spID+'_site_'+index+'_indicator').show();
             $
             .ajax(
@@ -468,7 +468,7 @@ th#th3 {
             })
             .done(function() {
                 $('#trial_'+spID+'_site_'+index+'_status').val('');
-                $('#trial_'+spID+'_site_'+index+'_statusDate').val('');                
+                $('#trial_'+spID+'_site_'+index+'_statusDate').val('');
                 $('#runValidations').val('true');
                 table.ajax.reload();
             })
@@ -477,25 +477,25 @@ th#th3 {
                             errorThrown) {
                         alert(jqXHR
                                 .getResponseHeader('msg'));
-                    });            
-            
-        })(jQuery);     
-                
+                    });
+
+        })(jQuery);
+
     }
-    
+
     function save() {
         displayWaitPanel();
         hideErrorRows();
-        
+
          var ajaxReq = new Ajax.Request('${validateUrl}', {
              method: 'post',
              parameters: $('addSitesForm').serialize(),
              onSuccess: function(transport) {
-                 hideWaitPanel();   
+                 hideWaitPanel();
                  var errors = transport.responseJSON;
                  if (errors.errors.length > 0) {
                      firstError = false;
-                     $A(errors.errors).each(function(errObj) {                       
+                     $A(errors.errors).each(function(errObj) {
                          displayErrorsRow(errObj.spID, errObj.index, errObj.errors);
                      });
                  } else {
@@ -505,8 +505,8 @@ th#th3 {
                  }
              },
              onFailure: function(transport) {
-                 hideWaitPanel();  
-                 alert('Error when communicating with the server. Please try again.');                 
+                 hideWaitPanel();
+                 alert('Error when communicating with the server. Please try again.');
              },
              onException: function(requesterObj, exceptionObj) {
                  ajaxReq.options.onFailure(null);
@@ -516,16 +516,16 @@ th#th3 {
              }
          });
     }
-    
+
     function hideErrorRows() {
         $$('.errors').each(Element.hide);
     }
-    
+
     var firstError = false;
     function displayErrorsRow(spID, index, errors) {
-        $('trial_'+spID+'_site_'+index+'_errorDiv').innerHTML = errors;     
-        $('trial_'+spID+'_site_'+index+'_errorRow').show();     
-        
+        $('trial_'+spID+'_site_'+index+'_errorDiv').innerHTML = errors;
+        $('trial_'+spID+'_site_'+index+'_errorRow').show();
+
         if (!firstError) {
             firstError = true;
             var offset = jQuery('#trial_'+spID+'_site_'+index+'_errorRow')
@@ -539,20 +539,20 @@ th#th3 {
                             scrollLeft : offset.left
                         });
         }
-        
+
         jQuery('#trial_'+spID+'_site_'+index+'_errorMainDiv').show('blind');
     }
-    
+
     function disableSorting() {
-        jQuery("#th1").unbind('click');     
+        jQuery("#th1").unbind('click');
         jQuery("#th2").unbind('click');
     }
-    
+
     var dataTable;
-    
+
     (function($) {
         $(document).ready(function() {
-            
+
             $('[data-toggle="tooltip"]').tooltip({
                 'placement' : 'top'
             });
@@ -586,12 +586,12 @@ th#th3 {
                     e.preventDefault();
                 }
             });
-            
+
         });
     }(jQuery));
-    
-    
-    
+
+
+
 </script>
 </head>
 <body>
@@ -667,7 +667,7 @@ th#th3 {
                             header (note: sorting becomes disabled once you start entering
                             sites). To add sites to a trial, click the <b>Plus</b> sign and
                             enter the site information in the fields provided. After adding
-                            your sites to each of the trials, scroll to the bottom of the 
+                            your sites to each of the trials, scroll to the bottom of the
                             page and click <b>Save.</b>
                         </p>
                     </div>
@@ -703,9 +703,9 @@ th#th3 {
                                     </td>
                                      <c:if test="${requestScope['CANCER_TRIAL']}">
                                     <td class="pgc">
-                                    
+
                                         <div id="s2div_${trial.studyProtocolId}" style="display:none; max-width: 160px; ">
-                                           
+
                                                 <select id="pgc_${trial.studyProtocolId}" name="trial_${trial.studyProtocolId}_programCode" multiple="multiple"
                                                         class="s2pgc" data-placeholder="Program Code(s)" >
                                                     <c:forEach var="entry" items="${requestScope['PROGRAM_CODES']}">
@@ -714,9 +714,9 @@ th#th3 {
                                                         </c:if>
                                                     </c:forEach>
                                                 </select>
-                                           
+
                                         </div>
-                                     
+
                                     </td>
                                     </c:if>
                                 </tr>
@@ -754,8 +754,8 @@ th#th3 {
                         <table class="table no-border">
                             <c:forEach items="${trial.orgsThatCanBeAddedAsSite}" var="org"
                                 varStatus="stat">
-                                <c:set var="rowVisibility" value="${stat.first?'':'none'}" />
-                                <tr class="bottom-border-only" style="display: ${rowVisibility};" 
+                                <c:set var="statIndex" value="${stat.index}"/>
+                                <tr class="bottom-border-only" style="display: ${rowVisibility};"
                                    id="trial_${trial.studyProtocolId}_site_${stat.index}_header">
                                     <td><b>Site<span class="required">*</span></b></td>
                                     <td><b>Principal Investigator<span class="required">*</span></b></td>
@@ -782,7 +782,7 @@ th#th3 {
                                     </td>
                                 </tr>
 
-                                
+
                                 <tr id="trial_${trial.studyProtocolId}_site_${stat.index}_row"
                                     style="display: ${rowVisibility};">
                                     <td><select class="form-control" style="min-width: 200px;"
@@ -840,13 +840,13 @@ th#th3 {
                                                                         class="required">*</span></label></td>
                                                                     <td nowrap="nowrap"><label
                                                                         for="trial_${trial.studyProtocolId}_site_${stat.index}_statusDate">Site Recruitment Status Date<span
-                                                                        class="required">*</span></label></td>      
-                                                                    <td>&nbsp;</td>                                                            
+                                                                        class="required">*</span></label></td>
+                                                                    <td>&nbsp;</td>
                                                                 </tr>
                                                                 <tr>
                                                                    <td><s:select headerKey="" headerValue="--Select--"
-                                                                            id="trial_%{#attr.trial.studyProtocolId}_site_%{#attr.stat.index}_status"
-                                                                            name="trial_%{#attr.trial.studyProtocolId}_site_%{#attr.stat.index}_status"
+                                                                            id="trial_%{#attr.trial.studyProtocolId}_site_%{#attr.statIndex}_status"
+                                                                            name="trial_%{#attr.trial.studyProtocolId}_site_%{#attr.statIndex}_status"
                                                                             list="#statusCodeValues" cssClass="form-control" /></td>
                                                                     <td><div class="datetimepicker input-append" id="datetimepicker">
                                                                             <input type="text"
@@ -871,10 +871,10 @@ th#th3 {
                                                                             Status Transition Rules</a>.
                                                                     </span>
                                                                   </td>
-                                                                </tr>                                                          
+                                                                </tr>
                                                         </table>
-                                                    </div>                                                    
-                                                </div>                                                 
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="row">
                                                  <div class="col-xs-10">
@@ -905,13 +905,13 @@ th#th3 {
                                                             <tbody>
                                                             </tbody>
                                                         </table>
-                                                    </div>                                                   
+                                                    </div>
                                                  </div>
                                                   <div class="col-xs-offset-1"></div>
                                             </div>
                                         </div>
                                     </td>
-                                </tr>                               
+                                </tr>
                                 <c:if test="${not stat.last}">
                                     <tr
                                         id="trial_${trial.studyProtocolId}_site_${stat.index}_btnrow"
@@ -931,7 +931,7 @@ th#th3 {
             </div>
         </div>
     </c:forEach>
-    
+
 <div id="dialog-edit" title="Edit Site Recruitment Status" style="display: none;">
     <div class="container-fluid">
         <div class="row">
@@ -955,7 +955,7 @@ th#th3 {
                 <s:select id="statusCode" name="statusCode" list="#statusCodeValues"
                     cssClass="form-control" />
             </div>
-        </div>   
+        </div>
         <div class="row">
             <div class="col-xs-4" align="right">
                 <label for="editComment">Comment:</label>

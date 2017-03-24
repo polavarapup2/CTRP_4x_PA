@@ -76,7 +76,7 @@
     <dependency conf="ear->master" org="commons-collections" name="commons-collections" rev="3.2.1"/>
     <dependency conf="ear->master" org="commons-dbutils" name="commons-dbutils" rev="1.5"/>
     <dependency conf="ear->master" org="commons-digester" name="commons-digester" rev="2.1"/>
-    <dependency conf="ear->master" org="commons-fileupload" name="commons-fileupload" rev="1.3"/>
+    <dependency conf="ear->master" org="commons-fileupload" name="commons-fileupload" rev="1.3.2"/>
     <dependency conf="ear->master" org="commons-io" name="commons-io" rev="1.4"/>
     <dependency conf="ear->master" org="commons-lang" name="commons-lang" rev="2.4"/>
     <dependency conf="ear->master" org="commons-logging" name="commons-logging" rev="1.0.4"/>
@@ -116,14 +116,14 @@
     <dependency conf="web->master" org="javax.servlet" name="jstl" rev="1.1.2"/>
     <dependency conf="web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.19"/>
     <dependency conf="web->master" org="net.htmlparser.jericho" name="jericho-html" rev="2.4"/>
-    <dependency conf="web->master" org="ognl" name="ognl" rev="3.0.6"/>    
+    <dependency conf="web->master" org="ognl" name="ognl" rev="3.0.19"/>
     <dependency conf="web->master" org="opensymphony" name="sitemesh" rev="2.3"/>
     <dependency conf="web->master" org="org.ajaxtags" name="ajaxtags" rev="1.3-beta-rc7"/> 
     <dependency conf="web->master" org="org.apache.commons" name="commons-lang3" rev="3.1"/>
-    <dependency conf="web->master" org="org.apache.struts" name="struts2-core" rev="2.3.16.3"/>
-    <dependency conf="web->master" org="org.apache.struts" name="struts2-json-plugin" rev="2.3.16.3"/>
-    <dependency conf="web->master" org="org.apache.struts.xwork" name="xwork-core" rev="2.3.16.3"/>
-    <dependency conf="web->master" org="org.freemarker" name="freemarker" rev="2.3.19"/>
+    <dependency conf="web->master" org="org.apache.struts" name="struts2-core" rev="2.3.32"/>
+    <dependency conf="web->master" org="org.apache.struts" name="struts2-json-plugin" rev="2.3.32"/>
+    <dependency conf="web->master" org="org.apache.struts.xwork" name="xwork-core" rev="2.3.32"/>
+    <dependency conf="web->master" org="org.freemarker" name="freemarker" rev="2.3.22"/>
     <dependency conf="web->master" org="taglibs" name="standard" rev="1.1.2"/>
     
      <dependency conf="webservices->master" org="commons-io" name="commons-io" rev="2.4"/>

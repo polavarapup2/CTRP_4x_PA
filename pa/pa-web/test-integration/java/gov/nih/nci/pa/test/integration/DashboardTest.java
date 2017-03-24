@@ -3243,6 +3243,7 @@ public class DashboardTest extends AbstractTrialStatusTest {
      * 
      */
     protected void goToDashboardSearch() {
+        waitForElementToBecomeAvailable(By.id("dashboardMenuOption"), 10);
         clickAndWait("id=dashboardMenuOption");
         clickAndWait("searchid");
     }
