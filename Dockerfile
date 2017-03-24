@@ -57,6 +57,7 @@ COPY ctrp.inttest.properties    "$JBOSS_HOME"/ctrp/ctrp.inttest.properties
 COPY ctrp.inttest2.properties    "$JBOSS_HOME"/ctrp/ctrp.inttest2.properties
 COPY ctrp.uat.properties        "$JBOSS_HOME"/ctrp/ctrp.uat.properties
 COPY ctrp.production.properties "$JBOSS_HOME"/ctrp/ctrp.production.properties
+COPY ctrp.local.properties    "$JBOSS_HOME"/ctrp/ctrp.local.properties
 
 USER root
 CMD $JBOSS_HOME/bin/standalone.sh
