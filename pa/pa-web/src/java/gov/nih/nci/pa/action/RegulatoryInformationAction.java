@@ -86,8 +86,11 @@ import gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
+import gov.nih.nci.pa.util.PAUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 
 import java.util.ArrayList;
@@ -98,6 +101,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
+import org.joda.time.DateMidnight;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -202,7 +206,7 @@ public class RegulatoryInformationAction extends ActionSupport {
                     .getSession().getAttribute(Constants.STUDY_PROTOCOL_II);
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolIi);
-
+            setFdaaaFieldsRequired(spDTO);
             List<Long> identifiersList = new ArrayList<Long>();
             Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
             identifiersList.add(studyprotocolId);
@@ -239,18 +243,15 @@ public class RegulatoryInformationAction extends ActionSupport {
     }
 
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
-    private void validateForm(StudyProtocolDTO spDTO) {
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())) { // TODO: only
-                                                                 // if start
-                                                                 // date after
-                                                                 // FDAAA
+    private void validateForm(StudyProtocolDTO spDTO) throws PAException {
+        setFdaaaFieldsRequired(spDTO);
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())
+                && webDTO.isRequired()) {
             addFieldError("webDTO.fdaRegulatedDrug",
                     "Studies a U.S. FDA-regulated Drug Product is required field");
         }
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())) { // TODO: only
-                                                                   // if start
-                                                                   // date after
-                                                                   // FDAAA
+        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())
+                && webDTO.isRequired()) { 
             addFieldError("webDTO.fdaRegulatedDevice",
                     "Studies a U.S. FDA-regulated Device Product is required field");
         }
@@ -269,6 +270,17 @@ public class RegulatoryInformationAction extends ActionSupport {
                     "Section 801 Indicator should be No for Non-interventional trials");
         }
 
+    }
+    @SuppressWarnings({ "PMD.NPathComplexity" })
+    private void setFdaaaFieldsRequired(StudyProtocolDTO spDTO) throws PAException {
+        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
+        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
+                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
+        if (trialStartDate.isAfter(fdaaaStartDate)) {
+            webDTO.setRequired(true);
+        } else {
+            webDTO.setRequired(false);
+        }
     }
 
     /**

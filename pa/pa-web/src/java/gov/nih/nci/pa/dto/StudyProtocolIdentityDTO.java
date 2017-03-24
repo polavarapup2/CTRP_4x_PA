@@ -1,4 +1,4 @@
-package gov.nih.nci.pa.webservices.dto;
+package gov.nih.nci.pa.dto;
 
 import java.util.List;
 

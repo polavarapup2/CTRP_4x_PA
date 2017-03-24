@@ -120,6 +120,8 @@ public class PaEarPropertyReader {
     private static final String STATE_TRANSITION_DIAGRAM_URL = "wikiHelp.baseUrl.trialStatusRules";
     private static final String CTGOV_FTP_URL = "ctgov.ftp.url";
     private static final String FDAAA_DATA_CLINICAL_TRIALS_URL = "fdaaa.data.clinical.trials.url";
+    private static final String FDAAA_START_DATE = "fdaaa.start.date";
+    private static final String CTRP_IMPORT_CT_API_URL = "ctrp.import.ct.api.url";
     private static final String NO_VALUE = "does not have a value in paear.properties";
 
     static {
@@ -332,6 +334,24 @@ public class PaEarPropertyReader {
      */
     public static String getFdaaaDataClinicalTrialsUrl() throws PAException {
         return getPropTemplate(FDAAA_DATA_CLINICAL_TRIALS_URL);
+    }
+
+    /**
+     * 
+     * @return FDAAA_START_DATE
+     * @throws PAException PAException
+     */
+    public static String getFdaaaStartDate() throws PAException {
+        return getPropTemplate(FDAAA_START_DATE);
+    }
+
+    /**
+     * 
+     * @return CTRP_IMPORT_CT_API_URL
+     * @throws PAException PAException
+     */
+    public static String getCtrpImportCtApiUrl() throws PAException {
+        return getPropTemplate(CTRP_IMPORT_CT_API_URL);
     }
 
     /**

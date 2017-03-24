@@ -66,7 +66,7 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     }
 
     @Test
-    public void testSaveWithErrors() {
+    public void testSaveWithErrors() throws PAException {
         UnitsCode unit = UnitsCode.getByCode("Years");
         double retMaxVal = unit.getMinuteMultiplicationFactor() * Double.valueOf(1);
         assertNotNull(retMaxVal);
@@ -74,7 +74,7 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
         assertTrue(eligibilityCriteriaAction.hasFieldErrors());
     }
     @Test
-    public void testSave() {
+    public void testSave() throws PAException {
     	eligibilityCriteriaAction.setStudyPopulationDescription("test");
     	eligibilityCriteriaAction.setSamplingMethodCode("test");
     	eligibilityCriteriaAction.setAcceptHealthyVolunteersIndicator("false");

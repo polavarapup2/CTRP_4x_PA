@@ -112,6 +112,23 @@
             	//handleExpandedAccessIndicator();
             });
             
+            function checkNCTIDRow() {
+                var input="group4";
+                var inputElement = document.forms[0].elements[input];
+                if (inputElement.options[inputElement.selectedIndex].value == "Yes") {
+                	showRow($('expandedAccessNctIdRow'));
+                } else {
+                	hideRow($('expandedAccessNctIdRow'));
+                    $(expandedAccessNctId).value='';
+                }
+            }
+            function hideRow(row) {            
+                row.style.display = 'none';    
+            }
+
+            function showRow(row) {
+                row.style.display = '';
+            }
         </script>
     </head>
     <body>
@@ -231,7 +248,7 @@
                             </label>
                         </td>
                         <td class="value">
-                            <s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'':'', 'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" />
+                            <s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'':'', 'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" onchange="checkNCTIDRow();"/>
                             <span class="formErrorMsg"> 
                                 <s:fielderror>
                                     <s:param>studyIndldeWebDTO.expandedAccessIndicator</s:param>
@@ -239,7 +256,7 @@
                             </span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="expandedAccessNctIdRow">
                         <td scope="row"  class="label">
                             <label for=expandedAccessNctId>
                                 <fmt:message key="trialIndide.expandedAccessNctId"/>:

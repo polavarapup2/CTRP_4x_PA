@@ -100,10 +100,12 @@ import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.IntConverter;
 import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
+import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.BaseLookUpService;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAUtil;
+import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 
 import java.util.ArrayList;
@@ -121,13 +123,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.joda.time.DateMidnight;
 
 /**
  * @author Kalpana Guthikonda
  * @since 11/12/2008
  */
 @SuppressWarnings({ "PMD.ExcessiveClassLength", "PMD.CyclomaticComplexity",  
-    "PMD.TooManyMethods", "PMD.TooManyFields" })
+    "PMD.TooManyMethods", "PMD.TooManyFields", "PMD.NPathComplexity" })
 public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
 
     private static final Logger LOG  = Logger.getLogger(EligibilityCriteriaAction.class);
@@ -170,11 +173,12 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     private String lastUpdatedDate;
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     private String msId;
+    private boolean required;
     /**
      *
      * @return String
      */
-    @SuppressWarnings({ "PMD.NPathComplexity" })
+
     public String query() {
         try {
             eligibilityList = null;
@@ -184,10 +188,11 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 .getPlannedEligibilityCriterionByStudyProtocol(studyProtocolIi);
             StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
                     .getAttribute(Constants.TRIAL_SUMMARY);
+            setFdaaaFieldsRequired(studyProtocolIi);
             if (CollectionUtils.isNotEmpty(pecList)) {
                 list = new ArrayList<ISDesignDetailsWebDTO>();
                 for (PlannedEligibilityCriterionDTO dto : pecList) {
-                    list.add(setEligibilityDetailsDTO(dto, studyProtocolIi));
+                    list.add(setEligibilityDetailsDTO(dto));
                 }
                 ISDesignDetailsWebDTO microServiceDto = setMicroServiceDataDTO(studyProtocolIi, spqDTO
                         .getNciIdentifier());
@@ -244,17 +249,17 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
     }
     /**
      * @return res
+     * @throws PAException 
      */
-    @SuppressWarnings({ "PMD.NPathComplexity" })
-    public String save() {
-        enforceBusinessRules();
+    public String save() throws PAException {
+        Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession()
+                .getAttribute(Constants.STUDY_PROTOCOL_II);
+        
+        enforceBusinessRules(studyProtocolIi);
         if (hasFieldErrors()) {
             return ELIGIBILITY;
         }
         try {
-            Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession()
-                .getAttribute(Constants.STUDY_PROTOCOL_II);
-
             StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
                 .getAttribute(Constants.TRIAL_SUMMARY);
             if (spqDTO.getStudyProtocolType().equalsIgnoreCase("NonInterventionalStudyProtocol")) {
@@ -429,7 +434,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         if (pecList != null && !pecList.isEmpty()) {
             list = new ArrayList<ISDesignDetailsWebDTO>();
             for (PlannedEligibilityCriterionDTO dto : pecList) {
-                list.add(setEligibilityDetailsDTO(dto, studyProtocolIi));
+                list.add(setEligibilityDetailsDTO(dto));
             }
         }
     }
@@ -516,7 +521,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         try {
             PlannedEligibilityCriterionDTO sgDTO = PaRegistry.getPlannedActivityService()
                 .getPlannedEligibilityCriterion(IiConverter.convertToIi(id));
-            webDTO = setEligibilityDetailsDTO(sgDTO, IiConverter.convertToIi(id));
+            webDTO = setEligibilityDetailsDTO(sgDTO);
         } catch (Exception e) {
             LOG.error(e, e);
             ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
@@ -629,8 +634,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         return pecDTO;
     }
 
-    private ISDesignDetailsWebDTO setEligibilityDetailsDTO(PlannedEligibilityCriterionDTO dto,
-            Ii studyProtocolIi) throws PAException {
+    private ISDesignDetailsWebDTO setEligibilityDetailsDTO(PlannedEligibilityCriterionDTO dto) throws PAException {
         ISDesignDetailsWebDTO webdto = new ISDesignDetailsWebDTO();
         if (dto != null) {
             if (dto.getEligibleGenderCode().getCode() != null) {
@@ -696,8 +700,8 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         }
         return webdto;
     }
-    @SuppressWarnings({ "PMD.NPathComplexity" })
-    private void enforceBusinessRules() {
+
+    private void enforceBusinessRules(Ii spId) throws PAException {
         StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
             .getAttribute(Constants.TRIAL_SUMMARY);
         if (spqDTO.getStudyProtocolType().equalsIgnoreCase("NonInterventionalStudyProtocol")) {
@@ -761,10 +765,25 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 }
             }
         }
+        setFdaaaFieldsRequired(spId);
         if (!StringUtils.isEmpty(eligibleGenderCode) 
                 && (StringUtils.endsWithIgnoreCase("Male", eligibleGenderCode) 
-                || StringUtils.endsWithIgnoreCase("Female", eligibleGenderCode)) && StringUtils.isEmpty(gender)) {
+                || StringUtils.endsWithIgnoreCase("Female", eligibleGenderCode)) && StringUtils.isEmpty(gender)
+                && isRequired()) {
             addFieldError("gender", getText("error.gender"));
+        }
+    }
+
+    private void setFdaaaFieldsRequired(Ii spId) throws PAException {
+        StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
+                .getStudyProtocol(spId);
+        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
+        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
+                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
+        if (trialStartDate.isAfter(fdaaaStartDate)) {
+            setRequired(true);
+        } else {
+            setRequired(false);
         }
     }
 
@@ -1252,5 +1271,19 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         this.msId = msId;
     }
     
-    
+    /**
+     * 
+     * @return required
+     */
+    public boolean isRequired() {
+        return required;
+    }
+    /**
+     * 
+     * @param required the required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
  }

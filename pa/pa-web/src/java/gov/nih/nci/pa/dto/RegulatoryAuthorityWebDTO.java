@@ -103,6 +103,7 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     private String exportedFromUs;
     private String lastUpdatedDate;
     private String id;
+    private boolean required;
 
     /**
      * @return the trialOversgtAuthCountry
@@ -290,4 +291,19 @@ public class RegulatoryAuthorityWebDTO implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+    /**
+     * 
+     * @return required
+     */
+    public boolean isRequired() {
+        return required;
+    }
+    /**
+     * 
+     * @param required the required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
 }

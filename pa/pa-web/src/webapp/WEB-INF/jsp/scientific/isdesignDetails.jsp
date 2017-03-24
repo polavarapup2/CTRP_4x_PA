@@ -134,7 +134,6 @@ function initialize() {
 }
 
 function noMaskingRules() {
-	alert("i am here")
 	var noMaskingValue = $('noMasking').checked;
 	 if (noMaskingValue) {
 		 $('subject').checked = false;

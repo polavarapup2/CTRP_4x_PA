@@ -95,7 +95,7 @@ public enum EligibleGenderCode implements CodedEnum<String> {
     /** Female. */
     FEMALE("Female"),
     /** Both. */
-    BOTH("Both");
+    BOTH("All");
 
     private String code;
 

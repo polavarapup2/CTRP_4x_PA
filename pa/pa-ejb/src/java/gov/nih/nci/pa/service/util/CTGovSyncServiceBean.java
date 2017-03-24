@@ -372,7 +372,7 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 StudyStatusCode.TEMPORARILY_CLOSED_TO_ACCRUAL.getCode());
         CTGOV_TO_CTRP_MAP.put("Suspended",
                 StudyStatusCode.TEMPORARILY_CLOSED_TO_ACCRUAL_AND_INTERVENTION
-                        .getCode());
+                        .getCode()); //remove as per Joe Martucci , Michael and Charles 
         CTGOV_TO_CTRP_MAP.put("Completed", StudyStatusCode.COMPLETE.getCode());
         CTGOV_TO_CTRP_MAP.put("Terminated",
                 StudyStatusCode.ADMINISTRATIVELY_COMPLETE.getCode());

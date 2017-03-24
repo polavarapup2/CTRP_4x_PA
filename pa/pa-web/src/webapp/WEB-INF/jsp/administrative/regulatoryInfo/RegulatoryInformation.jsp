@@ -158,11 +158,12 @@
                 <s:hidden id="lastUpdatedDate" name="webDTO.lastUpdatedDate"> </s:hidden>
                 <s:hidden id="msId" name="webDTO.id"> </s:hidden>
                 <h2><fmt:message key="regulatory.title" /></h2>
+               <c:set var="asterisk1" value="${(webDTO.required)?'*':''}" scope="request"/>
                 <table class="form">
                     
                     <tr>
                         <td scope="row" class="label">
-                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">*</span> 
+                            <label for="drug"><fmt:message key="regulatory.drug.product"/></label><span class="required">${asterisk1}</span> 
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="drug" name="webDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
@@ -175,7 +176,7 @@
                       </tr>
                       <tr>
                         <td scope="row" class="label">
-                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">*</span>
+                            <label for="device"><fmt:message key="regulatory.device.product"/></label><span class="required">${asterisk1}</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="device" name="webDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
@@ -190,7 +191,7 @@
                       <!--   Delayed Posting Indicator-->
                       <tr id="delpostindrow">
                         <td scope="row" class="label">
-                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">*</span>
+                            <label for="delpostindid"><fmt:message key="regulatory.delayed.posting.ind"/></label><span class="required">${asterisk1}</span>
                         </td>
                         <td style="padding: 1px 5px 5px 0 ">
                             <s:select id="delpostindid" name="webDTO.delayedPostingIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDelPostingIndDropDown();" />
