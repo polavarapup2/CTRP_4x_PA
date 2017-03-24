@@ -51,7 +51,7 @@ COPY target/pa/dist/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 #RUN mkdir -pv /local/content/ctrppa/tooltips
 
 #RUN touch ctrp_ldap_password
-RUN echo "${LDAP_PASS}" >ctrp_ldap_password
+RUN echo -n "${LDAP_PASS}" >ctrp_ldap_password
 RUN ls -alh
 RUN cp ctrp_ldap_password "$JBOSS_HOME"/.ctrp_ldap_password
 # ADD Environment specific properties files
