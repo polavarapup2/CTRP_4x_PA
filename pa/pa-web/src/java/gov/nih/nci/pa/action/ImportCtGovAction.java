@@ -118,6 +118,7 @@ public final class ImportCtGovAction extends ActionSupport implements
             return ERROR;
         }
         try {
+            // studyExists = !findExistentStudies(getNctID()).isEmpty();
             String nciID = ctGovSyncService.importTrial(getNctIdToImport());
             final String[] msgArgs = new String[] {getNctIdToImport(), nciID };
             final String msg = studyExists ? getText(

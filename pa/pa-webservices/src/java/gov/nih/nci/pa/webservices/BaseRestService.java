@@ -35,7 +35,10 @@ public class BaseRestService implements ContextResolver<JAXBContext> {
      * TXT_PLAIN
      */
     public static final String TXT_PLAIN = "text/plain";
-
+    /**
+     * APPLICATION_JSON
+     */
+    public static final String APPLICATION_JSON = "application/json";
     /**
      * PAServiceUtils
      */
