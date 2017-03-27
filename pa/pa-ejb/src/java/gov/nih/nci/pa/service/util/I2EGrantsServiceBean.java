@@ -3,8 +3,14 @@ package gov.nih.nci.pa.service.util;
 import gov.nih.nci.coppa.services.interceptor.RemoteAuthorizationInterceptor;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.PaHibernateSessionInterceptor;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.lang.StringUtils;
 
-import java.math.BigDecimal;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,19 +18,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-
-import oracle.jdbc.driver.OracleConnection;
-
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Hugh Reinhart
@@ -42,22 +35,19 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
 
     private static final String SQL_SEARCH =
             "SELECT serial_number, institution_name, project_title, pi_first_name, pi_last_name "
-            + "FROM ctrp_grants_r_vw "
-            + "WHERE serial_number LIKE ? AND rownum <= 10 ";
+            + "FROM grants "
+            + "WHERE CAST(serial_number AS TEXT) LIKE ? ";
 
     private static final String SQL_VALIDATE =
             "SELECT COUNT(*) "
-            + "FROM ctrp_grants_r_vw "
+            + "FROM grants "
             + "WHERE serial_number = ?";
 
-    @EJB 
+    @EJB
     private LookUpTableServiceRemote lookUpTableSvc;
 
     /** DB Connection. */
     private static Connection conn;
-    
-    private final ExecutorService exec = Executors
-            .newSingleThreadExecutor();
 
     /**
      * {@inheritDoc}
@@ -73,7 +63,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
                 List<I2EGrant> result = new ArrayList<I2EGrant>(); 
                 while (rs.next()) {
                     I2EGrant grant = new I2EGrant();
-                    grant.setSerialNumber(String.valueOf((BigDecimal) rs.getObject(COL_SN)));
+                    grant.setSerialNumber(String.valueOf(rs.getObject(COL_SN)));
                     grant.setOrganizationName((String) rs.getObject(COL_INST));
                     grant.setProjectName((String) rs.getObject(COL_PROJ));
                     grant.setPiFirstName((String) rs.getObject(COL_FIRST));
@@ -89,7 +79,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
         try {
             result = run.query(connection, SQL_SEARCH, handler, data + "%");
         } catch (SQLException e) {
-            throw new PAException("Error querying I2E Oracle database.", e);
+            throw new PAException("Error querying Postgres database.", e);
         }
         return result;
     }
@@ -112,7 +102,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
                 result = rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            throw new PAException("Error querying I2E Oracle database.", e);
+            throw new PAException("Error querying Postgres database.", e);
         } finally {
             DbUtils.closeQuietly(rs);
             DbUtils.closeQuietly(stmt);
@@ -132,34 +122,16 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
     private synchronized Connection getConnection() throws PAException {
         try {
             if (conn != null) {
-                if (conn instanceof OracleConnection && ((OracleConnection) conn).pingDatabase() != 0) {
-                    // Call to Connection.close() may block for quite a bit of
-                    // time; reported by CTRO.
-                    // So we are closing it in an async manner. Since the ping
-                    // has failed, the connection is already dead.
-                    final Connection toClose = conn;
-                    exec.submit(new Runnable() {
-                        @Override
-                        public void run() {
-                            DbUtils.closeQuietly(toClose);
-                        }
-                    });             
-                } else {
-                    return conn;
-                }
+                return conn;
             }
             try {
-                Class.forName("oracle.jdbc.driver.OracleDriver");
+                Class.forName("org.postgresql.Driver");
             } catch (ClassNotFoundException e) {
-                throw new PAException("Oracle JDBC Driver not found.", e);
+                throw new PAException("Couldn't find driver class.", e);
             }
             conn = DriverManager.getConnection(lookUpTableSvc.getPropertyValue("I2EGrantsUrl"));
-            if (((OracleConnection) conn).pingDatabase() != 0) {
-                DbUtils.closeQuietly(conn);
-                throw new PAException("Pinging I2E database failed.");
-            }
         } catch (SQLException e) {
-            throw new PAException("I2E Oracle connection failed.", e);
+            throw new PAException("Postgres connection failed.", e);
         }
         return conn;
     }

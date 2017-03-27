@@ -2088,5 +2088,9 @@
        <comment>New value in primary_purpose table </comment>
        <sqlFile path="@db-upgrade.run.dir@/FdaaaChanges/FdaaaDesignDetailsAddition.sql"/>
     </changeSet>
+    <changeSet id="grants_db_update" author="bnorris">
+        <comment>execute updateGrantsDbUrl.sql</comment>
+        <sqlFile path="@db-upgrade.run.dir@/grantsDbUpdate/updateGrantsDbUrl.sql"/>
+    </changeSet>
     
 </databaseChangeLog>
