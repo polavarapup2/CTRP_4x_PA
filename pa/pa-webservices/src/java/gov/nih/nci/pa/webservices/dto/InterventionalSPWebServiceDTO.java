@@ -1,20 +1,47 @@
 package gov.nih.nci.pa.webservices.dto;
 
+
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 /**
  * 
  * @author Reshma
  *
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
     private String allocationCode;
     private List<String> blindedRoleCode;
-    private String blindingSchemaCode;
     private String designConfigurationCode;
     private Integer numberOfInterventionGroups;
     private String studyClassificationCode;
     
+    /**
+     * const
+     */
+    public InterventionalSPWebServiceDTO() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+    /**
+     * 
+     * @param allocationCode allocationCode
+     * @param blindedRoleCode blindedRoleCode
+     * @param designConfigurationCode designConfigurationCode
+     * @param numberOfInterventionGroups numberOfInterventionGroups
+     * @param studyClassificationCode studyClassificationCode
+     */
+    public InterventionalSPWebServiceDTO(String allocationCode,
+            List<String> blindedRoleCode, String designConfigurationCode,
+            Integer numberOfInterventionGroups, String studyClassificationCode) {
+        super();
+        this.allocationCode = allocationCode;
+        this.blindedRoleCode = blindedRoleCode;
+        this.designConfigurationCode = designConfigurationCode;
+        this.numberOfInterventionGroups = numberOfInterventionGroups;
+        this.studyClassificationCode = studyClassificationCode;
+    }
     /**
      * 
      * @return allocationCode
@@ -43,20 +70,7 @@ public class InterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
     public void setBlindedRoleCode(List<String> blindedRoleCode) {
         this.blindedRoleCode = blindedRoleCode;
     }
-    /**
-     * 
-     * @return blindingSchemaCode
-     */
-    public String getBlindingSchemaCode() {
-        return blindingSchemaCode;
-    }
-    /**
-     * 
-     * @param blindingSchemaCode the blindingSchemaCode
-     */
-    public void setBlindingSchemaCode(String blindingSchemaCode) {
-        this.blindingSchemaCode = blindingSchemaCode;
-    }
+
     /**
      * 
      * @return designConfigurationCode
