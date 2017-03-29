@@ -136,8 +136,9 @@ public class TrialRegisterationWebServiceDTOConverter {
      */
     public OrganizationDTO convertToOrganizationDTO(
             gov.nih.nci.pa.webservices.dto.OrganizationDTO webServiceOrgDTO) {
-        OrganizationDTO dto = new OrganizationDTO();
+        OrganizationDTO dto = null;
         if (webServiceOrgDTO != null) {
+            dto = new OrganizationDTO();
             dto.setName(EnOnConverter.convertToEnOn(webServiceOrgDTO.getName()));
             dto.setPostalAddress(getUnknownPostalAddress(webServiceOrgDTO
                     .getPostalAddress()));
@@ -153,8 +154,9 @@ public class TrialRegisterationWebServiceDTOConverter {
      */
     public List<OrganizationDTO> convertToOrganizationDTOList(
             List<gov.nih.nci.pa.webservices.dto.OrganizationDTO> webServiceList) {
-        List<OrganizationDTO> list = new ArrayList<OrganizationDTO>();
+        List<OrganizationDTO> list = null;
         if (webServiceList != null) {
+            list = new ArrayList<OrganizationDTO>();
             for (gov.nih.nci.pa.webservices.dto.OrganizationDTO orgDTO : webServiceList) {
                 OrganizationDTO dto = convertToOrganizationDTO(orgDTO);
                 list.add(dto);
@@ -169,12 +171,13 @@ public class TrialRegisterationWebServiceDTOConverter {
      */
     public StudySiteDTO convertToLeadOrgID(
             gov.nih.nci.pa.webservices.dto.StudySiteDTO webServiceStudySiteDTO) {
-        StudySiteDTO dto = new StudySiteDTO();
+        StudySiteDTO dto = null;
         if (webServiceStudySiteDTO != null) {
+            dto = new StudySiteDTO();
             dto.setLocalStudyProtocolIdentifier(StConverter
                     .convertToSt(webServiceStudySiteDTO
                             .getLocalStudyProtocolIdentifier()));
-        }
+        } 
         return dto;
     }
     /**
@@ -184,9 +187,10 @@ public class TrialRegisterationWebServiceDTOConverter {
      */
     public PersonDTO convertToPersonDTO(
             gov.nih.nci.pa.webservices.dto.PersonDTO webServicePersonDTO) {
-        PersonDTO dto = new PersonDTO();
+        PersonDTO dto = null;
         if (webServicePersonDTO != null
                 && webServicePersonDTO.getName() != null) {
+            dto = new PersonDTO();
             dto.setName(EnPnConverter.convertToEnPn(webServicePersonDTO
                     .getName().getFirstName(), webServicePersonDTO.getName()
                     .getMiddleName(), webServicePersonDTO.getName()
@@ -206,8 +210,9 @@ public class TrialRegisterationWebServiceDTOConverter {
      */
     public ResponsiblePartyDTO convertToPartyDTO(
             gov.nih.nci.pa.webservices.dto.ResponsiblePartyDTO webServicePartyDTO) {
-        ResponsiblePartyDTO dto = new ResponsiblePartyDTO();
+        ResponsiblePartyDTO dto = null;
         if (webServicePartyDTO != null) {
+            dto = new ResponsiblePartyDTO();
             dto.setTitle(webServicePartyDTO.getTitle());
             dto.setType(ResponsiblePartyType.getByCode(webServicePartyDTO
                     .getType()));
