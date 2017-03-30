@@ -65,6 +65,14 @@ public class CTGovImportMergeHelper {
                dto.setSpID(list.item(0).getTextContent());
                list = doc.getElementsByTagName("nciTrialID");
                dto.setNciID(list.item(0).getTextContent());
+//               try {
+//                   JAXBContext jaxbContext = JAXBContext.newInstance(resultClass); 
+//                   Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//                   T resultObj = (T) jaxbUnmarshaller.unmarshal(new StringReader(response));
+//                   return  resultObj;
+//               } catch (JAXBException e) {
+//                   throw new ImportTrialException("Error in unmarshalling XML");
+//               }
             }
         } catch (Exception e) {
             LOG.error(

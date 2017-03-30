@@ -21,6 +21,7 @@ import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.DocumentServiceLocal;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
@@ -249,9 +250,9 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
             
             // Proceed with import otherwise.
             // call the glue code
-            //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
-            //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
-            String nciID = ctGovSyncService.importTrial(nctID);            
+            TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
+            //String nciID = ctGovSyncService.importTrial(nctID);      
+            String nciID = dto.getNciID();
             final Long newTrialId = IiConverter
                     .convertToLong(studyProtocolService.getStudyProtocol(
                             IiConverter.convertToAssignedIdentifierIi(nciID))

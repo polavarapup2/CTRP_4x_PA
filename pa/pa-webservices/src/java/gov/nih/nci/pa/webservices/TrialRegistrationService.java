@@ -21,6 +21,7 @@ import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
@@ -50,6 +51,7 @@ import gov.nih.nci.services.person.PersonDTO;
 //import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 
 
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -67,7 +69,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
@@ -79,8 +80,7 @@ import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 @Provider
 public class TrialRegistrationService extends BaseRestService {
 
-    private static final Logger LOG = Logger
-            .getLogger(TrialRegistrationService.class);
+   
     private CTGovImportMergeHelper helper;
 
     /**
@@ -378,8 +378,6 @@ public class TrialRegistrationService extends BaseRestService {
     @NoCache
     @Formatted
     public Response registerAbbreviatedTrial(@PathParam("nct") String nct) {
-        CTGovSyncServiceLocal ctGovSyncService = PaRegistry
-                .getCTGovSyncService();
         StudyProtocolServiceLocal studyProtocolService = PaRegistry
                 .getStudyProtocolService();
         Response response;
@@ -387,9 +385,9 @@ public class TrialRegistrationService extends BaseRestService {
             response = validateNctId(nct);
             if (response == null) {
                 // add glue code 
-                //TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
-                //String nciID =dto.getNciID();
-                String nciID = ctGovSyncService.importTrial(nct);
+                TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(nct, false);
+                String nciID = dto.getNciID();
+               // String nciID = ctGovSyncService.importTrial(nct);
                 final Long newTrialId = IiConverter
                         .convertToLong(studyProtocolService.getStudyProtocol(
                                 IiConverter

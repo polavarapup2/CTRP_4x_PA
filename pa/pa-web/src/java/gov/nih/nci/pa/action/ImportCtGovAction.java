@@ -3,6 +3,7 @@ package gov.nih.nci.pa.action;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 //import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
@@ -122,11 +123,10 @@ public final class ImportCtGovAction extends ActionSupport implements
         try {
             // studyExists = !findExistentStudies(getNctID()).isEmpty();
             // glue code
-          //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), studyExists);
-          //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
-            //studyExists
-            String nciID = ctGovSyncService.importTrial(getNctIdToImport()); // remove
-            final String[] msgArgs = new String[] {getNctIdToImport(), nciID };
+            TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), studyExists);
+            final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
+           // String nciID = ctGovSyncService.importTrial(getNctIdToImport()); // remove
+            //final String[] msgArgs = new String[] {getNctIdToImport(), nciID };
             final String msg = studyExists ? getText(
                     "importctgov.import.update.success", msgArgs) : getText(
                     "importctgov.import.new.success", msgArgs);

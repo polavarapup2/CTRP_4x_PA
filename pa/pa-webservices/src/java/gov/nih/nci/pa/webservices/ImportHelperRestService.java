@@ -406,4 +406,8 @@ public class ImportHelperRestService {
         }
         return Response.ok().build();
     }
+    // import nightly job 
+    // /importlog  
+    //get
+    // return hashmap<String, latestImportLog>
 }
