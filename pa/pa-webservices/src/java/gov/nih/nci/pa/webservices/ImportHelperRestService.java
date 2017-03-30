@@ -7,6 +7,7 @@ import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.ArmDTO;
 import gov.nih.nci.pa.iso.dto.DocumentDTO;
 import gov.nih.nci.pa.iso.dto.PlannedEligibilityCriterionDTO;
+import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.iso.dto.StudyOutcomeMeasureDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
@@ -18,6 +19,7 @@ import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.webservices.converters.TrialRegisterationWebServiceDTOConverter;
 import gov.nih.nci.services.organization.OrganizationDTO;
 import gov.nih.nci.services.person.PersonDTO;
+import gov.nih.nci.pa.webservices.dto.CTGovImportLog;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
 import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -59,6 +62,10 @@ public class ImportHelperRestService {
      * APPLICATION_JSON
      */
     public static final String APPLICATION_JSON = "application/json";
+    /**
+     * ERROR
+     */
+    public static final String ERROR = "Error while processing your request. Please try again";
 
     /**
      * @param nctID
@@ -77,24 +84,25 @@ public class ImportHelperRestService {
             throws PAException {
         List<StudyProtocolIdentityDTO> list = new ArrayList<StudyProtocolIdentityDTO>();
         try {
-        List<StudyProtocolQueryDTO> studyProtocolDTOList = findExistentStudies(nctID);
-        CTGovStudyAdapter study = PaRegistry.getCTGovSyncService()
-                .getAdaptedCtGovStudyByNctId(nctID);
-        if (!studyProtocolDTOList.isEmpty()) {
-            for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
-                list.add(setStudyProtocolIdentityDTO(dto));
+            List<StudyProtocolQueryDTO> studyProtocolDTOList = findExistentStudies(nctID);
+            CTGovStudyAdapter study = PaRegistry.getCTGovSyncService()
+                    .getAdaptedCtGovStudyByNctId(nctID);
+            if (!studyProtocolDTOList.isEmpty()) {
+                for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
+                    list.add(setStudyProtocolIdentityDTO(dto));
+                }
+            } else {
+                studyProtocolDTOList = findExistentStudies(study);
+                for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
+                    list.add(setStudyProtocolIdentityDTO(dto));
+                }
             }
-        } else {
-            studyProtocolDTOList = findExistentStudies(study);
-            for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
-                list.add(setStudyProtocolIdentityDTO(dto));
+            if (list.isEmpty()) {
+                return Response.status(NOT_FOUND_CODE).entity("NOT Found")
+                        .build();
             }
-        }
-        if (list.isEmpty()) {
-            return Response.status(NOT_FOUND_CODE).entity("NOT Found").build();
-        }
         } catch (Exception e) {
-            LOG.error("Error" + e);
+            LOG.error(ERROR + e);
             return Response.serverError().build();
         }
         return Response.ok(list).build();
@@ -157,7 +165,8 @@ public class ImportHelperRestService {
      * @return Response
      * @throws PAException
      *             PAException
-     * @throws IOException IOException
+     * @throws IOException
+     *             IOException
      */
     @PUT
     @Path("/trialregisteration")
@@ -172,8 +181,8 @@ public class ImportHelperRestService {
         StudyProtocolDTO afterStudyProtocolDTO = new StudyProtocolDTO();
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
+        StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
         try {
-
             List<StudyProtocolDTO> list = PaRegistry.getStudyProtocolService()
                     .getStudyProtocolsByNctId(nctIdStr);
             for (StudyProtocolDTO dto : list) {
@@ -243,18 +252,34 @@ public class ImportHelperRestService {
                             outcomes, collaborators, Arrays.asList(document));
             returnDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(
                     protocolID);
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long studyprotocolId = IiConverter.convertToLong(protocolID);
+            identifiersList.add(studyprotocolId);
+            Map<Long, String> identifierMap = PaRegistry
+                    .getStudyProtocolService().getTrialNciId(identifiersList);
+
+            if (returnDTO != null) {
+                finalDTO.setNciId(identifierMap.get(studyprotocolId));
+                finalDTO.setNctId(nctIdStr);
+                finalDTO.setStudyProtocolId(IiConverter
+                        .convertToString(protocolID));
+            }
         } catch (Exception e) {
-            LOG.error("Error" + nctIdStr);
+            LOG.error(ERROR + nctIdStr);
             return Response.serverError().build();
         }
-        return Response.ok(returnDTO).build();
+        return Response.ok(finalDTO).build();
     }
+
     /**
-     *  
-     * @param trialRegistrationDTO trialRegistrationDTO
+     * 
+     * @param trialRegistrationDTO
+     *            trialRegistrationDTO
      * @return Response
-     * @throws PAException PAException
-     * @throws IOException IOException
+     * @throws PAException
+     *             PAException
+     * @throws IOException
+     *             IOException
      */
     @POST
     @Path("/trialregisteration")
@@ -268,67 +293,117 @@ public class ImportHelperRestService {
         LOG.info("" + trialRegistrationDTO.getNctID());
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
+        StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
         try {
-        StudyProtocolDTO afterStudyProtocolDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToStudyProtocolDTO(
-                        trialRegistrationDTO.getStudyProtocolDTO(),
-                        new StudyProtocolDTO());
-        OrganizationDTO leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToOrganizationDTO(trialRegistrationDTO.getLeadOrgDTO());
+            StudyProtocolDTO afterStudyProtocolDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToStudyProtocolDTO(
+                            trialRegistrationDTO.getStudyProtocolDTO(),
+                            new StudyProtocolDTO());
+            OrganizationDTO leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToOrganizationDTO(trialRegistrationDTO
+                            .getLeadOrgDTO());
 
-        StudySiteDTO leadOrgID = new TrialRegisterationWebServiceDTOConverter()
-                .convertToLeadOrgID(trialRegistrationDTO.getLeadOrgID());
+            StudySiteDTO leadOrgID = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToLeadOrgID(trialRegistrationDTO.getLeadOrgID());
 
-        OrganizationDTO sponsorDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToOrganizationDTO(trialRegistrationDTO.getSponsorDTO());
+            OrganizationDTO sponsorDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToOrganizationDTO(trialRegistrationDTO
+                            .getSponsorDTO());
 
-        PersonDTO investigatorDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToPersonDTO(trialRegistrationDTO.getInvestigatorDTO());
+            PersonDTO investigatorDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToPersonDTO(trialRegistrationDTO
+                            .getInvestigatorDTO());
 
-        ResponsiblePartyDTO partyDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToPartyDTO(trialRegistrationDTO.getPartyDTO());
+            ResponsiblePartyDTO partyDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToPartyDTO(trialRegistrationDTO.getPartyDTO());
 
-        PersonDTO centralContactDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToPersonDTO(trialRegistrationDTO.getCentralContactDTO());
+            PersonDTO centralContactDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToPersonDTO(trialRegistrationDTO
+                            .getCentralContactDTO());
 
-        StudyOverallStatusDTO overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
-                .convertToOverallStatusDTO(trialRegistrationDTO
-                        .getOverallStatusDTO());
+            StudyOverallStatusDTO overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToOverallStatusDTO(trialRegistrationDTO
+                            .getOverallStatusDTO());
 
-        List<ArmDTO> arms = new TrialRegisterationWebServiceDTOConverter()
-                .convertToArmsDTOList(trialRegistrationDTO.getArms());
+            List<ArmDTO> arms = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToArmsDTOList(trialRegistrationDTO.getArms());
 
-        List<PlannedEligibilityCriterionDTO> eligibility = new TrialRegisterationWebServiceDTOConverter()
-                .convertToEligibilityDTOList(trialRegistrationDTO
-                        .getEligibility());
+            List<PlannedEligibilityCriterionDTO> eligibility = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToEligibilityDTOList(trialRegistrationDTO
+                            .getEligibility());
 
-        List<StudyOutcomeMeasureDTO> outcomes = new TrialRegisterationWebServiceDTOConverter()
-                .convertTOOutcomesDTOList(trialRegistrationDTO.getOutcomes());
+            List<StudyOutcomeMeasureDTO> outcomes = new TrialRegisterationWebServiceDTOConverter()
+                    .convertTOOutcomesDTOList(trialRegistrationDTO
+                            .getOutcomes());
 
-        List<OrganizationDTO> collaborators = new TrialRegisterationWebServiceDTOConverter()
-                .convertToOrganizationDTOList(trialRegistrationDTO
-                        .getCollaborators());
+            List<OrganizationDTO> collaborators = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToOrganizationDTOList(trialRegistrationDTO
+                            .getCollaborators());
 
-        DocumentDTO document = new TrialRegisterationWebServiceDTOConverter()
-                .convertToDocument(trialRegistrationDTO.getDocument());
+            DocumentDTO document = new TrialRegisterationWebServiceDTOConverter()
+                    .convertToDocument(trialRegistrationDTO.getDocument());
 
-        StudySiteDTO nctID = new StudySiteDTO();
-        nctID.setLocalStudyProtocolIdentifier(StConverter.convertToSt(nctIdStr));
+            StudySiteDTO nctID = new StudySiteDTO();
+            nctID.setLocalStudyProtocolIdentifier(StConverter
+                    .convertToSt(nctIdStr));
 
-        Ii protocolID = PaRegistry
-                .getTrialRegistrationService()
-                .createAbbreviatedStudyProtocol(afterStudyProtocolDTO, nctID,
-                        leadOrgDTO, leadOrgID, sponsorDTO, investigatorDTO,
-                        partyDTO, centralContactDTO, overallStatusDTO, null,
-                        arms, eligibility, outcomes, collaborators,
-                        Arrays.asList(document));
-        returnDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(
-                protocolID);
+            Ii protocolID = PaRegistry.getTrialRegistrationService()
+                    .createAbbreviatedStudyProtocol(afterStudyProtocolDTO,
+                            nctID, leadOrgDTO, leadOrgID, sponsorDTO,
+                            investigatorDTO, partyDTO, centralContactDTO,
+                            overallStatusDTO, null, arms, eligibility,
+                            outcomes, collaborators, Arrays.asList(document));
+            returnDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(
+                    protocolID);
+
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long studyprotocolId = IiConverter.convertToLong(protocolID);
+            identifiersList.add(studyprotocolId);
+            Map<Long, String> identifierMap = PaRegistry
+                    .getStudyProtocolService().getTrialNciId(identifiersList);
+
+            if (returnDTO != null) {
+                finalDTO.setNciId(identifierMap.get(studyprotocolId));
+                finalDTO.setNctId(nctIdStr);
+                finalDTO.setStudyProtocolId(IiConverter
+                        .convertToString(protocolID));
+            }
         } catch (Exception e) {
-            LOG.error("Error" + nctIdStr);
+            LOG.error(ERROR + nctIdStr);
             return Response.serverError().build();
         }
-        return Response.ok(returnDTO).build();
+        return Response.ok(finalDTO).build();
     }
 
+    /**
+     * 
+     * @param log
+     *            log
+     * @return Response
+     */
+    @POST
+    @Path("/importlog")
+    @Consumes({ APPLICATION_JSON })
+    @Produces({ APPLICATION_JSON })
+    @NoCache
+    @Formatted
+    public Response createImportLogEntry(CTGovImportLog log) {
+        StudyInboxDTO recent = null;
+        try {
+            if (log.getStudyInboxId() != null) {
+                recent = new StudyInboxDTO();
+                recent.setIdentifier(IiConverter.convertToIi(log
+                        .getStudyInboxId()));
+            }
+            PaRegistry.getCTGovSyncService().createImportLogEntry(
+                    log.getNciId(), log.getNctId(), log.getTitle(),
+                    log.getAction(), log.getImportStatus(),
+                    log.getUserCreated(), log.isNeedsReview(),
+                    log.isAdminChanged(), log.isScientificChanged(), recent);
+        } catch (Exception e) {
+            LOG.error(ERROR + log.getNciId());
+            return Response.serverError().build();
+        }
+        return Response.ok().build();
+    }
 }

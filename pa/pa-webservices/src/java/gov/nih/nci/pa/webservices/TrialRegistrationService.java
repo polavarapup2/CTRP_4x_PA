@@ -24,6 +24,7 @@ import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
+import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PaHibernateUtil;
@@ -46,6 +47,8 @@ import gov.nih.nci.pa.webservices.types.ObjectFactory;
 import gov.nih.nci.pa.webservices.types.TrialRegistrationConfirmation;
 import gov.nih.nci.services.organization.OrganizationDTO;
 import gov.nih.nci.services.person.PersonDTO;
+//import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
+
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -78,6 +81,7 @@ public class TrialRegistrationService extends BaseRestService {
 
     private static final Logger LOG = Logger
             .getLogger(TrialRegistrationService.class);
+    private CTGovImportMergeHelper helper;
 
     /**
      * Registers an complete trial.
@@ -382,6 +386,9 @@ public class TrialRegistrationService extends BaseRestService {
         try {
             response = validateNctId(nct);
             if (response == null) {
+                // add glue code 
+                //TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
+                //String nciID =dto.getNciID();
                 String nciID = ctGovSyncService.importTrial(nct);
                 final Long newTrialId = IiConverter
                         .convertToLong(studyProtocolService.getStudyProtocol(
@@ -426,5 +433,18 @@ public class TrialRegistrationService extends BaseRestService {
         }
         return null;
     }
-
+    /**
+     * 
+     * @return helper
+     */
+    public CTGovImportMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper helper
+     */
+    public void setHelper(CTGovImportMergeHelper helper) {
+        this.helper = helper;
+    }
 }

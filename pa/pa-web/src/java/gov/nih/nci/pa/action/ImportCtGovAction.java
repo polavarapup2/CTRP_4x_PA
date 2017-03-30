@@ -3,11 +3,13 @@ package gov.nih.nci.pa.action;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+//import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
 import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
+import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PaRegistry;
 
@@ -47,7 +49,7 @@ public final class ImportCtGovAction extends ActionSupport implements
     private boolean searchPerformed;
     private boolean studyExists;
     private StudyProtocolQueryDTO potentialMatch;
-
+    private CTGovImportMergeHelper helper;
     private HttpServletRequest request;
 
     /**
@@ -119,7 +121,11 @@ public final class ImportCtGovAction extends ActionSupport implements
         }
         try {
             // studyExists = !findExistentStudies(getNctID()).isEmpty();
-            String nciID = ctGovSyncService.importTrial(getNctIdToImport());
+            // glue code
+          //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), studyExists);
+          //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
+            //studyExists
+            String nciID = ctGovSyncService.importTrial(getNctIdToImport()); // remove
             final String[] msgArgs = new String[] {getNctIdToImport(), nciID };
             final String msg = studyExists ? getText(
                     "importctgov.import.update.success", msgArgs) : getText(
@@ -276,6 +282,20 @@ public final class ImportCtGovAction extends ActionSupport implements
      */
     public StudyProtocolQueryDTO getPotentialMatch() {
         return potentialMatch;
+    }
+    /**
+     * 
+     * @return helper
+     */
+    public CTGovImportMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper helper
+     */
+    public void setHelper(CTGovImportMergeHelper helper) {
+        this.helper = helper;
     }
 
 }

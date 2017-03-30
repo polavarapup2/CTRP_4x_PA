@@ -1,6 +1,7 @@
 package gov.nih.nci.pa.service.util;
 
 import gov.nih.nci.pa.domain.CTGovImportLog;
+import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
 import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
@@ -62,5 +63,27 @@ public interface CTGovSyncServiceLocal {
     // CHECKSTYLE:OFF More than 7 Parameters
     List<CTGovImportLog> getLogEntries(CTGovImportLogSearchCriteria searchCriteria)
             throws PAException;
+    // CHECKSTYLE:ON
+    // CHECKSTYLE:OFF
+    /**
+     * 
+     * @param trialNciId trialNciId
+     * @param nctIdStr nctIdStr
+     * @param title title
+     * @param action action
+     * @param status status
+     * @param user user
+     * @param needsReview needsReview
+     * @param adminChanged adminChanged
+     * @param scientificChanged scientificChanged
+     * @param recent recent
+     * @throws PAException PAException
+     */
+    void createImportLogEntry(
+            String trialNciId, // NOPMD
+            String nctIdStr, // NOPMD
+            String title, String action, String status, String user,
+            boolean needsReview, boolean adminChanged,
+            boolean scientificChanged, StudyInboxDTO recent) throws PAException;
     // CHECKSTYLE:ON
 }
