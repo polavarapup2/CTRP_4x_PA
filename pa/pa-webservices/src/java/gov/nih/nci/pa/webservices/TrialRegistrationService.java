@@ -80,7 +80,7 @@ import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 public class TrialRegistrationService extends BaseRestService {
 
    
-    private CTGovImportMergeHelper helper;
+    private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
 
     /**
      * Registers an complete trial.

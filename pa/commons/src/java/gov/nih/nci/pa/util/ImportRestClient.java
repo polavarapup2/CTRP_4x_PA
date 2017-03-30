@@ -97,7 +97,7 @@ public class ImportRestClient {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            throw new PAException("Error in reading micro service response:  " + e.getMessage(), e);
+            throw new PAException("Error in reading response:  " + e.getMessage(), e);
         }
         return httpResponse.toString();
     }

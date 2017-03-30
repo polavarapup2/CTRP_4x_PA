@@ -50,7 +50,7 @@ public final class ImportCtGovAction extends ActionSupport implements
     private boolean searchPerformed;
     private boolean studyExists;
     private StudyProtocolQueryDTO potentialMatch;
-    private CTGovImportMergeHelper helper;
+    private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
     private HttpServletRequest request;
 
     /**

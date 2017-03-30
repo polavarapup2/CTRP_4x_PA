@@ -137,7 +137,7 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
     private boolean showAddMySite = false;
 
     private String accrualDiseaseTerminology;
-    private CTGovImportMergeHelper helper;
+    private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
     
     /**
      * {@inheritDoc}
