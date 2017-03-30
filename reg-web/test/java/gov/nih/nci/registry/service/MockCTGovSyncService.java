@@ -4,6 +4,7 @@
 package gov.nih.nci.registry.service;
 
 import gov.nih.nci.pa.domain.CTGovImportLog;
+import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
 import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
@@ -11,7 +12,6 @@ import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -90,6 +90,23 @@ public class MockCTGovSyncService implements CTGovSyncServiceLocal {
     public List<CTGovImportLog> getLogEntries(CTGovImportLogSearchCriteria searchCriteria)
             throws PAException {        
         return new ArrayList<CTGovImportLog>();
+    }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.nih.nci.pa.service.util.CTGovSyncServiceLocal#createImportLogEntry(String trialNciId, String nctIdStr,
+            String title, String action, String status, String user,
+            boolean needsReview, boolean adminChanged,
+            boolean scientificChanged, StudyInboxDTO recent)
+     */
+    @Override
+    public void createImportLogEntry(String trialNciId, String nctIdStr,
+            String title, String action, String status, String user,
+            boolean needsReview, boolean adminChanged,
+            boolean scientificChanged, StudyInboxDTO recent) throws PAException {
+        // TODO Auto-generated method stub
+        
     }
 
 }
