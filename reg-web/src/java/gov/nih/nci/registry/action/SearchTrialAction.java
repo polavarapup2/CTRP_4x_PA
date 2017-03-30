@@ -34,6 +34,7 @@ import gov.nih.nci.pa.service.util.CTGovXmlGeneratorServiceLocal;
 import gov.nih.nci.pa.service.util.RegistryUserServiceLocal;
 import gov.nih.nci.pa.service.util.RegulatoryInformationServiceLocal;
 import gov.nih.nci.pa.service.util.TSRReportGeneratorServiceLocal;
+import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PaRegistry;
@@ -135,6 +136,7 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
     private boolean showAddMySite = false;
 
     private String accrualDiseaseTerminology;
+    private CTGovImportMergeHelper helper;
     
     /**
      * {@inheritDoc}
@@ -246,6 +248,9 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
             }
             
             // Proceed with import otherwise.
+            // call the glue code
+            //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
+            //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
             String nciID = ctGovSyncService.importTrial(nctID);            
             final Long newTrialId = IiConverter
                     .convertToLong(studyProtocolService.getStudyProtocol(
@@ -1183,5 +1188,18 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
     public void setAccrualDiseaseTerminology(String accrualDiseaseTerminology) {
         this.accrualDiseaseTerminology = accrualDiseaseTerminology;
     }
-
+    /**
+     * 
+     * @return helper
+     */
+    public CTGovImportMergeHelper getHelper() {
+        return helper;
+    }
+    /**
+     * 
+     * @param helper helper
+     */
+    public void setHelper(CTGovImportMergeHelper helper) {
+        this.helper = helper;
+    }
 }

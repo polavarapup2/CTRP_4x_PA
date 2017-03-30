@@ -209,8 +209,6 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
      */
     public static final String CTGOVIMPORT_USERNAME = "ClinicalTrials.gov Import";
 
-    private static final int INDEX_1 = 1;
-
     private static final String NEW_TRIAL_ACTION = "New Trial";
 
     private static final String UPDATE_ACTION = "Update";
@@ -238,7 +236,6 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
 
     private static final int L_160 = 160;
 
-    private static final String UNSPECIFIED = "Unspecified";
 
     private static final int L_600 = 600;
 
@@ -259,15 +256,11 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
     private static final int L_800 = 800;
 
     private static final int L_200 = 200;
-
-    private static final String UNITED_STATES = "United States";
-
+    
     private static final String ALL = "All";
 
     @EJB
     private LookUpTableServiceRemote lookUpTableService;
-    @EJB
-    private RegulatoryInformationServiceLocal regulatoryAuthorityService;
     @EJB
     private TrialRegistrationServiceLocal trialRegistrationService;
     @EJB
@@ -1030,9 +1023,22 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             return CsmUserUtil.getDisplayUsername(csmUser);
         }
     }
-
     // CHECKSTYLE:OFF
-    private void createImportLogEntry(
+    /**
+     * 
+     * @param trialNciId trialNciId
+     * @param nctIdStr nctIdStr
+     * @param title title
+     * @param action action
+     * @param status status
+     * @param user user
+     * @param needsReview needsReview
+     * @param adminChanged adminChanged
+     * @param scientificChanged scientificChanged
+     * @param recent recent
+     * @throws PAException PAException
+     */
+    public void createImportLogEntry(
             String trialNciId, // NOPMD
             String nctIdStr, // NOPMD
             String title, String action, String status, String user,
@@ -2134,15 +2140,6 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
                 .add(Restrictions.isNotNull("si.scientificCloseDate"))
                 .setProjection(Projections.property("si.id"))));
 
-    }
-
-    /**
-     * @param regulatoryAuthorityService
-     *            the regulatoryAuthorityService to set
-     */
-    public void setRegulatoryAuthorityService(
-            RegulatoryInformationServiceLocal regulatoryAuthorityService) {
-        this.regulatoryAuthorityService = regulatoryAuthorityService;
     }
 
     /**
