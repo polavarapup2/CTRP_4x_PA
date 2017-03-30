@@ -1,7 +1,5 @@
 package gov.nih.nci.pa.webservices.dto;
 
-import java.util.Date;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
@@ -22,7 +20,7 @@ public class CTGovImportLog {
     private boolean scientificChanged;
     private Long studyInboxId;
     private String userCreated;
-    private Date dateCreated;
+    private String dateCreated;
     /**
      * const
      */
@@ -48,7 +46,7 @@ public class CTGovImportLog {
     public CTGovImportLog(String nciId, String nctId, String title,
             String action, String importStatus, boolean needsReview,
             boolean adminChanged, boolean scientificChanged, Long studyInboxId,
-            String userCreated, Date dateCreated) {
+            String userCreated, String dateCreated) {
         super();
         this.nciId = nciId;
         this.nctId = nctId;
@@ -207,14 +205,14 @@ public class CTGovImportLog {
      * 
      * @return dateCreated
      */
-    public Date getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
     /**
      * 
      * @param dateCreated dateCreated
      */
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 }
