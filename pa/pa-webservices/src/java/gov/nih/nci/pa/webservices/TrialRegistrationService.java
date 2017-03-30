@@ -48,7 +48,6 @@ import gov.nih.nci.pa.webservices.types.ObjectFactory;
 import gov.nih.nci.pa.webservices.types.TrialRegistrationConfirmation;
 import gov.nih.nci.services.organization.OrganizationDTO;
 import gov.nih.nci.services.person.PersonDTO;
-//import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 
 
 

@@ -9,8 +9,8 @@
     <property file="${basedir}/../../build-pa/tier-properties/build-lite-${tier}.properties"/>
     <property file="${basedir}/../../build-pa/build-lite.properties"/>
     <property file="${basedir}/../../build-pa/version.properties"/>
-    <property name="commons.coverage.line" value="65"/>
-    <property name="commons.coverage.branch" value="48"/>
+    <property name="commons.coverage.line" value="64"/>
+    <property name="commons.coverage.branch" value="47"/>
     <property name="commons.pmd.maxerrors" value="57"/>
 
     <property name="software.dir" value="${basedir}/../.."/>

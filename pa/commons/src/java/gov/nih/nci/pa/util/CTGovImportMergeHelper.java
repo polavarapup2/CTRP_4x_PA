@@ -30,7 +30,7 @@ public class CTGovImportMergeHelper {
      * PUT
      */
     private static final String PUT = "PUT";
-    private RestClient client;
+    private ImportRestClient client;
     
     /**
      * 
@@ -38,7 +38,7 @@ public class CTGovImportMergeHelper {
      */
     public CTGovImportMergeHelper() {
         super();
-        this.client = new RestClient();
+        this.client = new ImportRestClient();
     }
     /**
      * 
@@ -109,7 +109,7 @@ public class CTGovImportMergeHelper {
      * 
      * @return client
      */
-    public RestClient getClient() {
+    public ImportRestClient getClient() {
         return client;
     }
 
@@ -118,7 +118,7 @@ public class CTGovImportMergeHelper {
      * @param client
      *            the client
      */
-    public void setClient(RestClient client) {
+    public void setClient(ImportRestClient client) {
         this.client = client;
     }
     
