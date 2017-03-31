@@ -1,5 +1,6 @@
 package gov.nih.nci.pa.webservices;
 
+import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
@@ -179,7 +180,7 @@ public class ImportHelperRestService {
             TrialRegistrationDTO trialRegistrationDTO) throws PAException,
             IOException {
         LOG.info("" + trialRegistrationDTO.getNctID());
-        StudyProtocolDTO afterStudyProtocolDTO = new StudyProtocolDTO();
+        StudyProtocolDTO afterStudyProtocolDTO = null;
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
         StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
@@ -295,11 +296,16 @@ public class ImportHelperRestService {
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
         StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
+        StudyProtocolDTO newDTO = null;
         try {
+            if (trialRegistrationDTO.getStudyProtocolDTO() instanceof InterventionalStudyProtocolDTO) {
+                newDTO = new gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO();
+            } else {
+                newDTO = new gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO();
+            }
             StudyProtocolDTO afterStudyProtocolDTO = new TrialRegisterationWebServiceDTOConverter()
                     .convertToStudyProtocolDTO(
-                            trialRegistrationDTO.getStudyProtocolDTO(),
-                            new StudyProtocolDTO());
+                            trialRegistrationDTO.getStudyProtocolDTO(), newDTO);
             OrganizationDTO leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
                     .convertToOrganizationDTO(trialRegistrationDTO
                             .getLeadOrgDTO());
@@ -426,7 +432,8 @@ public class ImportHelperRestService {
 //        criteria.setNctNumber("NCT");
 //        criteria.setTrialCategory("p");
 //        criteria.setExcludeRejectProtocol(true);                        
-//        List<StudyProtocolQueryDTO> trials = PaRegistry.getProtocolQueryService().getStudyProtocolByCriteria(criteria); 
+//        List<StudyProtocolQueryDTO> trials = PaRegistry.getProtocolQueryService()
+    //.getStudyProtocolByCriteria(criteria); 
 //        //Loop over all the trials
 //        for (StudyProtocolQueryDTO trial : trials) {
 //            String nctIdentifier = trial.getNctIdentifier();

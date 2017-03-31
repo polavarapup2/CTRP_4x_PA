@@ -9,7 +9,10 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
+import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
+import gov.nih.nci.ctrp.importtrials.dto.NonInterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Ad;
+import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.iso21090.DSet;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.Ivl;
@@ -54,15 +57,17 @@ public class TrialRegisterationWebServiceDTOConverter {
      * 
      * @param webServiceDTO
      *            the webServiceDTO
-     * @param dto dto
+     * @param dto
+     *            dto
      * @return StudyProtocolDTO
      */
+    @SuppressWarnings({ "deprecation", "PMD.ExcessiveMethodLength" })
     public StudyProtocolDTO convertToStudyProtocolDTO(
             StudyProtocolWebServiceDTO webServiceDTO, StudyProtocolDTO dto) {
         if (webServiceDTO != null) {
             if (webServiceDTO.getStudyProtocolId() != null) {
-                dto.setIdentifier(IiConverter.convertToIi(webServiceDTO
-                        .getStudyProtocolId()));
+                dto.setIdentifier(IiConverter.convertToStudyProtocolIi(Long.parseLong(webServiceDTO
+                        .getStudyProtocolId())));
             }
             dto.setAcronym(StConverter.convertToSt(webServiceDTO.getAcronym()));
             dto.setExpandedAccessIndicator(BlConverter
@@ -124,6 +129,60 @@ public class TrialRegisterationWebServiceDTOConverter {
                 dto.setSecondaryIdentifiers(DSetConverter
                         .convertIiSetToDset(secondaryIds));
             }
+            if (webServiceDTO instanceof NonInterventionalStudyProtocolDTO) {
+                NonInterventionalStudyProtocolDTO nonintdto = (NonInterventionalStudyProtocolDTO) webServiceDTO;
+                gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO nonIntIsoDTO = (gov.nih.nci
+                        .pa.iso.dto.NonInterventionalStudyProtocolDTO) dto;
+                nonIntIsoDTO.setBiospecimenDescription(StConverter
+                        .convertToSt(nonintdto.getBiospecimenDescription()));
+                nonIntIsoDTO.setBiospecimenRetentionCode(CdConverter
+                        .convertStringToCd(nonintdto
+                                .getBiospecimenRetentionCode()));
+                nonIntIsoDTO.setNumberOfGroups(IntConverter
+                        .convertToInt(nonintdto.getNumberOfGroups()));
+                nonIntIsoDTO.setSamplingMethodCode(CdConverter
+                        .convertStringToCd(nonintdto.getSamplingMethodCode()));
+                nonIntIsoDTO.setStudyModelCode(CdConverter
+                        .convertStringToCd(nonintdto.getStudyModelCode()));
+                nonIntIsoDTO.setStudyModelOtherText(StConverter
+                        .convertToSt(nonintdto.getStudyModelOtherText()));
+                nonIntIsoDTO.setTimePerspectiveCode(CdConverter
+                        .convertStringToCd(nonintdto.getTimePerspectiveCode()));
+                nonIntIsoDTO.setTimePerspectiveOtherText(StConverter
+                        .convertToSt(nonintdto.getTimePerspectiveOtherText()));
+                nonIntIsoDTO
+                        .setStudyPopulationDescription(StConverter
+                                .convertToSt(nonintdto
+                                        .getStudyPopulationDescription()));
+                nonIntIsoDTO.setStudySubtypeCode(CdConverter
+                        .convertStringToCd(nonintdto.getStudySubtypeCode()));
+            } else {
+                InterventionalStudyProtocolDTO intdto = (InterventionalStudyProtocolDTO) webServiceDTO;
+                gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO intIsoDTO = (gov.nih
+                        .nci.pa.iso.dto.InterventionalStudyProtocolDTO) dto;
+                intIsoDTO.setAllocationCode(CdConverter
+                        .convertStringToCd(intdto.getAllocationCode()));
+                intIsoDTO
+                        .setDesignConfigurationCode(CdConverter
+                                .convertStringToCd(intdto
+                                        .getDesignConfigurationCode()));
+                intIsoDTO.setNumberOfInterventionGroups(IntConverter
+                        .convertToInt(intdto.getNumberOfInterventionGroups()));
+                intIsoDTO
+                        .setStudyClassificationCode(CdConverter
+                                .convertStringToCd(intdto
+                                        .getStudyClassificationCode()));
+                List<Cd> codes = new ArrayList<Cd>();
+                if (intdto.getBlindedRoleCode() != null) {
+                    for (String role : intdto.getBlindedRoleCode()) {
+                        codes.add(CdConverter.convertStringToCd(role));
+                    }
+                }
+
+                intIsoDTO.setBlindedRoleCode(DSetConverter
+                        .convertCdListToDSet(codes));
+
+            }
         }
         return dto;
     }
@@ -147,9 +206,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
+
     /**
      * 
-     * @param webServiceList webServiceList
+     * @param webServiceList
+     *            webServiceList
      * @return list
      */
     public List<OrganizationDTO> convertToOrganizationDTOList(
@@ -163,11 +224,13 @@ public class TrialRegisterationWebServiceDTOConverter {
             }
         }
         return list;
-    }   
+    }
+
     /**
      * 
-     * @param webServiceStudySiteDTO webServiceStudySiteDTO
-     * @return  StudySiteDTO
+     * @param webServiceStudySiteDTO
+     *            webServiceStudySiteDTO
+     * @return StudySiteDTO
      */
     public StudySiteDTO convertToLeadOrgID(
             gov.nih.nci.pa.webservices.dto.StudySiteDTO webServiceStudySiteDTO) {
@@ -177,12 +240,14 @@ public class TrialRegisterationWebServiceDTOConverter {
             dto.setLocalStudyProtocolIdentifier(StConverter
                     .convertToSt(webServiceStudySiteDTO
                             .getLocalStudyProtocolIdentifier()));
-        } 
+        }
         return dto;
     }
+
     /**
      * 
-     * @param webServicePersonDTO webServicePersonDTO
+     * @param webServicePersonDTO
+     *            webServicePersonDTO
      * @return PersonDTO
      */
     public PersonDTO convertToPersonDTO(
@@ -203,9 +268,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
+
     /**
      * 
-     * @param webServicePartyDTO webServicePartyDTO
+     * @param webServicePartyDTO
+     *            webServicePartyDTO
      * @return ResponsiblePartyDTO
      */
     public ResponsiblePartyDTO convertToPartyDTO(
@@ -223,9 +290,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
+
     /**
      * 
-     * @param webServiceStatusDTO webServiceStatusDTO
+     * @param webServiceStatusDTO
+     *            webServiceStatusDTO
      * @return StudyOverallStatusDTO
      */
     public StudyOverallStatusDTO convertToOverallStatusDTO(
@@ -241,9 +310,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
+
     /**
      * 
-     * @param arms arms
+     * @param arms
+     *            arms
      * @return list
      */
     public List<ArmDTO> convertToArmsDTOList(
@@ -261,9 +332,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return list;
     }
+
     /**
      * 
-     * @param eligibilityList eligibilityList
+     * @param eligibilityList
+     *            eligibilityList
      * @return list
      */
     public List<PlannedEligibilityCriterionDTO> convertToEligibilityDTOList(
@@ -309,6 +382,7 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return list;
     }
+
     private Ivl<Pq> convertAgeRangeToIvlPq(AgeDTO minAge, AgeDTO maxAge) {
         IvlConverter.JavaPq low = parseAgeValue(minAge);
         IvlConverter.JavaPq high = parseAgeValue(maxAge);
@@ -318,9 +392,11 @@ public class TrialRegisterationWebServiceDTOConverter {
     private JavaPq parseAgeValue(AgeDTO age) {
         return new JavaPq(age.getUnitCode(), age.getValue(), age.getPrecision());
     }
+
     /**
      * 
-     * @param outcomeList outcomeList
+     * @param outcomeList
+     *            outcomeList
      * @return list
      */
     public List<StudyOutcomeMeasureDTO> convertTOOutcomesDTOList(
@@ -346,11 +422,14 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return list;
     }
+
     /**
      * 
-     * @param webServiceDoc webServiceDoc
+     * @param webServiceDoc
+     *            webServiceDoc
      * @return dto
-     * @throws IOException IOException
+     * @throws IOException
+     *             IOException
      */
     public DocumentDTO convertToDocument(
             gov.nih.nci.pa.webservices.dto.DocumentDTO webServiceDoc)
