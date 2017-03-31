@@ -410,7 +410,7 @@ public class ImportHelperRestService {
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        return Response.ok().build();
+        return Response.ok("Success").build();
     }
     // import nightly job 
     // /importlog  
