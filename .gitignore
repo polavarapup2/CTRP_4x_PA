@@ -1,3 +1,5 @@
+ctrp.local.properties
+build-pa/tier-properties/build-lite-LOCAL.properties
 */eclipse-out/*
 */.idea/*
 .idea/*
