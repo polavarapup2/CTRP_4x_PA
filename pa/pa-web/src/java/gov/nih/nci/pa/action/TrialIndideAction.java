@@ -94,6 +94,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 /**

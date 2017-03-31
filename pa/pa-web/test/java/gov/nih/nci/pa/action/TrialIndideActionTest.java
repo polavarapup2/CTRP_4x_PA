@@ -23,11 +23,13 @@ import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyIndldeServiceLocal;
 import gov.nih.nci.pa.util.Constants;
-import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
 	private List<AdditionalTrialIndIdeDTO> list = new ArrayList<AdditionalTrialIndIdeDTO>();
     private RestClient client = mock(RestClient.class);
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private StudyIndldeServiceLocal studyIndldeServiceLocal = mock(StudyIndldeServiceLocal.class);
     
 	@Before
@@ -62,11 +65,12 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
         additionalTrialIndIdeDTO.setExpandedAccessIndicator("Yes");
         additionalTrialIndIdeDTO.setExpandedAccessNctId("NCT12345678");
         list.add(additionalTrialIndIdeDTO);
-        String responseStr = PAWebUtil.marshallJSON(list);
+        String responseStr = PAJsonUtil.marshallJSON(list);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&trial_ide_ind_id=123", "GET", null)).thenReturn(responseStr);
-        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalTrialIndIdeDTO))).thenReturn("");
-        when(client.sendHTTPRequest(url + "/1", "PUT",  PAWebUtil.marshallJSON(additionalTrialIndIdeDTO))).thenReturn("");
-        helper.setClient(client);    
+        when(client.sendHTTPRequest(url, "POST", PAJsonUtil.marshallJSON(additionalTrialIndIdeDTO))).thenReturn("");
+        when(client.sendHTTPRequest(url + "/1", "PUT",  PAJsonUtil.marshallJSON(additionalTrialIndIdeDTO))).thenReturn("");
+        helperUtil.setClient(client);
+        helper.setTrialInfoHelperUtil(helperUtil);
         trialIndideAction.setHelper(helper);
         
 	}

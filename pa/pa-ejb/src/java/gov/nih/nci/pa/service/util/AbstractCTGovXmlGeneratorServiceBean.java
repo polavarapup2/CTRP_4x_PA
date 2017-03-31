@@ -117,6 +117,7 @@ import gov.nih.nci.pa.service.StudySiteServiceLocal;
 import gov.nih.nci.pa.service.correlation.CorrelationUtils;
 import gov.nih.nci.pa.service.correlation.OrganizationCorrelationServiceRemote;
 import gov.nih.nci.pa.util.ISOUtil;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -179,6 +180,8 @@ public class AbstractCTGovXmlGeneratorServiceBean {
 
     private CorrelationUtils corUtils = new CorrelationUtils();
     private PAServiceUtils paServiceUtil = new PAServiceUtils();
+
+    private TrialInfoHelperUtil trialInfoHelperUtil = new TrialInfoHelperUtil();
 
     private static Map<String, String> nv = null;
 
@@ -444,8 +447,6 @@ public class AbstractCTGovXmlGeneratorServiceBean {
         return interventionAlternateNameService;
     }
 
-   
-
     /**
      * @return the studyResourcingService
      */
@@ -468,14 +469,28 @@ public class AbstractCTGovXmlGeneratorServiceBean {
        this.paServiceUtil = paServiceUtil;
    }
 
-   /**
-    * @return the paServiceUtil
-    */
-   public PAServiceUtils getPaServiceUtil() {
-       return paServiceUtil;
-   }
+    /**
+     * @return the paServiceUtil
+     */
+    public PAServiceUtils getPaServiceUtil() {
+        return paServiceUtil;
+    }
 
-   /**
+    /**
+     * @return the TrialInfoHelperUtil
+     */
+    public TrialInfoHelperUtil getTrialInfoHelperUtil() {
+        return trialInfoHelperUtil;
+    }
+
+    /**
+     * @param trialInfoHelperUtil the TrialInfoHelperUtil to set
+     */
+    public void setTrialInfoHelperUtil(TrialInfoHelperUtil trialInfoHelperUtil) {
+        this.trialInfoHelperUtil = trialInfoHelperUtil;
+    }
+
+    /**
     * @return the corUtils
     */
    public CorrelationUtils getCorUtils() {

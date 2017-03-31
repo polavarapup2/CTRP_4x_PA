@@ -27,11 +27,13 @@ import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.util.Constants;
-import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
@@ -47,6 +49,7 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
     private StudyProtocolServiceLocal studyProtocolServiceLocal;
     private RestClient client = mock(RestClient.class);
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private Ii id = IiConverter.convertToIi(1L);
     List<Long> identifiersList = new ArrayList<Long>();
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
@@ -76,10 +79,10 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         regulatoryDtoList.add(additionalRegInfoDTO);
         String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
         when(client.sendHTTPRequest(url +"?study_protocol_id=1&nci_id=\" + \"NCI-1000-0000\"", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(regulatoryDtoList));
-        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");
-        helper.setClient(client);
-
+                PAJsonUtil.marshallJSON(regulatoryDtoList));
+        when(client.sendHTTPRequest(url, "POST", PAJsonUtil.marshallJSON(additionalRegInfoDTO))).thenReturn("");
+        helperUtil.setClient(client);
+        helper.setTrialInfoHelperUtil(helperUtil);
     }
     
     @Test
@@ -210,7 +213,7 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         webDTO.setDelayedPostingIndicator("true");
         regulatoryInformationAction.setWebDTO(webDTO);
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         String result = regulatoryInformationAction.update();
         assertEquals("success", result);
         assertNotNull(getRequest().getAttribute("failureMessage"));

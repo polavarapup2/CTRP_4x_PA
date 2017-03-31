@@ -11,10 +11,10 @@ import org.codehaus.jackson.type.TypeReference;
  * @author Purnima, Reshma
  *
  */
-public final class PAWebUtil {
-    private static final Logger LOG = Logger.getLogger(PAWebUtil.class);
+public final class PAJsonUtil {
+    private static final Logger LOG = Logger.getLogger(PAJsonUtil.class);
     
-    private PAWebUtil() {
+    private PAJsonUtil() {
        super();
     }
     /**
@@ -87,5 +87,6 @@ public final class PAWebUtil {
         }
         return b; 
     }
+
 
 }

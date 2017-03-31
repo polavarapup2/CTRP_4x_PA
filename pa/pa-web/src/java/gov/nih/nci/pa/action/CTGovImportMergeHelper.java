@@ -2,7 +2,7 @@ package gov.nih.nci.pa.action;
 
 import gov.nih.nci.pa.dto.StudyProtocolIdentityDTO;
 import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.RestClient;
 
 import org.apache.log4j.Logger;
@@ -42,7 +42,7 @@ public class CTGovImportMergeHelper {
      */
     public StudyProtocolIdentityDTO insertOrUpdateNctId(StudyProtocolIdentityDTO dto) throws PAException {
         try {
-            //String postBody = PAWebUtil.marshallJSON(dto);
+            //String postBody = PAJsonUtil.marshallJSON(dto);
             String response = "";
             if (dto.getNciId() != null) {
                 response = client.sendHTTPRequest("", POST, null);
@@ -50,7 +50,7 @@ public class CTGovImportMergeHelper {
                 response = client.sendHTTPRequest("", PUT, null);
             }
             if (response != null) {
-                dto = (StudyProtocolIdentityDTO) PAWebUtil
+                dto = (StudyProtocolIdentityDTO) PAJsonUtil
                     .unmarshallJSON(response, StudyProtocolIdentityDTO.class);
             }
         } catch (Exception e) {

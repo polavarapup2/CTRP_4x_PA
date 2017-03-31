@@ -1,4 +1,4 @@
-package gov.nih.nci.pa.action;
+package gov.nih.nci.pa.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -24,13 +24,11 @@ import gov.nih.nci.pa.dto.RegulatoryAuthorityWebDTO;
 import gov.nih.nci.pa.dto.StudyIndldeWebDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.util.PAWebUtil;
-import gov.nih.nci.pa.util.PaEarPropertyReader;
-import gov.nih.nci.pa.util.RestClient;
 
 public class TrialInfoMergeHelperTest {
     private Long studyprotocolId = 1L;
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
     private RegulatoryAuthorityWebDTO webDto = new RegulatoryAuthorityWebDTO();
     private RestClient client = mock(RestClient.class);
@@ -44,6 +42,7 @@ public class TrialInfoMergeHelperTest {
     public void setUp() throws PAException {
        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
        studyId = IiConverter.convertToIi(studyprotocolId);
+       helper.setTrialInfoHelperUtil(helperUtil);
     }
  
     @Test
@@ -57,9 +56,9 @@ public class TrialInfoMergeHelperTest {
         additionalRegInfoDTO.setStudy_protocol_id("1");
         additionalRegInfoDTO.setNci_id("NCI-2000-12222");
         regulatoryDtoList.add(additionalRegInfoDTO);
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=" + "NCI-2000-12222", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(regulatoryDtoList));
+                PAJsonUtil.marshallJSON(regulatoryDtoList));
         helper.mergeRegulatoryInfoRead(studyId, "NCI-2000-12222", webDto);
         assertEquals(webDto.getFdaRegulatedDevice(),
                 additionalRegInfoDTO.getFda_regulated_device());
@@ -76,7 +75,7 @@ public class TrialInfoMergeHelperTest {
     }
     @Test
     public void mergeRegulatoryInfoUpdateTest() throws PAException, IOException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         additionalRegInfoDTO.setExported_from_us("true");
         additionalRegInfoDTO.setFda_regulated_device("true");
         additionalRegInfoDTO.setFda_regulated_drug("false");
@@ -89,7 +88,7 @@ public class TrialInfoMergeHelperTest {
                 + "\"fda_regulated_device\":\"true\",\"post_prior_to_approval\":\"true\",\"ped_postmarket_surv\":\"true\","
                 + "\"exported_from_us\":\"true\",\"date_updated\":\"2017-03-01 23:30:38 -0500\"}]";
         when(client.sendHTTPRequest(url, "POST", 
-                PAWebUtil.marshallJSON(additionalRegInfoDTO))).thenReturn(reponse);
+                PAJsonUtil.marshallJSON(additionalRegInfoDTO))).thenReturn(reponse);
         webDto.setFdaRegulatedDevice("true");
         webDto.setFdaRegulatedDrug("false");
         webDto.setExportedFromUs("true");
@@ -114,7 +113,7 @@ public class TrialInfoMergeHelperTest {
    // @Test
     public void mergeRegulatoryInfoRead1Test() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         helper.mergeRegulatoryInfoRead(IiConverter.convertToIi(11111L), "NCI-2000-12222",webDto);
         assertEquals(webDto.getFdaRegulatedDevice(),
                 additionalRegInfoDTO.getFda_regulated_device());
@@ -123,7 +122,7 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void mergeRegulatoryInfoWrite1Test() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         webDto.setFdaRegulatedDevice("true");
         webDto.setFdaRegulatedDrug("true");
         webDto.setExportedFromUs("true");
@@ -136,7 +135,7 @@ public class TrialInfoMergeHelperTest {
     
     @Test
     public void noDataFromMicroServiceTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("");
         helper.mergeRegulatoryInfoRead(studyId, "NCI-2000-12222",webDto);
         assertNull(webDto.getFdaRegulatedDevice());
@@ -150,13 +149,13 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void microServiceUnavailableTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         helper.mergeRegulatoryInfoRead(studyId, "NCI-2000-12222",webDto);
     }
 
     @Test
     public void invalidFieldValuesFromMicroserviceTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("{\"study_protocol_id\":\"169939706\",\"nci_id\":\"NCI-2014-02277\",\"fda_regulated_drug\":\"truesed\",\"fda_regulated_device\":\"trueed\"}");
         helper.mergeRegulatoryInfoRead(studyId, "NCI-2000-12222", webDto);
         assertNull(webDto.getFdaRegulatedDrug());
@@ -165,7 +164,7 @@ public class TrialInfoMergeHelperTest {
     
     @Test
     public void incompatibleJsonFromMicroServiceTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("{\"study\":\"169939706\",\"nciid\":\"NCI-2014-02277\"}");
         helper.mergeRegulatoryInfoRead(studyId,"NCI-2000-12222", webDto);
         assertNull(webDto.getFdaRegulatedDrug());
@@ -187,8 +186,8 @@ public class TrialInfoMergeHelperTest {
         addTrialIndIdeDto.setExpandedAccessIndicator("Yes");
         addTrialIndIdeDto.setExpandedAccessNctId("NCT12345678");
         trialIndIdeDtoList.add(addTrialIndIdeDto);
-        String responseStr = PAWebUtil.marshallJSON(trialIndIdeDtoList);
-        helper.setClient(client);
+        String responseStr = PAJsonUtil.marshallJSON(trialIndIdeDtoList);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&trial_ide_ind_id=123", "GET", null)).thenReturn(responseStr);
         helper.mergeTrialIndIdeInfoRead(studyId, studyIndldeWebDTO);
         assertEquals(studyIndldeWebDTO.getStudyProtocolIi(),
@@ -207,8 +206,8 @@ public class TrialInfoMergeHelperTest {
                 + "\"expanded_access_indicator\":\"Yes\",\"expanded_access_nct_id\":\"NCT12345678\"},"
                 +"{\"study_protocol_id\":\"1\",\"trial_ide_ind_id\":\"223\","
                         + "\"expanded_access_indicator\":\"No\",\"expanded_access_nct_id\":\"NCT22345678\"}]";
-        
-        helper.setClient(client);
+
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1", "GET", null)).thenReturn(jsonStr);
         StudyIndldeWebDTO studyIndldeWebDTO = new StudyIndldeWebDTO();
         studyIndldeWebDTO.setStudyProtocolIi(studyprotocolId.toString());
@@ -233,7 +232,7 @@ public class TrialInfoMergeHelperTest {
     
     @Test
     public void mergeTrialIndIdeInfoUpdateTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         String jsonStr = "{\"study_protocol_id\":1,\"trial_ide_ind_id\":123,"
                 + "\"expanded_access_indicator\":\"Yes\",\"expanded_access_nct_id\":\"NCT12345678\",\"date_updated\":\"03/12/2017\"}";
         when(client.sendHTTPRequest(url, "POST", jsonStr)).thenReturn(jsonStr);
@@ -253,7 +252,7 @@ public class TrialInfoMergeHelperTest {
     @Test (expected=PAException.class)
     public void microServiceUnavailableTrialIndIdeTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         helper.mergeTrialIndIdeInfoRead(studyId, new StudyIndldeWebDTO());
     }
     
@@ -261,7 +260,7 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void mergeTrialINDUpdateExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         StudyIndldeWebDTO webDTO = new StudyIndldeWebDTO();
         webDTO.setStudyProtocolIi(studyprotocolId.toString());
         webDTO.setId("123");
@@ -276,7 +275,7 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void mergeTrialINDDeleteExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         StudyIndldeWebDTO webDTO = new StudyIndldeWebDTO();
         webDTO.setStudyProtocolIi(studyprotocolId.toString());
         webDTO.setId("123");
@@ -297,9 +296,9 @@ public class TrialInfoMergeHelperTest {
         dto.setNciId("NCI-2000-12222");
         dto.setStudyProtocolId("1");
         eligibilityDtoList.add(dto);
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(eligibilityDtoList));
+                PAJsonUtil.marshallJSON(eligibilityDtoList));
         ISDesignDetailsWebDTO webDto = helper.mergeEligibilityCriteriaRead(studyId, "NCI-2000-12222");
         assertEquals(webDto.getGender(),
                 dto.getGender());
@@ -311,7 +310,7 @@ public class TrialInfoMergeHelperTest {
    
     @Test
     public void mergeEligibilityCriteriaUpdateTest() throws PAException, IOException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         AdditionalEligibilityCriteriaDTO dto = new AdditionalEligibilityCriteriaDTO();
         dto.setDateUpdated("2017-03-01 23:30:38 -0500");
         dto.setGender("true");
@@ -322,7 +321,7 @@ public class TrialInfoMergeHelperTest {
                 + "\"date_updated\":\"2017-03-01 23:30:38 -0500\",\"study_protocol_id\":1,"
                 + "\"nci_id\":\"NCI-2000-12222\"}";
         when(client.sendHTTPRequest(url, "POST", 
-                PAWebUtil.marshallJSON(dto))).thenReturn(reponse);
+                PAJsonUtil.marshallJSON(dto))).thenReturn(reponse);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         webDTO.setGender("true");
         webDTO.setGenderEligibilityDescription("Description1");
@@ -331,7 +330,7 @@ public class TrialInfoMergeHelperTest {
         eligibilityDtoList.clear();
         eligibilityDtoList.add(dto);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(eligibilityDtoList));
+                PAJsonUtil.marshallJSON(eligibilityDtoList));
         ISDesignDetailsWebDTO webDto = helper.mergeEligibilityCriteriaRead(studyId, "NCI-2000-12222");
         assertEquals(webDto.getGender(),
                 dto.getGender());
@@ -342,7 +341,7 @@ public class TrialInfoMergeHelperTest {
     
     @Test
     public void noEligibilityDataFromMSTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("");
         ISDesignDetailsWebDTO webDTO = helper.mergeEligibilityCriteriaRead(studyId, "NCI-2000-12222");
         assertNull(webDTO.getGender());
@@ -352,7 +351,7 @@ public class TrialInfoMergeHelperTest {
     
     @Test
     public void invalidFieldValuesFromMSEligibilityTest() throws PAException {
-        helper.setClient(client);
+        helperUtil.setClient(client);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         when(client.sendHTTPRequest(url + "/1", "GET", null)).thenReturn("{\\\"gender_based\\\":\\\"trusdsfdsfe\\\",\\\"gender_description\\\":\\\"Description\\\",\"\r\n" + 
                 "                + \"\\\"date_updated\\\":\\\"2017-03-01 23:30:38 -0500\\\",\\\"study_protocol_id\\\":1,\"\r\n" + 
@@ -365,14 +364,14 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=Exception.class)
     public void mergeEligibilityCriteriaReadExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         helper.mergeEligibilityCriteriaRead(studyId,"NCI-2000-12222");
     }
     
     @Test(expected=PAException.class)
     public void mergeEligibilityCriteriaUpdateExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         webDTO.setGender("true");
         webDTO.setGenderEligibilityDescription("Description1");
@@ -390,9 +389,9 @@ public class TrialInfoMergeHelperTest {
         dto.setNoMasking("True");
         dto.setStudyProtocolId("1");
         designDetailsDtoList.add(dto);
-        helper.setClient(client);
+        helperUtil.setClient(client);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(
-                PAWebUtil.marshallJSON(designDetailsDtoList));
+                PAJsonUtil.marshallJSON(designDetailsDtoList));
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         helper.mergeDesignDetailsRead(studyId, webDTO, "NCI-2000-12222");
         assertEquals(webDTO.getMaskingDescription(),
@@ -406,7 +405,7 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void mergeDesignDetailsExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         helper.mergeDesignDetailsRead(studyId, webDTO, "NCI-2000-12222");
     }
@@ -421,11 +420,11 @@ public class TrialInfoMergeHelperTest {
         dto.setNoMasking("True");
         dto.setStudyProtocolId("1");
         
-        helper.setClient(client);
+        helperUtil.setClient(client);
         String reponse ="{\"id\":null,\"nci_id\":\"NCI-2000-12222\",\"study_protocol_id\":\"1\",\"date_updated\":null,"
                 + "\"model_description\":\"ModelDesc1\",\"masking_description\":\"Desc1\",\"no_masking\":\"True\"}";
         when(client.sendHTTPRequest(url, "POST", 
-                PAWebUtil.marshallJSON(dto))).thenReturn(reponse);
+                PAJsonUtil.marshallJSON(dto))).thenReturn(reponse);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         webDTO.setLastUpdatedDate("2017-03-01 23:30:38 -0500");
         webDTO.setMaskingDescription("Desc1");
@@ -440,7 +439,7 @@ public class TrialInfoMergeHelperTest {
     @Test(expected=PAException.class)
     public void mergeDesignDetailsUpdateExceptionTest() throws PAException {
         RestClient client1 = new RestClient();
-        helper.setClient(client1);
+        helperUtil.setClient(client1);
         ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
         webDTO.setLastUpdatedDate("2017-03-01 23:30:38 -0500");
         webDTO.setMaskingDescription("Desc1");

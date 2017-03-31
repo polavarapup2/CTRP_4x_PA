@@ -160,7 +160,7 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     }
     /**
      * 
-     * @param data_updated the data_updated
+     * @param date_updated the date_updated
      */
     public void setDate_updated(String date_updated) {
         this.date_updated = date_updated;

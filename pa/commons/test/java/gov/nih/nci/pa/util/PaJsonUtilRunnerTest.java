@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-public class PaWebUtilRunnerTest {
+public class PaJsonUtilRunnerTest {
 
     private String booleanStr;
     private Boolean expectedResult;
@@ -21,7 +21,7 @@ public class PaWebUtilRunnerTest {
 
     }
 
-    public PaWebUtilRunnerTest(String booleanStr, Boolean expectedResult) {
+    public PaJsonUtilRunnerTest(String booleanStr, Boolean expectedResult) {
         this.booleanStr = booleanStr;
         this.expectedResult = expectedResult;
     }
@@ -41,7 +41,7 @@ public class PaWebUtilRunnerTest {
 
     @Test
     public void isValidBooleanStringTest() {
-        assertEquals(expectedResult, PAWebUtil.isValidBooleanString(booleanStr));
+        assertEquals(expectedResult, PAJsonUtil.isValidBooleanString(booleanStr));
     }
 
 }

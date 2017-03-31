@@ -108,6 +108,7 @@ import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -26,11 +26,13 @@ import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyOutcomeMeasureServiceLocal;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.util.Constants;
-import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.RestClient;
 import gov.nih.nci.pa.util.ServiceLocator;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
     InterventionalStudyDesignAction action ;
     private final String TEN_CHARACTERS = "abcdefghij";
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private StudyProtocolServiceLocal studyProtocolServiceLocal;
     private Ii id = IiConverter.convertToIi(1L);
     
@@ -409,11 +412,12 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         designDetailsDto.setNciId("NCI-1000-0000");
         designDetailsDtoList.add(designDetailsDto);
         String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
-        String responseStr = PAWebUtil.marshallJSON(designDetailsDtoList);
+        String responseStr = PAJsonUtil.marshallJSON(designDetailsDtoList);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-1000-0000", "GET", null)).thenReturn(responseStr);
-        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(designDetailsDto))).thenReturn("");
-        when(client.sendHTTPRequest(url + "/1", "PUT",  PAWebUtil.marshallJSON(designDetailsDto))).thenReturn("");
-        helper.setClient(client);
+        when(client.sendHTTPRequest(url, "POST", PAJsonUtil.marshallJSON(designDetailsDto))).thenReturn("");
+        when(client.sendHTTPRequest(url + "/1", "PUT",  PAJsonUtil.marshallJSON(designDetailsDto))).thenReturn("");
+        helperUtil.setClient(client);
+        helper.setTrialInfoHelperUtil(helperUtil);
         action.setHelper(helper);
     }
 }

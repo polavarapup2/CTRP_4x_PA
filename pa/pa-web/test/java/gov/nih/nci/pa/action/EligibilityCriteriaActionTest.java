@@ -12,9 +12,11 @@ import gov.nih.nci.pa.enums.UnitsCode;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
-import gov.nih.nci.pa.util.PAWebUtil;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.RestClient;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
 
     private RestClient client = mock(RestClient.class);
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
+    private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private List<AdditionalEligibilityCriteriaDTO> eligibilityDtoList = new ArrayList<AdditionalEligibilityCriteriaDTO>();
     @Before
     public void setUp() throws PAException, IOException{
@@ -51,11 +54,12 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
         additionalDTO.setNciId("NCI-2000-12222");
         eligibilityDtoList.add(additionalDTO);
         
-        String responseStr = PAWebUtil.marshallJSON(eligibilityDtoList);
+        String responseStr = PAJsonUtil.marshallJSON(eligibilityDtoList);
         when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn(responseStr);
-        when(client.sendHTTPRequest(url, "POST", PAWebUtil.marshallJSON(additionalDTO))).thenReturn("");
-        when(client.sendHTTPRequest(url + "/1", "PUT",  PAWebUtil.marshallJSON(additionalDTO))).thenReturn("");
-        helper.setClient(client);    
+        when(client.sendHTTPRequest(url, "POST", PAJsonUtil.marshallJSON(additionalDTO))).thenReturn("");
+        when(client.sendHTTPRequest(url + "/1", "PUT",  PAJsonUtil.marshallJSON(additionalDTO))).thenReturn("");
+        helperUtil.setClient(client);
+        helper.setTrialInfoHelperUtil(helperUtil);
         eligibilityCriteriaAction.setHelper(helper);
     }
     

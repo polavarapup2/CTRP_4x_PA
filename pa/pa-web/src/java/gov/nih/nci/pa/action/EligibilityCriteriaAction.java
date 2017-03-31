@@ -107,6 +107,7 @@ import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

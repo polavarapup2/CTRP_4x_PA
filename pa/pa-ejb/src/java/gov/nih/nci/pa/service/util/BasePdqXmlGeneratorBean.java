@@ -83,6 +83,7 @@
 package gov.nih.nci.pa.service.util;
 
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalTrialInfo;
 import gov.nih.nci.pa.enums.StudyContactRoleCode;
 import gov.nih.nci.pa.enums.StudySiteContactRoleCode;
 import gov.nih.nci.pa.enums.StudySiteFunctionalCode;
@@ -185,7 +186,7 @@ public class BasePdqXmlGeneratorBean extends CTGovXmlGeneratorServiceBeanLocal {
      * {@inheritDoc}
      */
     @Override
-    protected void createEligibility(StudyProtocolDTO spDTO, Document doc, Element root) throws PAException {
+    protected void createEligibility(StudyProtocolDTO spDTO, Document doc, Element root, AdditionalTrialInfo additionalTrialInfo) throws PAException {
         List<PlannedEligibilityCriterionDTO> paECs = getPlannedActivityService()
                 .getPlannedEligibilityCriterionByStudyProtocol(spDTO.getIdentifier());
 
@@ -259,7 +260,7 @@ public class BasePdqXmlGeneratorBean extends CTGovXmlGeneratorServiceBeanLocal {
      * {@inheritDoc}
      */
     @Override
-    protected void createIndInfo(StudyProtocolDTO spDTO, Document doc, Element root) throws PAException {
+    protected void createIndInfo(StudyProtocolDTO spDTO, Document doc, Element root, AdditionalTrialInfo additionalTrialInfo) throws PAException {
         List<StudyIndldeDTO> ideDtos = getStudyIndldeService().getByStudyProtocol(spDTO.getIdentifier());
         if (!CollectionUtils.isEmpty(ideDtos)) {
             Element trialIndIdeElement = doc.createElement("trial_ind_ide");

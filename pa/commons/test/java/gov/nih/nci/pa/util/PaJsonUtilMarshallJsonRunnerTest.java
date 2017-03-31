@@ -16,7 +16,7 @@ import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 
 @RunWith(Parameterized.class)
-public class PaWebUtilMarshallJsonRunnerTest {
+public class PaJsonUtilMarshallJsonRunnerTest {
     private Object obj;
     private String expectedResult;
     
@@ -24,7 +24,7 @@ public class PaWebUtilMarshallJsonRunnerTest {
     public void setUp() {
     }
     
-    public PaWebUtilMarshallJsonRunnerTest(Object obj, String expectedResult) {
+    public PaJsonUtilMarshallJsonRunnerTest(Object obj, String expectedResult) {
         this.obj = obj;
         this.expectedResult = expectedResult;
     }
@@ -74,7 +74,7 @@ public class PaWebUtilMarshallJsonRunnerTest {
 
     @Test
     public void marshallTest() throws IOException {
-        String jsonStr = PAWebUtil.marshallJSON(obj);
+        String jsonStr = PAJsonUtil.marshallJSON(obj);
         assertEquals(jsonStr, expectedResult);
     }
 
