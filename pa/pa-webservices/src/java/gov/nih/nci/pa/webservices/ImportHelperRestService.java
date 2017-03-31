@@ -38,6 +38,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang.StringUtils;
@@ -103,7 +104,7 @@ public class ImportHelperRestService {
             }
         } catch (Exception e) {
             LOG.error(ERROR + e);
-            return Response.serverError().build();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.ok(list).build();
     }
@@ -266,7 +267,7 @@ public class ImportHelperRestService {
             }
         } catch (Exception e) {
             LOG.error(ERROR + nctIdStr);
-            return Response.serverError().build();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.ok(finalDTO).build();
     }
@@ -370,7 +371,7 @@ public class ImportHelperRestService {
             }
         } catch (Exception e) {
             LOG.error(ERROR + nctIdStr);
-            return Response.serverError().build();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.ok(finalDTO).build();
     }
@@ -401,8 +402,7 @@ public class ImportHelperRestService {
                     log.getUserCreated(), log.isNeedsReview(),
                     log.isAdminChanged(), log.isScientificChanged(), recent);
         } catch (Exception e) {
-            LOG.error(ERROR + log.getNciId());
-            return Response.serverError().build();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.ok().build();
     }
@@ -410,4 +410,28 @@ public class ImportHelperRestService {
     // /importlog  
     //get
     // return hashmap<String, latestImportLog>
+    
+//    @GET
+//    @Path("/importlog")
+//    @Consumes({ APPLICATION_JSON })
+//    @Produces({ APPLICATION_JSON })
+//    @NoCache
+//    @Formatted
+//    public Response getIndustrialConsortiaTrialsWithNCTIds() {
+//        
+//        Map<String, CTGovImportLog> map = new HashMap<String, CTGovImportLog>();
+//      //Query all industrial and consortia trials with NCT identifiers in CTRP.
+//        StudyProtocolQueryCriteria criteria = new StudyProtocolQueryCriteria();
+//        criteria.setIdentifierType(IdentifierType.NCT.getCode());
+//        criteria.setNctNumber("NCT");
+//        criteria.setTrialCategory("p");
+//        criteria.setExcludeRejectProtocol(true);                        
+//        List<StudyProtocolQueryDTO> trials = PaRegistry.getProtocolQueryService().getStudyProtocolByCriteria(criteria); 
+//        //Loop over all the trials
+//        for (StudyProtocolQueryDTO trial : trials) {
+//            String nctIdentifier = trial.getNctIdentifier();
+//            
+//        }
+//        return Response.ok().build();
+//    }
 }
