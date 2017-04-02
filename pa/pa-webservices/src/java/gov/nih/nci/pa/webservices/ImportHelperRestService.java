@@ -392,10 +392,6 @@ public class ImportHelperRestService {
         return Response.ok("Success").build();
     }
 
-    // import nightly job
-    // /importlog
-    // get
-    // return hashmap<String, latestImportLog>
     /**
      * 
      * @return Response
@@ -453,4 +449,8 @@ public class ImportHelperRestService {
         query.setParameter("importStatus", "Success");
         return query.list();
     }
+    
+    // get the protocol snapshot and the studyinbox 
+    //map<String, DTO>
+    
 }
