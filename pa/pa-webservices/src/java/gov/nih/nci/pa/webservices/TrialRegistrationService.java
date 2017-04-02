@@ -384,8 +384,8 @@ public class TrialRegistrationService extends BaseRestService {
             response = validateNctId(nct);
             if (response == null) {
                 // add glue code 
-                TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(nct, false);
-                String nciID = dto.getNciID();
+                TrialRegistrationConfirmationDTO dto = helper.insertNctId(nct);
+                String nciID = dto.getNciTrialID();
                // String nciID = ctGovSyncService.importTrial(nct);
                 final Long newTrialId = IiConverter
                         .convertToLong(studyProtocolService.getStudyProtocol(
