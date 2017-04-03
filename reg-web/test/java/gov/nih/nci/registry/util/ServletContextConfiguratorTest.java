@@ -345,13 +345,6 @@ public class ServletContextConfiguratorTest {
             
         }
 
-        @Override
-        public String getVirtualServerName() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-
         
     }
 }
