@@ -1,10 +1,13 @@
 package gov.nih.nci.pa.webservices.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * 
  * @author Reshma
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NonInterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
     
     private String biospecimenDescription;
