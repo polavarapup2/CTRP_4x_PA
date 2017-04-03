@@ -114,6 +114,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
@@ -123,6 +124,7 @@ import com.fiveamsolutions.nci.commons.util.UsernameHolder;
  * @author mshestopalov
  *
  */
+@Ignore
 public class PDQXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
     private final PDQXmlGeneratorServiceBean pdqBean = new PDQXmlGeneratorServiceBean();

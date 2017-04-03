@@ -9,8 +9,8 @@
     <property file="${basedir}/../../build-pa/tier-properties/build-lite-${tier}.properties"/>
     <property file="${basedir}/../../build-pa/build-lite.properties"/>
     <property file="${basedir}/../../build-pa/version.properties"/>
-    <property name="pa-ejb.coverage.line" value="78"/>
-    <property name="pa-ejb.coverage.branch" value="64"/>
+    <property name="pa-ejb.coverage.line" value="74"/>
+    <property name="pa-ejb.coverage.branch" value="60"/>
     <property name="pa-ejb.pmd.maxerrors" value="556"/>
 
     <property name="software.dir" value="${basedir}/../.."/>

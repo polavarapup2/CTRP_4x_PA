@@ -181,7 +181,7 @@ public class AbstractCTGovXmlGeneratorServiceBean {
     private CorrelationUtils corUtils = new CorrelationUtils();
     private PAServiceUtils paServiceUtil = new PAServiceUtils();
 
-    private TrialInfoHelperUtil trialInfoHelperUtil = new TrialInfoHelperUtil();
+    private TrialInfoHelperUtil trialInfoHelperUtil = new TrialInfoHelperUtil(); //new MockTrialInfoHelperUtil();
 
     private static Map<String, String> nv = null;
 

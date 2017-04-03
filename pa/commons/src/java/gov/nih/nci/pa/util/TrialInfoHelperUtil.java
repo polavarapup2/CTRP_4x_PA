@@ -102,6 +102,7 @@ public class TrialInfoHelperUtil {
         LOG.info("Updating Regulatory data info to new DB"
                 + IiConverter.convertToString(studyProtocolIi));
 
+        AdditionalRegulatoryInfoDTO currRegulatoryDto = regulatoryDto;
         try {
             String postBody = PAJsonUtil.marshallJSON(regulatoryDto);
             String response = "";
@@ -113,7 +114,7 @@ public class TrialInfoHelperUtil {
                         .getFdaaaDataClinicalTrialsUrl() + "/" + regulatoryDto.getId(), PUT, postBody);
             }
             if (response != null) {
-                regulatoryDto = (AdditionalRegulatoryInfoDTO) PAJsonUtil
+                currRegulatoryDto = (AdditionalRegulatoryInfoDTO) PAJsonUtil
                         .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
             }
         } catch (Exception e) {
@@ -124,7 +125,7 @@ public class TrialInfoHelperUtil {
                     "Error in updating additional Regulatory info in rest service for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
-        return regulatoryDto;
+        return currRegulatoryDto;
     }
 
 
@@ -135,7 +136,8 @@ public class TrialInfoHelperUtil {
      * @return AdditionalEligibilityCriteriaDTO
      * @throws PAException the exception
      */
-    public AdditionalEligibilityCriteriaDTO retrieveEligibilityCriteria(Ii studyProtocolIi, String nciId) throws PAException {
+    public AdditionalEligibilityCriteriaDTO retrieveEligibilityCriteria(Ii studyProtocolIi, String nciId)
+            throws PAException {
         LOG.info("Getting Eligibility Criteria data info from new DB"
                 + IiConverter.convertToString(studyProtocolIi));
         String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
@@ -170,7 +172,7 @@ public class TrialInfoHelperUtil {
             Ii studyProtocolIi, String nciId, AdditionalEligibilityCriteriaDTO eligibilityDto) throws PAException {
         LOG.info("Updating Eligibility criteria to new DB"
                 + IiConverter.convertToString(studyProtocolIi));
-
+        AdditionalEligibilityCriteriaDTO currEligibilityDto = eligibilityDto;
         try {
             String postBody = PAJsonUtil.marshallJSON(eligibilityDto);
             String response = "";
@@ -181,7 +183,7 @@ public class TrialInfoHelperUtil {
                 response = client.sendHTTPRequest(PaEarPropertyReader
                         .getFdaaaDataClinicalTrialsUrl() + "/" + eligibilityDto.getId(), PUT, postBody);
             }
-            eligibilityDto = (AdditionalEligibilityCriteriaDTO) PAJsonUtil
+            currEligibilityDto = (AdditionalEligibilityCriteriaDTO) PAJsonUtil
                     .unmarshallJSON(response, AdditionalEligibilityCriteriaDTO.class);
         } catch (Exception e) {
             LOG.error(
@@ -191,7 +193,7 @@ public class TrialInfoHelperUtil {
                     "Error in updating additional Eligibility Criteria in rest service for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
-        return eligibilityDto;
+        return currEligibilityDto;
     }
     
     /**
@@ -201,7 +203,8 @@ public class TrialInfoHelperUtil {
      * @return AdditionalTrialIndIdeDTO
      * @throws PAException exception
      */
-    public AdditionalTrialIndIdeDTO retrieveTrialIndIdeById(Ii studyProtocolIi, String trialIndldeID) throws PAException {
+    public AdditionalTrialIndIdeDTO retrieveTrialIndIdeById(Ii studyProtocolIi, String trialIndldeID)
+            throws PAException {
         LOG.info("Getting additional Trial IND/IDE info by IND/IDE id: " + trialIndldeID);
         AdditionalTrialIndIdeDTO trialIndIdeDto = new AdditionalTrialIndIdeDTO();
         try {
@@ -256,11 +259,11 @@ public class TrialInfoHelperUtil {
      * @throws PAException exception
      */
     public AdditionalTrialIndIdeDTO mergeTrialIndIdeInfoUpdate(Ii studyProtocolIi,
-                                                               AdditionalTrialIndIdeDTO trialIndIdeDto) throws PAException {
+                             AdditionalTrialIndIdeDTO trialIndIdeDto) throws PAException {
         String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
         LOG.info("Updating Trial IND/IDE info to new DB for :"
                 + studyProtocolId + ", Trial IND/IDE id: " + trialIndIdeDto.getTrialIndIdeId());
-
+        AdditionalTrialIndIdeDTO currTrialIndIdeDto = trialIndIdeDto;
         try {
             String postBody = PAJsonUtil.marshallJSON(trialIndIdeDto);
             String response = "";
@@ -272,17 +275,17 @@ public class TrialInfoHelperUtil {
                         .getFdaaaDataClinicalTrialsUrl() + "/" + trialIndIdeDto.getId(), PUT, postBody);
             }
 
-            trialIndIdeDto = (AdditionalTrialIndIdeDTO) PAJsonUtil
+            currTrialIndIdeDto = (AdditionalTrialIndIdeDTO) PAJsonUtil
                     .unmarshallJSON(response, AdditionalTrialIndIdeDTO.class);
         } catch (Exception e) {
             LOG.error(
-                    "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
-                            + studyProtocolId, e);
+                 "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
+                       + studyProtocolId, e);
             throw new PAException(
                     "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
                             + studyProtocolId, e);
         }
-        return trialIndIdeDto;
+        return currTrialIndIdeDto;
     }
 
     /**
@@ -298,8 +301,8 @@ public class TrialInfoHelperUtil {
                 .getFdaaaDataClinicalTrialsUrl() + "/" + msId, DELETE, null);
         } catch (Exception e) {
             LOG.error(
-                    "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
-                            + msId, e);
+                 "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
+                      + msId, e);
             throw new PAException(
                     "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
                             + msId, e);
@@ -348,6 +351,7 @@ public class TrialInfoHelperUtil {
             Ii studyProtocolIi, String nciId, AdditionalDesignDetailsDTO designDetailsDto) throws PAException {
         LOG.info("Updating Design Details to new DB"
                 + IiConverter.convertToString(studyProtocolIi));
+        AdditionalDesignDetailsDTO currDesignDetailsDto = designDetailsDto;
         try {
             String postBody = PAJsonUtil.marshallJSON(designDetailsDto);
             String response = "";
@@ -358,7 +362,7 @@ public class TrialInfoHelperUtil {
                 response = client.sendHTTPRequest(PaEarPropertyReader
                         .getFdaaaDataClinicalTrialsUrl() + "/" + designDetailsDto.getId(), PUT, postBody);
             }
-            designDetailsDto = (AdditionalDesignDetailsDTO) PAJsonUtil
+            currDesignDetailsDto = (AdditionalDesignDetailsDTO) PAJsonUtil
                     .unmarshallJSON(response, AdditionalDesignDetailsDTO.class);
         } catch (Exception e) {
             LOG.error(
@@ -368,7 +372,7 @@ public class TrialInfoHelperUtil {
                     "Error in updating Design Details in rest service for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
-        return designDetailsDto;
+        return currDesignDetailsDto;
     }
 
     /**

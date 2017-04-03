@@ -98,7 +98,6 @@ import gov.nih.nci.pa.dto.AdditionalEligibilityCriteriaDTO;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialInfo;
-import gov.nih.nci.pa.dto.EligibilityCriteriaDTO;
 import gov.nih.nci.pa.dto.PAContactDTO;
 import gov.nih.nci.pa.enums.ActualAnticipatedTypeCode;
 import gov.nih.nci.pa.enums.BlindingRoleCode;
@@ -402,13 +401,15 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
 
         if (StringUtils.isNotEmpty(nciID)) {
             additionalTrialInfo.setDesignDetailsDTO(getTrialInfoHelperUtil().retrieveDesignDetails(spIi, nciID));
-            additionalTrialInfo.setEligibilityCriteriaDTO(getTrialInfoHelperUtil().retrieveEligibilityCriteria(spIi, nciID));
+            additionalTrialInfo.setEligibilityCriteriaDTO(getTrialInfoHelperUtil().
+                    retrieveEligibilityCriteria(spIi, nciID));
             additionalTrialInfo.setRegulatoryInfoDTO(getTrialInfoHelperUtil().retrieveRegulatoryInfo(spIi, nciID));
 
-            List<AdditionalTrialIndIdeDTO> trialIndIdeDTOList = getTrialInfoHelperUtil().retrieveAllTrialIndIdeByStudyId(spIi);
+            List<AdditionalTrialIndIdeDTO> trialIndIdeDTOList = getTrialInfoHelperUtil().
+                    retrieveAllTrialIndIdeByStudyId(spIi);
 
-            Map<String, AdditionalTrialIndIdeDTO> trialIndIdeDTOMap = new HashMap<> ();
-            if (trialIndIdeDTOList !=null && !trialIndIdeDTOList.isEmpty()) {
+            Map<String, AdditionalTrialIndIdeDTO> trialIndIdeDTOMap = new HashMap<>();
+            if (trialIndIdeDTOList != null && !trialIndIdeDTOList.isEmpty()) {
                 for (AdditionalTrialIndIdeDTO dto: trialIndIdeDTOList) {
                     trialIndIdeDTOMap.put(dto.getTrialIndIdeId(), dto);
                 }
@@ -619,7 +620,7 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                         convertTsToYYYYMMDDFormat(spDTO.getStartDate()), doc));
         XmlGenHelper.appendElement(root,
                 XmlGenHelper.createElementWithTextblock("start_date_type", convertToCtValues(spDTO
-                        .getStartDateTypeCode() ), doc));
+                        .getStartDateTypeCode()), doc));
         XmlGenHelper.appendElement(root,
                 XmlGenHelper.createElementWithTextblock("primary_compl_date", convertTsToYYYYMMDDFormat(spDTO
                 .getPrimaryCompletionDate()), doc));
@@ -792,31 +793,31 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
 
         AdditionalRegulatoryInfoDTO regInfoDTO = additionalTrialInfo.getRegulatoryInfoDTO();
         if (regInfoDTO != null) {
-            if(PAJsonUtil.isValidBooleanString(regInfoDTO.getFda_regulated_drug())) {
+            if (PAJsonUtil.isValidBooleanString(regInfoDTO.getFda_regulated_drug())) {
                 XmlGenHelper.appendElement(overSightInfo,
                         XmlGenHelper.createElementWithTextblock("fda_regulated_drug",
                                 toYesNoStr(regInfoDTO.getFda_regulated_drug())
                                 , doc));
             }
-            if(PAJsonUtil.isValidBooleanString(regInfoDTO.getFda_regulated_device())) {
+            if (PAJsonUtil.isValidBooleanString(regInfoDTO.getFda_regulated_device())) {
                 XmlGenHelper.appendElement(overSightInfo,
                         XmlGenHelper.createElementWithTextblock("fda_regulated_device",
                                 toYesNoStr(regInfoDTO.getFda_regulated_device())
                                 , doc));
             }
-            if(PAJsonUtil.isValidBooleanString(regInfoDTO.getPost_prior_to_approval())) {
+            if (PAJsonUtil.isValidBooleanString(regInfoDTO.getPost_prior_to_approval())) {
                 XmlGenHelper.appendElement(overSightInfo,
                         XmlGenHelper.createElementWithTextblock("post_prior_to_approval",
                                 toYesNoStr(regInfoDTO.getPost_prior_to_approval())
                                 , doc));
             }
-            if(PAJsonUtil.isValidBooleanString(regInfoDTO.getPed_postmarket_surv())) {
+            if (PAJsonUtil.isValidBooleanString(regInfoDTO.getPed_postmarket_surv())) {
                 XmlGenHelper.appendElement(overSightInfo,
                         XmlGenHelper.createElementWithTextblock("ped_postmarket_surv",
                                 toYesNoStr(regInfoDTO.getPed_postmarket_surv())
                                 , doc));
             }
-            if(PAJsonUtil.isValidBooleanString(regInfoDTO.getExported_from_us())) {
+            if (PAJsonUtil.isValidBooleanString(regInfoDTO.getExported_from_us())) {
                 XmlGenHelper.appendElement(overSightInfo,
                         XmlGenHelper.createElementWithTextblock("exported_from_us",
                                 toYesNoStr(regInfoDTO.getExported_from_us())
@@ -1144,7 +1145,7 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
      * @param spDTO StudyProtocolDTO
      * @param doc Document
      * @param root Element
-     * @param additionalTrialInfo
+     * @param additionalTrialInfo AdditionalTrialInfo
      * @throws PAException when error
      */
     protected void createIndInfo(StudyProtocolDTO spDTO, Document doc, Element root,
@@ -1166,7 +1167,8 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                 XmlGenHelper.createElementWithTextblock("ind_number",
                         StConverter.convertToString(ideDTO.getIndldeNumber()), doc));
 
-        AdditionalTrialIndIdeDTO indIdeDTO = additionalTrialInfo.getTrialIndIdeDTOMap().get(ideDTO.getIndldeNumber());
+        String indIdeNum = StConverter.convertToString(ideDTO.getIndldeNumber());
+        AdditionalTrialIndIdeDTO indIdeDTO = additionalTrialInfo.getTrialIndIdeDTOMap().get(indIdeNum);
         if (indIdeDTO != null) {
             XmlGenHelper.appendElement(idInfo,
                     XmlGenHelper.createElementWithTextblock("has_expanded_access",
@@ -2149,6 +2151,11 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
         return formatter1.format(ts);
     }
 
+    /**
+     * Converts boolean string value to a Yes/No string
+     * @param booleanStr String
+     * @return Yes/No string
+     */
     protected static String toYesNoStr(String booleanStr) {
         return BooleanUtils.toBooleanObject(booleanStr, "true", "false", "null")
                 ? XmlGenHelper.YES : XmlGenHelper.NO;
