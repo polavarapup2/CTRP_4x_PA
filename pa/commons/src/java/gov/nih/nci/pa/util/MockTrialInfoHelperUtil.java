@@ -16,14 +16,19 @@ import java.util.List;
  */
 public class MockTrialInfoHelperUtil extends TrialInfoHelperUtil {
 
+    /**
+     * Constant for literal 'true'
+     */
+    public static final String TRUE = "true";
+
     @Override
     public AdditionalRegulatoryInfoDTO retrieveRegulatoryInfo(Ii studyProtocolIi, String nciId) throws PAException {
         AdditionalRegulatoryInfoDTO additionalRegInfoDTO = new AdditionalRegulatoryInfoDTO();
-        additionalRegInfoDTO.setExported_from_us("true");
-        additionalRegInfoDTO.setFda_regulated_device("true");
-        additionalRegInfoDTO.setFda_regulated_drug("true");
-        additionalRegInfoDTO.setPed_postmarket_surv("true");
-        additionalRegInfoDTO.setPost_prior_to_approval("true");
+        additionalRegInfoDTO.setExported_from_us(TRUE);
+        additionalRegInfoDTO.setFda_regulated_device(TRUE);
+        additionalRegInfoDTO.setFda_regulated_drug(TRUE);
+        additionalRegInfoDTO.setPed_postmarket_surv(TRUE);
+        additionalRegInfoDTO.setPost_prior_to_approval(TRUE);
         additionalRegInfoDTO.setDate_updated("2017-03-01 23:30:38 -0500");
         additionalRegInfoDTO.setStudy_protocol_id(IiConverter.convertToString(studyProtocolIi));
         additionalRegInfoDTO.setNci_id(nciId);
@@ -41,7 +46,7 @@ public class MockTrialInfoHelperUtil extends TrialInfoHelperUtil {
             throws PAException {
         AdditionalEligibilityCriteriaDTO dto = new AdditionalEligibilityCriteriaDTO();
         dto.setDateUpdated("2017-03-01 23:30:38 -0500");
-        dto.setGender("true");
+        dto.setGender(TRUE);
         dto.setGenderEligibilityDescription("Description");
         dto.setNciId(nciId);
         dto.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
