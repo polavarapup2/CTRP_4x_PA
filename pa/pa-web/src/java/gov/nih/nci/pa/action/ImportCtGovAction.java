@@ -3,6 +3,8 @@ package gov.nih.nci.pa.action;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTOs;
 //import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
@@ -49,7 +51,7 @@ public final class ImportCtGovAction extends ActionSupport implements
     private boolean searchPerformed;
     private boolean studyExists;
     private StudyProtocolQueryDTO potentialMatch;
-    private CTGovImportMergeHelper helper;
+    private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
     private HttpServletRequest request;
 
     /**
@@ -120,13 +122,26 @@ public final class ImportCtGovAction extends ActionSupport implements
             return ERROR;
         }
         try {
-            // studyExists = !findExistentStudies(getNctID()).isEmpty();
-            // glue code
-          //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), studyExists);
-          //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
-            //studyExists
-            String nciID = ctGovSyncService.importTrial(getNctIdToImport()); // remove
-            final String[] msgArgs = new String[] {getNctIdToImport(), nciID };
+            //glue code
+            StringBuffer nciIds = new StringBuffer();
+            if (studyExists) {
+                TrialRegistrationConfirmationDTOs dtos = helper.updateNctId(getNctIdToImport());
+                if (dtos != null && dtos.getDtos() != null && !dtos.getDtos().isEmpty()) {
+                    for (TrialRegistrationConfirmationDTO nciId : dtos.getDtos()) {
+                        if (dtos.getDtos().size() > 1) {
+                            nciIds.append(nciId.getNciTrialID()).append(",");
+                        } else {
+                            nciIds.append(nciId.getNciTrialID());
+                        }
+                    }
+                }
+            } else {
+                TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
+                if (dto != null) {
+                    nciIds.append(dto.getNciTrialID());
+                }
+            }
+            final String[] msgArgs = new String[] {getNctIdToImport(), (nciIds != null) ? nciIds.toString() : ""};
             final String msg = studyExists ? getText(
                     "importctgov.import.update.success", msgArgs) : getText(
                     "importctgov.import.new.success", msgArgs);

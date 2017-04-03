@@ -9,8 +9,8 @@
     <property file="${basedir}/../../build-pa/tier-properties/build-lite-${tier}.properties"/>
     <property file="${basedir}/../../build-pa/build-lite.properties"/>
     <property file="${basedir}/../../build-pa/version.properties"/>
-    <property name="pa-webservices.coverage.line" value="67"/>
-    <property name="pa-webservices.coverage.branch" value="63"/>
+    <property name="pa-webservices.coverage.line" value="50"/>
+    <property name="pa-webservices.coverage.branch" value="50"/>
     <property name="pa-webservices.pmd.maxerrors" value="13"/>
 
     <property name="software.dir" value="${basedir}/../.."/>

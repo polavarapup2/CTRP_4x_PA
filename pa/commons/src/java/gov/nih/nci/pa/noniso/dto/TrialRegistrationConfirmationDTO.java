@@ -1,12 +1,19 @@
 package gov.nih.nci.pa.noniso.dto;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * 
  * @author Reshma
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "TrialRegistrationConfirmation")
 public class TrialRegistrationConfirmationDTO {
-    private String nciID;
-    private String spID;
+    private String paTrialID;
+    private String nciTrialID;
     /**
      * const
      */
@@ -16,42 +23,42 @@ public class TrialRegistrationConfirmationDTO {
     }
     /**
      * 
-     * @param nciID nciID
-     * @param spID spID
+     * @param paTrialID paTrialID
+     * @param nciTrialID nciTrialID
      */
-    public TrialRegistrationConfirmationDTO(String nciID, String spID) {
+    public TrialRegistrationConfirmationDTO(String paTrialID, String nciTrialID) {
         super();
-        this.nciID = nciID;
-        this.spID = spID;
+        this.paTrialID = paTrialID;
+        this.nciTrialID = nciTrialID;
     }
     /**
      * 
-     * @return nciID
+     * @return paTrialID
      */
-    public String getNciID() {
-        return nciID;
+    public String getPaTrialID() {
+        return paTrialID;
     }
     /**
      * 
-     * @param nciID nciID
+     * @param paTrialID paTrialID
      */
-    public void setNciID(String nciID) {
-        this.nciID = nciID;
+    public void setPaTrialID(String paTrialID) {
+        this.paTrialID = paTrialID;
     }
     /**
      * 
-     * @return spID
+     * @return nciTrialID
      */
-    public String getSpID() {
-        return spID;
+    public String getNciTrialID() {
+        return nciTrialID;
     }
     /**
      * 
-     * @param spID spID
+     * @param nciTrialID nciTrialID
      */
-    public void setSpID(String spID) {
-        this.spID = spID;
+    public void setNciTrialID(String nciTrialID) {
+        this.nciTrialID = nciTrialID;
     }
-
     
+   
 }

@@ -1,9 +1,11 @@
 package gov.nih.nci.pa.webservices;
 
+import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
+import gov.nih.nci.pa.enums.IdentifierType;
 import gov.nih.nci.pa.iso.dto.ArmDTO;
 import gov.nih.nci.pa.iso.dto.DocumentDTO;
 import gov.nih.nci.pa.iso.dto.PlannedEligibilityCriterionDTO;
@@ -15,6 +17,7 @@ import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
+import gov.nih.nci.pa.util.PaHibernateUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.webservices.converters.TrialRegisterationWebServiceDTOConverter;
 import gov.nih.nci.services.organization.OrganizationDTO;
@@ -27,6 +30,7 @@ import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +42,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
@@ -66,6 +73,18 @@ public class ImportHelperRestService {
      * ERROR
      */
     public static final String ERROR = "Error while processing your request. Please try again";
+    private StudySiteDTO leadOrgID = new StudySiteDTO();
+    private OrganizationDTO sponsorDTO = new OrganizationDTO();
+    private PersonDTO investigatorDTO = new PersonDTO();
+    private ResponsiblePartyDTO partyDTO = new ResponsiblePartyDTO();
+    private PersonDTO centralContactDTO = new PersonDTO();
+    private StudyOverallStatusDTO overallStatusDTO = new StudyOverallStatusDTO();
+    private List<ArmDTO> arms = new ArrayList<ArmDTO>();
+    private List<PlannedEligibilityCriterionDTO> eligibility = new ArrayList<PlannedEligibilityCriterionDTO>();
+    private List<StudyOutcomeMeasureDTO> outcomes = new ArrayList<StudyOutcomeMeasureDTO>();
+    private List<OrganizationDTO> collaborators = new ArrayList<OrganizationDTO>();
+    private DocumentDTO document = new DocumentDTO();
+    private OrganizationDTO leadOrgDTO = new OrganizationDTO();
 
     /**
      * @param nctID
@@ -102,8 +121,9 @@ public class ImportHelperRestService {
                         .build();
             }
         } catch (Exception e) {
-            LOG.error(ERROR + e);
-            return Response.serverError().build();
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
         }
         return Response.ok(list).build();
     }
@@ -178,7 +198,7 @@ public class ImportHelperRestService {
             TrialRegistrationDTO trialRegistrationDTO) throws PAException,
             IOException {
         LOG.info("" + trialRegistrationDTO.getNctID());
-        StudyProtocolDTO afterStudyProtocolDTO = new StudyProtocolDTO();
+        StudyProtocolDTO afterStudyProtocolDTO = null;
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
         StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
@@ -196,49 +216,7 @@ public class ImportHelperRestService {
                     break;
                 }
             }
-            OrganizationDTO leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTO(trialRegistrationDTO
-                            .getLeadOrgDTO());
-
-            StudySiteDTO leadOrgID = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToLeadOrgID(trialRegistrationDTO.getLeadOrgID());
-
-            OrganizationDTO sponsorDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTO(trialRegistrationDTO
-                            .getSponsorDTO());
-
-            PersonDTO investigatorDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPersonDTO(trialRegistrationDTO
-                            .getInvestigatorDTO());
-
-            ResponsiblePartyDTO partyDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPartyDTO(trialRegistrationDTO.getPartyDTO());
-
-            PersonDTO centralContactDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPersonDTO(trialRegistrationDTO
-                            .getCentralContactDTO());
-
-            StudyOverallStatusDTO overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOverallStatusDTO(trialRegistrationDTO
-                            .getOverallStatusDTO());
-
-            List<ArmDTO> arms = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToArmsDTOList(trialRegistrationDTO.getArms());
-
-            List<PlannedEligibilityCriterionDTO> eligibility = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToEligibilityDTOList(trialRegistrationDTO
-                            .getEligibility());
-
-            List<StudyOutcomeMeasureDTO> outcomes = new TrialRegisterationWebServiceDTOConverter()
-                    .convertTOOutcomesDTOList(trialRegistrationDTO
-                            .getOutcomes());
-
-            List<OrganizationDTO> collaborators = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTOList(trialRegistrationDTO
-                            .getCollaborators());
-
-            DocumentDTO document = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToDocument(trialRegistrationDTO.getDocument());
+            convertDTOs(trialRegistrationDTO);
 
             StudySiteDTO nctID = new StudySiteDTO();
             nctID.setLocalStudyProtocolIdentifier(StConverter
@@ -265,10 +243,53 @@ public class ImportHelperRestService {
                         .convertToString(protocolID));
             }
         } catch (Exception e) {
-            LOG.error(ERROR + nctIdStr);
-            return Response.serverError().build();
+            LOG.error(ERROR + nctIdStr, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
         }
         return Response.ok(finalDTO).build();
+    }
+
+    private void convertDTOs(TrialRegistrationDTO trialRegistrationDTO)
+            throws IOException {
+        leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToOrganizationDTO(trialRegistrationDTO.getLeadOrgDTO());
+
+        leadOrgID = new TrialRegisterationWebServiceDTOConverter()
+                .convertToLeadOrgID(trialRegistrationDTO.getLeadOrgID());
+
+        sponsorDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToOrganizationDTO(trialRegistrationDTO.getSponsorDTO());
+
+        investigatorDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToPersonDTO(trialRegistrationDTO.getInvestigatorDTO());
+
+        partyDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToPartyDTO(trialRegistrationDTO.getPartyDTO());
+
+        centralContactDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToPersonDTO(trialRegistrationDTO.getCentralContactDTO());
+
+        overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
+                .convertToOverallStatusDTO(trialRegistrationDTO
+                        .getOverallStatusDTO());
+
+        arms = new TrialRegisterationWebServiceDTOConverter()
+                .convertToArmsDTOList(trialRegistrationDTO.getArms());
+
+        eligibility = new TrialRegisterationWebServiceDTOConverter()
+                .convertToEligibilityDTOList(trialRegistrationDTO
+                        .getEligibility());
+
+        outcomes = new TrialRegisterationWebServiceDTOConverter()
+                .convertTOOutcomesDTOList(trialRegistrationDTO.getOutcomes());
+
+        collaborators = new TrialRegisterationWebServiceDTOConverter()
+                .convertToOrganizationDTOList(trialRegistrationDTO
+                        .getCollaborators());
+
+        document = new TrialRegisterationWebServiceDTOConverter()
+                .convertToDocument(trialRegistrationDTO.getDocument());
     }
 
     /**
@@ -294,55 +315,17 @@ public class ImportHelperRestService {
         String nctIdStr = trialRegistrationDTO.getNctID();
         StudyProtocolDTO returnDTO = new StudyProtocolDTO();
         StudyProtocolIdentityDTO finalDTO = new StudyProtocolIdentityDTO();
+        StudyProtocolDTO newDTO = null;
         try {
+            if (trialRegistrationDTO.getStudyProtocolDTO() instanceof InterventionalStudyProtocolDTO) {
+                newDTO = new gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO();
+            } else {
+                newDTO = new gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO();
+            }
             StudyProtocolDTO afterStudyProtocolDTO = new TrialRegisterationWebServiceDTOConverter()
                     .convertToStudyProtocolDTO(
-                            trialRegistrationDTO.getStudyProtocolDTO(),
-                            new StudyProtocolDTO());
-            OrganizationDTO leadOrgDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTO(trialRegistrationDTO
-                            .getLeadOrgDTO());
-
-            StudySiteDTO leadOrgID = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToLeadOrgID(trialRegistrationDTO.getLeadOrgID());
-
-            OrganizationDTO sponsorDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTO(trialRegistrationDTO
-                            .getSponsorDTO());
-
-            PersonDTO investigatorDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPersonDTO(trialRegistrationDTO
-                            .getInvestigatorDTO());
-
-            ResponsiblePartyDTO partyDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPartyDTO(trialRegistrationDTO.getPartyDTO());
-
-            PersonDTO centralContactDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToPersonDTO(trialRegistrationDTO
-                            .getCentralContactDTO());
-
-            StudyOverallStatusDTO overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOverallStatusDTO(trialRegistrationDTO
-                            .getOverallStatusDTO());
-
-            List<ArmDTO> arms = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToArmsDTOList(trialRegistrationDTO.getArms());
-
-            List<PlannedEligibilityCriterionDTO> eligibility = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToEligibilityDTOList(trialRegistrationDTO
-                            .getEligibility());
-
-            List<StudyOutcomeMeasureDTO> outcomes = new TrialRegisterationWebServiceDTOConverter()
-                    .convertTOOutcomesDTOList(trialRegistrationDTO
-                            .getOutcomes());
-
-            List<OrganizationDTO> collaborators = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToOrganizationDTOList(trialRegistrationDTO
-                            .getCollaborators());
-
-            DocumentDTO document = new TrialRegisterationWebServiceDTOConverter()
-                    .convertToDocument(trialRegistrationDTO.getDocument());
-
+                            trialRegistrationDTO.getStudyProtocolDTO(), newDTO);
+            convertDTOs(trialRegistrationDTO);
             StudySiteDTO nctID = new StudySiteDTO();
             nctID.setLocalStudyProtocolIdentifier(StConverter
                     .convertToSt(nctIdStr));
@@ -369,8 +352,9 @@ public class ImportHelperRestService {
                         .convertToString(protocolID));
             }
         } catch (Exception e) {
-            LOG.error(ERROR + nctIdStr);
-            return Response.serverError().build();
+            LOG.error(ERROR + nctIdStr, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
         }
         return Response.ok(finalDTO).build();
     }
@@ -401,9 +385,72 @@ public class ImportHelperRestService {
                     log.getUserCreated(), log.isNeedsReview(),
                     log.isAdminChanged(), log.isScientificChanged(), recent);
         } catch (Exception e) {
-            LOG.error(ERROR + log.getNciId());
-            return Response.serverError().build();
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
         }
-        return Response.ok().build();
+        return Response.ok("Success").build();
     }
+
+    /**
+     * 
+     * @return Response
+     */
+    @GET
+    @Path("/importlog")
+    @Consumes({ APPLICATION_JSON })
+    @Produces({ APPLICATION_JSON })
+    @NoCache
+    @Formatted
+    public Response getIndustrialConsortiaTrialsWithNCTIds() {
+
+        Map<String, CTGovImportLog> map = new HashMap<String, CTGovImportLog>();
+        // Query all industrial and consortia trials with NCT identifiers in CTRP.
+        try {
+            StudyProtocolQueryCriteria criteria = new StudyProtocolQueryCriteria();
+            criteria.setIdentifierType(IdentifierType.NCT.getCode());
+            criteria.setNctNumber("NCT");
+            criteria.setTrialCategory("p");
+            criteria.setExcludeRejectProtocol(true);
+            List<StudyProtocolQueryDTO> trials = PaRegistry
+                    .getProtocolQueryService().getStudyProtocolByCriteria(
+                            criteria);
+            // Loop over all the trials
+            for (StudyProtocolQueryDTO trial : trials) {
+                String nctIdentifier = trial.getNctIdentifier();
+                List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
+                if (associatedImportLogs != null && !associatedImportLogs.isEmpty()) {
+                    map.put(nctIdentifier, associatedImportLogs.get(0));
+                } else {
+                    map.put(nctIdentifier, null);
+                }
+                
+            }
+        } catch (Exception e) {
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
+        }
+        return Response.ok(map).build();
+    }
+    /**
+     * Gets the CT.Gov import log entries with matching NCT identifier.
+     * @param nctIdentifier NCT identifier to match.
+     * @return list of CT.Gov import log entries with matching NCT identifer.
+     * @throws PAException PAException
+     */
+    private List<CTGovImportLog> getLogEntries(String nctIdentifier)
+            throws PAException {
+        String hqlQuery = "from CTGovImportLog log where log.nctID = :nctID and " 
+            + "log.importStatus = :importStatus order by log.dateCreated DESC";
+        Session session = PaHibernateUtil.getCurrentSession();
+        Query query = session.createQuery(hqlQuery);
+        query.setParameter("nctID", nctIdentifier);
+        query.setParameter("importStatus", "Success");
+        return query.list();
+    }
+    
+    // get the protocol snapshot and the studyinbox 
+    //map<String, DTO>
+    
 }

@@ -1,5 +1,7 @@
-package gov.nih.nci.pa.webservices.dto;
+package gov.nih.nci.ctrp.importtrials.dto;
 
+
+import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class InterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
+public class InterventionalStudyProtocolDTO extends StudyProtocolWebServiceDTO {
     private String allocationCode;
     private List<String> blindedRoleCode;
     private String designConfigurationCode;
@@ -20,7 +22,7 @@ public class InterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
     /**
      * const
      */
-    public InterventionalSPWebServiceDTO() {
+    public InterventionalStudyProtocolDTO() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +34,7 @@ public class InterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
      * @param numberOfInterventionGroups numberOfInterventionGroups
      * @param studyClassificationCode studyClassificationCode
      */
-    public InterventionalSPWebServiceDTO(String allocationCode,
+    public InterventionalStudyProtocolDTO(String allocationCode,
             List<String> blindedRoleCode, String designConfigurationCode,
             Integer numberOfInterventionGroups, String studyClassificationCode) {
         super();

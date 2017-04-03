@@ -1,4 +1,6 @@
-package gov.nih.nci.pa.webservices.dto;
+package gov.nih.nci.ctrp.importtrials.dto;
+
+import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -8,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NonInterventionalSPWebServiceDTO extends StudyProtocolWebServiceDTO {
+public class NonInterventionalStudyProtocolDTO extends StudyProtocolWebServiceDTO {
     
     private String biospecimenDescription;
     private String biospecimenRetentionCode;

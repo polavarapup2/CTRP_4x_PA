@@ -21,6 +21,7 @@ import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.DocumentServiceLocal;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
@@ -136,7 +137,7 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
     private boolean showAddMySite = false;
 
     private String accrualDiseaseTerminology;
-    private CTGovImportMergeHelper helper;
+    private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
     
     /**
      * {@inheritDoc}
@@ -249,9 +250,9 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
             
             // Proceed with import otherwise.
             // call the glue code
-            //  TrialRegistrationConfirmationDTO dto = helper.insertOrUpdateNctId(getNctIdToImport(), false);
-            //  final String[] msgArgs = new String[] {getNctIdToImport(), dto.getNciID() };
-            String nciID = ctGovSyncService.importTrial(nctID);            
+            TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
+            //String nciID = ctGovSyncService.importTrial(nctID);      
+            String nciID = dto.getNciTrialID();
             final Long newTrialId = IiConverter
                     .convertToLong(studyProtocolService.getStudyProtocol(
                             IiConverter.convertToAssignedIdentifierIi(nciID))
