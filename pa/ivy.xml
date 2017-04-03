@@ -96,15 +96,15 @@
     <dependency conf="ear->master" org="dom4j" name="dom4j" rev="1.6.1"/>
     <dependency conf="ear->master" org="org.freemarker" name="freemarker" rev="2.3.22"/>
     <dependency conf="ear->master" org="org.apache.commons" name="commons-exec" rev="1.3"/>
-    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="coppa-commons" rev="1.3.21"/>
-    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-core" rev="1.4.19"/>
+    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="coppa-commons" rev="1.3.22"/>
+    <dependency conf="ear->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-core" rev="1.4.21"/>
     <dependency conf="ear->master" org="gov.nih.nci.coppa.po" name="po-services" rev="1.0.1.IR6">
           <artifact name="po-services" ext="jar" conf="*" m:classifier="client"/>
     </dependency>
     <dependency conf="ear->master" org="gov.nih.nci.iso-datatypes" name="iso-datatypes" rev="2.0.0-alpha1"/> 
     <dependency conf="ear->master" org="joda-time" name="joda-time" rev="1.6.2"/>
     <dependency conf="ear->master" org="net.sf.ehcache" name="ehcache" rev="1.2.4"/>
-    <dependency conf="ear->master" org="ognl" name="ognl" rev="3.0.19"/>
+    <dependency conf="ear->master" org="ognl" name="ognl" rev="3.0.19"/>    
     <dependency conf="ear->master" org="org.jdom" name="jdom" rev="1.1"/> 
     <dependency conf="ear->master" org="org.mockito" name="mockito-all" rev="1.9.5"/> 
     <dependency conf="ear->master" org="org.springframework" name="spring-beans" rev="3.2.2.RELEASE"/>
@@ -134,7 +134,7 @@
     <dependency conf="pa-web->master" org="commons-fileupload" name="commons-fileupload" rev="1.3"/>
     <dependency conf="pa-web->master" org="commons-io" name="commons-io" rev="2.0.1"/>
     <dependency conf="pa-web->master" org="displaytag" name="displaytag" rev="1.2"/>
-    <dependency conf="pa-web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.19"/>
+    <dependency conf="pa-web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.21"/>
     <dependency conf="pa-web->master" org="javax.servlet" name="jstl" rev="1.1.2"/>
     <dependency conf="pa-web->master" org="net.htmlparser.jericho" name="jericho-html" rev="2.4"/>
     <dependency conf="pa-web->master" org="ognl" name="ognl" rev="3.0.19"/>
@@ -163,7 +163,7 @@
     <dependency conf="pa-webservices->master" org="commons-io" name="commons-io" rev="2.4"/>
     
     <dependency conf="reg-web->master" org="displaytag" name="displaytag" rev="1.2"/>
-    <dependency conf="reg-web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.19"/>
+    <dependency conf="reg-web->master" org="gov.nih.nci.coppa" name="nci-commons-ctrp-struts2" rev="1.4.21"/>
     <dependency conf="reg-web->master" org="javax.servlet" name="jstl" rev="1.1.2"/>
     <dependency conf="reg-web->master" org="net.htmlparser.jericho" name="jericho-html" rev="2.4"/>
     <dependency conf="reg-web->master" org="ognl" name="ognl" rev="3.0.19"/>
@@ -173,7 +173,7 @@
     <dependency conf="reg-web->master" org="org.apache.poi" name="poi" rev="3.2-FINAL"/>
     <dependency conf="reg-web->master" org="org.apache.struts" name="struts2-core" rev="2.3.32"/>
     <dependency conf="reg-web->master" org="org.apache.struts" name="struts2-json-plugin" rev="2.3.32"/>
-    <dependency conf="reg-web->master" org="org.apache.struts.xwork" name="xwork-core" rev="2.3.32"/>
+    <dependency conf="reg-web->master" org="org.apache.struts.xwork" name="xwork-core" rev="2.3.32"/>    
     <dependency conf="reg-web->master" org="org.json" name="json" rev="20140107"/>
     <dependency conf="reg-web->master" org="taglibs" name="standard" rev="1.1.2"/>
     
