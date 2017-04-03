@@ -27,7 +27,7 @@ public class CTGovImportMergeHelper {
     /**
      * ERROR
      */
-    private static final String ERROR = "Error in importing ctgov xml with NCT number";
+    private static final String ERROR = "Error in importing ctgov xml with NCT number ";
     private ImportRestClient client;
 
     /**

@@ -50,9 +50,9 @@ public class RestClient {
         HttpURLConnection urlConnection = null;
 
         boolean success = false;
-        for (int count = 0; count <= RETRY_COUNT; count++) {
+        for (int count = 0; count < RETRY_COUNT; count++) {
             try {
-                urlConnection = makeUrlConnection(restUrl, method, postBody);
+                urlConnection = makeUrlConnection(new URL(restUrl), method, postBody);
 
                 httpResponseCode = urlConnection.getResponseCode();
                 if (httpResponseCode == HTTP_SUCCESS_CODE_200 || httpResponseCode == HTTP_SUCCESS_CODE_201) {
@@ -61,7 +61,7 @@ public class RestClient {
                 } else if (httpResponseCode == HTTP_NOT_FOUND_404) {
                     return null;
                 }
-                Thread.sleep(0, SLEEP_TIME);   
+                Thread.sleep(0, SLEEP_TIME);
             } catch (Exception e) {
                 LOG.error("Error: Unable to get response from Rest server (" + httpResponseCode + ") - "
                         + httpResponseMessage, e);
@@ -110,9 +110,8 @@ public class RestClient {
      * @return http connection to the URL 
      * @throws IOException
      */
-    private HttpURLConnection makeUrlConnection(String restUrl, String method, String postBody)
+    HttpURLConnection makeUrlConnection(URL url, String method, String postBody)
             throws IOException {
-        URL url = new URL(restUrl);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setConnectTimeout(HTTP_TIME_OUT);
         urlConnection.setReadTimeout(HTTP_TIME_OUT);

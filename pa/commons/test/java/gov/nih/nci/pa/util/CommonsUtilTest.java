@@ -1,6 +1,7 @@
 package gov.nih.nci.pa.util;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTOs;
 
@@ -38,5 +39,23 @@ public class CommonsUtilTest {
         assertTrue(resultObj.getNciTrialID().equals("NCI-2017-00117"));
        
     }
+    
+    @Test
+    public void unmarshallXMLNullTest() {
+        TrialRegistrationConfirmationDTO dto = CommonsUtil.unmarshallXML(null, TrialRegistrationConfirmationDTO.class);
+        assertNull(dto);
+    }
+    
+    @Test
+    public void unmarshallXMLEmptyStringTest() {
+        TrialRegistrationConfirmationDTO dto = CommonsUtil.unmarshallXML("", TrialRegistrationConfirmationDTO.class);
+        assertNull(dto);
+    }
 
+    @Test
+    public void unmarshallXMLInvalidXMLTest() {
+        String xmlStr = "<TrialRegistrationConfirmation><paTrialID>234984367</paTrialID><nciTrialID>NCI-2017-00117</nciTrialID></TrialRegistrationConfirmation";
+        TrialRegistrationConfirmationDTO dto = CommonsUtil.unmarshallXML(xmlStr, TrialRegistrationConfirmationDTO.class);
+        assertNull(dto);
+    }
 }
