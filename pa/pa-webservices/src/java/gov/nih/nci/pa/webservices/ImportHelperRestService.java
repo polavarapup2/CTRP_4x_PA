@@ -1,5 +1,6 @@
 package gov.nih.nci.pa.webservices;
 
+import static org.apache.commons.lang.StringUtils.left;
 import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
@@ -36,8 +37,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -66,7 +70,8 @@ import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
  */
 @Path("/api/v1")
 @Provider
-public class ImportHelperRestService {
+@SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
+public class ImportHelperRestService { // NOPMD
     private static final Logger LOG = Logger
             .getLogger(ImportHelperRestService.class);
 
@@ -79,6 +84,9 @@ public class ImportHelperRestService {
      * ERROR
      */
     public static final String ERROR = "Error while processing your request. Please try again";
+    private static final String ELIGIBILITY = "eligibilityCriteria";
+    private static final String ARMS = "arms";
+    private static final int L_5000 = 5000;
     private StudySiteDTO leadOrgID = new StudySiteDTO();
     private OrganizationDTO sponsorDTO = new OrganizationDTO();
     private PersonDTO investigatorDTO = new PersonDTO();
@@ -445,6 +453,7 @@ public class ImportHelperRestService {
      * @return list of CT.Gov import log entries with matching NCT identifer.
      * @throws PAException PAException
      */
+    @SuppressWarnings("unchecked")
     private List<CTGovImportLog> getLogEntries(String nctIdentifier)
             throws PAException {
         String hqlQuery = "from CTGovImportLog log where log.nctID = :nctID and " 
@@ -470,62 +479,19 @@ public class ImportHelperRestService {
     @Produces({ APPLICATION_JSON })
     @NoCache
     @Formatted
-    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
+
     public Response getProtocolSnapshotWithSInboxID(
             @PathParam("spID") String spID) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            // "ctgov.sync.fields_of_interest"
             Ii studyProtocolId = IiConverter.convertToIi(spID);
-            List<gov.nih.nci.pa.webservices.dto.ArmDTO> resturnArms = new ArrayList<gov.nih.nci
-                    .pa.webservices.dto.ArmDTO>();
+            List<gov.nih.nci.pa.webservices.dto.ArmDTO> resturnArms = getArms(studyProtocolId);
             List<gov.nih.nci.pa.webservices.dto
-            .PlannedEligibilityCriterionDTO> resturneligibility = new ArrayList<gov.nih
-                    .nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
-            List<String> ognls = Arrays.asList(PaRegistry
-                    .getLookUpTableService()
-                    .getPropertyValue("ctgov.sync.fields_of_interest")
-                    .split(";"));
+            .PlannedEligibilityCriterionDTO> resturneligibility = getEligibility(studyProtocolId);
             StudyProtocolDTO studyDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolId);
-            List<ArmDTO> armIsoList = PaRegistry.getArmService()
-                    .getByStudyProtocol(studyProtocolId);
-            for (ArmDTO arm : armIsoList) {
-                resturnArms.add(setArms(arm));
-            }
-            List<PlannedEligibilityCriterionDTO> pecList = PaRegistry
-                    .getPlannedActivityService()
-                    .getPlannedEligibilityCriterionByStudyProtocol(
-                            studyProtocolId);
-            if (CollectionUtils.isNotEmpty(pecList)) {
-                for (PlannedEligibilityCriterionDTO dto : pecList) {
-                    resturneligibility.add(setEligibility(dto));
-                }
-            }
-            for (String ognl : ognls) {
-                List<String> innerValues = Arrays.asList(ognl.split("\\."));
-                if (innerValues != null && innerValues.size() == 2) {
-                    if (innerValues.get(0).equals("studyProtocol")) {
-                        if (innerValues.get(1).equals("publicDescription")) {
-                            map.put(ognl, StConverter.convertToString(studyDTO
-                                    .getPublicDescription()));
-                        } else if (innerValues.get(1).equals(
-                                "scientificDescription")) {
-                            map.put(ognl, StConverter.convertToString(studyDTO
-                                    .getScientificDescription()));
-                        } else if (innerValues.get(1).equals("keywordText")) {
-                            map.put(ognl, StConverter.convertToString(studyDTO
-                                    .getKeywordText()));
-                        }
-                    }
-                } else if (StringUtils.endsWithIgnoreCase(ognl,
-                        "eligibilityCriteria")) {
-                    map.put("eligibilityCriteria", resturneligibility);
-                } else if (StringUtils.endsWithIgnoreCase(ognl, "arms")) {
-                    map.put("arms", resturnArms);
-                }
-            }
-
+            
+            map = setSnapshotMap(studyDTO, resturneligibility, resturnArms);
             List<StudyInboxDTO> inboxEntries = PaRegistry
                     .getStudyInboxService()
                     .getOpenInboxEntries(studyProtocolId);
@@ -543,7 +509,30 @@ public class ImportHelperRestService {
         }
         return Response.ok(map).build();
     }
-
+    
+    private List<String> getOgnls() throws PAException {
+       return (Arrays.asList(PaRegistry
+                .getLookUpTableService()
+                .getPropertyValue("ctgov.sync.fields_of_interest")
+                .split(";")));
+    }
+    
+    private List<gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO> getEligibility(
+            Ii studyProtocolId) throws PAException {
+        List<gov.nih.nci.pa.webservices.dto
+        .PlannedEligibilityCriterionDTO> resturneligibility = new ArrayList<gov.nih
+                .nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
+        List<PlannedEligibilityCriterionDTO> pecList = PaRegistry
+                .getPlannedActivityService()
+                .getPlannedEligibilityCriterionByStudyProtocol(
+                        studyProtocolId);
+        if (CollectionUtils.isNotEmpty(pecList)) {
+            for (PlannedEligibilityCriterionDTO dto : pecList) {
+                resturneligibility.add(setEligibility(dto));
+            }
+        }
+        return resturneligibility;
+    }
     private gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO setEligibility(
             PlannedEligibilityCriterionDTO dto) {
         gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO eligibilityDTO = new gov.nih.nci
@@ -576,6 +565,7 @@ public class ImportHelperRestService {
                 .getTextValue()));
         eligibilityDTO.setTextDescription(StConverter.convertToString(dto
                 .getTextDescription()));
+        eligibilityDTO.setIdentifier(IiConverter.convertToLong(dto.getIdentifier()));
         AgeDTO ageMaxDto = null;
         AgeDTO ageMinDto = null;
         if (dto.getValue() != null) {
@@ -609,6 +599,17 @@ public class ImportHelperRestService {
         return eligibilityDTO;
     }
     
+    private List<gov.nih.nci.pa.webservices.dto.ArmDTO> getArms(Ii studyProtocolId) throws PAException {
+        List<gov.nih.nci.pa.webservices.dto.ArmDTO> resturnArms = new ArrayList<gov.nih.nci
+                .pa.webservices.dto.ArmDTO>();
+        List<ArmDTO> armIsoList = PaRegistry.getArmService()
+                .getByStudyProtocol(studyProtocolId);
+
+        for (ArmDTO arm : armIsoList) {
+            resturnArms.add(setArms(arm));
+        }
+        return resturnArms;
+    }
     private gov.nih.nci.pa.webservices.dto.ArmDTO setArms(ArmDTO arm) {
         gov.nih.nci.pa.webservices.dto.ArmDTO arm1 = new gov.nih.nci.pa.webservices.dto.ArmDTO();
         arm1.setDescriptionText(StConverter.convertToString(arm
@@ -616,7 +617,208 @@ public class ImportHelperRestService {
         arm1.setName(StConverter.convertToString(arm.getName()));
         arm1.setTypeCode(CdConverter.convertCdToString(arm
                 .getTypeCode()));
+        arm1.setId(IiConverter.convertToLong(arm.getIdentifier()));
         return arm1;
     }
     
+    private  Map<String, Object> setSnapshotMap(StudyProtocolDTO studyDTO, List<gov.nih.nci.pa.webservices.dto
+            .PlannedEligibilityCriterionDTO> resturneligibility, List<gov.nih
+            .nci.pa.webservices.dto.ArmDTO> resturnArms) throws PAException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (String ognl : getOgnls()) {
+            List<String> innerValues = Arrays.asList(ognl.split("\\."));
+            if (innerValues != null && innerValues.size() == 2) {
+                if (innerValues.get(0).equals("studyProtocol")) {
+                    if (innerValues.get(1).equals("publicDescription")) {
+                        map.put(ognl, StConverter.convertToString(studyDTO
+                                .getPublicDescription()));
+                    } else if (innerValues.get(1).equals(
+                            "scientificDescription")) {
+                        map.put(ognl, StConverter.convertToString(studyDTO
+                                .getScientificDescription()));
+                    } else if (innerValues.get(1).equals("keywordText")) {
+                        map.put(ognl, StConverter.convertToString(studyDTO
+                                .getKeywordText()));
+                    }
+                }
+            } else if (StringUtils.endsWithIgnoreCase(ognl,
+                    ELIGIBILITY)) {
+                map.put(ELIGIBILITY, resturneligibility);
+            } else if (StringUtils.endsWithIgnoreCase(ognl, ARMS)) {
+                map.put(ARMS, resturnArms);
+            }
+        }
+        return map;
+    }
+    
+    /**
+     * 
+     * @param spID spID
+     * @param beforeMap beforeMap
+     * @return Response
+     */
+    // post processing 
+    @PUT
+    @Path("/postprocessing/{spID}")
+    @Consumes({ APPLICATION_JSON })
+    @Produces({ APPLICATION_JSON })
+    @NoCache
+    @Formatted
+    public Response postProcessingCall(@PathParam("spID") String spID,  Map<String, Object> beforeMap) {
+        Map<String, Object> afterMap = new HashMap<String, Object>();
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        try {
+            Ii studyProtocolId = IiConverter.convertToIi(spID);
+            List<gov.nih.nci.pa.webservices.dto.ArmDTO> afterArms = getArms(studyProtocolId);
+            List<gov.nih.nci.pa.webservices.dto
+            .PlannedEligibilityCriterionDTO> afterEligibility = getEligibility(studyProtocolId);
+            StudyProtocolDTO studyDTO = PaRegistry.getStudyProtocolService()
+                    .getStudyProtocol(studyProtocolId);
+            
+            afterMap = setSnapshotMap(studyDTO, afterEligibility, afterArms);
+            final boolean needsReview = needsReview(beforeMap, afterMap);
+            final boolean adminChanged = false;
+            final boolean scientificChanged = needsReview;
+            if (needsReview) {
+                attachListOfChangedFieldsToInboxEntry(
+                        studyProtocolId, beforeMap, afterMap,
+                        adminChanged, scientificChanged);
+            }
+            String dateValue = (beforeMap.get("lastChangedDate") != null) ? beforeMap
+                    .get("lastChangedDate").toString() : "";
+            PaRegistry.getCTGovSyncService().closeStudyInboxAndAcceptTrialIfNeeded(
+                    studyProtocolId, needsReview, dateValue);
+            returnMap.put("needsReview", needsReview);
+            returnMap.put("adminChanged", adminChanged);
+            returnMap.put("scientificChanged", scientificChanged);
+        } catch (Exception e) {
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
+        }
+        return Response.ok(returnMap).build();
+    }
+    /**
+     * 
+     * @param beforeMap beforeMap
+     * @param afterMap afterMap
+     * @return boolean
+     */
+
+    public boolean needsReview(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        
+        boolean eligibilityChange = isEligibilityChange(beforeMap, afterMap);
+        
+        boolean armChange = isArmsChange(beforeMap, afterMap);
+        
+        boolean pubDescChange = isPublicDescChange(beforeMap, afterMap);
+
+        boolean sciChange = isScientificDescChange(beforeMap, afterMap);
+        
+        boolean keyWordChange = isKeywordChange(beforeMap, afterMap);
+        
+        if (!eligibilityChange || !armChange || !pubDescChange || !sciChange || !keyWordChange) {
+            return true;
+        }
+        return false;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private boolean isEligibilityChange(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        Set<gov.nih.nci.pa.webservices.dto
+        .PlannedEligibilityCriterionDTO> eligibility1 = (Set<gov.nih.nci.pa.webservices
+                .dto.PlannedEligibilityCriterionDTO>) new HashSet();
+        
+        List<gov.nih.nci.pa.webservices.dto
+        .PlannedEligibilityCriterionDTO> eligibilityList1 = (List<gov.nih.nci.pa.webservices
+                .dto.PlannedEligibilityCriterionDTO>) beforeMap.get(ELIGIBILITY);
+        eligibility1.addAll(eligibilityList1);
+        
+        Set<gov.nih.nci.pa.webservices.dto
+        .PlannedEligibilityCriterionDTO>  eligibility2 = (Set<gov.nih.nci.pa.webservices
+                .dto.PlannedEligibilityCriterionDTO>) new HashSet();
+        
+        List<gov.nih.nci.pa.webservices.dto
+        .PlannedEligibilityCriterionDTO> eligibilityList2 = (List<gov.nih.nci.pa.webservices
+                        .dto.PlannedEligibilityCriterionDTO>) afterMap.get(ELIGIBILITY);
+        eligibility2.addAll(eligibilityList2);
+        
+        return (Objects.deepEquals(eligibility1, eligibility2));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private boolean isArmsChange(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        Set<gov.nih.nci.pa.webservices.dto.ArmDTO> arms1 = (Set<gov.nih.nci.pa.webservices.dto.ArmDTO>) new HashSet();
+        List<gov.nih.nci.pa.webservices.dto.ArmDTO> armList1 = (List<gov.nih.nci
+                .pa.webservices.dto.ArmDTO>) beforeMap.get(ARMS);
+        arms1.addAll(armList1);
+        Set<gov.nih.nci.pa.webservices.dto.ArmDTO> arms2 = (Set<gov.nih.nci.pa.webservices.dto.ArmDTO>) new HashSet();
+        List<gov.nih.nci.pa.webservices.dto.ArmDTO> armList2 = (List<gov.nih.nci
+                .pa.webservices.dto.ArmDTO>) afterMap.get(ARMS);
+        arms2.addAll(armList2);
+        return (Objects.deepEquals(arms1, arms2));
+    }
+    
+    private boolean isPublicDescChange(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        String desc1 = (String) beforeMap.get("studyProtocol.publicDescription");
+        String desc2 = (String) afterMap.get("studyProtocol.publicDescription");
+        return (StringUtils.equals(desc1, desc2));
+    }
+    
+    private boolean isScientificDescChange(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        String desc1 = (String) beforeMap.get("studyProtocol.scientificDescription");
+        String desc2 = (String) afterMap.get("studyProtocol.scientificDescription");
+        return (StringUtils.equals(desc1, desc2));
+    }
+    
+    private boolean isKeywordChange(Map<String, Object> beforeMap, Map<String, Object> afterMap) {
+        String desc1 = (String) beforeMap.get("studyProtocol.keywordText");
+        String desc2 = (String) afterMap.get("studyProtocol.keywordText");
+        return (StringUtils.equals(desc1, desc2));
+    }
+    private void attachListOfChangedFieldsToInboxEntry(Ii studyProtocolIi,
+            Map<String, Object> before, Map<String, Object> after,
+            boolean adminChanged, boolean scientificChanged) throws PAException {
+        StudyInboxDTO recent = null;
+        final List<String> differences = findDifferences(before, after);
+        List<StudyInboxDTO> inboxEntries = PaRegistry.getStudyInboxService()
+                .getOpenInboxEntries(studyProtocolIi);
+        if (!inboxEntries.isEmpty()) {
+            recent = inboxEntries.get(0);
+            recent.setAdmin(BlConverter.convertToBl(adminChanged));
+            recent.setScientific(BlConverter.convertToBl(scientificChanged));
+            for (String diff : differences) {
+                String fieldLabel = PaRegistry.getCTGovSyncService().getFieldLabel(diff);
+                String currentComments = StringUtils.defaultString(StConverter
+                        .convertToString(recent.getComments()));
+                String newComments = left(currentComments
+                        + gov.nih.nci.pa.util.TrialUpdatesRecorder.SEPARATOR
+                        + fieldLabel + " changed", L_5000);
+                recent.setComments(StConverter.convertToSt(newComments));
+            }
+            PaRegistry.getStudyInboxService().update(recent);
+        }
+    }
+    
+    private List<String> findDifferences(Map<String, Object> beforeMap,
+            Map<String, Object> afterMap) {
+        List<String> values = new ArrayList<String>();
+        if (!isEligibilityChange(beforeMap, afterMap)) {
+            values.add(ELIGIBILITY);
+        }
+        if (!isArmsChange(beforeMap, afterMap)) {
+            values.add(ARMS);
+        }
+        if (!isPublicDescChange(beforeMap, afterMap)) {
+            values.add("studyProtocol.publicDescription");
+        }
+        if (!isScientificDescChange(beforeMap, afterMap)) {
+            values.add("studyProtocol.scientificDescription");
+        }
+        if (!isKeywordChange(beforeMap, afterMap)) {
+            values.add("studyProtocol.keywordText");
+        }
+        return values;
+    }
+
 }

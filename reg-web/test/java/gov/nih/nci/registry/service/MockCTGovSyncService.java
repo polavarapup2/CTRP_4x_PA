@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.registry.service;
 
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.CTGovImportLog;
 import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.service.PAException;
@@ -105,6 +106,29 @@ public class MockCTGovSyncService implements CTGovSyncServiceLocal {
             String title, String action, String status, String user,
             boolean needsReview, boolean adminChanged,
             boolean scientificChanged, StudyInboxDTO recent) throws PAException {
+        // TODO Auto-generated method stub
+        
+    }
+    /**
+     * @param fieldKey fieldKey
+     * @throws PAException PAException
+     * @return String
+     */
+    @Override
+    public String getFieldLabel(String fieldKey) throws PAException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    /**
+     * @param spId spId
+     * @param fieldsOfInterestChanged fieldsOfInterestChanged
+     * @param ctgovLastUpdateDate ctgovLastUpdateDate
+     * @throws PAException PAException
+     */
+    @Override
+    public void closeStudyInboxAndAcceptTrialIfNeeded(Ii spId,
+            boolean fieldsOfInterestChanged, String ctgovLastUpdateDate)
+            throws PAException {
         // TODO Auto-generated method stub
         
     }

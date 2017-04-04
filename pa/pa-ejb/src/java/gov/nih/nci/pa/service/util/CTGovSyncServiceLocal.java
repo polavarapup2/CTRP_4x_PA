@@ -1,5 +1,6 @@
 package gov.nih.nci.pa.service.util;
 
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.CTGovImportLog;
 import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.service.PAException;
@@ -86,4 +87,22 @@ public interface CTGovSyncServiceLocal {
             boolean needsReview, boolean adminChanged,
             boolean scientificChanged, StudyInboxDTO recent) throws PAException;
     // CHECKSTYLE:ON
+    
+    /**
+     * 
+     * @param fieldKey fieldKey
+     * @return String
+     * @throws PAException PAException
+     */
+    String getFieldLabel(String fieldKey) throws PAException;
+    /**
+     * 
+     * @param spId spId 
+     * @param fieldsOfInterestChanged fieldsOfInterestChanged
+     * @param ctgovLastUpdateDate ctgovLastUpdateDate
+     * @throws PAException PAException
+     */
+    void closeStudyInboxAndAcceptTrialIfNeeded(Ii spId,
+            boolean fieldsOfInterestChanged, String ctgovLastUpdateDate)
+            throws PAException;
 }

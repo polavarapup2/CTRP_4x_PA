@@ -1,15 +1,33 @@
 package gov.nih.nci.pa.webservices;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
 
+
+
+
+
+
+
+
+
+
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hibernate.validator.AssertTrue;
 import org.junit.Test;
 
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
@@ -18,6 +36,7 @@ import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.AbstractMockitoTest;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
+import gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO;
 
 /**
  * 
@@ -89,5 +108,37 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    public void needsReviewTest() {
+        Set<PlannedEligibilityCriterionDTO> dtos = new HashSet<PlannedEligibilityCriterionDTO>();
+
+        PlannedEligibilityCriterionDTO dto = new PlannedEligibilityCriterionDTO();
+        dto.setIdentifier(1L);
+        dto.setCategoryCode("AGE");
+        dtos.add(dto);
+        PlannedEligibilityCriterionDTO dto21 = new PlannedEligibilityCriterionDTO();
+        dto21.setIdentifier(2L);
+        dto21.setCategoryCode("AGE");
+        dtos.add(dto21);
+//        PlannedEligibilityCriterionDTO dto22 = new PlannedEligibilityCriterionDTO();
+//        dto22.setIdentifier(3L);
+//        dto22.setCategoryCode("AGE");
+//        dtos.add(dto22);
+
+        Set<PlannedEligibilityCriterionDTO> dtos1 = new HashSet<PlannedEligibilityCriterionDTO>();
+        PlannedEligibilityCriterionDTO dto2 = new PlannedEligibilityCriterionDTO();
+        dto2.setIdentifier(2L);
+        dto2.setCategoryCode("AGE");
+        dtos1.add(dto2);
+        PlannedEligibilityCriterionDTO dto1 = new PlannedEligibilityCriterionDTO();
+        dto1.setIdentifier(1L);
+        dto1.setCategoryCode("AGE");
+        dtos1.add(dto1);
+      
+
+        boolean eligibilityChange = Objects.deepEquals(dtos, dtos1);
+        assertTrue(eligibilityChange);
     }
 }

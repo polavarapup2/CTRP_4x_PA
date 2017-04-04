@@ -767,14 +767,25 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
             studyInboxService.update(recent);
         }
     }
-
-    private String getFieldLabel(String fieldKey) throws PAException {
+    /**
+     * 
+     * @param fieldKey fieldKey
+     * @return String
+     * @throws PAException PAException
+     */
+    public String getFieldLabel(String fieldKey) throws PAException {
         String fieldKeyToLabelMap = lookUpTableService
                 .getPropertyValue("ctgov.sync.fields_of_interest.key_to_label_mapping");
         return getFieldKeyMappingValue(fieldKey, fieldKeyToLabelMap);
     }
-
-    private void closeStudyInboxAndAcceptTrialIfNeeded(Ii spId,
+    /**
+     * 
+     * @param spId spId 
+     * @param fieldsOfInterestChanged fieldsOfInterestChanged
+     * @param ctgovLastUpdateDate ctgovLastUpdateDate
+     * @throws PAException PAException
+     */
+    public void closeStudyInboxAndAcceptTrialIfNeeded(Ii spId,
             boolean fieldsOfInterestChanged, String ctgovLastUpdateDate)
             throws PAException {
         if (fieldsOfInterestChanged || ctgovLastUpdateDate == null

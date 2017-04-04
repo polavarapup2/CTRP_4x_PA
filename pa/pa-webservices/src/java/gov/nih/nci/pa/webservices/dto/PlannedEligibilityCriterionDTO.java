@@ -6,7 +6,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 /**
  * Created by chandrasekaranp on 3/21/17.
  */
-@SuppressWarnings({ "PMD.TooManyFields", "PMD.ExcessiveClassLength" })
+@SuppressWarnings({ "PMD.TooManyFields", "PMD.ExcessiveClassLength", 
+    "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlannedEligibilityCriterionDTO {
 
@@ -26,6 +27,7 @@ public class PlannedEligibilityCriterionDTO {
     private boolean leadProductIndicator;
     private String textDescription;
     private String userLastCreated;
+    private Long identifier;
     /**
      * const
      */
@@ -52,6 +54,7 @@ public class PlannedEligibilityCriterionDTO {
      * @param leadProductIndicator leadProductIndicator
      * @param textDescription textDescription
      * @param userLastCreated userLastCreated
+     * @param identifier identifier
      */
     public PlannedEligibilityCriterionDTO(boolean inclusionIndicator,// NOPMD
             String criterionName, String operator, AgeDTO minValue,
@@ -60,7 +63,7 @@ public class PlannedEligibilityCriterionDTO {
             Long cdePublicIdentifier, String cdeVersionNumber,
             String categoryCode, Long interventionIdentifier,
             boolean leadProductIndicator, String textDescription,
-            String userLastCreated) {
+            String userLastCreated, Long identifier) {
         super();
         this.inclusionIndicator = inclusionIndicator;
         this.criterionName = criterionName;
@@ -78,6 +81,7 @@ public class PlannedEligibilityCriterionDTO {
         this.leadProductIndicator = leadProductIndicator;
         this.textDescription = textDescription;
         this.userLastCreated = userLastCreated;
+        this.identifier = identifier;
     }
   //CHECKSTYLE:ON
     /**
@@ -297,11 +301,206 @@ public class PlannedEligibilityCriterionDTO {
     public AgeDTO getMaxValue() {
         return maxValue;
     }
-/**
- * 
- * @param maxValue the maxValue
- */
+    /**
+     * 
+     * @param maxValue the maxValue
+     */
     public void setMaxValue(AgeDTO maxValue) {
         this.maxValue = maxValue;
     }
+    /**
+     * @return the identifier
+     */
+    public Long getIdentifier() {
+    return identifier;
+    }
+    /**
+     * @param identifier the identifier to set
+     */
+    public void setIdentifier(Long identifier) {
+        this.identifier = identifier;
+    }
+    //CHECKSTYLE:OFF
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    /**
+     * @return int 
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((categoryCode == null) ? 0 : categoryCode.hashCode());
+        result = prime
+                * result
+                + ((cdePublicIdentifier == null) ? 0 : cdePublicIdentifier
+                        .hashCode());
+        result = prime
+                * result
+                + ((cdeVersionNumber == null) ? 0 : cdeVersionNumber.hashCode());
+        result = prime * result
+                + ((criterionName == null) ? 0 : criterionName.hashCode());
+        result = prime * result
+                + ((displayOrder == null) ? 0 : displayOrder.hashCode());
+        result = prime
+                * result
+                + ((eligibleGenderCode == null) ? 0 : eligibleGenderCode
+                        .hashCode());
+        result = prime * result
+                + ((identifier == null) ? 0 : identifier.hashCode());
+        result = prime * result + (inclusionIndicator ? 1231 : 1237);
+        result = prime
+                * result
+                + ((interventionIdentifier == null) ? 0
+                        : interventionIdentifier.hashCode());
+        result = prime * result + (leadProductIndicator ? 1231 : 1237);
+        result = prime * result
+                + ((maxValue == null) ? 0 : maxValue.hashCode());
+        result = prime * result
+                + ((minValue == null) ? 0 : minValue.hashCode());
+        result = prime * result
+                + ((operator == null) ? 0 : operator.hashCode());
+        result = prime * result + (structuredIndicator ? 1231 : 1237);
+        result = prime * result
+                + ((textDescription == null) ? 0 : textDescription.hashCode());
+        result = prime * result
+                + ((textValue == null) ? 0 : textValue.hashCode());
+        result = prime * result
+                + ((userLastCreated == null) ? 0 : userLastCreated.hashCode());
+        return result;
+    }
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    /**
+     * @param obj obj
+     * @return boolean
+     */
+  //CHECKSTYLE:OFF
+    @SuppressWarnings({ "PMD.ExcessiveMethodLength" })
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PlannedEligibilityCriterionDTO other = (PlannedEligibilityCriterionDTO) obj;
+        if (categoryCode == null) {
+            if (other.categoryCode != null) {
+                return false;
+            }
+        } else if (!categoryCode.equals(other.categoryCode)) {
+            return false;
+        }
+        if (cdePublicIdentifier == null) {
+            if (other.cdePublicIdentifier != null) {
+                return false;
+            }
+        } else if (!cdePublicIdentifier.equals(other.cdePublicIdentifier)) {
+            return false;
+        }
+        if (cdeVersionNumber == null) {
+            if (other.cdeVersionNumber != null) {
+                return false;
+            }
+        } else if (!cdeVersionNumber.equals(other.cdeVersionNumber)) {
+            return false;
+        }
+        if (criterionName == null) {
+            if (other.criterionName != null) {
+                return false;
+            }
+        } else if (!criterionName.equals(other.criterionName)) {
+            return false;
+        }
+        if (displayOrder == null) {
+            if (other.displayOrder != null) {
+                return false;
+            }
+        } else if (!displayOrder.equals(other.displayOrder)) {
+            return false;
+        }
+        if (eligibleGenderCode == null) {
+            if (other.eligibleGenderCode != null) {
+                return false;
+            }
+        } else if (!eligibleGenderCode.equals(other.eligibleGenderCode)) {
+            return false;
+        }
+        if (identifier == null) {
+            if (other.identifier != null) {
+                return false;
+            }
+        } else if (!identifier.equals(other.identifier)) {
+            return false;
+        }
+        if (inclusionIndicator != other.inclusionIndicator) {
+            return false;
+        }
+        if (interventionIdentifier == null) {
+            if (other.interventionIdentifier != null) {
+                return false;
+            }
+        } else if (!interventionIdentifier.equals(other.interventionIdentifier)) {
+            return false;
+        }
+        if (leadProductIndicator != other.leadProductIndicator) {
+            return false;
+        }
+        if (maxValue == null) {
+            if (other.maxValue != null) {
+                return false;
+            }
+        } else if (!maxValue.equals(other.maxValue)) {
+            return false;
+        }
+        if (minValue == null) {
+            if (other.minValue != null) {
+                return false;
+            }
+        } else if (!minValue.equals(other.minValue)) {
+            return false;
+        }
+        if (operator == null) {
+            if (other.operator != null) {
+                return false;
+            }
+        } else if (!operator.equals(other.operator)) {
+            return false;
+        }
+        if (structuredIndicator != other.structuredIndicator) {
+            return false;
+        }
+        if (textDescription == null) {
+            if (other.textDescription != null) {
+                return false;
+            }
+        } else if (!textDescription.equals(other.textDescription)) {
+            return false;
+        }
+        if (textValue == null) {
+            if (other.textValue != null) {
+                return false;
+            }
+        } else if (!textValue.equals(other.textValue)) {
+            return false;
+        }
+        if (userLastCreated == null) {
+            if (other.userLastCreated != null) {
+                return false;
+            }
+        } else if (!userLastCreated.equals(other.userLastCreated)) {
+            return false;
+        }
+        return true;
+    }
+  //CHECKSTYLE:ON
+    
 }
