@@ -618,4 +618,5 @@ public class ImportHelperRestService {
                 .getTypeCode()));
         return arm1;
     }
+    
 }
