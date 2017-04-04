@@ -13,15 +13,20 @@ import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.iso.dto.StudyOutcomeMeasureDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.iso.util.BlConverter;
+import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.iso.util.IntConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
+import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PaHibernateUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.webservices.converters.TrialRegisterationWebServiceDTOConverter;
 import gov.nih.nci.services.organization.OrganizationDTO;
 import gov.nih.nci.services.person.PersonDTO;
+import gov.nih.nci.pa.webservices.dto.AgeDTO;
 import gov.nih.nci.pa.webservices.dto.CTGovImportLog;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
@@ -45,6 +50,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -452,5 +458,164 @@ public class ImportHelperRestService {
     
     // get the protocol snapshot and the studyinbox 
     //map<String, DTO>
+    /**
+     * 
+     * @param spID
+     *            spID
+     * @return Response
+     */
+    @GET
+    @Path("/snapshot/{spID}")
+    @Consumes({ APPLICATION_JSON })
+    @Produces({ APPLICATION_JSON })
+    @NoCache
+    @Formatted
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
+    public Response getProtocolSnapshotWithSInboxID(
+            @PathParam("spID") String spID) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            // "ctgov.sync.fields_of_interest"
+            Ii studyProtocolId = IiConverter.convertToIi(spID);
+            List<gov.nih.nci.pa.webservices.dto.ArmDTO> resturnArms = new ArrayList<gov.nih.nci
+                    .pa.webservices.dto.ArmDTO>();
+            List<gov.nih.nci.pa.webservices.dto
+            .PlannedEligibilityCriterionDTO> resturneligibility = new ArrayList<gov.nih
+                    .nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
+            List<String> ognls = Arrays.asList(PaRegistry
+                    .getLookUpTableService()
+                    .getPropertyValue("ctgov.sync.fields_of_interest")
+                    .split(";"));
+            StudyProtocolDTO studyDTO = PaRegistry.getStudyProtocolService()
+                    .getStudyProtocol(studyProtocolId);
+            List<ArmDTO> armIsoList = PaRegistry.getArmService()
+                    .getByStudyProtocol(studyProtocolId);
+            for (ArmDTO arm : armIsoList) {
+                resturnArms.add(setArms(arm));
+            }
+            List<PlannedEligibilityCriterionDTO> pecList = PaRegistry
+                    .getPlannedActivityService()
+                    .getPlannedEligibilityCriterionByStudyProtocol(
+                            studyProtocolId);
+            if (CollectionUtils.isNotEmpty(pecList)) {
+                for (PlannedEligibilityCriterionDTO dto : pecList) {
+                    resturneligibility.add(setEligibility(dto));
+                }
+            }
+            for (String ognl : ognls) {
+                List<String> innerValues = Arrays.asList(ognl.split("\\."));
+                if (innerValues != null && innerValues.size() == 2) {
+                    if (innerValues.get(0).equals("studyProtocol")) {
+                        if (innerValues.get(1).equals("publicDescription")) {
+                            map.put(ognl, StConverter.convertToString(studyDTO
+                                    .getPublicDescription()));
+                        } else if (innerValues.get(1).equals(
+                                "scientificDescription")) {
+                            map.put(ognl, StConverter.convertToString(studyDTO
+                                    .getScientificDescription()));
+                        } else if (innerValues.get(1).equals("keywordText")) {
+                            map.put(ognl, StConverter.convertToString(studyDTO
+                                    .getKeywordText()));
+                        }
+                    }
+                } else if (StringUtils.endsWithIgnoreCase(ognl,
+                        "eligibilityCriteria")) {
+                    map.put("eligibilityCriteria", resturneligibility);
+                } else if (StringUtils.endsWithIgnoreCase(ognl, "arms")) {
+                    map.put("arms", resturnArms);
+                }
+            }
+
+            List<StudyInboxDTO> inboxEntries = PaRegistry
+                    .getStudyInboxService()
+                    .getOpenInboxEntries(studyProtocolId);
+            Ii recent = null;
+            if (!inboxEntries.isEmpty()) {
+                recent = inboxEntries.get(0).getIdentifier();
+            }
+            if (!ISOUtil.isIiNull(recent)) {
+                map.put("studyInboxID", IiConverter.convertToLong(recent));
+            }
+        } catch (Exception e) {
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage())
+                    .build();
+        }
+        return Response.ok(map).build();
+    }
+
+    private gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO setEligibility(
+            PlannedEligibilityCriterionDTO dto) {
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO eligibilityDTO = new gov.nih.nci
+                .pa.webservices.dto.PlannedEligibilityCriterionDTO();
+        eligibilityDTO.setCategoryCode(CdConverter.convertCdToString(dto
+                .getCategoryCode()));
+        eligibilityDTO.setInclusionIndicator(BlConverter.convertToBool(dto
+                .getInclusionIndicator()));
+        eligibilityDTO.setCdePublicIdentifier(IiConverter.convertToLong(dto
+                .getCdePublicIdentifier()));
+        eligibilityDTO.setCdeVersionNumber(StConverter.convertToString(dto
+                .getCdeVersionNumber()));
+        eligibilityDTO.setCriterionName(StConverter.convertToString(dto
+                .getCriterionName()));
+        eligibilityDTO.setDisplayOrder(IntConverter.convertToInteger(dto
+                .getDisplayOrder()));
+        eligibilityDTO.setEligibleGenderCode(CdConverter.convertCdToString(dto
+                .getEligibleGenderCode()));
+        eligibilityDTO.setInterventionIdentifier(IiConverter.convertToLong(dto
+                .getInterventionIdentifier()));
+        eligibilityDTO.setLeadProductIndicator(BlConverter.convertToBool(dto
+                .getLeadProductIndicator()));
+        eligibilityDTO.setOperator(StConverter.convertToString(dto
+                .getOperator()));
+        eligibilityDTO.setStructuredIndicator(BlConverter.convertToBool(dto
+                .getStructuredIndicator()));
+        eligibilityDTO.setUserLastCreated(StConverter.convertToString(dto
+                .getUserLastCreated()));
+        eligibilityDTO.setTextValue(StConverter.convertToString(dto
+                .getTextValue()));
+        eligibilityDTO.setTextDescription(StConverter.convertToString(dto
+                .getTextDescription()));
+        AgeDTO ageMaxDto = null;
+        AgeDTO ageMinDto = null;
+        if (dto.getValue() != null) {
+            ageMaxDto = new AgeDTO();
+            ageMinDto = new AgeDTO();
+            if (!ISOUtil.isIvlHighNull(dto.getValue())) {
+                ageMaxDto.setValue(dto.getValue().getHigh().getValue());
+                if (dto.getValue().getHigh().getPrecision() != null) {
+                    ageMaxDto.setPrecision(dto.getValue().getHigh()
+                            .getPrecision());
+                }
+
+            }
+            if (!ISOUtil.isIvlUnitNull(dto.getValue())) {
+                ageMaxDto.setUnitCode(dto.getValue().getHigh().getUnit());
+            }
+            if (!ISOUtil.isIvlLowNull(dto.getValue())) {
+
+                ageMinDto.setValue(dto.getValue().getLow().getValue());
+                if (dto.getValue().getHigh().getPrecision() != null) {
+                    ageMinDto.setPrecision(dto.getValue().getLow()
+                            .getPrecision());
+                }
+            }
+            if (!ISOUtil.isIvlUnitNull(dto.getValue())) {
+                ageMinDto.setUnitCode(dto.getValue().getLow().getUnit());
+            }
+        }
+        eligibilityDTO.setMinValue(ageMinDto);
+        eligibilityDTO.setMaxValue(ageMaxDto);
+        return eligibilityDTO;
+    }
     
+    private gov.nih.nci.pa.webservices.dto.ArmDTO setArms(ArmDTO arm) {
+        gov.nih.nci.pa.webservices.dto.ArmDTO arm1 = new gov.nih.nci.pa.webservices.dto.ArmDTO();
+        arm1.setDescriptionText(StConverter.convertToString(arm
+                .getDescriptionText()));
+        arm1.setName(StConverter.convertToString(arm.getName()));
+        arm1.setTypeCode(CdConverter.convertCdToString(arm
+                .getTypeCode()));
+        return arm1;
+    }
 }

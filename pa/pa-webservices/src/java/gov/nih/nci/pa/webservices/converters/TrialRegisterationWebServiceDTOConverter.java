@@ -1,13 +1,17 @@
 package gov.nih.nci.pa.webservices.converters;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 
 import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.ctrp.importtrials.dto.NonInterventionalStudyProtocolDTO;
@@ -60,10 +64,11 @@ public class TrialRegisterationWebServiceDTOConverter {
      * @param dto
      *            dto
      * @return StudyProtocolDTO
+     * @throws ParseException 
      */
     @SuppressWarnings({ "deprecation", "PMD.ExcessiveMethodLength" })
     public StudyProtocolDTO convertToStudyProtocolDTO(
-            StudyProtocolWebServiceDTO webServiceDTO, StudyProtocolDTO dto) {
+            StudyProtocolWebServiceDTO webServiceDTO, StudyProtocolDTO dto) throws ParseException {
         if (webServiceDTO != null) {
             if (webServiceDTO.getStudyProtocolId() != null) {
                 dto.setIdentifier(IiConverter.convertToStudyProtocolIi(Long.parseLong(webServiceDTO
@@ -98,13 +103,11 @@ public class TrialRegisterationWebServiceDTOConverter {
             dto.setCompletionDateTypeCode(CdConverter
                     .convertStringToCd(webServiceDTO
                             .getCompletionDateTypeCode()));
-            dto.setStartDate(TsConverter.convertToTs(PAUtil
-                    .dateStringToTimestamp(webServiceDTO.getStartDate())));
-            dto.setPrimaryCompletionDate(TsConverter.convertToTs(PAUtil
-                    .dateStringToTimestamp(webServiceDTO
-                            .getPrimaryCompletionDate())));
-            dto.setCompletionDate(TsConverter.convertToTs(PAUtil
-                    .dateStringToTimestamp(webServiceDTO.getCompletionDate())));
+            dto.setStartDate(TsConverter.convertToTs(parseCtGovDate(webServiceDTO.getStartDate())));
+            dto.setPrimaryCompletionDate(TsConverter.convertToTs(parseCtGovDate(webServiceDTO
+                    .getPrimaryCompletionDate())));
+            dto.setCompletionDate(TsConverter.convertToTs(parseCtGovDate(webServiceDTO
+                    .getCompletionDate())));
             dto.setPhaseCode(CdConverter.convertStringToCd(webServiceDTO
                     .getPhaseCode()));
             dto.setDataMonitoringCommitteeAppointedIndicator(BlConverter
@@ -186,7 +189,11 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
-
+    private Date parseCtGovDate(String date) throws ParseException {
+        return StringUtils.isNotBlank(date) ? DateUtils.parseDate(date,
+                new String[] {"MMMM dd, yyyy", "MMM dd, yyyy", "MMMM yyyy" })
+                : null;
+    }
     /**
      * 
      * @param webServiceOrgDTO
