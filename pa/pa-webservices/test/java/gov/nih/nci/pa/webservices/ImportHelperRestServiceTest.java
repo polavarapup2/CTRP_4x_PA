@@ -5,12 +5,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +23,6 @@ import javax.ws.rs.core.Response;
 
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.validator.AssertTrue;
 import org.junit.Test;
 
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
@@ -141,4 +136,5 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
         boolean eligibilityChange = Objects.deepEquals(dtos, dtos1);
         assertTrue(eligibilityChange);
     }
+
 }
