@@ -28,10 +28,6 @@ function handleAction(){
     
   //If empty value is submitted then disabled paramter as if paratmeter is not submmited
 	//this is because otherwise struts defaults blank value to boolean field
-	var safetyIndicatorValue = document.forms[0].elements['webDTO.outcomeMeasure.safetyIndicator'].value;
-	if(safetyIndicatorValue == " ") {
-		document.getElementById("safety").setAttribute("disabled","disabled");
-	}
 	
 	if (page == "Edit"){
  		document.forms[0].action="interventionalStudyDesignoutcomeupdate.action";
@@ -130,7 +126,8 @@ BubbleTips.activateTipOn("dfn");
                                </s:fielderror>                            
                          </span>
                       </td>         
-                </tr> 
+                </tr>
+                <!-- 
 				<tr>
 					<td scope="row"  class="label"><label for="safety">
 						<fmt:message key="osdesign.outcome.safety"/><span class="required">*</span></label>
@@ -142,7 +139,7 @@ BubbleTips.activateTipOn("dfn");
                                </s:fielderror>                            
                          </span>
 					</td>
-				</tr>    			                                                          
+				</tr>  -->    			                                                          
         </table>
 		<div class="actionsrow">
             <del class="btnwrapper">

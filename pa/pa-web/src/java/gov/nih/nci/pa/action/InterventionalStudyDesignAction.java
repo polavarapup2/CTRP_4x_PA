@@ -538,8 +538,8 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             sgDTO.setName(StConverter.convertToSt(webDTO.getOutcomeMeasure().getName()));
             sgDTO.setDescription(StConverter.convertToSt(webDTO.getOutcomeMeasure().getDescription()));
             sgDTO.setTypeCode(CdConverter.convertStringToCd(webDTO.getOutcomeMeasure().getTypeCode()));
-            sgDTO.setSafetyIndicator(BlConverter.convertToBl(
-                    Boolean.valueOf(webDTO.getOutcomeMeasure().getSafetyIndicator())));
+//            sgDTO.setSafetyIndicator(BlConverter.convertToBl(
+//                    Boolean.valueOf(webDTO.getOutcomeMeasure().getSafetyIndicator())));
             sgDTO.setTimeFrame(StConverter.convertToSt(webDTO.getOutcomeMeasure().getTimeFrame()));
             PaRegistry.getStudyOutcomeMeasurService().create(sgDTO);
             outcomeQuery();
@@ -595,7 +595,7 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             studyOutcomeMeasure.setName(StConverter.convertToSt(webOutcomeMeasure.getName()));
             studyOutcomeMeasure.setDescription(StConverter.convertToSt(webOutcomeMeasure.getDescription()));
             studyOutcomeMeasure.setTypeCode(CdConverter.convertStringToCd(webOutcomeMeasure.getTypeCode()));
-            studyOutcomeMeasure.setSafetyIndicator(BlConverter.convertToBl(webOutcomeMeasure.getSafetyIndicator()));
+            //studyOutcomeMeasure.setSafetyIndicator(BlConverter.convertToBl(webOutcomeMeasure.getSafetyIndicator()));
             studyOutcomeMeasure.setTimeFrame(StConverter.convertToSt(webOutcomeMeasure.getTimeFrame()));
             studyOutcomeMeasure.setDisplayOrder(IntConverter
                     .convertToInt(webOutcomeMeasure.getDisplayOrder()));
@@ -625,9 +625,9 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         if (StringUtils.length(webDTO.getOutcomeMeasure().getTimeFrame()) > MAXIMUM_CHAR_OUTCOME_NAME) {
           addFieldError("webDTO.outcomeMeasure.timeFrame", getText("error.maximumChar.254"));
         }
-        if (webDTO.getOutcomeMeasure().getSafetyIndicator() == null) {
-            addFieldError("webDTO.outcomeMeasure.safetyIndicator", getText("error.outcome.safety"));
-        }
+//        if (webDTO.getOutcomeMeasure().getSafetyIndicator() == null) {
+//            addFieldError("webDTO.outcomeMeasure.safetyIndicator", getText("error.outcome.safety"));
+//        }
     }
 
     /**
@@ -670,7 +670,7 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
             webdto.getOutcomeMeasure().setName(StConverter.convertToString(dto.getName()));
             webdto.getOutcomeMeasure().setDescription(StConverter.convertToString(dto.getDescription()));
             webdto.getOutcomeMeasure().setTimeFrame(StConverter.convertToString(dto.getTimeFrame()));
-            webdto.getOutcomeMeasure().setSafetyIndicator(BlConverter.convertToBoolean(dto.getSafetyIndicator()));
+           // webdto.getOutcomeMeasure().setSafetyIndicator(BlConverter.convertToBoolean(dto.getSafetyIndicator()));
             webdto.getOutcomeMeasure().setId(IiConverter.convertToLong(dto.getIdentifier()).toString());
             webdto.getOutcomeMeasure().setDisplayOrder(IntConverter.convertToInteger(dto.getDisplayOrder()));
         }

@@ -80,7 +80,7 @@ function callOnloadFunctions(){
 }
 
 function checkAllonLoad() {
-	 if ($('gender').value == '' | $('gender').value == 'Both') {
+	 if ($('gender').value == '' | $('gender').value == 'All') {
          hideRow($('genderNewRow'));
          $('genderNew').value == '';
      } 
@@ -106,7 +106,7 @@ function showRow(row) {
     row.style.display = '';
 }
 function checkGenderDropDown(){
-	 if ($('gender').value == '' | $('gender').value == 'Both') {
+	 if ($('gender').value == '' | $('gender').value == 'All') {
          hideRow($('genderNewRow'));
          hideRow($('genderDescriptionRow'));
          $(genderDescription).value='';

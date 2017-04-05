@@ -129,9 +129,7 @@
         <display:column escapeXml="true" titleKey="osdesign.outcome.name" property="outcomeMeasure.name" sortable="true" headerClass="sortable nodnd" />
 	    <display:column escapeXml="true" titleKey="osdesign.outcome.timeFrame" property="outcomeMeasure.timeFrame"  sortable="true" headerClass="sortable nodnd" />
         <display:column escapeXml="true" titleKey="osdesign.outcome.description" property="outcomeMeasure.description"  sortable="true" headerClass="sortable nodnd" />
-	    <display:column escapeXml="true" titleKey="osdesign.outcome.safety" sortable="true" headerClass="sortable nodnd">
-            <pa:displayBoolean value="${row.outcomeMeasure.safetyIndicator}"/>
-        </display:column>
+	   
         <pa:scientificAbstractorDisplayWhenCheckedOut>
             <display:column title="Edit" class="action nodnd" headerClass="nodnd">
                 <s:url id="url" action="interventionalStudyDesignoutcomeedit"><s:param name="id" value="%{#attr.row.outcomeMeasure.id}" /> <s:param name="page" value="%{'Edit'}"/></s:url>

@@ -1064,11 +1064,11 @@ public class PAServiceUtils {
                 && ISOUtil.isBlNull(studyProtocolDTO.getSection801Indicator())) {
                  errMsg.append("Section 801 is required if FDA Regulated indicator is true." + ERR_MSG_SEPARATOR);
             }
-            if (CommonsConstant.YES.equalsIgnoreCase(
-                 BlConverter.convertBlToYesNoString(studyProtocolDTO.getSection801Indicator()))
-                 && ISOUtil.isBlNull(studyProtocolDTO.getDelayedpostingIndicator())) {
-                   errMsg.append("Delayed Posting Indicator is required if Section 801 is true." + ERR_MSG_SEPARATOR);
-            }
+//            if (CommonsConstant.YES.equalsIgnoreCase(
+//                 BlConverter.convertBlToYesNoString(studyProtocolDTO.getSection801Indicator()))
+//                 && ISOUtil.isBlNull(studyProtocolDTO.getDelayedpostingIndicator())) {
+//                 errMsg.append("Delayed Posting Indicator is required if Section 801 is true." + ERR_MSG_SEPARATOR);
+//            }
 
             if (containsNonExemptInds(studyIndldeDTOs)) {
                      if (CommonsConstant.NO.equalsIgnoreCase(BlConverter.convertBlToYesNoString(

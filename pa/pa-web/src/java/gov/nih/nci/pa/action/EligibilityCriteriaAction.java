@@ -781,7 +781,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
         DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
         DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
                 .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
-        if (trialStartDate.isAfter(fdaaaStartDate)) {
+        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
             setRequired(true);
         } else {
             setRequired(false);

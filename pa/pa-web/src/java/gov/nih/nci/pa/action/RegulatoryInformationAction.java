@@ -277,7 +277,7 @@ public class RegulatoryInformationAction extends ActionSupport {
         DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
         DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
                 .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
-        if (trialStartDate.isAfter(fdaaaStartDate)) {
+        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
             webDTO.setRequired(true);
         } else {
             webDTO.setRequired(false);

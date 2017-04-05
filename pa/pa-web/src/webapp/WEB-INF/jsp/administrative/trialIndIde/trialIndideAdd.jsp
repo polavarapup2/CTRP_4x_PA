@@ -11,7 +11,8 @@
         <script type="text/javascript" language="javascript">
             // this function is called from body onload in main.jsp (decorator)
             function callOnloadFunctions() {
-                setFocusToFirstControl();        
+                setFocusToFirstControl();
+                checkNCTIDRow();
             }
            
             function checkCode() {
