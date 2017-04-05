@@ -1,10 +1,12 @@
 package gov.nih.nci.pa.util;
 
+import java.util.List;
+
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
-import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTOs;
 import gov.nih.nci.pa.service.PAException;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.type.TypeReference;
 
 
 /**
@@ -28,7 +30,7 @@ public class CTGovImportMergeHelper {
      * ERROR
      */
     private static final String ERROR = "Error in importing ctgov xml with NCT number ";
-    private ImportRestClient client;
+    private RestClient client;
 
     /**
      * 
@@ -36,7 +38,7 @@ public class CTGovImportMergeHelper {
      */
     public CTGovImportMergeHelper() {
         super();
-        this.client = new ImportRestClient();
+        this.client = new RestClient();
     }
 
     /**
@@ -47,16 +49,16 @@ public class CTGovImportMergeHelper {
      * @throws PAException
      *             PAException
      */
-    public TrialRegistrationConfirmationDTOs updateNctId(String nctID)
+    public List<TrialRegistrationConfirmationDTO> updateNctId(String nctID)
             throws PAException {
-        TrialRegistrationConfirmationDTOs dtos = null;
+        List<TrialRegistrationConfirmationDTO> dtos = null;
         try {
             String response = client.sendHTTPRequest(
                     PaEarPropertyReader.getCtrpImportCtApiUrl() + "/" + nctID,
                     PUT, null);
             if (response != null) {
-                dtos = CommonsUtil.unmarshallXML(response,
-                        TrialRegistrationConfirmationDTOs.class);
+                dtos = (List<TrialRegistrationConfirmationDTO>) PAJsonUtil.unmarshallJSON(
+                        response, new TypeReference<List<TrialRegistrationConfirmationDTO>>() { });
             }
         } catch (Exception e) {
             LOG.error(ERROR + nctID, e);
@@ -81,7 +83,7 @@ public class CTGovImportMergeHelper {
                     PaEarPropertyReader.getCtrpImportCtApiUrl() + "/" + nctID,
                     POST, null);
             if (response != null) {
-                dto = CommonsUtil.unmarshallXML(response,
+                dto = PAJsonUtil.unmarshallJSON(response,
                         TrialRegistrationConfirmationDTO.class);
             }
         } catch (Exception e) {
@@ -95,7 +97,7 @@ public class CTGovImportMergeHelper {
      * 
      * @return client
      */
-    public ImportRestClient getClient() {
+    public RestClient getClient() {
         return client;
     }
 
@@ -104,7 +106,7 @@ public class CTGovImportMergeHelper {
      * @param client
      *            the client
      */
-    public void setClient(ImportRestClient client) {
+    public void setClient(RestClient client) {
         this.client = client;
     }
 

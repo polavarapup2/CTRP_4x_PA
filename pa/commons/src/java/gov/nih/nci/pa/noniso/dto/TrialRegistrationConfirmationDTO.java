@@ -1,16 +1,14 @@
 package gov.nih.nci.pa.noniso.dto;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * 
  * @author Reshma
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "TrialRegistrationConfirmation")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrialRegistrationConfirmationDTO {
     private String paTrialID;
     private String nciTrialID;

@@ -4,8 +4,6 @@ import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
-import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTOs;
-//import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
@@ -125,10 +123,10 @@ public final class ImportCtGovAction extends ActionSupport implements
             //glue code
             StringBuffer nciIds = new StringBuffer();
             if (studyExists) {
-                TrialRegistrationConfirmationDTOs dtos = helper.updateNctId(getNctIdToImport());
-                if (dtos != null && dtos.getDtos() != null && !dtos.getDtos().isEmpty()) {
-                    for (TrialRegistrationConfirmationDTO nciId : dtos.getDtos()) {
-                        if (dtos.getDtos().size() > 1) {
+                List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId(getNctIdToImport());
+                if (dtos != null && !dtos.isEmpty()) {
+                    for (TrialRegistrationConfirmationDTO nciId : dtos) {
+                        if (dtos.size() > 1) {
                             nciIds.append(nciId.getNciTrialID()).append(",");
                         } else {
                             nciIds.append(nciId.getNciTrialID());

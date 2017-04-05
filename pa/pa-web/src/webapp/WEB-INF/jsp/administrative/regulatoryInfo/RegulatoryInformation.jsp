@@ -118,7 +118,7 @@
                     }
                     if ($('device').value == 'true'){
                         if ($('delpostindid').value == ''){
-                             alert("The Delayed posting Indicator cannot be empty");
+                             alert("The Unapproved/uncleared Device Indicator cannot be empty");
                             return true;
                         }
                     }
