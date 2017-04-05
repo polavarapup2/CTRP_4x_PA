@@ -9,7 +9,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @SuppressWarnings({ "PMD.ExcessiveParameterList" })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CTGovImportLog {
+public class CTGovImportLogWebService {
     private String nciId;
     private String nctId;
     private String title;
@@ -24,7 +24,7 @@ public class CTGovImportLog {
     /**
      * const
      */
-    public CTGovImportLog() {
+    public CTGovImportLogWebService() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,7 +43,7 @@ public class CTGovImportLog {
      * @param userCreated userCreated
      * @param dateCreated dateCreated
      */
-    public CTGovImportLog(String nciId, String nctId, String title,
+    public CTGovImportLogWebService(String nciId, String nctId, String title,
             String action, String importStatus, boolean needsReview,
             boolean adminChanged, boolean scientificChanged, Long studyInboxId,
             String userCreated, String dateCreated) {

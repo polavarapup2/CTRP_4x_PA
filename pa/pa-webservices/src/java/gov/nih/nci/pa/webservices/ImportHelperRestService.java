@@ -3,6 +3,7 @@ package gov.nih.nci.pa.webservices;
 import static org.apache.commons.lang.StringUtils.left;
 import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.domain.CTGovImportLog;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
@@ -28,7 +29,7 @@ import gov.nih.nci.pa.webservices.converters.TrialRegisterationWebServiceDTOConv
 import gov.nih.nci.services.organization.OrganizationDTO;
 import gov.nih.nci.services.person.PersonDTO;
 import gov.nih.nci.pa.webservices.dto.AgeDTO;
-import gov.nih.nci.pa.webservices.dto.CTGovImportLog;
+import gov.nih.nci.pa.webservices.dto.CTGovImportLogWebService;
 import gov.nih.nci.pa.webservices.dto.ProtocolSnapshotDTO;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
@@ -386,7 +387,7 @@ public class ImportHelperRestService { // NOPMD
     @Produces({ APPLICATION_JSON })
     @NoCache
     @Formatted
-    public Response createImportLogEntry(CTGovImportLog log) {
+    public Response createImportLogEntry(CTGovImportLogWebService log) {
         StudyInboxDTO recent = null;
         try {
             if (log.getStudyInboxId() != null) {
@@ -419,7 +420,7 @@ public class ImportHelperRestService { // NOPMD
     @Formatted
     public Response getIndustrialConsortiaTrialsWithNCTIds() {
 
-        Map<String, CTGovImportLog> map = new HashMap<String, CTGovImportLog>();
+        Map<String, CTGovImportLogWebService> map = new HashMap<String, CTGovImportLogWebService>();
         // Query all industrial and consortia trials with NCT identifiers in CTRP.
         try {
             StudyProtocolQueryCriteria criteria = new StudyProtocolQueryCriteria();
@@ -432,10 +433,13 @@ public class ImportHelperRestService { // NOPMD
                             criteria);
             // Loop over all the trials
             for (StudyProtocolQueryDTO trial : trials) {
+                if (trial.getNctIdentifier().equals("NCT03097666")) {
+                    System.out.println("hello");
+                }
                 String nctIdentifier = trial.getNctIdentifier();
                 List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
                 if (associatedImportLogs != null && !associatedImportLogs.isEmpty()) {
-                    map.put(nctIdentifier, associatedImportLogs.get(0));
+                    map.put(nctIdentifier, setLogEntries(associatedImportLogs.get(0)));
                 } else {
                     map.put(nctIdentifier, null);
                 }
@@ -448,6 +452,24 @@ public class ImportHelperRestService { // NOPMD
         }
         return Response.ok(map).build();
     }
+    
+    private CTGovImportLogWebService setLogEntries(CTGovImportLog log) {
+        CTGovImportLogWebService returnDto = new CTGovImportLogWebService();
+        returnDto.setNciId(log.getNciID());
+        returnDto.setNctId(log.getNctID());
+        returnDto.setTitle(log.getTitle());
+        returnDto.setAction(log.getAction());
+        returnDto.setImportStatus(log.getImportStatus());
+        returnDto.setNeedsReview(log.getReviewRequired());
+        returnDto.setAdminChanged(log.getAdmin());
+        returnDto.setScientificChanged(log.getScientific());
+        if (log.getStudyInbox() != null) {
+            returnDto.setStudyInboxId(log.getStudyInbox().getId());
+        }
+        returnDto.setUserCreated(log.getUserCreated());
+        returnDto.setDateCreated(log.getDateCreated().toString());
+        return returnDto;
+    }
     /**
      * Gets the CT.Gov import log entries with matching NCT identifier.
      * @param nctIdentifier NCT identifier to match.
@@ -458,7 +480,7 @@ public class ImportHelperRestService { // NOPMD
     private List<CTGovImportLog> getLogEntries(String nctIdentifier)
             throws PAException {
         String hqlQuery = "from CTGovImportLog log where log.nctID = :nctID and " 
-            + "log.importStatus = :importStatus order by log.dateCreated DESC";
+            + "log.importStatus = :importStatus order by log.dateCreated DESC LIMIT 1";
         Session session = PaHibernateUtil.getCurrentSession();
         Query query = session.createQuery(hqlQuery);
         query.setParameter("nctID", nctIdentifier);

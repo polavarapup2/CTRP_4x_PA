@@ -1005,7 +1005,7 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
                 && YES.equalsIgnoreCase(convertBLToString(spDTO.getDelayedpostingIndicator()))
                 && !isDeviceFound(studyProtocolIi)) {
             messages.addError("Select Regulatory under Regulatory Information" + " from Administrative Data menu.",
-                              "Delay posting indicator can only be set to \'yes\' "
+                              "Unapproved/uncleared Device indicator can only be set to \'yes\' "
                                       + " if study includes at least one intervention with type \'device\'.", 
                                       ErrorMessageTypeEnum.ADMIN, 3);
         }
