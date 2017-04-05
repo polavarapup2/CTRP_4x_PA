@@ -452,7 +452,7 @@ public class ImportHelperRestService { // NOPMD
         }
         return Response.ok(map).build();
     }
-    
+     
     private CTGovImportLogWebService setLogEntries(CTGovImportLog log) {
         CTGovImportLogWebService returnDto = new CTGovImportLogWebService();
         returnDto.setNciId(log.getNciID());
