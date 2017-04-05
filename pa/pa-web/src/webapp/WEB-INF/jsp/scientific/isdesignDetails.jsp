@@ -382,6 +382,11 @@ function maskingRules() {
                     <p class="info" style="margin-top: 0px; padding-bottom: 0px;">
                         Even though not mandatory on this screen, failure to select masking role(s) may lead to abstraction validation warnings/errors.
                     </p>
+                    <span class="formErrorMsg"> 
+             <s:fielderror>
+               <s:param>webDTO.blindingRoleCode</s:param>
+             </s:fielderror>                            
+          </span>
                 </td>
             </tr>        
           </table>

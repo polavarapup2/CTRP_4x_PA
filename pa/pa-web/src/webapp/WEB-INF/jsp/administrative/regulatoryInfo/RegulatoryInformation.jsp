@@ -13,6 +13,7 @@
             function callOnloadFunctions() {
                 setFocusToFirstControl();
                 checkAllonLoad();
+                
             }
 
             function checkAllonLoad() {
@@ -28,12 +29,11 @@
                    $('surveillance').value = '';
                }
                   
-               if (($('delpostindrow').value == 'false' | $('delpostindrow').value == '') & 
+               if (($('delpostindid').value == 'false' | $('delpostindid').value == '') & 
                    ($('device').value == 'false' | $('device').value == '')) {
                    hideRow($('approvalRow'));
                    $('approval').value = '';
                }
-
             }
             
             function checkFDADropDown() {
@@ -116,12 +116,7 @@
                         alert("The Section801 Indicator cannot be empty");
                         return true;
                     }
-                    if ($('device').value == 'true'){
-                        if ($('delpostindid').value == ''){
-                             alert("The Unapproved/uncleared Device Indicator cannot be empty");
-                            return true;
-                        }
-                    }
+                   
                 }    
                 return false;
             }

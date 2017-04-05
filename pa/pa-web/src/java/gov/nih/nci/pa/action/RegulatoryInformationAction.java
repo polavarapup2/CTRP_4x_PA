@@ -213,24 +213,25 @@ public class RegulatoryInformationAction extends ActionSupport {
             identifiersList.add(studyprotocolId);
             Map<Long, String> identifierMap = PaRegistry
                     .getStudyProtocolService().getTrialNciId(identifiersList);
-
-            if (spDTO.getSection801Indicator().getValue() != null) {
-                webDTO.setSection801Indicator(BlConverter.convertToString(spDTO
-                        .getSection801Indicator()));
+            if (!hasFieldErrors()) {
+                if (spDTO.getSection801Indicator().getValue() != null) {
+                    webDTO.setSection801Indicator(BlConverter
+                            .convertToString(spDTO.getSection801Indicator()));
+                }
+                if (spDTO.getFdaRegulatedIndicator().getValue() != null) {
+                    webDTO.setFdaRegulatedInterventionIndicator(BlConverter
+                            .convertToString(spDTO.getFdaRegulatedIndicator()));
+                }
+                if (spDTO.getDelayedpostingIndicator().getValue() != null) {
+                    webDTO.setDelayedPostingIndicator(BlConverter
+                            .convertToString(spDTO.getDelayedpostingIndicator()));
+                }
+                if (spDTO.getDataMonitoringCommitteeAppointedIndicator()
+                        .getValue() != null) {
+                    webDTO.setDataMonitoringIndicator((BlConverter.convertToString(spDTO
+                            .getDataMonitoringCommitteeAppointedIndicator())));
+                }
             }
-            if (spDTO.getFdaRegulatedIndicator().getValue() != null) {
-                webDTO.setFdaRegulatedInterventionIndicator(BlConverter
-                        .convertToString(spDTO.getFdaRegulatedIndicator()));
-            }
-            if (spDTO.getDelayedpostingIndicator().getValue() != null) {
-                webDTO.setDelayedPostingIndicator(BlConverter
-                        .convertToString(spDTO.getDelayedpostingIndicator()));
-            }
-            if (spDTO.getDataMonitoringCommitteeAppointedIndicator().getValue() != null) {
-                webDTO.setDataMonitoringIndicator((BlConverter.convertToString(spDTO
-                        .getDataMonitoringCommitteeAppointedIndicator())));
-            }
-
             // Call glue code helper class
             helper.mergeRegulatoryInfoRead(studyProtocolIi,
                     identifierMap.get(studyprotocolId), webDTO);

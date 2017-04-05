@@ -82,7 +82,6 @@ import gov.nih.nci.coppa.services.interceptor.RemoteAuthorizationInterceptor;
 import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.Organization;
-import gov.nih.nci.pa.domain.RegulatoryAuthority;
 import gov.nih.nci.pa.domain.ResearchOrganization;
 import gov.nih.nci.pa.domain.StructuralRole;
 import gov.nih.nci.pa.dto.AbstractionCompletionDTO;
@@ -928,19 +927,19 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
             // then Trial Oversight Authority Organization Name shld be FDA if not throw err
             // get the country and check if its usa if so then check if Org name is FDA if not throw err
             if (paServiceUtil.containsNonExemptInds(siList)) {
-                StudyRegulatoryAuthorityDTO sraFromDatabaseDTO = studyRegulatoryAuthorityService
-                    .getCurrentByStudyProtocol(studyProtocolDto.getIdentifier());
-                if (sraFromDatabaseDTO != null) {
-                    Long sraId = Long.valueOf(sraFromDatabaseDTO.getRegulatoryAuthorityIdentifier().getExtension());
-                    RegulatoryAuthority regAuth = regulatoryInformationService.get(sraId);
-                    if (!("USA".equals(regAuth.getCountry().getAlpha3()) && "Food and Drug Administration"
-                        .equalsIgnoreCase(regAuth.getAuthorityName()))) {
-                        messages.addError("Select Regulatory under Regulatory Information from Administrative "
-                                                  + "Data menu.",
-                                          "For IND protocols, Oversight Authorities  must include United States: "
-                                                  + "Food and Drug Administration.", ErrorMessageTypeEnum.ADMIN, 3);
-                    }
-                }
+//                StudyRegulatoryAuthorityDTO sraFromDatabaseDTO = studyRegulatoryAuthorityService
+//                    .getCurrentByStudyProtocol(studyProtocolDto.getIdentifier());
+//                if (sraFromDatabaseDTO != null) {
+//                    Long sraId = Long.valueOf(sraFromDatabaseDTO.getRegulatoryAuthorityIdentifier().getExtension());
+//                    RegulatoryAuthority regAuth = regulatoryInformationService.get(sraId);
+//                    if (!("USA".equals(regAuth.getCountry().getAlpha3()) && "Food and Drug Administration"
+//                        .equalsIgnoreCase(regAuth.getAuthorityName()))) {
+//                        messages.addError("Select Regulatory under Regulatory Information from Administrative "
+//                                                  + "Data menu.",
+//                                          "For IND protocols, Oversight Authorities  must include United States: "
+//                                                  + "Food and Drug Administration.", ErrorMessageTypeEnum.ADMIN, 3);
+//                    }
+//                }
                 if (isCorrelationRuleRequired(studyProtocolDto)) {
                     messages.addError("Select Regulatory under Regulatory Information from Administrative "
                             + "Data menu.",
