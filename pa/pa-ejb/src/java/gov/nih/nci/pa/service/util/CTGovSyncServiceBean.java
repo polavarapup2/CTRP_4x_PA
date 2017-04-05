@@ -236,7 +236,6 @@ public class CTGovSyncServiceBean implements CTGovSyncServiceLocal {
 
     private static final int L_160 = 160;
 
-
     private static final int L_600 = 600;
 
     private static final int L_2000 = 2000;
