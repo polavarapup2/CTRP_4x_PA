@@ -36,7 +36,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
     private static final String SQL_SEARCH =
             "SELECT serial_number, institution_name, project_title, pi_first_name, pi_last_name "
             + "FROM grants "
-            + "WHERE CAST(serial_number AS TEXT) LIKE ? ";
+            + "WHERE serial_number::text LIKE ? ";
 
     private static final String SQL_VALIDATE =
             "SELECT COUNT(*) "
