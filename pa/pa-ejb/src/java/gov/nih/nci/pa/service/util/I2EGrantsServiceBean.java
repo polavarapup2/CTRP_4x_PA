@@ -36,7 +36,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
     private static final String SQL_SEARCH =
             "SELECT serial_number, institution_name, project_title, pi_first_name, pi_last_name "
             + "FROM grants "
-            + "WHERE serial_number = ? ";
+            + "WHERE to_char(serial_number, 'FM999999999999999999') LIKE ? ";
 
     private static final String SQL_VALIDATE =
             "SELECT COUNT(*) "
@@ -77,7 +77,7 @@ public class I2EGrantsServiceBean implements I2EGrantsServiceLocal {
         List<I2EGrant> result = new ArrayList<I2EGrantsServiceLocal.I2EGrant>();
         Connection connection = getConnection();
         try {
-            result = run.query(connection, SQL_SEARCH, handler, data);
+            result = run.query(connection, SQL_SEARCH, handler, data + "%");
         } catch (SQLException e) {
             throw new PAException("Error querying Postgres database.", e);
         }
