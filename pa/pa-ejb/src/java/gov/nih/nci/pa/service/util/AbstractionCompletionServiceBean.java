@@ -986,8 +986,7 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
 
     private void enforceRegulatoryInfo(StudyProtocolDTO studyProtocolDTO,
             AbstractionMessageCollection messages) throws PAException {
-        if (studyProtocolDTO.getFdaRegulatedIndicator() == null 
-                && (studyProtocolDTO.getFdaRegulatedIndicator().getValue() == null)) {
+        if (ISOUtil.isBlNull(studyProtocolDTO.getFdaRegulatedIndicator())) {
             messages.addError("Select Regulatory under Regulatory Information" + " from Administrative Data menu.",
                               "Regulatory Information fields must be Entered.", ErrorMessageTypeEnum.ADMIN, 3);
         }
