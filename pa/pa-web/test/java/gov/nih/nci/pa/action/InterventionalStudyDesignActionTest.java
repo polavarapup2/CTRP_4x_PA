@@ -231,9 +231,10 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         webDTO.getOutcomeMeasure().setName("Name");
         webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
         webDTO.getOutcomeMeasure().setSafetyIndicator(true);
+        action.setCaregiver("caregiver");
         action.setWebDTO(webDTO);
-
-       // assertEquals("details",action.update());
+        
+        assertEquals("details",action.update());
     }
     @Test
     public void testUpdateErrOther() throws PAException {
@@ -252,6 +253,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         webDTO.getOutcomeMeasure().setName("Name");
         webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
         webDTO.getOutcomeMeasure().setSafetyIndicator(true);
+        action.setCaregiver("caregiver");
         action.setWebDTO(webDTO);
         assertEquals("details",action.update());
 

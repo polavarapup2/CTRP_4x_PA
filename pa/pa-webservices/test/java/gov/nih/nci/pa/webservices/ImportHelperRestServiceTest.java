@@ -1,6 +1,6 @@
 package gov.nih.nci.pa.webservices;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -11,16 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.ws.rs.core.Response;
-
-
-
-
-
-
-
-
-
-
+import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
@@ -52,7 +43,7 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
                         .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
                 .thenReturn(queryDTOList);
         Response r = service.getStudyProtocolIdentity("NCT290384");
-       // assertEquals(Status.OK.getStatusCode(), r.getStatus());
+      // assertEquals(Status.OK.getStatusCode(), r.getStatus());
     }
     
     @Test
