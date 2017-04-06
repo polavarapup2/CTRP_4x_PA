@@ -3,6 +3,9 @@ FROM centos:7
 MAINTAINER Jeremy Pumphrey <jeremypumphrey@gmail.com>
 ARG LDAP_PASS
 
+ENV TZ=America/New_York
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install packages necessary to run EAP
 RUN yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
 
