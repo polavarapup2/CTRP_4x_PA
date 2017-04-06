@@ -97,6 +97,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.ClinicalResearchStaff;
 import gov.nih.nci.pa.domain.Country;
@@ -151,18 +152,7 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -1421,7 +1411,8 @@ public class MailManagerServiceTest extends AbstractHibernateTestCase {
      */
     @Test
     public void prepareMessageTest() throws Exception {
-        MimeMessage result = bean.prepareMessage("to", "from", null, "subject");
+        Properties properties = bean.buildProperties();
+        MimeMessage result = bean.prepareMessage("to", "from", null, "subject", properties);
         Address from = result.getFrom()[0];
         Address to = result.getRecipients(Message.RecipientType.TO)[0];
         Address bcc = result.getRecipients(Message.RecipientType.BCC)[0];
@@ -1436,7 +1427,8 @@ public class MailManagerServiceTest extends AbstractHibernateTestCase {
         List<String> copy = new ArrayList<String>();
         copy.add("copy");
         copy.add("CDE_MARKER_REQUEST_FROM_EMAIL");
-        MimeMessage result = bean.prepareMessage("to", "from", copy, "subject");
+        Properties properties = bean.buildProperties();
+        MimeMessage result = bean.prepareMessage("to", "from", copy, "subject", properties);
         Address from = result.getFrom()[0];
         Address to = result.getRecipients(Message.RecipientType.TO)[0];
         Address cc = result.getRecipients(Message.RecipientType.CC)[0];

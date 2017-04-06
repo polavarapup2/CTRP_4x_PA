@@ -170,7 +170,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 import javax.mail.Address;
-import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -270,7 +269,8 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     private static final String YES_VAL = "YES";
     private static final String NO_VAL = "NO";
     private static final String TRIAL_IDENTIFIERS = "${trialIdentifiers}";
-    
+    private static final String NCI_ID = "${nciId}";
+
     @EJB
     private ProtocolQueryServiceLocal protocolQueryService;
     @EJB
@@ -496,8 +496,9 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             List<String> mailCc, String subject, String mailBody,
             File[] attachments, boolean deleteAttachments) { 
         try {
+            final Properties properties = buildProperties();
             // Define Message
-            MimeMessage message = prepareMessage(mailTo, mailFrom, mailCc, subject);
+            MimeMessage message = prepareMessage(mailTo, mailFrom, mailCc, subject, properties);
             // body
             Multipart multipart = new MimeMultipart();
             BodyPart msgPart = new MimeBodyPart();
@@ -521,7 +522,8 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             }
             message.setContent(multipart);
             // Send Message
-            invokeTransportAsync(message, deleteAttachments ? postDeletes.toArray(new File[0]) : null); // NOPMD
+            invokeTransportAsync(message, deleteAttachments ? postDeletes.toArray(new File[0]) : null,
+                    properties); // NOPMD
         } catch (Exception e) {
             LOG.error(e.getMessage());
             LOG.error(SEND_MAIL_ERROR, e);
@@ -554,13 +556,18 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     }
 
     private void invokeTransportAsync(final MimeMessage message,
-            final File[] postDeletes) {
+            final File[] postDeletes, final Properties properties) {
         mailDeliveryExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Transport.send(message);
-                    logEmail(message, null, postDeletes);
+                    Session session = Session.getDefaultInstance(properties);
+                    Transport transport = session.getTransport();
+                    transport.connect(lookUpTableService.getPropertyValue("smtp"),
+                            lookUpTableService.getPropertyValue("smtp.auth.username"),
+                            lookUpTableService.getPropertyValue("smtp.auth.password"));
+                    transport.sendMessage(message, message.getAllRecipients());
+                    LOG.info("e-mail sent successfully.");
                 } catch (Exception e) {
                     LOG.error(SEND_MAIL_ERROR, e);
                     logEmail(message, e, postDeletes);
@@ -571,7 +578,12 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     
     @Override
     public void send(MimeMessage message) {
-        invokeTransportAsync(message, null);
+        try {
+            final Properties properties = buildProperties();
+            invokeTransportAsync(message, null, properties);
+        } catch (PAException e) {
+            LOG.error(e, e);
+        }
     }
 
     private void logEmail(final MimeMessage message, final Throwable error,
@@ -599,7 +611,6 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
                             file.delete();
                         }
                     }
-
                 }
             }
         });
@@ -960,7 +971,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
      */
     public String commonMailSubjectReplacementsForNCI(String nciId, String mailSubject) {
         String subject =  mailSubject;
-        subject = subject.replace("${nciId}", nciId);
+        subject = subject.replace(NCI_ID, nciId);
         
         return subject;
     }
@@ -1257,9 +1268,10 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     @Override
     public void sendCDERequestMail(String mailFrom, String mailBody) {
         try {
+            final Properties properties = buildProperties();
             // Define Message
             MimeMessage message = prepareMessage(lookUpTableService.getPropertyValue(CDE_REQUEST_TO_EMAIL), mailFrom, 
-                    null, lookUpTableService.getPropertyValue("CDE_REQ_TO_EMAIL_SUB_PERMISSIBLE"));
+                    null, lookUpTableService.getPropertyValue("CDE_REQ_TO_EMAIL_SUB_PERMISSIBLE"), properties);
             // body
             Multipart multipart = new MimeMultipart();
             BodyPart msgPart = new MimeBodyPart();
@@ -1267,7 +1279,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             multipart.addBodyPart(msgPart);
             message.setContent(multipart);
             // Send Message
-            invokeTransportAsync(message, null);
+            invokeTransportAsync(message, null, properties);
         } catch (Exception e) {
             LOG.error(SEND_MAIL_ERROR, e);
         } // catch
@@ -1822,7 +1834,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     }
 
     /**
-     * @param studyProtocolId
+     * @param study
      * @param emails
      * @throws PAException
      */
@@ -1886,10 +1898,11 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     public void sendMailWithHtmlBody(String mailFrom, String mailTo,
             List<String> mailCc, String mailSubject, String mailBody) {
         try {
-            MimeMessage message = prepareMessage(mailTo, mailFrom, mailCc, mailSubject);
+            final Properties properties = buildProperties();
+            MimeMessage message = prepareMessage(mailTo, mailFrom, mailCc, mailSubject, properties);
             message.setContent(mailBody, "text/html");
             // Send Message
-            invokeTransportAsync(message, null);
+            invokeTransportAsync(message, null, properties);
         } catch (Exception e) {
             LOG.error(SEND_MAIL_ERROR, e);
         }
@@ -1898,11 +1911,12 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
     @Override
     public void sendMailWithHtmlBody(String mailTo, String subject, String mailBody) {
         try {
-            MimeMessage message = prepareMessage(mailTo, 
-                    lookUpTableService.getPropertyValue(FROMADDRESS), null, subject);
+            final Properties properties = buildProperties();
+            MimeMessage message = prepareMessage(mailTo,
+                    lookUpTableService.getPropertyValue(FROMADDRESS), null, subject, properties);
             message.setContent(mailBody, "text/html");
             // Send Message
-            invokeTransportAsync(message, null);
+            invokeTransportAsync(message, null, properties);
         } catch (Exception e) {
             LOG.error(SEND_MAIL_ERROR, e);
         }
@@ -1913,9 +1927,10 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             List<String> mailCc, String subject, String mailBody,
             File[] attachments, boolean deleteAttachments) { 
         try {
+            final Properties properties = buildProperties();
             // Define Message
             MimeMessage message = prepareMessage(mailTo, mailFrom, mailCc,
-                    subject);
+                    subject, properties);
             // body
             Multipart multipart = new MimeMultipart();
             BodyPart msgPart = new MimeBodyPart();
@@ -1942,7 +1957,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             message.setContent(multipart);
             // Send Message
             invokeTransportAsync(message,
-                    deleteAttachments ? postDeletes.toArray(new File[0]) : null); // NOPMD
+                    deleteAttachments ? postDeletes.toArray(new File[0]) : null, properties); // NOPMD
         } catch (Exception e) {
             LOG.error(SEND_MAIL_ERROR, e);
         }
@@ -1965,38 +1980,42 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
         sendMailWithHtmlBody(ctroEmail, mailSubject, mailBody);
     }
 
-    MimeMessage prepareMessage(String mailTo, String mailFrom, 
-            List<String> mailCc, String subject) throws PAException {
-        Session session;
-        // get system properties
-        Properties props = System.getProperties();
-        // Set up mail server
-        props.put("mail.smtp.host", lookUpTableService.getPropertyValue("smtp"));
-        props.put("mail.smtp.port", lookUpTableService.getPropertyValue("smtp.port"));
-        props.put("mail.smtp.timeout", SMTP_TIMEOUT);
-        props.put("mail.smtp.connectiontimeout", SMTP_TIMEOUT);
-        
-        if (StringUtils.isNotBlank(lookUpTableService.getPropertyValue("smtp.auth.username"))) {
-            props.put("mail.smtp.auth", "true");
-            Authenticator auth = new SMTPAuthenticator(lookUpTableService.getPropertyValue("smtp.auth.username"), 
-                    lookUpTableService.getPropertyValue("smtp.auth.password"));
-            // Get session
-            session = Session.getDefaultInstance(props, auth);
-        } else {
-            // Get session
-            session = Session.getDefaultInstance(props, null);
-        }        
-        
+    /**
+     * This methods builds the properties needed for sending mail
+     * @return properties
+     * @throws PAException if an error occurs
+     */
+    public Properties buildProperties() throws PAException {
+        Properties properties = System.getProperties();
+        try {
+            // Set up mail server
+            properties.put("mail.transport.protocol", "smtps");
+            properties.put("mail.smtp.port", lookUpTableService.getPropertyValue("smtp.port"));
+            properties.put("mail.smtps.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+            properties.put("mail.smtp.starttls.required", "true");
+            properties.put("mail.smtp.host", lookUpTableService.getPropertyValue("smtp"));
+            properties.put("mail.smtp.timeout", SMTP_TIMEOUT);
+            properties.put("mail.smtp.connectiontimeout", SMTP_TIMEOUT);
+        } catch (Exception e) {
+            throw new PAException("Error building properties for MIME Message", e);
+        }
+        return properties;
+    }
+
+    MimeMessage prepareMessage(String mailTo, String mailFrom,
+            List<String> mailCc, String subject, Properties properties) throws PAException {
+        Session session = Session.getDefaultInstance(properties);
         MimeMessage result = new MimeMessage(session);
         try {
             result.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
-            result.setFrom(new InternetAddress(mailFrom)); 
+            result.setFrom(new InternetAddress(mailFrom));
             if (mailCc != null && !mailCc.isEmpty()) {
-                   InternetAddress[] myList = new InternetAddress[mailCc.size()];
-                   for (int i = 0; i < mailCc.size(); i++) {
-                       myList[i] = new InternetAddress(mailCc.get(i));
-                   }
-                result.addRecipients(Message.RecipientType.CC, myList);         
+                InternetAddress[] myList = new InternetAddress[mailCc.size()];
+                for (int i = 0; i < mailCc.size(); i++) {
+                    myList[i] = new InternetAddress(mailCc.get(i));
+                }
+                result.addRecipients(Message.RecipientType.CC, myList);
             }
             result.addRecipient(Message.RecipientType.BCC,
                     new InternetAddress(lookUpTableService.getPropertyValue("log.email.address")));
@@ -2699,12 +2718,12 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
                 .getPropertyValue("abstraction.script.mailTo");
         
         String mailSubject = lookUpTableService.getPropertyValue("ctro.comparision.email.subject");
-        mailSubject = mailSubject.replace("${nciId}", nciID);
+        mailSubject = mailSubject.replace(NCI_ID, nciID);
        
         String body = lookUpTableService.getPropertyValue("ctro.comparision.email.body");
         body = body.replace("${nctId}", nctId);
         body = body.replace("${currentDate}", submissionDate);
-        body = body.replace("${nciId}", nciID);
+        body = body.replace(NCI_ID, nciID);
        
         
         File [] file = new File[1];
@@ -2736,12 +2755,12 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
         }
         
         String mailSubject = lookUpTableService.getPropertyValue("ccct.comparision.email.subject");
-        mailSubject = mailSubject.replace("${nciId}", nciId);
+        mailSubject = mailSubject.replace(NCI_ID, nciId);
        
         String body = lookUpTableService.getPropertyValue("ccct.comparision.email.body");
         body = body.replace("${nctId}", nctId);
         body = body.replace("${currentDate}", submissionDate);
-        body = body.replace("${nciId}", nciId);
+        body = body.replace(NCI_ID, nciId);
        
         
         File [] file = new File[1];
@@ -2784,7 +2803,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             toEmailAddressList = Arrays.asList(lists);
         }
         String mailSubject = lookUpTableService.getPropertyValue("ctro.coversheet.email.subject");
-        mailSubject = mailSubject.replace("${nciId}", nciId);
+        mailSubject = mailSubject.replace(NCI_ID, nciId);
         
         if (BlConverter.convertToBool(studyProtocolDTO.getUseStandardLanguage())) {
             useStandardLanguage = YES_VAL;
@@ -2899,7 +2918,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
                 .getTrialSummaryByStudyProtocolId(IiConverter
                         .convertToLong(dataForEmail.getStudyProtocolID())); 
         
-        mailSubject = mailSubject.replace("${nciId}", trial.getNciIdentifier());
+        mailSubject = mailSubject.replace(NCI_ID, trial.getNciIdentifier());
        
         String body = lookUpTableService.getPropertyValue("participating.site.not.closed.email.body");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(PAUtil.DATE_FORMAT_WITH_TIME 
@@ -2910,7 +2929,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
         body = body.replace("${title}"
                 , StringUtils.defaultString(trial.getOfficialTitle()));    
         
-        body = body.replace("${nciId}"
+        body = body.replace(NCI_ID
                 , StringUtils.defaultString(trial.getNciIdentifier()));
         
         body = body.replace("${nctId}"
