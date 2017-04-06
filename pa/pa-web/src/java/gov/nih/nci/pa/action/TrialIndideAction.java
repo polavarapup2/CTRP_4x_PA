@@ -304,8 +304,9 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
               getText("error.trialIndide.indldeNumber"));
       addFieldErrorIfEmpty(studyIndldeWebDTO.getIndldeType(), "studyIndldeWebDTO.indldeType",
             getText("error.trialIndide.indldeType"));
-      addFieldErrorIfEmpty(studyIndldeWebDTO.getExpandedAccessIndicator(), "studyIndldeWebDTO.expandedAccessIndicator",
-              getText("error.trialIndide.expandedAccessIndicator"));
+//      addFieldErrorIfEmpty(studyIndldeWebDTO.getExpandedAccessIndicator(), 
+      //"studyIndldeWebDTO.expandedAccessIndicator",
+//              getText("error.trialIndide.expandedAccessIndicator"));
       addFieldErrorIfEmpty(studyIndldeWebDTO.getGrantor(), "studyIndldeWebDTO.grantor",
               getText("error.trialIndide.grantor"));
       addFieldErrorIfEmpty(studyIndldeWebDTO.getHolderType(), "studyIndldeWebDTO.holderType",

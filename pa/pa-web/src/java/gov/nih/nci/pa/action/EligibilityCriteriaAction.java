@@ -100,12 +100,10 @@ import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.IntConverter;
 import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
-import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.BaseLookUpService;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAUtil;
-import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
@@ -124,8 +122,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.joda.time.DateMidnight;
-
 /**
  * @author Kalpana Guthikonda
  * @since 11/12/2008
@@ -189,7 +185,7 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 .getPlannedEligibilityCriterionByStudyProtocol(studyProtocolIi);
             StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
                     .getAttribute(Constants.TRIAL_SUMMARY);
-            setFdaaaFieldsRequired(studyProtocolIi);
+       //     setFdaaaFieldsRequired(studyProtocolIi);
             if (CollectionUtils.isNotEmpty(pecList)) {
                 list = new ArrayList<ISDesignDetailsWebDTO>();
                 for (PlannedEligibilityCriterionDTO dto : pecList) {
@@ -766,27 +762,27 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
                 }
             }
         }
-        setFdaaaFieldsRequired(spId);
-        if (!StringUtils.isEmpty(eligibleGenderCode) 
-                && (StringUtils.endsWithIgnoreCase("Male", eligibleGenderCode) 
-                || StringUtils.endsWithIgnoreCase("Female", eligibleGenderCode)) && StringUtils.isEmpty(gender)
-                && isRequired()) {
-            addFieldError("gender", getText("error.gender"));
-        }
+        //setFdaaaFieldsRequired(spId);
+//        if (!StringUtils.isEmpty(eligibleGenderCode) 
+//                && (StringUtils.endsWithIgnoreCase("Male", eligibleGenderCode) 
+//                || StringUtils.endsWithIgnoreCase("Female", eligibleGenderCode)) && StringUtils.isEmpty(gender)
+//                && isRequired()) {
+//            addFieldError("gender", getText("error.gender"));
+//        }
     }
-
-    private void setFdaaaFieldsRequired(Ii spId) throws PAException {
-        StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
-                .getStudyProtocol(spId);
-        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
-        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
-                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
-        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
-            setRequired(true);
-        } else {
-            setRequired(false);
-        }
-    }
+//
+//    private void setFdaaaFieldsRequired(Ii spId) throws PAException {
+//        StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
+//                .getStudyProtocol(spId);
+//        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
+//        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
+//                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
+//        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
+//            setRequired(true);
+//        } else {
+//            setRequired(false);
+//        }
+//    }
 
     private double convertToMinutes(double value, String unit) {
         double retMaxVal = 0;

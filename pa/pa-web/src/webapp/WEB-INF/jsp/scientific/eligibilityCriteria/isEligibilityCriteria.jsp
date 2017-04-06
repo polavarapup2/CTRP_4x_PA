@@ -191,7 +191,7 @@ BubbleTips.activateTipOn("dfn");
     </c:if>
     <s:hidden id="lastUpdatedDate" name="lastUpdatedDate"> </s:hidden>
     <s:hidden id="msId" name="msId"> </s:hidden>
-    <c:set var="asterisk1" value="${(required)?'*':''}" scope="request"/>
+   
     <tr>
         <td scope="row"  class="label"><label for="acceptHealthy">
             <fmt:message key="isdesign.eligibilitycriteria.ahv"/><span class="required">${asterisk}</span></label>
@@ -259,7 +259,7 @@ BubbleTips.activateTipOn("dfn");
     </tr> 
     <tr id="genderNewRow">
        <td scope="row" class="label">
-            <label for="genderNew"><fmt:message key="isdesign.eligibilitycriteria.Gender"/><span class="required">${asterisk1}</span></label>
+            <label for="genderNew"><fmt:message key="isdesign.eligibilitycriteria.Gender"/></label>
        </td>
        <td colspan="3">   
             <s:select id="genderNew" name="gender" list="#{'':'','false':'No', 'true':'Yes'}" onchange="checkGenderDesc();"/>

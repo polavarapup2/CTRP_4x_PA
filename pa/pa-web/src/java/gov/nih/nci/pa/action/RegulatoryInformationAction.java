@@ -86,11 +86,8 @@ import gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
-import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.Constants;
-import gov.nih.nci.pa.util.PAUtil;
-import gov.nih.nci.pa.util.PaEarPropertyReader;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
@@ -102,7 +99,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
-import org.joda.time.DateMidnight;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -207,7 +203,7 @@ public class RegulatoryInformationAction extends ActionSupport {
                     .getSession().getAttribute(Constants.STUDY_PROTOCOL_II);
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                     .getStudyProtocol(studyProtocolIi);
-            setFdaaaFieldsRequired(spDTO);
+           // setFdaaaFieldsRequired(spDTO);
             List<Long> identifiersList = new ArrayList<Long>();
             Long studyprotocolId = IiConverter.convertToLong(studyProtocolIi);
             identifiersList.add(studyprotocolId);
@@ -246,17 +242,17 @@ public class RegulatoryInformationAction extends ActionSupport {
 
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     private void validateForm(StudyProtocolDTO spDTO) throws PAException {
-        setFdaaaFieldsRequired(spDTO);
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())
-                && webDTO.isRequired()) {
-            addFieldError("webDTO.fdaRegulatedDrug",
-                    "Studies a U.S. FDA-regulated Drug Product is required field");
-        }
-        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())
-                && webDTO.isRequired()) { 
-            addFieldError("webDTO.fdaRegulatedDevice",
-                    "Studies a U.S. FDA-regulated Device Product is required field");
-        }
+     //   setFdaaaFieldsRequired(spDTO);
+//        if (StringUtils.isBlank(webDTO.getFdaRegulatedDrug())
+//                && webDTO.isRequired()) {
+//            addFieldError("webDTO.fdaRegulatedDrug",
+//                    "Studies a U.S. FDA-regulated Drug Product is required field");
+//        }
+//        if (StringUtils.isBlank(webDTO.getFdaRegulatedDevice())
+//                && webDTO.isRequired()) { 
+//            addFieldError("webDTO.fdaRegulatedDevice",
+//                    "Studies a U.S. FDA-regulated Device Product is required field");
+//        }
 
         if (!BlConverter.convertToBool(spDTO.getProprietaryTrialIndicator())
                 && StringUtils.isBlank(webDTO
@@ -273,17 +269,17 @@ public class RegulatoryInformationAction extends ActionSupport {
         }
 
     }
-    @SuppressWarnings({ "PMD.NPathComplexity" })
-    private void setFdaaaFieldsRequired(StudyProtocolDTO spDTO) throws PAException {
-        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
-        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
-                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
-        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
-            webDTO.setRequired(true);
-        } else {
-            webDTO.setRequired(false);
-        }
-    }
+//    @SuppressWarnings({ "PMD.NPathComplexity" })
+//    private void setFdaaaFieldsRequired(StudyProtocolDTO spDTO) throws PAException {
+//        DateMidnight trialStartDate = TsConverter.convertToDateMidnight(spDTO.getStartDate());
+//        DateMidnight fdaaaStartDate = TsConverter.convertToDateMidnight(TsConverter
+//                .convertToTs(PAUtil.dateStringToDate(PaEarPropertyReader.getFdaaaStartDate())));
+//        if (trialStartDate != null && trialStartDate.isAfter(fdaaaStartDate)) {
+//            webDTO.setRequired(true);
+//        } else {
+//            webDTO.setRequired(false);
+//        }
+//    }
 
     /**
      * @return the countryList

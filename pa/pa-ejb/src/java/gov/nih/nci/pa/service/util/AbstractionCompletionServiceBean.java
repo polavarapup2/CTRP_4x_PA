@@ -999,15 +999,15 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
         }
         // Display error in abstraction validation if section 801 indicator = yes,
         // delayed posting indicator is yes and trial does not include Intervention with type Device
-        StudyProtocolDTO spDTO = studyProtocolService.getStudyProtocol(studyProtocolIi);
-        if (YES.equalsIgnoreCase(convertBLToString(spDTO.getSection801Indicator()))
-                && YES.equalsIgnoreCase(convertBLToString(spDTO.getDelayedpostingIndicator()))
-                && !isDeviceFound(studyProtocolIi)) {
-            messages.addError("Select Regulatory under Regulatory Information" + " from Administrative Data menu.",
-                              "Unapproved/uncleared Device indicator can only be set to \'yes\' "
-                                      + " if study includes at least one intervention with type \'device\'.", 
-                                      ErrorMessageTypeEnum.ADMIN, 3);
-        }
+//        StudyProtocolDTO spDTO = studyProtocolService.getStudyProtocol(studyProtocolIi);
+//        if (YES.equalsIgnoreCase(convertBLToString(spDTO.getSection801Indicator()))
+//                && YES.equalsIgnoreCase(convertBLToString(spDTO.getDelayedpostingIndicator()))
+//                && !isDeviceFound(studyProtocolIi)) {
+//            messages.addError("Select Regulatory under Regulatory Information" + " from Administrative Data menu.",
+//                              "Unapproved/uncleared Device indicator can only be set to \'yes\' "
+//                                      + " if study includes at least one intervention with type \'device\'.", 
+//                                      ErrorMessageTypeEnum.ADMIN, 3);
+//        }
 
     }
 

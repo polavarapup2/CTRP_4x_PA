@@ -245,7 +245,7 @@
                     <tr>
                         <td scope="row" class="label">
                             <label for="group4true">
-                                <fmt:message key="trialIndide.expandedAccessIndicator"/>:<span class="required">*</span>
+                                <fmt:message key="trialIndide.expandedAccessIndicator"/>:
                             </label>
                         </td>
                         <td class="value">

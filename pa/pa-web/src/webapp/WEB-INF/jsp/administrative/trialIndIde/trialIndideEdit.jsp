@@ -289,7 +289,7 @@ function showRow(row) {
 					</tr>
 					<tr>
 						<td scope="row"  class="label"><label>
-							<fmt:message key="trialIndide.expandedAccessIndicator"/>:<span class="required">*</span></label>
+							<fmt:message key="trialIndide.expandedAccessIndicator"/>:</label>
 						</td>
 						<td class="value">
 							<s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" onchange="checkNCTIDRow();"/>
