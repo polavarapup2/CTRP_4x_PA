@@ -101,7 +101,7 @@ public class CTGovImportMergeHelperTest {
             fail("Expected exception");
         } catch (Exception e) {
             assertTrue(e instanceof PAException);
-            assertEquals("Error in importing ctgov xml with NCT number NCT12345678", e.getMessage());
+            assertEquals("TEST", e.getMessage());
         }
         verify(client).sendHTTPRequest(url, "POST", null);
     }

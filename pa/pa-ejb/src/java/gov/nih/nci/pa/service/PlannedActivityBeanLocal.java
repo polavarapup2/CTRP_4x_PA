@@ -58,6 +58,7 @@ import com.fiveamsolutions.nci.commons.util.UsernameHolder;
  */
 @Stateless
 @Interceptors({RemoteAuthorizationInterceptor.class, PaHibernateSessionInterceptor.class })
+@SuppressWarnings({ "PMD.TooManyMethods", "PMD.CyclomaticComplexity" })
 public class PlannedActivityBeanLocal extends
         AbstractStudyIsoService<PlannedActivityDTO, PlannedActivity, PlannedActivityConverter> implements
         PlannedActivityServiceLocal {

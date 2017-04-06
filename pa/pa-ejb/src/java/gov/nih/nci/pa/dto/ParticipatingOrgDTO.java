@@ -13,6 +13,7 @@ import java.util.List;
  * @author Hugh Reinhart
  * @since Jun 18, 2012
  */
+@SuppressWarnings({ "PMD.TooManyFields" })
 public class ParticipatingOrgDTO implements Serializable {
 
     private static final long serialVersionUID = 5370561621744531528L;

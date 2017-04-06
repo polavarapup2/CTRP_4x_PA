@@ -117,7 +117,6 @@ import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
 import gov.nih.nci.pa.iso.dto.StudyOutcomeMeasureDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
-import gov.nih.nci.pa.iso.dto.StudyRegulatoryAuthorityDTO;
 import gov.nih.nci.pa.iso.dto.StudyResourcingDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteAccrualStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteContactDTO;
@@ -269,7 +268,7 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
             enforceGeneralTrialDetails(studyProtocolDTO, messages);
             enforceNCISpecificInfo(studyProtocolDTO, messages);
             if (studyProtocolDTO.getCtgovXmlRequiredIndicator().getValue().booleanValue()) {
-                enforceRegulatoryInfo(studyProtocolIi, messages);
+                enforceRegulatoryInfo(studyProtocolDTO, messages);
             }
             enforceIRBInfo(studyProtocolDTO, messages);
             enforceTrialINDIDE(studyProtocolDTO, messages);
@@ -985,15 +984,10 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
         }
     }
 
-    private void enforceRegulatoryInfo(Ii studyProtocolIi, AbstractionMessageCollection messages) throws PAException {
-
-        List<StudyRegulatoryAuthorityDTO> sraDTOList = studyRegulatoryAuthorityService
-            .getByStudyProtocol(studyProtocolIi);
-        StudyRegulatoryAuthorityDTO sraDTO = null;
-        if (!sraDTOList.isEmpty()) {
-            sraDTO = sraDTOList.get(0);
-        }
-        if (sraDTO == null) {
+    private void enforceRegulatoryInfo(StudyProtocolDTO studyProtocolDTO,
+            AbstractionMessageCollection messages) throws PAException {
+        if (studyProtocolDTO.getFdaRegulatedIndicator() == null 
+                && (studyProtocolDTO.getFdaRegulatedIndicator().getValue() == null)) {
             messages.addError("Select Regulatory under Regulatory Information" + " from Administrative Data menu.",
                               "Regulatory Information fields must be Entered.", ErrorMessageTypeEnum.ADMIN, 3);
         }

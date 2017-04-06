@@ -70,11 +70,37 @@ public class RestClient {
         if (success) {
             return readResponse(urlConnection);
         }  else {
-            throw new PAException("Error: Unable to get response from Rest server @" + restUrl);
+            throw new PAException("Error: " + readError(urlConnection));
         }
 
     }
+    private String readError(HttpURLConnection urlConnection) throws PAException {
+        BufferedReader reader;
+        StringBuilder httpResponse = new StringBuilder();
+        try {
+            reader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+            String line;
 
+            while ((line = reader.readLine()) != null) {
+                httpResponse.append(line);
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
+
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        } catch (Exception e) {
+            throw new PAException("Error in reading response:  " + e.getMessage(), e);
+        }
+        return httpResponse.toString();
+        
+    }
     private String readResponse(HttpURLConnection urlConnection) throws PAException {
         BufferedReader reader;
         StringBuilder httpResponse = new StringBuilder();
@@ -97,7 +123,7 @@ public class RestClient {
                 urlConnection.disconnect();
             }
         } catch (Exception e) {
-            throw new PAException("Error in reading micro service response:  " + e.getMessage(), e);
+            throw new PAException("Error in reading response:  " + e.getMessage(), e);
         }
         return httpResponse.toString();
     }

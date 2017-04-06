@@ -88,7 +88,7 @@ public class CTGovImportMergeHelper {
             }
         } catch (Exception e) {
             LOG.error(ERROR + nctID, e);
-            throw new PAException(ERROR + nctID, e);
+            throw new PAException(e.getMessage(), e);
         }
         return dto;
     }

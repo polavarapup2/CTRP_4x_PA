@@ -41,7 +41,7 @@ public class TrialInfoHelperUtil {
     /**
      * ERROR_MESSAGE
      */
-    private static final String ERROR_MESSAGE = "Error in getting the response from microservices.";
+    private static final String ERROR_MESSAGE = "Error in getting additional information.";
     private RestClient client;
 
     /**
@@ -119,10 +119,10 @@ public class TrialInfoHelperUtil {
             }
         } catch (Exception e) {
             LOG.error(
-                    "Error in updating additional Regulatory info in rest service for the study protocol id: "
+                    "Error in updating additional Regulatory info for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
             throw new PAException(
-                    "Error in updating additional Regulatory info in rest service for the study protocol id: "
+                    "Error in updating additional Regulatory info for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
         return currRegulatoryDto;
@@ -187,10 +187,10 @@ public class TrialInfoHelperUtil {
                     .unmarshallJSON(response, AdditionalEligibilityCriteriaDTO.class);
         } catch (Exception e) {
             LOG.error(
-                    "Error in updating additional Eligibility Criteria in rest service for the study protocol id: "
+                    "Error in updating additional Eligibility Criteria for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
             throw new PAException(
-                    "Error in updating additional Eligibility Criteria in rest service for the study protocol id: "
+                    "Error in updating additional Eligibility Criteria for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
         return currEligibilityDto;
@@ -279,10 +279,10 @@ public class TrialInfoHelperUtil {
                     .unmarshallJSON(response, AdditionalTrialIndIdeDTO.class);
         } catch (Exception e) {
             LOG.error(
-                 "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
+                 "Error in updating additional Trial IND/IDE info for the study protocol id: "
                        + studyProtocolId, e);
             throw new PAException(
-                    "Error in updating additional Trial IND/IDE info in rest service for the study protocol id: "
+                    "Error in updating additional Trial IND/IDE info for the study protocol id: "
                             + studyProtocolId, e);
         }
         return currTrialIndIdeDto;
@@ -301,10 +301,10 @@ public class TrialInfoHelperUtil {
                 .getFdaaaDataClinicalTrialsUrl() + "/" + msId, DELETE, null);
         } catch (Exception e) {
             LOG.error(
-                 "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
+                 "Error in deleting additional Trial IND/IDE info for the study protocol id: "
                       + msId, e);
             throw new PAException(
-                    "Error in deleting additional Trial IND/IDE info in rest service for the study protocol id: "
+                    "Error in deleting additional Trial IND/IDE info for the study protocol id: "
                             + msId, e);
         }
     }
@@ -366,10 +366,10 @@ public class TrialInfoHelperUtil {
                     .unmarshallJSON(response, AdditionalDesignDetailsDTO.class);
         } catch (Exception e) {
             LOG.error(
-                    "Error in updating Design Details in rest service for the study protocol id: "
+                    "Error in updating Design Details in for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
             throw new PAException(
-                    "Error in updating Design Details in rest service for the study protocol id: "
+                    "Error in updating Design Details in for the study protocol id: "
                             + IiConverter.convertToString(studyProtocolIi), e);
         }
         return currDesignDetailsDto;

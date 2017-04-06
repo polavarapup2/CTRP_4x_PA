@@ -91,6 +91,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Naveen Amiruddin, Harsha
  * @since 7/28/2008
  */
+@SuppressWarnings({ "PMD.TooManyFields" })
 public class PaPersonDTO implements Serializable {
     private static final long serialVersionUID = 7576215348756326812L;
     private Long id;
