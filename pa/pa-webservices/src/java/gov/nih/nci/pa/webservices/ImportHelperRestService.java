@@ -289,7 +289,7 @@ public class ImportHelperRestService { // NOPMD
         overallStatusDTO = new TrialRegisterationWebServiceDTOConverter()
                 .convertToOverallStatusDTO(trialRegistrationDTO
                         .getOverallStatusDTO());
-
+        
         arms = new TrialRegisterationWebServiceDTOConverter()
                 .convertToArmsDTOList(trialRegistrationDTO.getArms());
 
