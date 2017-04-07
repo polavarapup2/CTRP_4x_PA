@@ -1309,11 +1309,13 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
 
         AdditionalEligibilityCriteriaDTO elgCritDTO = additionalTrialInfo.getEligibilityCriteriaDTO();
         if (elgCritDTO != null) {
-            XmlGenHelper.appendElement(eligibility,
-                    XmlGenHelper.createElementWithTextblock("gender_based",
-                            toYesNoStr(elgCritDTO.getGender()), doc));
-            XmlGenHelper.appendElement(eligibility, XmlGenHelper.createElementWithTextblock(
-                    "gender_description", elgCritDTO.getGenderEligibilityDescription(), doc));
+            if (PAJsonUtil.isValidBooleanString(elgCritDTO.getGender())) {
+                XmlGenHelper.appendElement(eligibility,
+                        XmlGenHelper.createElementWithTextblock("gender_based",
+                                toYesNoStr(elgCritDTO.getGender()), doc));
+                XmlGenHelper.appendElement(eligibility, XmlGenHelper.createElementWithTextblock(
+                        "gender_description", elgCritDTO.getGenderEligibilityDescription(), doc));
+            }
         }
 
         XmlGenHelper.appendElement(eligibility,
