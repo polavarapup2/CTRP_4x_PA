@@ -203,6 +203,8 @@ public abstract class AbstractTrialRegistrationBean {
             toDTO.setStudyModelCode(fromDTO.getStudyModelCode());
             toDTO.setStudyModelOtherText(fromDTO.getStudyModelOtherText());
             toDTO.setTimePerspectiveCode(fromDTO.getTimePerspectiveCode());
+            toDTO.setBiospecimenDescription(fromDTO.getBiospecimenDescription());
+            toDTO.setBiospecimenRetentionCode(fromDTO.getBiospecimenRetentionCode());
             toDTO.setTimePerspectiveOtherText(fromDTO
                     .getTimePerspectiveOtherText());
             if (!ISOUtil.isIntNull(fromDTO.getNumberOfGroups())) {

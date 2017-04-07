@@ -85,11 +85,14 @@ package gov.nih.nci.pa.service.util;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AbstractionCompletionDTO;
+import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.util.AbstractMockitoTest;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 
 import java.util.List;
 
@@ -105,7 +108,7 @@ import org.junit.Test;
 public class AbsCompletionServiceTest extends AbstractMockitoTest {
 
     private final AbstractionCompletionServiceBean bean = new AbstractionCompletionServiceBean();
-
+    private final TrialInfoHelperUtil helper = mock(TrialInfoHelperUtil.class);
     @Before
     public void setup() throws Exception {
         bean.setCorrelationUtils(corUtils);
@@ -127,12 +130,19 @@ public class AbsCompletionServiceTest extends AbstractMockitoTest {
         bean.setStudySiteService(studySiteSvc);
         bean.setStudySiteAccrualStatusService(studySiteAccrualStatusSvc);
         bean.setStudySiteContactService(studySiteContactSvc);
+        AdditionalDesignDetailsDTO dto = new AdditionalDesignDetailsDTO();
+        dto.setMaskingDescription("true");
+        when(helper.retrieveDesignDetails(any(Ii.class), any(String.class))).thenReturn(dto);
+        bean.setHelper(helper);
     }
     
     @Test
     public void testStatusTransitionValidation() throws PAException {        
         when(studyOverallStatusSvc.statusHistoryHasErrors(any(Ii.class))).thenReturn(Boolean.TRUE);
         when(studyOverallStatusSvc.statusHistoryHasWarnings(any(Ii.class))).thenReturn(Boolean.TRUE);
+        AdditionalDesignDetailsDTO dto = new AdditionalDesignDetailsDTO();
+        dto.setMaskingDescription("true");
+        when(helper.retrieveDesignDetails(any(Ii.class), any(String.class))).thenReturn(dto);
         List<AbstractionCompletionDTO> errList = bean.validateAbstractionCompletion(spId);
 
         boolean errFound = false;
