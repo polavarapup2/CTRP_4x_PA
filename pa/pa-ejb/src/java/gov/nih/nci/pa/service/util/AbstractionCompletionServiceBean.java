@@ -1467,7 +1467,7 @@ public class AbstractionCompletionServiceBean implements AbstractionCompletionSe
             messages.addError(SELECT_INT_TRIAL_DESIGN_DETAILS_MSG, "Number of Arms must be Entered", 
                     ErrorMessageTypeEnum.SCIENTIFIC, 12);
         }
-        if (ispDTO.getBlindingSchemaCode().getCode() == null) {
+        if (ISOUtil.isDSetEmpty(ispDTO.getBlindedRoleCode())) {
             messages.addError(SELECT_INT_TRIAL_DESIGN_DETAILS_MSG, "Masking must be Entered", 
                     ErrorMessageTypeEnum.SCIENTIFIC, 12);
         }
