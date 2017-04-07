@@ -308,6 +308,7 @@ public class ImportHelperRestService { // NOPMD
                 .convertToDocument(trialRegistrationDTO.getDocument());
     }
 
+    
     /**
      * 
      * @param trialRegistrationDTO
