@@ -79,7 +79,7 @@ public interface CTGovSyncServiceLocal {
      * @param scientificChanged scientificChanged
      * @param recent recent
      * @throws PAException PAException
-     */ 
+     */
     void createImportLogEntry(
             String trialNciId, // NOPMD
             String nctIdStr, // NOPMD
