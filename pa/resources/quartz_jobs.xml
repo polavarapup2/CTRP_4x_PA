@@ -181,7 +181,7 @@
          -->
     </job>    
              
-    <job>
+    <!-- <job>
         <job-detail>
             <name>ctgovSyncNightlyJob</name>
             <group>DEFAULT</group>
@@ -204,7 +204,7 @@
                 </entry>
             </job-data-map>
         </job-detail>
-    </job>
+    </job> -->
     
      <job>
         <job-detail>
