@@ -62,5 +62,7 @@ COPY ctrp.uat.properties        "$JBOSS_HOME"/ctrp/ctrp.uat.properties
 COPY ctrp.production.properties "$JBOSS_HOME"/ctrp/ctrp.production.properties
 COPY ctrp.local.properties    "$JBOSS_HOME"/ctrp/ctrp.local.properties
 
+EXPOSE 18080
+
 USER root
 CMD $JBOSS_HOME/bin/standalone.sh
