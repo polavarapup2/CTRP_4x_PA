@@ -112,6 +112,7 @@ import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
+import gov.nih.nci.pa.util.MockCSMUserService;
 import gov.nih.nci.pa.util.MockTrialInfoHelperUtil;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.services.entity.NullifiedEntityException;
@@ -138,13 +139,15 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-@Ignore
+//@Ignore
 public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
     private final CTGovXmlGeneratorServiceBeanLocal bean = new CTGovXmlGeneratorServiceBeanLocal();
 
     @Override
     public CTGovXmlGeneratorServiceBeanLocal getBean() {
+        MockCSMUserService csmUserService = new MockCSMUserService();
+        CSMUserService.setInstance(csmUserService);
         bean.setTrialInfoHelperUtil(new MockTrialInfoHelperUtil());
         return bean;
     }
@@ -210,18 +213,6 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
         String xml = getBean().generateCTGovXml(spId);
         assertTrue(xml.contains("<is_section_801>No</is_section_801>"));
-    }
-
-    @Test
-    public void testExpAccIndNull() throws PAException {
-        spDto.setExpandedAccessIndicator(null);
-        assertFalse(getBean().generateCTGovXml(spId).contains("<expanded_access_status>"));
-    }
-
-    @Test
-    public void testExpAccIndFalse() throws PAException {
-        spDto.setExpandedAccessIndicator(BlConverter.convertToBl(false));
-        assertTrue(getBean().generateCTGovXml(spId).contains("<expanded_access_status>No longer available</expanded_access_status>"));
     }
 
     @Test

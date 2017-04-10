@@ -603,17 +603,6 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                                 StringUtils.substring(StConverter.convertToString(sosDTO
                         .getReasonText()), 0, PAAttributeMaxLen.LEN_160), doc));
             }
-
-            if (!ISOUtil.isBlNull(spDTO.getExpandedAccessIndicator())) {
-                if (spDTO.getExpandedAccessIndicator().getValue()) {
-                    XmlGenHelper.appendElement(root,
-                            XmlGenHelper.createElementWithTextblock("expanded_access_status", "Available", doc));
-                } else {
-                    XmlGenHelper.appendElement(root,
-                            XmlGenHelper.createElementWithTextblock("expanded_access_status",
-                                    "No longer available", doc));
-                }
-            }
         }
         XmlGenHelper.appendElement(root,
                 XmlGenHelper.createElementWithTextblock("start_date",
