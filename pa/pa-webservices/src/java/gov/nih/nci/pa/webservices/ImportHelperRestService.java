@@ -21,6 +21,7 @@ import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.IntConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
+import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PaHibernateUtil;
@@ -38,6 +39,7 @@ import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -708,6 +710,40 @@ public class ImportHelperRestService { // NOPMD
         }
         return Response.ok(returnMap).build();
     }
+    
+    /**
+     * 
+     * @param startDate start date of job
+     * @return Response
+     */
+    //email sync job import logs
+    @POST
+    @Path("/emailsynclogs")
+    @NoCache
+    @Formatted
+    public Response emailSyncJobImportLogs(Date startDate) {
+        LOG.info("Received a request to email import logs at end of import sync job started at " + startDate);
+        try {
+            //Record the finish time of nightly job
+            Date endDate = new Date();
+            //Get the log entries which got created between start date and end date
+            CTGovImportLogSearchCriteria searchCriteria = new CTGovImportLogSearchCriteria();
+            searchCriteria.setOnOrAfter(startDate);
+            searchCriteria.setOnOrBefore(endDate);
+            List<CTGovImportLog> logEntries = PaRegistry.getCTGovSyncService().getLogEntries(searchCriteria);
+            if (logEntries != null && !logEntries.isEmpty()) {
+                //Send a status e-mail with a summary of trials in CTRP updated from CTGov to 
+                //authorized users
+                PaRegistry.getMailManagerService().sendCTGovSyncStatusSummaryMail(logEntries);                    
+            }
+            
+        } catch (Exception e) {
+            LOG.error(ERROR, e);
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+        return Response.ok("Success").build();
+    }
+    
     /**
      * 
      * @param before before
