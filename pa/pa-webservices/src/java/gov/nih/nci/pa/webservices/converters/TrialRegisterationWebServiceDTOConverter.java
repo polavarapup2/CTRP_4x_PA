@@ -44,7 +44,6 @@ import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.iso.util.IvlConverter.JavaPq;
-import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.webservices.dto.AgeDTO;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
 import gov.nih.nci.services.organization.OrganizationDTO;
@@ -83,8 +82,7 @@ public class TrialRegisterationWebServiceDTOConverter {
                     .getPublicDescription()));
             dto.setPublicTitle(StConverter.convertToSt(webServiceDTO
                     .getPublicTitle()));
-            dto.setRecordVerificationDate(TsConverter.convertToTs(PAUtil
-                    .dateStringToTimestamp(webServiceDTO
+            dto.setRecordVerificationDate(TsConverter.convertToTs(parseCtGovDate(webServiceDTO
                             .getRecordVerificationDate())));
             dto.setScientificDescription(StConverter.convertToSt(webServiceDTO
                     .getScientificDescription()));
@@ -126,7 +124,7 @@ public class TrialRegisterationWebServiceDTOConverter {
                     .getStudySource()));
             Set<Ii> secondaryIds = new LinkedHashSet<Ii>();
             for (String id : webServiceDTO.getSecondaryIdentifiers()) {
-                secondaryIds.add(IiConverter.convertToIi(id));
+                secondaryIds.add(IiConverter.convertToOtherIdentifierIi(id));
             }
             if (!secondaryIds.isEmpty()) {
                 dto.setSecondaryIdentifiers(DSetConverter
