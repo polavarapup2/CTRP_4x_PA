@@ -1167,8 +1167,8 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                 XmlGenHelper.createElementWithTextblock("ind_number",
                         StConverter.convertToString(ideDTO.getIndldeNumber()), doc));
 
-        String indIdeNum = StConverter.convertToString(ideDTO.getIndldeNumber());
-        AdditionalTrialIndIdeDTO indIdeDTO = additionalTrialInfo.getTrialIndIdeDTOMap().get(indIdeNum);
+        String indIdeId = IiConverter.convertToString(ideDTO.getIdentifier());
+        AdditionalTrialIndIdeDTO indIdeDTO = additionalTrialInfo.getTrialIndIdeDTOMap().get(indIdeId);
         if (indIdeDTO != null) {
             XmlGenHelper.appendElement(idInfo,
                     XmlGenHelper.createElementWithTextblock("has_expanded_access",
