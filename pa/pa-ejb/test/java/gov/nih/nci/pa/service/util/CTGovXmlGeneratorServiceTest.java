@@ -139,7 +139,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-//@Ignore
+@Ignore
 public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
     private final CTGovXmlGeneratorServiceBeanLocal bean = new CTGovXmlGeneratorServiceBeanLocal();
