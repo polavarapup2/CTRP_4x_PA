@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -123,8 +124,12 @@ public class TrialRegisterationWebServiceDTOConverter {
             dto.setStudySource(CdConverter.convertStringToCd(webServiceDTO
                     .getStudySource()));
             Set<Ii> secondaryIds = new LinkedHashSet<Ii>();
-            for (String id : webServiceDTO.getSecondaryIdentifiers()) {
-                secondaryIds.add(IiConverter.convertToOtherIdentifierIi(id));
+            if (CollectionUtils.isNotEmpty(webServiceDTO
+                    .getSecondaryIdentifiers())) {
+                for (String id : webServiceDTO.getSecondaryIdentifiers()) {
+                    secondaryIds
+                            .add(IiConverter.convertToOtherIdentifierIi(id));
+                }
             }
             if (!secondaryIds.isEmpty()) {
                 dto.setSecondaryIdentifiers(DSetConverter

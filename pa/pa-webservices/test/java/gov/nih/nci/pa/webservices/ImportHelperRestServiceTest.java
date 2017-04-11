@@ -25,10 +25,11 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
+import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
+import gov.nih.nci.ctrp.importtrials.dto.NonInterventionalStudyProtocolDTO;
 import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
-import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.dto.StudyContactDTO;
 import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
@@ -46,6 +47,7 @@ import gov.nih.nci.pa.util.AbstractMockitoTest;
 import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.webservices.dto.CTGovImportLogWebService;
+import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
 import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
 import gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO;
 import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
@@ -91,6 +93,7 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
                 .thenReturn(queryDTOList);
         Response r = service.getStudyProtocolIdentity("NCT290384");
        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
     }
     @Test
     public void getStudyProtocolIdentityTitleTest() throws PAException {
@@ -109,9 +112,31 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
         when(
                 protocolQueryServiceLocal
                         .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
-                .thenReturn(queryDTOList);
+                .thenReturn(null).thenReturn(queryDTOList);
         Response r = service.getStudyProtocolIdentity("NCT290384");
        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+    }
+    @Test
+    public void getSPIdentityNotFoundTest() throws PAException {
+        ClinicalStudy clinicalStudy = new ClinicalStudy();
+        clinicalStudy.setOverallStatus("Completed");
+        clinicalStudy.setOfficialTitle("official Title");
+        CTGovStudyAdapter study = new CTGovStudyAdapter(clinicalStudy);
+        when(PaRegistry.getCTGovSyncService()).thenReturn(ctGovSyncServiceLocal);
+        when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
+                        eq("NCT290384"))).thenReturn(
+                Arrays.asList((StudyProtocolDTO) spDto));
+        when(ctGovSyncServiceLocal
+                    .getAdaptedCtGovStudyByNctId(eq("NCT290384"))).thenReturn(study);
+        when(PaRegistry.getProtocolQueryService()).thenReturn(protocolQueryServiceLocal);
+        queryDTOList.get(0).setOfficialTitle("official Title");
+        when(
+                protocolQueryServiceLocal
+                        .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
+                .thenReturn(null).thenReturn(null);
+        Response r = service.getStudyProtocolIdentity("NCT290384");
+       assertEquals(Status.NOT_FOUND.getStatusCode(), r.getStatus());
     }
     @Test
     public void getStudyProtocolIdentityTitleErrorTest() throws PAException {
@@ -134,6 +159,7 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
         assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
         assertEquals("error", r.getEntity().toString());
     }
+
    @Test
    public void createImportLogEntryTest() throws IOException {
        CTGovImportLogWebService log = new CTGovImportLogWebService();
@@ -175,20 +201,64 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
        assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
        assertEquals("error", r.getEntity().toString());
    }
-//   @Test
-//   public void updateTrialRegisterationTest() throws PAException, IOException {
-//       TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
-//       trialRegistrationDTO.setNctID("NCT290384");
-//       StudyProtocolWebServiceDTO webDto = new StudyProtocolWebServiceDTO();
-//       webDto.setStudyProtocolId("1");
-//       webDto.setOfficialTitle("officialTitle");
-//       trialRegistrationDTO.setStudyProtocolDTO(webDto);
-//       when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
-//               eq("NCT290384"))).thenReturn(
-//       Arrays.asList((StudyProtocolDTO) spDto));
-//       Response r = service.updateTrialRegisteration(trialRegistrationDTO);
-//       assertEquals(Status.OK.getStatusCode(), r.getStatus());
-//   }
+   
+   @Test
+   public void createImportLogEntryNotFoundTest() throws IOException {
+       CTGovImportLogWebService log = new CTGovImportLogWebService();
+       log.setAction("update");
+       log.setNciId("NCI-1000-11111");
+       log.setNctId("NCT290384");
+       log.setTitle("Title1");
+       log.setImportStatus("Success");
+       log.setUserCreated("kogantir");
+       log.setNeedsReview(true);
+       log.setAdminChanged(true);
+       log.setScientificChanged(true);
+       Response r = service.createImportLogEntry(log);
+       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+   }
+   
+   
+   @Test
+   public void updateTrialRegisterationTest() throws PAException, IOException {
+       TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
+       trialRegistrationDTO.setNctID("NCT290384");
+       InterventionalStudyProtocolDTO webDto = new InterventionalStudyProtocolDTO();
+       webDto.setStudyProtocolId("1");
+       webDto.setOfficialTitle("officialTitle");
+       webDto.setExpandedAccessIndicator(true);
+       webDto.setAllocationCode("Randomized Controlled Trial");
+       webDto.setDesignConfigurationCode("Single Group");
+       trialRegistrationDTO.setStudyProtocolDTO(webDto);
+       when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
+               eq("NCT290384"))).thenReturn(
+       Arrays.asList((StudyProtocolDTO) spDto));
+       Response r = service.updateTrialRegisteration(trialRegistrationDTO);
+       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       assertTrue(r.getEntity() instanceof StudyProtocolIdentityDTO);
+   }
+   
+   @Test
+   public void updateTrialRegisterationBadRequestTest() throws PAException, IOException {
+       TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
+       trialRegistrationDTO.setNctID("NCT290384");
+       InterventionalStudyProtocolDTO webDto = new InterventionalStudyProtocolDTO();
+       webDto.setStudyProtocolId("1");
+       webDto.setOfficialTitle("officialTitle");
+       webDto.setExpandedAccessIndicator(true);
+       webDto.setAllocationCode("Randomized Controlled Trial");
+       webDto.setDesignConfigurationCode("Single Group");
+       trialRegistrationDTO.setStudyProtocolDTO(webDto);
+       when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
+               eq("NCT290384"))).thenThrow(new PAException("error"));
+       
+       Response r = service.updateTrialRegisteration(trialRegistrationDTO);
+       assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       assertEquals(r.getEntity(), "error");
+   }
+   
     @Test
     public void extractStudyProtocolDTOTest() {
         String jsonStr ="{" + 
