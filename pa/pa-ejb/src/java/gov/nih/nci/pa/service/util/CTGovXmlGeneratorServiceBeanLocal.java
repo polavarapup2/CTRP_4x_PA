@@ -1303,8 +1303,8 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                         XmlGenHelper.createElementWithTextblock("gender_based",
                                 toYesNoStr(elgCritDTO.getGender()), doc));
                 createTextBlock(
-                        "gender_description",
-                        StringUtils.substring(elgCritDTO.getGenderEligibilityDescription(),0, PAAttributeMaxLen.LEN_1000)
+                        "gender_description", StringUtils.substring(
+                                elgCritDTO.getGenderEligibilityDescription(), 0, PAAttributeMaxLen.LEN_1000)
                         , doc, eligibility);
             }
         }
