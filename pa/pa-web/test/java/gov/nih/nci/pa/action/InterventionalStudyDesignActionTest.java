@@ -60,6 +60,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
     public void prepare() {
         action = new InterventionalStudyDesignAction();
     }
+    
     @Test
     public void testWebDTOProperty(){
         assertNotNull(action.getWebDTO());
@@ -124,7 +125,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
     public void testDetailsQuery() throws PAException, IOException{
      setMockValues();
      getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
-     assertEquals("details",action.detailsQuery());
+     assertEquals("details",action.execute());
      assertEquals(action.getWebDTO().getMaskingDescription(), "Desc1");
      assertEquals(action.getWebDTO().getModelDescription(), "ModelDesc1");
      assertEquals(action.getWebDTO().getNoMasking(), "True");
@@ -214,6 +215,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         action.setWebDTO(webDTO);
         assertEquals("outcome",action.outcomecreate());
     }
+    
     @Test
     public void testUpdateErr() throws PAException {
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
@@ -236,6 +238,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         
         assertEquals("details",action.update());
     }
+    
     @Test
     public void testUpdateErrOther() throws PAException {
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
@@ -421,5 +424,63 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         helperUtil.setClient(client);
         helper.setTrialInfoHelperUtil(helperUtil);
         action.setHelper(helper);
+    }
+    
+    @Test
+    public void testUpdateIspException() throws PAException, IOException {
+        studyProtocolServiceLocal =  mock(StudyProtocolServiceLocal.class);
+        InterventionalStudyProtocolDTO ispDTO = new InterventionalStudyProtocolDTO();
+        ispDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(false));
+        ispDTO.setNumberOfInterventionGroups(IntConverter.convertToInt(1));
+        ispDTO.setTargetAccrualNumber(IvlConverter.convertInt().convertToIvl(10, null));
+        
+        Map<Long, String> identifierMap = new HashMap<Long, String>();
+        List<Long> identifiersList = new ArrayList<Long>();
+        ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
+        PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);
+        when(paRegSvcLoc.getStudyProtocolService()).thenReturn(studyProtocolServiceLocal);
+        Long studyprotocolId = IiConverter.convertToLong(id);
+        identifiersList.add(studyprotocolId);
+        identifierMap.put(1L, "NCI-1000-0000");
+        when(PaRegistry.getStudyProtocolService().getTrialNciId(identifiersList)).thenReturn(identifierMap);
+        when(PaRegistry.getStudyProtocolService().getInterventionalStudyProtocol(any(Ii.class))).thenReturn(ispDTO);
+        List<AdditionalDesignDetailsDTO> designDetailsDtoList = new ArrayList<AdditionalDesignDetailsDTO>();
+        AdditionalDesignDetailsDTO designDetailsDto = new AdditionalDesignDetailsDTO();
+        designDetailsDto.setMaskingDescription("Desc1");
+        designDetailsDto.setModelDescription("ModelDesc1");
+        designDetailsDto.setNoMasking("True");
+        designDetailsDto.setStudyProtocolId("1");
+        designDetailsDto.setNciId("NCI-1000-0000");
+        designDetailsDtoList.add(designDetailsDto);
+        
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        OutcomeMeasureWebDTO omDto = new OutcomeMeasureWebDTO();
+        webDTO.setOutcomeMeasure(omDto);
+        webDTO.getOutcomeMeasure().setPrimaryIndicator(true);
+        webDTO.setPrimaryPurposeCode(PrimaryPurposeCode.PREVENTION.getDisplayName());
+        webDTO.setPhaseCode(PhaseCode.I.getDisplayName());
+        webDTO.setDesignConfigurationCode("designConfigurationCode");
+        webDTO.setNumberOfInterventionGroups("1");
+        webDTO.setBlindingSchemaCode("blindingSchemaCode");
+        webDTO.setAllocationCode("allocationCode");
+        webDTO.setMinimumTargetAccrualNumber("1");
+        webDTO.getOutcomeMeasure().setName("Name");
+        webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
+        webDTO.getOutcomeMeasure().setSafetyIndicator(true);
+        webDTO.setNoMasking("Ture");
+        action.setWebDTO(webDTO);
+        
+        TrialInfoMergeHelper mockhelper = mock(TrialInfoMergeHelper.class);
+        action.setHelper(mockhelper);
+        
+        when(mockhelper.mergeDesignDetailsUpdate(any(Ii.class), any(String.class), any(ISDesignDetailsWebDTO.class)))
+            .thenReturn(designDetailsDto);
+        
+        when(PaRegistry.getStudyProtocolService().getInterventionalStudyProtocol(any(Ii.class))).thenReturn(ispDTO);
+        when (PaRegistry.getStudyProtocolService().updateInterventionalStudyProtocol(
+                any(InterventionalStudyProtocolDTO.class), any(String.class)))
+                .thenThrow(new PAException("Error in updating Study Protocol."));
+        assertEquals("details",action.update());
+        assertNotNull(getRequest().getAttribute(Constants.FAILURE_MESSAGE));
     }
 }

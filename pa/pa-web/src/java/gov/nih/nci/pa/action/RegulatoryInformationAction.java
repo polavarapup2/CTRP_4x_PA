@@ -218,7 +218,8 @@ public class RegulatoryInformationAction extends ActionSupport {
                     webDTO.setFdaRegulatedInterventionIndicator(BlConverter
                             .convertToString(spDTO.getFdaRegulatedIndicator()));
                 }
-                if (spDTO.getDelayedpostingIndicator().getValue() != null) {
+                if (spDTO.getDelayedpostingIndicator() != null 
+                        && spDTO.getDelayedpostingIndicator().getValue() != null) {
                     webDTO.setDelayedPostingIndicator(BlConverter
                             .convertToString(spDTO.getDelayedpostingIndicator()));
                 }

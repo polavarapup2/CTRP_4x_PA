@@ -102,15 +102,73 @@ public class RegulatoryInformationActionTest extends AbstractPaActionTest {
         webDTO.setPedPostmarketSurv("true");
         webDTO.setPostPriorToApproval("true");
         webDTO.setDataMonitoringIndicator("true");
-        webDTO.setFdaRegulatedInterventionIndicator("true");
         webDTO.setSection801Indicator("true");
         webDTO.setDelayedPostingIndicator("true");
+        webDTO.setFdaRegulatedInterventionIndicator("true");
         regulatoryInformationAction.setWebDTO(webDTO);
 
         spDTO.setDataMonitoringCommitteeAppointedIndicator(BlConverter.convertToBl(false));
         String result = regulatoryInformationAction.update();
         assertEquals("success", result);
         assertTrue(Boolean.valueOf(webDTO.getDataMonitoringIndicator()));
+    }
+    
+    @Test
+    public void testUpdateNegativeChecks() throws PAException {
+        StudyProtocolDTO spDTO = new StudyProtocolDTO();
+        spDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(true));
+        spDTO.setSection801Indicator(null);
+        spDTO.setFdaRegulatedIndicator(null);
+        spDTO.setDelayedpostingIndicator(null);
+        spDTO.setDataMonitoringCommitteeAppointedIndicator(null);
+        spDTO.setStartDate(TsConverter.convertToTs(new Date()));
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(id)).thenReturn(spDTO);
+        RegulatoryAuthorityWebDTO webDTO = new RegulatoryAuthorityWebDTO();
+        webDTO.setFdaRegulatedDevice("true");
+        webDTO.setFdaRegulatedDrug("true");
+        webDTO.setExportedFromUs("true");
+        webDTO.setPedPostmarketSurv("true");
+        webDTO.setPostPriorToApproval("true");
+        webDTO.setDataMonitoringIndicator(null);
+        webDTO.setSection801Indicator(null);
+        webDTO.setDelayedPostingIndicator(null);
+        webDTO.setFdaRegulatedInterventionIndicator(null);
+        regulatoryInformationAction.setWebDTO(webDTO);
+
+        String result = regulatoryInformationAction.update();
+        assertEquals("success", result);
+        assertTrue(StringUtils.isEmpty(webDTO.getFdaRegulatedInterventionIndicator()));
+        assertTrue(StringUtils.isEmpty(webDTO.getSection801Indicator()));
+        assertTrue(StringUtils.isEmpty(webDTO.getDelayedPostingIndicator()));
+        assertTrue(StringUtils.isEmpty(webDTO.getDataMonitoringIndicator()));
+    }
+    
+    @Test
+    public void updateException() throws PAException {
+        StudyProtocolDTO spDTO = new StudyProtocolDTO();
+        spDTO.setProprietaryTrialIndicator(BlConverter.convertToBl(true));
+        spDTO.setSection801Indicator(BlConverter.convertToBl(true));
+        spDTO.setFdaRegulatedIndicator(BlConverter.convertToBl(true));
+        spDTO.setDelayedpostingIndicator(BlConverter.convertToBl(true));
+        spDTO.setDataMonitoringCommitteeAppointedIndicator(BlConverter.convertToBl(true));
+        spDTO.setStartDate(TsConverter.convertToTs(new Date()));
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(id)).thenReturn(spDTO);
+        RegulatoryAuthorityWebDTO webDTO = new RegulatoryAuthorityWebDTO();
+        webDTO.setFdaRegulatedDevice("true");
+        webDTO.setFdaRegulatedDrug("true");
+        webDTO.setExportedFromUs("true");
+        webDTO.setPedPostmarketSurv("true");
+        webDTO.setPostPriorToApproval("true");
+        webDTO.setDataMonitoringIndicator("true");
+        webDTO.setSection801Indicator("true");
+        webDTO.setDelayedPostingIndicator("true");
+        webDTO.setFdaRegulatedInterventionIndicator("true");
+        regulatoryInformationAction.setWebDTO(webDTO);
+        
+        when (PaRegistry.getStudyProtocolService().updateStudyProtocol(spDTO)).thenThrow(
+                new PAException("Error in updating Study Protocol."));
+        regulatoryInformationAction.update();
+        assertNotNull(getRequest().getAttribute("failureMessage"));
     }
     
     /**
