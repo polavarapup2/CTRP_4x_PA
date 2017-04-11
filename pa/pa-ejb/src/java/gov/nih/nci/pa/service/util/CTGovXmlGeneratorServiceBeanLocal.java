@@ -1302,8 +1302,10 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                 XmlGenHelper.appendElement(eligibility,
                         XmlGenHelper.createElementWithTextblock("gender_based",
                                 toYesNoStr(elgCritDTO.getGender()), doc));
-                XmlGenHelper.appendElement(eligibility, XmlGenHelper.createElementWithTextblock(
-                        "gender_description", elgCritDTO.getGenderEligibilityDescription(), doc));
+                createTextBlock(
+                        "gender_description", StringUtils.substring(
+                                elgCritDTO.getGenderEligibilityDescription(), 0, PAAttributeMaxLen.LEN_1000)
+                        , doc, eligibility);
             }
         }
 
@@ -1581,12 +1583,13 @@ public class CTGovXmlGeneratorServiceBeanLocal extends AbstractCTGovXmlGenerator
                         XmlGenHelper.createElementWithTextblock("no_masking",
                                 toYesNoStr(designDetailsDTO.getNoMasking()), doc));
             }
-            XmlGenHelper.appendElement(invDesign,
-                    XmlGenHelper.createElementWithTextblock("model_description",
-                            designDetailsDTO.getModelDescription(), doc));
-            XmlGenHelper.appendElement(invDesign,
-                    XmlGenHelper.createElementWithTextblock("masking_description",
-                            designDetailsDTO.getMaskingDescription(), doc));
+
+            createTextBlock("model_description", StringUtils.substring(
+                    designDetailsDTO.getModelDescription(), 0, PAAttributeMaxLen.LEN_1000)
+                    , doc, invDesign);
+            createTextBlock("masking_description", StringUtils.substring(
+                    designDetailsDTO.getMaskingDescription(), 0, PAAttributeMaxLen.LEN_1000)
+                    , doc, invDesign);
         }
 
         List<Cd> cds = DSetConverter.convertDsetToCdList(ispDTO.getBlindedRoleCode());

@@ -29,7 +29,7 @@
                    $('surveillance').value = '';
                }
                   
-               if (($('delpostindid').value == 'false' | $('delpostindid').value == '') & 
+               if (($('delpostindid').value == 'false' | $('delpostindid').value == '') |
                    ($('device').value == 'false' | $('device').value == '')) {
                    hideRow($('approvalRow'));
                    $('approval').value = '';

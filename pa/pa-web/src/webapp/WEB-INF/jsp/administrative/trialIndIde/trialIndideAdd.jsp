@@ -250,6 +250,7 @@
                         </td>
                         <td class="value">
                             <s:select id="group4" name="studyIndldeWebDTO.expandedAccessIndicator" list="#{'':'', 'Unknown':'Unknown', 'No':'No', 'Yes':'Yes'}" onchange="checkNCTIDRow();"/>
+                           <span class="info">Will any non-protocol access to the investigational drug, biologic or device be provided?</span>
                             <span class="formErrorMsg"> 
                                 <s:fielderror>
                                     <s:param>studyIndldeWebDTO.expandedAccessIndicator</s:param>
