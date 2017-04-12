@@ -60,5 +60,26 @@ public class PAJsonUtilTest {
                 jsonString, new TypeReference<List<AdditionalDesignDetailsDTO>>() { });
         assertTrue(dtoList != null && dtoList.size() == 1);
     }
+    
+    @Test
+    public void unmarshallJsonListException() {
+        String jsonString = "{\"model_description\":\"Desc1\",\"date_updated\":\"2017-03-20 17:17:14 -0400\",\"nci_id\":\"NCI-2014-00342\","
+                + "\"no_masking\":\"true\",\"date_created\":\"2017-03-20 17:17:14 -0400\",\"study_protocol_id\":\"135258099\","
+                + "\"id\":\"d0a9ba51bc6424a6f2a2\",\"masking_description\":\"no masking\"}";
+        List<AdditionalDesignDetailsDTO> dtoList = (List<AdditionalDesignDetailsDTO>) PAJsonUtil.unmarshallJSON(
+                jsonString, new TypeReference<List<AdditionalDesignDetailsDTO>>() { });
+        assertTrue(dtoList == null);
+    }
+    
+    @Test
+    public void unmarshallJSONExceptionTest() {
+        String actualString = "[{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
+                + "\"fda_regulated_device\":\"true\""
+                + ",\"post_prior_to_approval\":\"true\""
+                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\"}]";
+        AdditionalRegulatoryInfoDTO dto = (AdditionalRegulatoryInfoDTO) PAJsonUtil
+                .unmarshallJSON(actualString, AdditionalRegulatoryInfoDTO.class);
+        assertTrue(dto == null);
+    }
 
 }
