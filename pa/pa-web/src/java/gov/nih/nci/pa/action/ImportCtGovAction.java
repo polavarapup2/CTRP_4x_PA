@@ -132,21 +132,29 @@ public final class ImportCtGovAction extends ActionSupport implements
                             nciIds.append(nciId.getNciTrialID());
                         }
                     }
+                }  else {
+                    throw new PAException(
+                            String.format("Update of trial for NCT ID: %s did not go through successfully.", 
+                                    getNctIdToImport()));
                 }
             } else {
                 TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
                 if (dto != null) {
                     nciIds.append(dto.getNciTrialID());
+                } else {
+                    throw new PAException(
+                            String.format("New trial import for NCT ID: %s did not go through successfully.", 
+                                    getNctIdToImport()));
                 }
             }
             final String[] msgArgs = new String[] {getNctIdToImport(), (nciIds != null) ? nciIds.toString() : ""};
             final String msg = studyExists ? getText(
                     "importctgov.import.update.success", msgArgs) : getText(
                     "importctgov.import.new.success", msgArgs);
-            request.setAttribute(Constants.SUCCESS_MESSAGE, msg);
+            ServletActionContext.getRequest().setAttribute(Constants.SUCCESS_MESSAGE, msg);
             return SUCCESS;
         } catch (PAException e) {
-            request.setAttribute(Constants.FAILURE_MESSAGE,
+            ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE,
                     e.getLocalizedMessage());
             LOG.error(e, e);
         }

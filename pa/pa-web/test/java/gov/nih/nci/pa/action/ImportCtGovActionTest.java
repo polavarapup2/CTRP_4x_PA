@@ -2,26 +2,30 @@ package gov.nih.nci.pa.action;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
 import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
 import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
+import gov.nih.nci.pa.util.CTGovImportMergeHelper;
+import gov.nih.nci.pa.util.Constants;
 /**
  * 
  * @author Reshma Koganti
  *
  */
-public class ImportCtGovActionTest {
+public class ImportCtGovActionTest extends AbstractPaActionTest {
      private ImportCtGovAction action;
      private CTGovSyncServiceLocal ctGovSyncService;
      private StudyProtocolService studyProtocolService;
@@ -72,5 +76,108 @@ public class ImportCtGovActionTest {
          studyProtocolDtos.add(dto);
          when(studyProtocolService.getStudyProtocolsByNctId(action.getNctID())).thenReturn(studyProtocolDtos);
          assertEquals("success", action.query());  
+     }
+     
+     @Test
+     public void testNewTrialImport() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(false);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
+         dto.setPaTrialID("1");
+         dto.setNciTrialID("NCI-2017-1234");
+         
+         when(helper.insertNctId(any(String.class))).thenReturn(dto);
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
+         String expected = "importctgov.import.new.success";
+         assertTrue(StringUtils.equals(msg, expected));
+     }
+     
+     @Test
+     public void testNoNewTrialImport() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(false);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+         
+         when(helper.insertNctId(any(String.class))).thenReturn(null);
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
+         assertTrue(StringUtils.isNotBlank(msg));
+     }
+     
+     @Test
+     public void testUpdateTrialImport() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(true);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
+         dto.setPaTrialID("1");
+         dto.setNciTrialID("NCI-2017-1234");
+         List<TrialRegistrationConfirmationDTO> list = new ArrayList<TrialRegistrationConfirmationDTO>();
+         list.add(dto);
+         
+         when(helper.updateNctId(any(String.class))).thenReturn(list);
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
+         String expected = "importctgov.import.update.success";
+         assertTrue(StringUtils.equals(msg, expected));
+     }
+     
+     @Test
+     public void testUpdateMultipleTrialImport() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(true);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+         List<TrialRegistrationConfirmationDTO> list = new ArrayList<TrialRegistrationConfirmationDTO>();
+         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
+         dto.setPaTrialID("1");
+         dto.setNciTrialID("NCI-2017-1234");
+         TrialRegistrationConfirmationDTO dto1 = new TrialRegistrationConfirmationDTO();
+         dto1.setPaTrialID("2");
+         dto1.setNciTrialID("NCI-2017-2234");
+         list.add(dto);
+         list.add(dto1);
+         
+         when(helper.updateNctId(any(String.class))).thenReturn(list);
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
+         String expected = "importctgov.import.update.success";
+         assertTrue(StringUtils.equals(msg, expected));
+     }
+     
+     @Test
+     public void testNoUpdateTrialImport() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(true);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+
+         when(helper.updateNctId(any(String.class))).thenReturn(null);
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
+         assertTrue(StringUtils.isNotBlank(msg));
+     }
+     
+     @Test
+     public void testImportTrialException() throws PAException {
+         action.setNctIdToImport("NCT12345678");
+         action.setStudyExists(true);
+         CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
+         action.setHelper(helper);
+         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
+         dto.setPaTrialID("1");
+         dto.setNciTrialID("NCI-2017-1234");
+         List<TrialRegistrationConfirmationDTO> list = new ArrayList<TrialRegistrationConfirmationDTO>();
+         list.add(dto);
+         
+         when(helper.updateNctId(any(String.class))).thenThrow(new PAException("Error in call to import trial."));
+         action.importTrial();
+         String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
+         assertTrue(StringUtils.isNotBlank(msg));
      }
 }

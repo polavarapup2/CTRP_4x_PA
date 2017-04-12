@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.ISDesignDetailsWebDTO;
@@ -16,6 +17,7 @@ import gov.nih.nci.pa.dto.OutcomeMeasureWebDTO;
 import gov.nih.nci.pa.enums.OutcomeMeasureTypeCode;
 import gov.nih.nci.pa.enums.PhaseAdditionalQualifierCode;
 import gov.nih.nci.pa.enums.PhaseCode;
+import gov.nih.nci.pa.enums.StudyTypeCode;
 import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
@@ -43,6 +45,9 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * @author Vrushali
@@ -467,7 +472,7 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         webDTO.getOutcomeMeasure().setName("Name");
         webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
         webDTO.getOutcomeMeasure().setSafetyIndicator(true);
-        webDTO.setNoMasking("Ture");
+        webDTO.setNoMasking("True");
         action.setWebDTO(webDTO);
         
         TrialInfoMergeHelper mockhelper = mock(TrialInfoMergeHelper.class);
@@ -483,4 +488,35 @@ public class InterventionalStudyDesignActionTest extends AbstractPaActionTest {
         assertEquals("details",action.update());
         assertNotNull(getRequest().getAttribute(Constants.FAILURE_MESSAGE));
     }
+    
+    @Test
+    public void testMaskingError() throws PAException {
+        getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
+        ISDesignDetailsWebDTO webDTO = new ISDesignDetailsWebDTO();
+        OutcomeMeasureWebDTO omDto = new OutcomeMeasureWebDTO();
+        webDTO.setOutcomeMeasure(omDto);
+        webDTO.getOutcomeMeasure().setPrimaryIndicator(true);
+        webDTO.setPrimaryPurposeCode(PrimaryPurposeCode.PREVENTION.getDisplayName());
+        webDTO.setPhaseCode(PhaseCode.I.getDisplayName());
+        webDTO.setPhaseAdditionalQualifierCode(PhaseAdditionalQualifierCode.PILOT.getDisplayName());
+        webDTO.setDesignConfigurationCode("designConfigurationCode");
+        webDTO.setNumberOfInterventionGroups("1");
+        webDTO.setBlindingSchemaCode("blindingSchemaCode");
+        webDTO.setAllocationCode("allocationCode");
+        webDTO.setMinimumTargetAccrualNumber("1");
+        webDTO.getOutcomeMeasure().setName("Name");
+        webDTO.getOutcomeMeasure().setTimeFrame("designConfigurationCode");
+        webDTO.getOutcomeMeasure().setSafetyIndicator(true);
+        webDTO.setNoMasking("False");
+        action.setWebDTO(webDTO);
+        action.setInvestigator("false");
+        action.setOutcomesassessor("false");
+        action.setCaregiver("false");
+        action.setSubject("false");
+        assertEquals("details",action.update());
+        
+        assertEquals("error.masking", action.getFieldErrors().get("webDTO.blindingRoleCode").get(0)); 
+
+    }
+    
 }

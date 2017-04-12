@@ -325,14 +325,16 @@ public class InterventionalStudyDesignAction extends AbstractMultiObjectDeleteAc
         if (StringUtils.isNotBlank(arms) && !NumberUtils.isDigits(arms)) {
             addFieldError("webDTO.numberOfInterventionGroups", getText("error.numeric"));
         }
-        if (caregiver != null && investigator != null && subject != null && outcomesassessor != null) {
-        if ((caregiver.equals("false") && investigator.equals("false")
-                && subject.equals("false") && outcomesassessor.equals("false"))
+
+        if (((caregiver == null || caregiver.equals("false")) 
+                && (investigator == null || investigator.equals("false"))
+                && (subject == null || subject.equals("false")) 
+                && (outcomesassessor == null || outcomesassessor.equals("false")))
                 && (StringUtils.isEmpty(webDTO.getNoMasking())
                 || StringUtils.equalsIgnoreCase(webDTO.getNoMasking(), "False"))) {
             addFieldError("webDTO.blindingRoleCode", getText("error.masking"));
         }
-        }
+
         if (NumberUtils.isNumber(arms)
                 && NumberUtils.toInt(arms) < 1) {
             addFieldError("webDTO.numberOfInterventionGroups",

@@ -40,6 +40,11 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     public void setUp() throws PAException, IOException{
         eligibilityCriteriaAction = new EligibilityCriteriaAction();
         
+        StudyProtocolQueryDTO spqDto = new StudyProtocolQueryDTO();
+        spqDto.setNciIdentifier("NCI-2000-12222");
+        spqDto.setStudyProtocolType("NonInterventionalStudyProtocol");
+        getRequest().getSession().setAttribute(Constants.TRIAL_SUMMARY, spqDto);
+        
         spDTO = new StudyProtocolQueryDTO();
         spDTO.setStudyProtocolType("NonInterventionalStudyProtocol");
         getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
@@ -48,7 +53,7 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
         dto = new ISDesignDetailsWebDTO();
         eligibilityCriteriaAction.setWebDTO(dto);
         String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
-        additionalDTO.setGender("Yes");
+        additionalDTO.setGender("true");
         additionalDTO.setGenderEligibilityDescription("Desc1");
         additionalDTO.setStudyProtocolId("1");
         additionalDTO.setNciId("NCI-2000-12222");
@@ -65,6 +70,33 @@ public class EligibilityCriteriaActionTest extends AbstractPaActionTest {
     
     @Test
     public void testQuery() {
+        String result = eligibilityCriteriaAction.query();
+        assertEquals("eligibility", result);
+    }
+
+    @Test
+    public void testQueryFDAAAData() throws PAException, IOException {
+        eligibilityCriteriaAction = new EligibilityCriteriaAction();
+        
+        spDTO = new StudyProtocolQueryDTO();
+        spDTO.setStudyProtocolType("NonInterventionalStudyProtocol");
+        getSession().setAttribute(Constants.STUDY_PROTOCOL_II, IiConverter.convertToIi(1L));
+        getSession().setAttribute(Constants.TRIAL_SUMMARY, spDTO);
+        
+        dto = new ISDesignDetailsWebDTO();
+        eligibilityCriteriaAction.setWebDTO(dto);
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
+        additionalDTO.setGender("true");
+        additionalDTO.setGenderEligibilityDescription("Desc1");
+        additionalDTO.setStudyProtocolId("1");
+        additionalDTO.setNciId("NCI-2000-12222");
+        eligibilityDtoList.add(additionalDTO);
+        
+        when(client.sendHTTPRequest(url + "?study_protocol_id=1&nci_id=NCI-2000-12222", "GET", null)).thenReturn("");
+        helperUtil.setClient(client);
+        helper.setTrialInfoHelperUtil(helperUtil);
+        eligibilityCriteriaAction.setHelper(helper);
+        
         String result = eligibilityCriteriaAction.query();
         assertEquals("eligibility", result);
     }
