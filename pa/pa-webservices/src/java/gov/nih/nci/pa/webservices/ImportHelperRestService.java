@@ -442,9 +442,6 @@ public class ImportHelperRestService { // NOPMD
                             criteria);
             // Loop over all the trials
             for (StudyProtocolQueryDTO trial : trials) {
-                if (trial.getNctIdentifier().equals("NCT03097666")) {
-                    System.out.println("hello");
-                }
                 String nctIdentifier = trial.getNctIdentifier();
                 List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
                 if (associatedImportLogs != null && !associatedImportLogs.isEmpty()) {
@@ -469,9 +466,15 @@ public class ImportHelperRestService { // NOPMD
         returnDto.setTitle(log.getTitle());
         returnDto.setAction(log.getAction());
         returnDto.setImportStatus(log.getImportStatus());
-        returnDto.setNeedsReview(log.getReviewRequired());
-        returnDto.setAdminChanged(log.getAdmin());
-        returnDto.setScientificChanged(log.getScientific());
+        if (log.getReviewRequired() != null) {
+            returnDto.setNeedsReview(log.getReviewRequired());
+        }
+        if (log.getAdmin() != null) {
+            returnDto.setAdminChanged(log.getAdmin());
+        }
+        if (log.getScientific() != null) {
+            returnDto.setScientificChanged(log.getScientific());
+        }
         if (log.getStudyInbox() != null) {
             returnDto.setStudyInboxId(log.getStudyInbox().getId());
         }

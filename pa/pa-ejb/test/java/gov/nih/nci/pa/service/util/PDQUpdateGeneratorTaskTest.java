@@ -138,7 +138,7 @@ public class PDQUpdateGeneratorTaskTest extends AbstractMockitoTest {
             FileUtils.cleanDirectory(pdqDirectory);
         } catch (IOException e) {
             System.out.println("PDQUpdateGeneratorTaskTest was unable to clean pdqDirectory in setUp; " +
-            		"oncoming test may fail?");
+                    "oncoming test may fail?");
             e.printStackTrace();
         }
     }

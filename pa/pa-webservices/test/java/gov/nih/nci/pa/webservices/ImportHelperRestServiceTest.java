@@ -1,16 +1,67 @@
 package gov.nih.nci.pa.webservices;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.nih.nci.iso21090.DSet;
+import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.iso21090.Int;
+import gov.nih.nci.iso21090.Ivl;
+import gov.nih.nci.iso21090.Pq;
+import gov.nih.nci.pa.domain.CTGovImportLog;
+import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
+import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
+import gov.nih.nci.pa.enums.AccrualReportingMethodCode;
+import gov.nih.nci.pa.enums.ActivityCategoryCode;
+import gov.nih.nci.pa.enums.ArmTypeCode;
+import gov.nih.nci.pa.enums.StudyStatusCode;
+import gov.nih.nci.pa.iso.dto.ArmDTO;
+import gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO;
+import gov.nih.nci.pa.iso.dto.PlannedEligibilityCriterionDTO;
+import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
+import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.iso.util.BlConverter;
+import gov.nih.nci.pa.iso.util.CdConverter;
+import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.iso.util.IntConverter;
+import gov.nih.nci.pa.iso.util.StConverter;
+import gov.nih.nci.pa.iso.util.TsConverter;
+import gov.nih.nci.pa.lov.Lov;
+import gov.nih.nci.pa.service.ArmServiceLocal;
+import gov.nih.nci.pa.service.PAException;
+import gov.nih.nci.pa.service.PlannedActivityServiceLocal;
+import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
+import gov.nih.nci.pa.service.TrialRegistrationServiceLocal;
+import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
+import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
+import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
+import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
+import gov.nih.nci.pa.service.util.LookUpTableServiceRemote;
+import gov.nih.nci.pa.service.util.MailManagerServiceLocal;
+import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
+import gov.nih.nci.pa.service.StudyInboxServiceLocal;
+import gov.nih.nci.pa.util.AbstractHibernateTestCase;
+import gov.nih.nci.pa.util.PaHibernateUtil;
+import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.ServiceLocator;
+import gov.nih.nci.pa.webservices.dto.AgeDTO;
+import gov.nih.nci.pa.webservices.dto.CTGovImportLogWebService;
+import gov.nih.nci.pa.webservices.dto.ProtocolSnapshotDTO;
+import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
+import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
+import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -20,60 +71,130 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-
-import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
-import gov.nih.nci.ctrp.importtrials.dto.NonInterventionalStudyProtocolDTO;
-import gov.nih.nci.iso21090.Bl;
-import gov.nih.nci.iso21090.Ii;
-import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
-import gov.nih.nci.pa.iso.dto.StudyContactDTO;
-import gov.nih.nci.pa.iso.dto.StudyInboxDTO;
-import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
-import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
-import gov.nih.nci.pa.iso.dto.StudyRegulatoryAuthorityDTO;
-import gov.nih.nci.pa.iso.dto.StudyResourcingDTO;
-import gov.nih.nci.pa.iso.dto.StudySiteContactDTO;
-import gov.nih.nci.pa.iso.util.IiConverter;
-import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
-import gov.nih.nci.pa.service.TrialRegistrationServiceLocal;
-import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
-import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
-import gov.nih.nci.pa.util.AbstractMockitoTest;
-import gov.nih.nci.pa.util.PAJsonUtil;
-import gov.nih.nci.pa.util.PaRegistry;
-import gov.nih.nci.pa.webservices.dto.CTGovImportLogWebService;
-import gov.nih.nci.pa.webservices.dto.StudyProtocolIdentityDTO;
-import gov.nih.nci.pa.webservices.dto.StudyProtocolWebServiceDTO;
-import gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO;
-import gov.nih.nci.pa.webservices.dto.TrialRegistrationDTO;
-import gov.nih.nci.pa.webservices.types.CompleteTrialUpdate;
-import gov.nih.nci.services.entity.NullifiedEntityException;
-import gov.nih.nci.services.organization.OrganizationDTO;
 
 /**
  * 
  * @author Reshma
  *
  */
-public class ImportHelperRestServiceTest extends AbstractMockitoTest {
+public class ImportHelperRestServiceTest extends AbstractHibernateTestCase {
     private ImportHelperRestService service = new ImportHelperRestService();
-    private ImportHelperRestService serviceMock = mock(ImportHelperRestService.class);
     private TrialRegistrationServiceLocal trialRegistrationServiceLocal;
+    private CTGovSyncServiceLocal ctGovSyncServiceLocal = mock(CTGovSyncServiceLocal.class);
+    private ProtocolQueryServiceLocal protocolQueryServiceLocal = mock(ProtocolQueryServiceLocal.class);
+    private InterventionalStudyProtocolDTO spDto;
+    private Ii spId;
+    private List<StudyProtocolQueryDTO> queryDTOList = new ArrayList<StudyProtocolQueryDTO>();
+    private StudyProtocolServiceLocal spSvc = mock(StudyProtocolServiceLocal.class);
     Ii studyId = null;
+    private ArmServiceLocal armSvc = mock(ArmServiceLocal.class);
+    private List<ArmDTO> armDtoList = new ArrayList<ArmDTO>();
+    private PlannedActivityServiceLocal plannedActSvc = mock(PlannedActivityServiceLocal.class);
+    private List<PlannedEligibilityCriterionDTO> plannedEcDtoList;
+    private LookUpTableServiceRemote lookupSvc = mock(LookUpTableServiceRemote.class);
+    private StudyInboxServiceLocal inboxSvs = mock(StudyInboxServiceLocal.class);
+    private MailManagerServiceLocal mailManagerSvc = mock(MailManagerServiceLocal.class);
     @Before
     public void before() throws PAException {
+        ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
         studyId = IiConverter.convertToIi(1L);
+        spId = new Ii();
+        spId.setExtension("1");
         trialRegistrationServiceLocal = mock(TrialRegistrationServiceLocal.class);
-        when(
-                PaRegistry.getInstance().getServiceLocator()
+        PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);
+        when(PaRegistry.getInstance().getServiceLocator()
                         .getTrialRegistrationService()).thenReturn(
                 trialRegistrationServiceLocal);
         when(PaRegistry.getCTGovSyncService()).thenReturn(ctGovSyncServiceLocal);
+        when(PaRegistry.getProtocolQueryService()).thenReturn(protocolQueryServiceLocal);
+        when(PaRegistry.getStudyProtocolService()).thenReturn(spSvc);
+        setupSpDto();
+        StudyProtocolQueryDTO dto = new StudyProtocolQueryDTO();
+        dto.setNciIdentifier("NCI-2012-0001");
+        dto.setNctIdentifier("NCI20120001");
+        dto.setStudyStatusCode(StudyStatusCode.COMPLETE);
+        dto.setLocalStudyProtocolIdentifier("LEAD_ORG_ID_0001");
+        dto.setStudyProtocolId(1L);
+        dto.setLeadOrganizationPOId(1L);
+        
+        queryDTOList.add(dto);
+        
+        dto = new StudyProtocolQueryDTO();
+        dto.setNciIdentifier("NCI-2012-0002");
+        dto.setNctIdentifier("NCI20120002");
+        dto.setStudyStatusCode(StudyStatusCode.IN_REVIEW);
+        dto.setLocalStudyProtocolIdentifier("LEAD_ORG_ID_0001");
+        dto.setStudyProtocolId(2L);
+        dto.setLeadOrganizationPOId(2L);
+        
+        queryDTOList.add(dto);
+        setupArmDto();
+        when(PaRegistry.getArmService()).thenReturn(armSvc);
+        when(armSvc.getByStudyProtocol(any(Ii.class))).thenReturn(armDtoList);
+        setupPlEcDto();
+        when(PaRegistry.getPlannedActivityService()).thenReturn(plannedActSvc);
+        when(plannedActSvc.getPlannedEligibilityCriterionByStudyProtocol(any(Ii.class))).thenReturn(plannedEcDtoList);
+        when(paRegSvcLoc.getLookUpTableService()).thenReturn(lookupSvc);
+        when(lookupSvc.getPropertyValue("ctgov.sync.fields_of_interest"))
+        .thenReturn("studyProtocol.publicDescription;studyProtocol.scientificDescription;studyProtocol.keywordText;eligibilityCriteria;arms");
+        when(PaRegistry.getMailManagerService()).thenReturn(mailManagerSvc);
+    }
+    private void setupArmDto() {
+        ArmDTO armDto = new ArmDTO();
+        armDto.setName(StConverter.convertToSt("Bname"));
+        armDto.setDescriptionText(StConverter.convertToSt("some description"));
+        armDto.setTypeCode(CdConverter.convertToCd(ArmTypeCode.EXPERIMENTAL));
+        armDto.setIdentifier(studyId);
+        armDtoList = new ArrayList<ArmDTO>();
+        armDtoList.add(armDto);
+        armDto = new ArmDTO();
+        armDto.setName(StConverter.convertToSt("Aname"));
+        armDto.setDescriptionText(StConverter.convertToSt("some description"));
+        armDto.setTypeCode(CdConverter.convertToCd(ArmTypeCode.EXPERIMENTAL));
+        armDto.setIdentifier(IiConverter.convertToIi(2L));
+        armDtoList.add(armDto);
+    }
+    private void setupPlEcDto() {
+        plannedEcDtoList = new ArrayList<PlannedEligibilityCriterionDTO>();
+        PlannedEligibilityCriterionDTO plannedECDto = new PlannedEligibilityCriterionDTO();
+        Ivl<Pq> ivlPq = new Ivl<Pq>();
+        Pq pq = new Pq();
+        pq.setValue(BigDecimal.valueOf(1L));
+        pq.setPrecision(Integer.valueOf("1"));
+        pq.setUnit("years");
+        ivlPq.setLow(pq);
+        ivlPq.setHigh(pq);
+        plannedECDto.setValue(ivlPq);
+        plannedECDto.setDisplayOrder(IntConverter.convertToInt(1));
+        plannedECDto.setCriterionName(StConverter.convertToSt("GENDER"));
+        plannedECDto.setEligibleGenderCode(CdConverter.convertStringToCd("M"));
+        plannedECDto.setTextDescription(StConverter.convertToSt("some description"));
+        plannedECDto.setOperator(StConverter.convertToSt("+"));
+        plannedECDto.setCategoryCode(CdConverter.convertToCd(ActivityCategoryCode.COURSE));
+        plannedEcDtoList.add(plannedECDto);
+
+        plannedECDto = new PlannedEligibilityCriterionDTO();
+        plannedECDto.setCriterionName(StConverter.convertToSt("AGE"));
+        ivlPq = new Ivl<Pq>();
+        pq = new Pq();
+        pq.setValue(BigDecimal.valueOf(1L));
+        pq.setUnit("some unit");
+        pq.setPrecision(Integer.valueOf("1"));
+        ivlPq.setLow(pq);
+        pq = new Pq();
+        pq.setValue(BigDecimal.valueOf(999L));
+        ivlPq.setHigh(pq);
+        plannedECDto.setValue(ivlPq);
+        plannedECDto.setDisplayOrder(IntConverter.convertToInt(2));
+        plannedECDto.setTextDescription(StConverter.convertToSt("some description"));
+        plannedECDto.setInclusionIndicator(BlConverter.convertToBl(true));
+        plannedECDto.setOperator(StConverter.convertToSt("+"));
+        plannedECDto.setCategoryCode(CdConverter.convertToCd(ActivityCategoryCode.COURSE));
+        plannedEcDtoList.add(plannedECDto);
     }
     @Test
     public void getStudyProtocolIdentityTest() throws PAException {
@@ -223,7 +344,8 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
    public void updateTrialRegisterationTest() throws PAException, IOException {
        TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
        trialRegistrationDTO.setNctID("NCT290384");
-       InterventionalStudyProtocolDTO webDto = new InterventionalStudyProtocolDTO();
+       gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO webDto = new gov
+               .nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO();
        webDto.setStudyProtocolId("1");
        webDto.setOfficialTitle("officialTitle");
        webDto.setExpandedAccessIndicator(true);
@@ -243,7 +365,8 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
    public void updateTrialRegisterationBadRequestTest() throws PAException, IOException {
        TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
        trialRegistrationDTO.setNctID("NCT290384");
-       InterventionalStudyProtocolDTO webDto = new InterventionalStudyProtocolDTO();
+       gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO webDto = new gov
+               .nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO();
        webDto.setStudyProtocolId("1");
        webDto.setOfficialTitle("officialTitle");
        webDto.setExpandedAccessIndicator(true);
@@ -258,6 +381,147 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
        assertTrue(r.getEntity() != null);
        assertEquals(r.getEntity(), "error");
    }
+   
+   @Test
+   public void createTrialRegisterationTest() throws PAException, IOException {
+       TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
+       trialRegistrationDTO.setNctID("NCT290384");
+       gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO webDto = new gov
+               .nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO();
+       webDto.setOfficialTitle("officialTitle");
+       webDto.setExpandedAccessIndicator(true);
+       webDto.setAllocationCode("Randomized Controlled Trial");
+       webDto.setDesignConfigurationCode("Single Group");
+       trialRegistrationDTO.setStudyProtocolDTO(webDto);
+       when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
+               eq("NCT290384"))).thenReturn(
+       Arrays.asList((StudyProtocolDTO) spDto));
+       Response r = service.createTrialRegisteration(trialRegistrationDTO);
+       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       assertTrue(r.getEntity() instanceof StudyProtocolIdentityDTO);
+   }
+   @Test
+   public void createTrialRegisterationErrorTest() throws PAException, IOException {
+       TrialRegistrationDTO trialRegistrationDTO = new TrialRegistrationDTO();
+       trialRegistrationDTO.setNctID("NCT290384");
+       gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO webDto = new gov
+               .nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO();
+      
+       webDto.setOfficialTitle("officialTitle");
+       webDto.setExpandedAccessIndicator(true);
+       webDto.setAllocationCode("Randomized Controlled Trial");
+       webDto.setDesignConfigurationCode("Single Group");
+       trialRegistrationDTO.setStudyProtocolDTO(webDto);
+       when(PaRegistry.getStudyProtocolService().getStudyProtocol(any(Ii.class))).thenThrow(new PAException("error"));
+       
+       Response r = service.createTrialRegisteration(trialRegistrationDTO);
+       assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       assertEquals(r.getEntity(), "error");
+   }
+   @Test
+   public void getIndustrialConsortiaTrialsWithNCTIdsTest() throws PAException {
+       populateCTGovImportLogs();
+       StudyProtocolQueryDTO dto = new StudyProtocolQueryDTO();
+       dto.setNciIdentifier("NCI-2012-0004");
+       dto.setNctIdentifier("NCI20120004");
+      
+       dto.setStudyStatusCode(StudyStatusCode.COMPLETE);
+       dto.setLocalStudyProtocolIdentifier("LEAD_ORG_ID_0004");
+       dto.setStudyProtocolId(1L);
+       dto.setLeadOrganizationPOId(1L);
+       queryDTOList.add(dto);
+       when(protocolQueryServiceLocal
+                       .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
+               .thenReturn(queryDTOList);
+       Response r = service.getIndustrialConsortiaTrialsWithNCTIds();
+       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       tear();
+   }
+   @Test
+   public void getIndConsortiaTrialsWithNCTIdsErrorTest() throws PAException {
+       populateCTGovImportLogs();
+       StudyProtocolQueryDTO dto = new StudyProtocolQueryDTO();
+       dto.setNciIdentifier("NCI-2012-0004");
+       dto.setNctIdentifier("NCI20120004");
+      
+       dto.setStudyStatusCode(StudyStatusCode.COMPLETE);
+       dto.setLocalStudyProtocolIdentifier("LEAD_ORG_ID_0004");
+       dto.setStudyProtocolId(1L);
+       dto.setLeadOrganizationPOId(1L);
+       queryDTOList.add(dto);
+       when(protocolQueryServiceLocal
+                       .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
+               .thenThrow(new PAException("error"));
+       Response r = service.getIndustrialConsortiaTrialsWithNCTIds();
+       assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       assertEquals(r.getEntity(), "error");
+       tear();
+   }
+   @Test
+   public void getIndConsortiaTrialsWithNCTIdsNullTest() throws PAException {
+       when(protocolQueryServiceLocal
+                       .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
+               .thenReturn(queryDTOList);
+       Response r = service.getIndustrialConsortiaTrialsWithNCTIds();
+       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+       assertTrue(r.getEntity() != null);
+       tear();
+   }
+   /**
+    * Populates entries in ctgovimport_log table for NCT-2012-0001 and NCT-2012-0003.
+    */
+   private void populateCTGovImportLogs() {
+       Calendar calendar = Calendar.getInstance();
+       
+       Session s = PaHibernateUtil.getCurrentSession();
+       SQLQuery query = s.createSQLQuery(
+               "insert into ctgovimport_log (identifier, nci_id, nct_id, trial_title, action_performed, " 
+       + "import_status, user_created, date_created,review_required,admin,scientific) " 
+       + "values (:id, :nci_id, :nct_id, :title, :action, :status, :user, :date, :review, :admin, :scientific)");
+       
+       calendar.add(Calendar.MONTH, -2);
+       query.setText("id", "1");
+       query.setText("nci_id", "NCI-2012-0001");
+       query.setText("nct_id", "NCI20120001");
+       query.setText("title", "Test");
+       query.setText("action", "UPDATE");
+       query.setText("status", "Success");
+       query.setText("user", "User");
+       query.setTimestamp("date", calendar.getTime());
+       query.setText("review", "true");
+       query.setText("admin", "true");
+       query.setText("scientific", "true");
+       query.executeUpdate();
+       s.flush();
+       
+       calendar.add(Calendar.MONTH, 2);
+       query.setText("id", "2");
+       query.setText("nci_id", "NCI-2012-0004");
+       query.setText("nct_id", "NCI20120004");
+       query.setText("title", "Test");
+       query.setText("action", "UPDATE");
+       query.setText("status", "Success");
+       query.setText("user", "User");
+       query.setTimestamp("date", calendar.getTime());
+       query.setText("review", null);
+       query.setText("admin", null);
+       query.setText("scientific", null);
+       query.executeUpdate();
+       s.flush();
+   }
+   /**
+    * Removes the entries in ctgovimport_log table
+    */
+   public void tear() {
+       Session s = PaHibernateUtil.getCurrentSession();
+       SQLQuery query = s.createSQLQuery("delete from ctgovimport_log");
+       query.executeUpdate();
+   }
+   
    
     @Test
     public void extractStudyProtocolDTOTest() {
@@ -311,13 +575,16 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
     
     @Test
     public void needsReviewTest() {
-        Set<PlannedEligibilityCriterionDTO> dtos = new HashSet<PlannedEligibilityCriterionDTO>();
+        Set<gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO> dtos = new HashSet<gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
 
-        PlannedEligibilityCriterionDTO dto = new PlannedEligibilityCriterionDTO();
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO dto = new gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO();
         dto.setIdentifier(1L);
         dto.setCategoryCode("AGE");
         dtos.add(dto);
-        PlannedEligibilityCriterionDTO dto21 = new PlannedEligibilityCriterionDTO();
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO dto21 = new gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO();
         dto21.setIdentifier(2L);
         dto21.setCategoryCode("AGE");
         dtos.add(dto21);
@@ -326,12 +593,15 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
 //        dto22.setCategoryCode("AGE");
 //        dtos.add(dto22);
 
-        Set<PlannedEligibilityCriterionDTO> dtos1 = new HashSet<PlannedEligibilityCriterionDTO>();
-        PlannedEligibilityCriterionDTO dto2 = new PlannedEligibilityCriterionDTO();
+        Set<gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO> dtos1 = new HashSet<gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO dto2 = new gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO();
         dto2.setIdentifier(2L);
         dto2.setCategoryCode("AGE");
         dtos1.add(dto2);
-        PlannedEligibilityCriterionDTO dto1 = new PlannedEligibilityCriterionDTO();
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO dto1 = new gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO();
         dto1.setIdentifier(1L);
         dto1.setCategoryCode("AGE");
         dtos1.add(dto1);
@@ -340,5 +610,217 @@ public class ImportHelperRestServiceTest extends AbstractMockitoTest {
         boolean eligibilityChange = Objects.deepEquals(dtos, dtos1);
         assertTrue(eligibilityChange);
     }
+    private void setupSpDto() {
+        spDto = new InterventionalStudyProtocolDTO();
+        spDto.setPublicTitle(StConverter.convertToSt("title"));
+        spDto.setAcronym(StConverter.convertToSt("acronym"));
+        spDto.setOfficialTitle(StConverter.convertToSt("off title"));
+        spDto.setIdentifier(spId);
+        spDto.setCtgovXmlRequiredIndicator(BlConverter.convertToBl(true));
+        spDto.setFdaRegulatedIndicator(BlConverter.convertToBl(true));
+        spDto.setStudyProtocolType(StConverter.convertToSt("InterventionalStudyProtocol"));
+        spDto.setDataMonitoringCommitteeAppointedIndicator(BlConverter.convertToBl(true));
+        spDto.setSection801Indicator(BlConverter.convertToBl(true));
+        spDto.setExpandedAccessIndicator(BlConverter.convertToBl(true));
+        spDto.setReviewBoardApprovalRequiredIndicator(BlConverter.convertToBl(true));
+        spDto.setRecordVerificationDate(TsConverter.convertToTs(new Timestamp(0)));
+        spDto.setAccrualReportingMethodCode(CdConverter.convertToCd(AccrualReportingMethodCode.ABBREVIATED));
+        spDto.setStartDate(TsConverter.convertToTs(new Timestamp(0)));
+        spDto.setStartDateTypeCode(CdConverter.convertStringToCd("Actual"));
+        spDto.setPrimaryCompletionDate(TsConverter.convertToTs(new Timestamp(0)));
+        spDto.setPrimaryCompletionDateTypeCode(CdConverter.convertStringToCd("Anticipated"));
+        spDto.setCompletionDate(TsConverter.convertToTs(new Timestamp(0)));
+        spDto.setCompletionDateTypeCode(CdConverter.convertStringToCd("Anticipated"));
+        spDto.setPublicDescription(StConverter.convertToSt("public description"));
+        spDto.setDelayedpostingIndicator(BlConverter.convertToBl(true));
+        spDto.setPublicTitle(StConverter.convertToSt("public title"));
+        spDto.setAcceptHealthyVolunteersIndicator(BlConverter.convertToBl(true));
+        spDto.setPrimaryPurposeCode(CdConverter.convertStringToCd("TREATMENT"));
+        
+        spDto.setPhaseCode(CdConverter.convertToCd((Lov)null));
+        spDto.setDesignConfigurationCode(CdConverter.convertToCd((Lov)null)); 
+        spDto.setNumberOfInterventionGroups(IntConverter.convertToInt((Integer)null));
+        spDto.setAllocationCode(CdConverter.convertToCd((Lov)null)) ;
+        spDto.setScientificDescription(StConverter.convertToSt("scientificDesc"));
+        spDto.setKeywordText(StConverter.convertToSt("keywordText"));
+        final Ivl<Int> targetAccrualNumber = new Ivl<Int>();
+        targetAccrualNumber.setLow(IntConverter.convertToInt((Integer)null));
+        spDto.setTargetAccrualNumber(targetAccrualNumber);
 
+
+        DSet<Ii> secondaryIdentifiers = new DSet<Ii>();
+        Ii assignedId = new Ii();
+        assignedId.setRoot(IiConverter.STUDY_PROTOCOL_ROOT);
+        assignedId.setExtension("NCI_2010_0001");
+        Set<Ii> iis = new HashSet<Ii>();
+        iis.add(assignedId);
+        
+        Ii otherId = new Ii();
+        otherId.setRoot(IiConverter.STUDY_PROTOCOL_OTHER_IDENTIFIER_ROOT);
+        otherId.setIdentifierName(IiConverter.STUDY_PROTOCOL_OTHER_IDENTIFIER_NAME);
+        otherId.setExtension("OtherId");
+        iis.add(otherId);
+        
+        otherId = new Ii();
+        otherId.setRoot(IiConverter.STUDY_PROTOCOL_OTHER_IDENTIFIER_ROOT);
+        otherId.setIdentifierName(IiConverter.STUDY_PROTOCOL_OTHER_IDENTIFIER_NAME);
+        otherId.setExtension("AAAAId");
+        iis.add(otherId);
+        
+        secondaryIdentifiers.setItem(iis);
+        
+        spDto.setSecondaryIdentifiers(secondaryIdentifiers);
+    }
+    
+    @Test
+    public void getProtocolSnapshotWithSInboxIDTest() throws PAException {
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(
+                any(Ii.class))).thenReturn(spDto);
+        List<StudyInboxDTO> inboxEntries = new ArrayList<StudyInboxDTO>();
+        StudyInboxDTO dto = new StudyInboxDTO();
+        dto.setIdentifier(studyId);
+        inboxEntries.add(dto);
+        when(PaRegistry.getStudyInboxService()).thenReturn(inboxSvs);
+        when(inboxSvs.getOpenInboxEntries(any(Ii.class))).thenReturn(inboxEntries);
+        Response r = service.getProtocolSnapshotWithSInboxID(IiConverter.convertToString(studyId));
+        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertTrue(r.getEntity() instanceof ProtocolSnapshotDTO);
+    }
+    
+    @Test
+    public void getProtocolSnapshotWithSInboxIDErrorTest() throws PAException {
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(
+                any(Ii.class))).thenReturn(spDto);
+        List<StudyInboxDTO> inboxEntries = new ArrayList<StudyInboxDTO>();
+        StudyInboxDTO dto = new StudyInboxDTO();
+        dto.setIdentifier(studyId);
+        inboxEntries.add(dto);
+        when(PaRegistry.getStudyInboxService()).thenReturn(inboxSvs);
+        when(inboxSvs.getOpenInboxEntries(any(Ii.class))).thenThrow(new PAException("error"));
+        Response r = service.getProtocolSnapshotWithSInboxID(IiConverter.convertToString(studyId));
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertEquals(r.getEntity(), "error");
+    }
+    
+    
+    @Test
+    public void getProtocolSnapshotWithNoSInboxIDTest() throws PAException {
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(
+                any(Ii.class))).thenReturn(spDto);
+        when(PaRegistry.getStudyInboxService()).thenReturn(inboxSvs);
+        when(inboxSvs.getOpenInboxEntries(any(Ii.class))).thenReturn(new ArrayList<StudyInboxDTO>());
+        Response r = service.getProtocolSnapshotWithSInboxID(IiConverter.convertToString(studyId));
+        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertTrue(r.getEntity() instanceof ProtocolSnapshotDTO);
+    }
+    
+    @Test 
+    public void postProcessingCallTest() throws PAException {
+        ProtocolSnapshotDTO before = setUpProtocolSnapshotDTO();
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(
+                any(Ii.class))).thenReturn(spDto);
+        List<StudyInboxDTO> inboxEntries = new ArrayList<StudyInboxDTO>();
+        StudyInboxDTO dto = new StudyInboxDTO();
+        dto.setIdentifier(studyId);
+        inboxEntries.add(dto);
+        when(PaRegistry.getStudyInboxService()).thenReturn(inboxSvs);
+        when(inboxSvs.getOpenInboxEntries(any(Ii.class))).thenReturn(inboxEntries);
+        Response r = service.postProcessingCall("1", before);
+        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+    }
+    @Test 
+    public void postProcessingCallExceptionTest() throws PAException {
+        ProtocolSnapshotDTO before = setUpProtocolSnapshotDTO();
+        when(PaRegistry.getStudyProtocolService().getStudyProtocol(
+                any(Ii.class))).thenReturn(spDto);
+
+        when(PaRegistry.getStudyInboxService()).thenReturn(inboxSvs);
+        when(inboxSvs.getOpenInboxEntries(any(Ii.class))).thenThrow(new PAException("error"));
+        Response r = service.postProcessingCall("1", before);
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertEquals(r.getEntity(), "error");
+    }
+    private ProtocolSnapshotDTO setUpProtocolSnapshotDTO() {
+        ProtocolSnapshotDTO dto = new ProtocolSnapshotDTO();
+        dto.setKeywordText("keywordText");
+        dto.setPublicDescription("public description");
+        dto.setScientificDescription("scientificDesc");
+        dto.setLastChangedDate("2017-01-01");
+        dto.setStudyInboxId("1");
+        gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO eligiDto = new gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO();
+        eligiDto.setInclusionIndicator(true);
+        eligiDto.setCategoryCode("Course");
+        eligiDto.setDisplayOrder(1);
+        eligiDto.setEligibleGenderCode("M");
+        eligiDto.setIdentifier(1L);
+        eligiDto.setCriterionName("GENDER");
+        eligiDto.setOperator("+");
+        eligiDto.setTextDescription("some description");
+        AgeDTO age1 = new AgeDTO("years", BigDecimal.valueOf(1L), Integer.valueOf("1"));
+        eligiDto.setMaxValue(age1);
+        eligiDto.setMinValue(age1);
+        List <gov.nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO> eligibilityList = new ArrayList<gov
+                .nih.nci.pa.webservices.dto.PlannedEligibilityCriterionDTO>();
+        eligibilityList.add(eligiDto);
+        dto.setEligibilityList(eligibilityList);
+        gov.nih.nci.pa.webservices.dto.ArmDTO arm = new gov.nih.nci.pa.webservices.dto.ArmDTO();
+        arm.setName("Bname");
+        arm.setDescriptionText("some description");
+        arm.setId(1L);
+        arm.setTypeCode("Experimental");
+        List <gov.nih.nci.pa.webservices.dto.ArmDTO> armList = new ArrayList<gov.nih.nci.pa.webservices.dto.ArmDTO>();
+        armList.add(arm);
+        arm = new gov.nih.nci.pa.webservices.dto.ArmDTO();
+        arm.setName("Aname");
+        arm.setDescriptionText("some description");
+        arm.setId(2L);
+        arm.setTypeCode("Experimental");
+        armList.add(arm);
+        dto.setArmList(armList);
+        return dto;
+    }
+   
+    @Test
+    public void emailSyncJobImportLogsTest() throws PAException {
+        List<CTGovImportLog> logEntries = new ArrayList<CTGovImportLog>();
+        CTGovImportLog log = new CTGovImportLog();
+        log.setAdmin(true);
+        log.setAction("update");
+        log.setDateCreated(new Date());
+        log.setId(1L);
+        log.setNciID("NCI-2017-00001");
+        log.setNctID("NCT10000");
+        log.setReviewRequired(true);
+        logEntries.add(log);
+        when(ctGovSyncServiceLocal.getLogEntries(any(CTGovImportLogSearchCriteria.class))).thenReturn(logEntries);
+        Response r = service.emailSyncJobImportLogs(new Date());
+        assertEquals(Status.OK.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertEquals(r.getEntity(), "Success");
+    }
+    @Test
+    public void emailSyncJobImportLogsErrorTest() throws PAException {
+        List<CTGovImportLog> logEntries = new ArrayList<CTGovImportLog>();
+        CTGovImportLog log = new CTGovImportLog();
+        log.setAdmin(true);
+        log.setAction("update");
+        log.setDateCreated(new Date());
+        log.setId(1L);
+        log.setNciID("NCI-2017-00001");
+        log.setNctID("NCT10000");
+        log.setReviewRequired(true);
+        logEntries.add(log);
+        when(ctGovSyncServiceLocal.getLogEntries(any(CTGovImportLogSearchCriteria.class))).thenReturn(logEntries);
+        doThrow(new TrialDataException("error")).when(mailManagerSvc).sendCTGovSyncStatusSummaryMail(logEntries);
+        Response r = service.emailSyncJobImportLogs(new Date());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), r.getStatus());
+        assertTrue(r.getEntity() != null);
+        assertEquals(r.getEntity(), "error");
+    }
 }
