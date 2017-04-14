@@ -22,7 +22,6 @@ import gov.nih.nci.pa.iso.util.IntConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.search.CTGovImportLogSearchCriteria;
-import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PaHibernateUtil;
 import gov.nih.nci.pa.util.PaRegistry;
@@ -122,8 +121,6 @@ public class ImportHelperRestService { // NOPMD
         List<StudyProtocolIdentityDTO> list = new ArrayList<StudyProtocolIdentityDTO>();
         try {
             List<StudyProtocolQueryDTO> studyProtocolDTOList = findExistentStudies(nctID);
-            CTGovStudyAdapter study = PaRegistry.getCTGovSyncService()
-                    .getAdaptedCtGovStudyByNctId(nctID);
             if (!studyProtocolDTOList.isEmpty()) {
                 for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
                     list.add(setStudyProtocolIdentityDTO(dto));
