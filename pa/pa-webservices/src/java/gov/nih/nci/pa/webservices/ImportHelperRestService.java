@@ -128,11 +128,6 @@ public class ImportHelperRestService { // NOPMD
                 for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
                     list.add(setStudyProtocolIdentityDTO(dto));
                 }
-            } else {
-                studyProtocolDTOList = findExistentStudies(study);
-                for (StudyProtocolQueryDTO dto : studyProtocolDTOList) {
-                    list.add(setStudyProtocolIdentityDTO(dto));
-                }
             }
             if (list.isEmpty()) {
                 return Response.status(NOT_FOUND_CODE).entity("NOT Found")
@@ -162,28 +157,28 @@ public class ImportHelperRestService { // NOPMD
         return list;
     }
 
-    private List<StudyProtocolQueryDTO> findExistentStudies(
-            CTGovStudyAdapter ctgovStudy) throws PAException {
-        List<StudyProtocolQueryDTO> list = new ArrayList<StudyProtocolQueryDTO>();
-        if (ctgovStudy != null && StringUtils.isNotBlank(ctgovStudy.getTitle())) {
-            StudyProtocolQueryCriteria criteria = new StudyProtocolQueryCriteria();
-            criteria.setOfficialTitle(ctgovStudy.getTitle());
-            criteria.setTrialCategory("p");
-            criteria.setExcludeRejectProtocol(true);
-            List<StudyProtocolQueryDTO> dtoList = PaRegistry
-                    .getProtocolQueryService().getStudyProtocolByCriteria(
-                            criteria);
-            if (CollectionUtils.isNotEmpty(dtoList)) {
-                for (StudyProtocolQueryDTO dto : dtoList) {
-                    if (ctgovStudy.getTitle().equalsIgnoreCase(
-                            dto.getOfficialTitle())) {
-                        list.add(dto);
-                    }
-                }
-            }
-        }
-        return list;
-    }
+//    private List<StudyProtocolQueryDTO> findExistentStudies(
+//            CTGovStudyAdapter ctgovStudy) throws PAException {
+//        List<StudyProtocolQueryDTO> list = new ArrayList<StudyProtocolQueryDTO>();
+//        if (ctgovStudy != null && StringUtils.isNotBlank(ctgovStudy.getTitle())) {
+//            StudyProtocolQueryCriteria criteria = new StudyProtocolQueryCriteria();
+//            criteria.setOfficialTitle(ctgovStudy.getTitle());
+//            criteria.setTrialCategory("p");
+//            criteria.setExcludeRejectProtocol(true);
+//            List<StudyProtocolQueryDTO> dtoList = PaRegistry
+//                    .getProtocolQueryService().getStudyProtocolByCriteria(
+//                            criteria);
+//            if (CollectionUtils.isNotEmpty(dtoList)) {
+//                for (StudyProtocolQueryDTO dto : dtoList) {
+//                    if (ctgovStudy.getTitle().equalsIgnoreCase(
+//                            dto.getOfficialTitle())) {
+//                        list.add(dto);
+//                    }
+//                }
+//            }
+//        }
+//        return list;
+//    }
 
     private StudyProtocolIdentityDTO setStudyProtocolIdentityDTO(
             StudyProtocolQueryDTO dto) {

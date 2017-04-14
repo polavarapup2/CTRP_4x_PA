@@ -216,28 +216,28 @@ public class ImportHelperRestServiceTest extends AbstractHibernateTestCase {
        assertEquals(Status.OK.getStatusCode(), r.getStatus());
        assertTrue(r.getEntity() != null);
     }
-    @Test
-    public void getStudyProtocolIdentityTitleTest() throws PAException {
-        ClinicalStudy clinicalStudy = new ClinicalStudy();
-        clinicalStudy.setOverallStatus("Completed");
-        clinicalStudy.setOfficialTitle("official Title");
-        CTGovStudyAdapter study = new CTGovStudyAdapter(clinicalStudy);
-        when(PaRegistry.getCTGovSyncService()).thenReturn(ctGovSyncServiceLocal);
-        when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
-                        eq("NCT290384"))).thenReturn(
-                Arrays.asList((StudyProtocolDTO) spDto));
-        when(ctGovSyncServiceLocal
-                    .getAdaptedCtGovStudyByNctId(eq("NCT290384"))).thenReturn(study);
-        when(PaRegistry.getProtocolQueryService()).thenReturn(protocolQueryServiceLocal);
-        queryDTOList.get(0).setOfficialTitle("official Title");
-        when(
-                protocolQueryServiceLocal
-                        .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
-                .thenReturn(null).thenReturn(queryDTOList);
-        Response r = service.getStudyProtocolIdentity("NCT290384");
-       assertEquals(Status.OK.getStatusCode(), r.getStatus());
-       assertTrue(r.getEntity() != null);
-    }
+//    @Test
+//    public void getStudyProtocolIdentityTitleTest() throws PAException {
+//        ClinicalStudy clinicalStudy = new ClinicalStudy();
+//        clinicalStudy.setOverallStatus("Completed");
+//        clinicalStudy.setOfficialTitle("official Title");
+//        CTGovStudyAdapter study = new CTGovStudyAdapter(clinicalStudy);
+//        when(PaRegistry.getCTGovSyncService()).thenReturn(ctGovSyncServiceLocal);
+//        when(PaRegistry.getStudyProtocolService().getStudyProtocolsByNctId(
+//                        eq("NCT290384"))).thenReturn(
+//                Arrays.asList((StudyProtocolDTO) spDto));
+//        when(ctGovSyncServiceLocal
+//                    .getAdaptedCtGovStudyByNctId(eq("NCT290384"))).thenReturn(study);
+//        when(PaRegistry.getProtocolQueryService()).thenReturn(protocolQueryServiceLocal);
+//        queryDTOList.get(0).setOfficialTitle("official Title");
+//        when(
+//                protocolQueryServiceLocal
+//                        .getStudyProtocolByCriteria(any(StudyProtocolQueryCriteria.class)))
+//                .thenReturn(null).thenReturn(queryDTOList);
+//        Response r = service.getStudyProtocolIdentity("NCT290384");
+//       assertEquals(Status.OK.getStatusCode(), r.getStatus());
+//       assertTrue(r.getEntity() != null);
+//    }
     @Test
     public void getSPIdentityNotFoundTest() throws PAException {
         ClinicalStudy clinicalStudy = new ClinicalStudy();
