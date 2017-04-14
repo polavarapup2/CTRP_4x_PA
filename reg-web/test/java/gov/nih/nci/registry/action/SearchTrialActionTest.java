@@ -13,6 +13,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
+
+import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.Organization;
 import gov.nih.nci.pa.domain.Person;
@@ -25,9 +28,12 @@ import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.enums.DocumentWorkflowStatusCode;
 import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.enums.SummaryFourFundingCategoryCode;
+import gov.nih.nci.pa.iso.dto.DocumentDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
+import gov.nih.nci.pa.service.DocumentServiceLocal;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.service.correlation.CorrelationUtilsRemote;
@@ -35,12 +41,15 @@ import gov.nih.nci.pa.service.util.AccrualDiseaseTerminologyServiceRemote;
 import gov.nih.nci.pa.service.util.CSMUserService;
 import gov.nih.nci.pa.service.util.CTGovXmlGeneratorOptions;
 import gov.nih.nci.pa.service.util.CTGovXmlGeneratorServiceLocal;
+import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
 import gov.nih.nci.pa.service.util.RegistryUserServiceLocal;
 import gov.nih.nci.pa.service.util.TSRReportGeneratorServiceRemote;
+import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.CacheUtils;
 import gov.nih.nci.pa.util.MockCSMUserService;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PAUtil;
+import gov.nih.nci.registry.dto.ProprietaryTrialDTO;
 import gov.nih.nci.registry.dto.SearchProtocolCriteria;
 import gov.nih.nci.registry.service.MockPAOrganizationService;
 import gov.nih.nci.registry.service.MockPAPersonServiceRemote;
@@ -48,6 +57,7 @@ import gov.nih.nci.registry.service.MockProtocolQueryService;
 import gov.nih.nci.registry.util.ComparableOrganizationDTO;
 import gov.nih.nci.registry.util.TrialUtil;
 import gov.nih.nci.security.authorization.domainobjects.User;
+import gov.nih.nci.services.correlation.NullifiedRoleException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,6 +80,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.struts2.ServletActionContext;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.fiveamsolutions.nci.commons.util.UsernameHolder;
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -89,6 +101,8 @@ public class SearchTrialActionTest extends AbstractHibernateTestCase {
     private TSRReportGeneratorServiceRemote tsrReportGeneratorService = mock(TSRReportGeneratorServiceRemote.class);
     private StudyProtocolServiceLocal studyProtocolService = mock(StudyProtocolServiceLocal.class);
     private AccrualDiseaseTerminologyServiceRemote accrualDiseaseTerminologyService = mock(AccrualDiseaseTerminologyServiceRemote.class);
+    private CTGovImportMergeHelper helper = mock (CTGovImportMergeHelper.class);
+    
     /**
      * Initialization.
      * @throws Exception in case of error
@@ -175,17 +189,54 @@ public class SearchTrialActionTest extends AbstractHibernateTestCase {
         assertEquals("NCT01861054", action.getStudy().getNctId());
     }
     
-   // @Test
-    public void testImportCtGovTrial(){
+    @Test
+    public void testImportCtGovTrial() throws PAException, NullifiedRoleException {
+        action.setHelper(helper);
+        DocumentServiceLocal documentService = mock(DocumentServiceLocal.class);
+        action.setDocumentService(documentService);
+        action.setStudyProtocolService(studyProtocolService);
         UsernameHolder.setUserCaseSensitive("firstName");
+        TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
+        dto.setNciTrialID("NCI-2017-1234");
+        dto.setPaTrialID("1234");
+        when(helper.insertNctId(any(String.class))).thenReturn(dto);
         
-        action.prepare();
+        StudyProtocolDTO spDTO = new StudyProtocolDTO();
+        Bl propInd = new Bl();
+        propInd.setValue(Boolean.TRUE);
+        spDTO.setProprietaryTrialIndicator(propInd);
+        when(studyProtocolService.getStudyProtocol(any(Ii.class))).thenReturn(spDTO);
+        
+        when(registryUserService.hasTrialAccess(any(String.class), any(Long.class))).thenReturn(true);
+        
+        TrialUtil trialUtils = mock(TrialUtil.class);
+        action.setTrialUtils(trialUtils);
+        
+        doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+              Object[] args = invocation.getArguments();
+              System.out.println("called with arguments: " + Arrays.toString(args));
+              return null;
+            }
+        }).when(trialUtils).getProprietaryTrialDTOFromDb(any(Ii.class), any(ProprietaryTrialDTO.class));
+        
+        List<DocumentDTO> docList = new ArrayList<DocumentDTO>();
+        
+        when(documentService.getDocumentsAndAllTSRByStudyProtocol(any(Ii.class))).thenReturn(docList);
+        
+        ProtocolQueryServiceLocal protocolQueryService = mock(ProtocolQueryServiceLocal.class);
+        action.setProtocolQueryService(protocolQueryService);
+        
+        StudyProtocolQueryDTO studyProtocolQueryDTO = new StudyProtocolQueryDTO();
+        studyProtocolQueryDTO.setDocumentWorkflowStatusCode(DocumentWorkflowStatusCode.ABSTRACTION_VERIFIED_NORESPONSE);
+        studyProtocolQueryDTO.getLastCreated().setUserLastCreated("firstName");
+        when(protocolQueryService.getTrialSummaryByStudyProtocolId(any(Long.class))).thenReturn(studyProtocolQueryDTO);
+        
         action.setNctIdToImport("NCT01861054");
         assertFalse(action.isShowAddMySite());
         assertEquals("view", action.importTrial());
         assertNotNull(action.getStudy());
         assertEquals("NCT01861054", action.getStudy().getNctId());
-        assertTrue(action.isShowAddMySite());
     }
     
     @Test

@@ -253,11 +253,11 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
             TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
             //String nciID = ctGovSyncService.importTrial(nctID);      
             String nciID = dto.getNciTrialID();
-            final Long newTrialId = IiConverter
+            /*final Long newTrialId = IiConverter
                     .convertToLong(studyProtocolService.getStudyProtocol(
                             IiConverter.convertToAssignedIdentifierIi(nciID))
-                            .getIdentifier());            
-            studyProtocolId = newTrialId;
+                            .getIdentifier()); */           
+            studyProtocolId = Long.valueOf(dto.getPaTrialID());
             ServletActionContext.getRequest().setAttribute(
                     Constants.SUCCESS_MESSAGE,
                     getText("importctgov.import.new.success", new String[] {
