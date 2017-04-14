@@ -266,6 +266,8 @@
             	<exclude name="**/AccessLoggingFilter.class"/>
             	<exclude name="**/WebServiceAccessLog.class"/>
             	<exclude name="**/testsupport/*.class" />
+				<exclude name="**/TrialRegistrationConfirmationDTO.class"/>
+				<exclude name="**/gov/nih/nci/pa/dto/*.class" />
             </fileset>
         	<auxClasspath>
                  <path refid="compile.classpath"/>

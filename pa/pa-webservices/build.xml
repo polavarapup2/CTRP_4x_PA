@@ -558,6 +558,8 @@
                 <include name="**/*.class" />
             	<exclude name="**/gov/nih/nci/pa/webservices/types/*.class"/>
             	<exclude name="**/gov/nih/nci/po/webservices/types/*.class"/>
+				<exclude name="**/gov/nih/nci/ctrp/importtrials/dto/*.class"/>
+				<exclude name="**/gov/nih/nci/pa/webservices/dto/*.class"/>
             </fileset>
         	<auxClasspath>
         		 <path refid="ejb.package.classpath"/>
