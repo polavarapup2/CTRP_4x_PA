@@ -345,6 +345,13 @@ public class ServletContextConfiguratorTest {
             
         }
 
+        // Purposely not adding Override annotation so this stays backwards compatible
+        //@Override
+        public String getVirtualServerName() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
         
     }
 }
