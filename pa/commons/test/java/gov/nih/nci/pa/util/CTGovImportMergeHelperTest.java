@@ -10,6 +10,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.util.List;
+
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 
@@ -31,27 +34,26 @@ public class CTGovImportMergeHelperTest {
         url = PaEarPropertyReader.getCtrpImportCtApiUrl() + "/NCT12345678";
     }
     
-//    @Test
-//    public void updateNctIdTest() throws PAException {
-//        String response = "<List><item><paTrialID>176578</paTrialID><nciTrialID>NCI-2017-00420</nciTrialID></item></List>";
-//        when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(response);
-//        helper.setClient(client);
-//        //TrialRegistrationConfirmationDTOs dtos = helper.updateNctId("NCT12345678");
-//        verify(client).sendHTTPRequest(url,"PUT", null);
-//        assertNotNull(dtos);
-//        assertEquals(1, dtos.getDtos().size());
-//        assertEquals("NCI-2017-00420", dtos.getDtos().get(0).getNciTrialID());
-//    }
+    @Test
+    public void updateNctIdTest() throws PAException, IOException {
+        String response = "[{\"paTrialID\":\"176578\",\"nciTrialID\":\"NCI-2017-00420\"}]";
+        when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(response);
+        helper.setClient(client);
+        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678");
+        verify(client).sendHTTPRequest(url,"PUT", null);
+        assertNotNull(dtos);
+        assertEquals(1, dtos.size());
+        assertEquals("NCI-2017-00420", dtos.get(0).getNciTrialID());
+    }
 
-//    @Test
-//    public void updateNctIdNullTest() throws PAException {
-//        when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(null);
-//        helper.setClient(client);
-//        // TODO: should this throw an exception?
-//        TrialRegistrationConfirmationDTOs dtos = helper.updateNctId("NCT12345678");
-//        verify(client).sendHTTPRequest(url,"PUT", null);
-//        assertNull(dtos);
-//    }
+    @Test
+    public void updateNctIdNullTest() throws PAException {
+        when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(null);
+        helper.setClient(client);
+        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678");
+        verify(client).sendHTTPRequest(url,"PUT", null);
+        assertNull(dtos);
+    }
 
     @Test
     public void updateNctIdExceptionTest() throws PAException {
@@ -68,9 +70,9 @@ public class CTGovImportMergeHelperTest {
     }
 
     
-    //@Test
+    @Test
     public void insertNctIdTest() throws PAException {
-        String response = "<TrialRegistrationConfirmation><paTrialID>176578</paTrialID><nciTrialID>NCI-2017-00420</nciTrialID></TrialRegistrationConfirmation>";
+        String response = "{\"paTrialID\":\"176578\",\"nciTrialID\":\"NCI-2017-00420\"}";
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(response);
         helper.setClient(client);
         TrialRegistrationConfirmationDTO dto = helper.insertNctId("NCT12345678");

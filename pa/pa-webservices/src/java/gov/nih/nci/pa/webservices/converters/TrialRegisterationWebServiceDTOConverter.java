@@ -123,6 +123,7 @@ public class TrialRegisterationWebServiceDTOConverter {
                     .getUserLastCreated()));
             dto.setStudySource(CdConverter.convertStringToCd(webServiceDTO
                     .getStudySource()));
+            
             Set<Ii> secondaryIds = new LinkedHashSet<Ii>();
             if (CollectionUtils.isNotEmpty(webServiceDTO
                     .getSecondaryIdentifiers())) {
@@ -131,10 +132,13 @@ public class TrialRegisterationWebServiceDTOConverter {
                             .add(IiConverter.convertToOtherIdentifierIi(id));
                 }
             }
-            if (!secondaryIds.isEmpty()) {
-                dto.setSecondaryIdentifiers(DSetConverter
-                        .convertIiSetToDset(secondaryIds));
-            }
+//            if (!secondaryIds.isEmpty()) {
+//                dto.setSecondaryIdentifiers(DSetConverter
+//                        .convertIiSetToDset(secondaryIds));
+//            }
+            dto.setSecondaryIdentifiers(mergeIdentifiers(DSetConverter
+                    .convertIiSetToDset(secondaryIds),
+                    dto.getSecondaryIdentifiers()));
             if (webServiceDTO instanceof NonInterventionalStudyProtocolDTO) {
                 NonInterventionalStudyProtocolDTO nonintdto = (NonInterventionalStudyProtocolDTO) webServiceDTO;
                 gov.nih.nci.pa.iso.dto.NonInterventionalStudyProtocolDTO nonIntIsoDTO = (gov.nih.nci
@@ -192,6 +196,23 @@ public class TrialRegisterationWebServiceDTOConverter {
         }
         return dto;
     }
+    
+    private DSet<Ii> mergeIdentifiers(DSet<Ii> mergeInto, DSet<Ii> mergeFrom) {
+        if (mergeFrom != null && mergeFrom.getItem() != null) {
+            l1: for (Ii id : mergeFrom.getItem()) {
+                for (Ii id2 : mergeInto.getItem()) {
+                    if (StringUtils.equals(id2.getExtension(),
+                            id.getExtension())
+                            && StringUtils.equals(id2.getRoot(), id.getRoot())) {
+                        continue l1;
+                    }
+                }
+                mergeInto.getItem().add(id);
+            }
+        }
+        return mergeInto;
+    }
+    
     private Date parseCtGovDate(String date) throws ParseException {
         return StringUtils.isNotBlank(date) ? DateUtils.parseDate(date,
                 new String[] {"MMMM dd, yyyy", "MMM dd, yyyy", "MMMM yyyy" })

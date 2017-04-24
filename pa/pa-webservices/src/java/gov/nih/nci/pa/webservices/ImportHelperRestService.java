@@ -434,14 +434,17 @@ public class ImportHelperRestService { // NOPMD
                             criteria);
             // Loop over all the trials
             for (StudyProtocolQueryDTO trial : trials) {
-                String nctIdentifier = trial.getNctIdentifier();
-                List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
-                if (associatedImportLogs != null && !associatedImportLogs.isEmpty()) {
-                    map.put(nctIdentifier, setLogEntries(associatedImportLogs.get(0)));
-                } else {
-                    map.put(nctIdentifier, null);
+                if (StringUtils.isNotBlank(trial.getNciIdentifier())) {
+                    String nctIdentifier = trial.getNctIdentifier();
+                    List<CTGovImportLog> associatedImportLogs = getLogEntries(nctIdentifier);
+                    if (associatedImportLogs != null
+                            && !associatedImportLogs.isEmpty()) {
+                        map.put(nctIdentifier,
+                                setLogEntries(associatedImportLogs.get(0)));
+                    } else {
+                        map.put(nctIdentifier, null);
+                    }
                 }
-                
             }
         } catch (Exception e) {
             LOG.error(ERROR, e);

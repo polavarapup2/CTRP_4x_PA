@@ -56,13 +56,14 @@ function handleAction(studyProtocolIi){
     	<display:column escapeXml="true" titleKey="trialIndide.nciDivProgHolderCode" property="nciDivProgHolder"   sortable="true" headerClass="sortable"/>
     	<display:column escapeXml="true" titleKey="trialIndide.expandedAccessIndicator" property="expandedAccessIndicator"   sortable="true" headerClass="sortable"/>
     	<display:column escapeXml="true" titleKey="trialIndide.expandedAccessNctId" property="expandedAccessNctId"   sortable="true" headerClass="sortable"/>
-        
         <pa:adminAbstractorDisplayWhenCheckedOut>
             <display:column title="Edit" class="action">
                 <s:a href="javascript:void(0)" onclick="handleAction(%{#attr.row.id})"><img src='<c:url value="/images/ico_edit.gif"/>' alt="Edit" width="16" height="16"/></s:a>
             </display:column>
             <display:column title="Delete" class="action">
+                <s:hidden id="msId" name="studyIndldeWebDTO.msId" value="%{#attr.row.msId}"></s:hidden>
         	   <s:checkbox name="objectsToDelete" fieldValue="%{#attr.row.id}" value="%{#attr.row.id in objectsToDelete}"/>
+        	  
             </display:column>
         </pa:adminAbstractorDisplayWhenCheckedOut>
     </display:table>

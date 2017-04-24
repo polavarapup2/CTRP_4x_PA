@@ -4,10 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import gov.nih.nci.ctrp.importtrials.dto.InterventionalStudyProtocolDTO;
 import gov.nih.nci.ctrp.importtrials.dto.NonInterventionalStudyProtocolDTO;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.iso.util.CdConverter;
+import gov.nih.nci.pa.iso.util.DSetConverter;
 import gov.nih.nci.pa.iso.util.EdConverter;
 import gov.nih.nci.pa.iso.util.EnOnConverter;
 import gov.nih.nci.pa.iso.util.EnPnConverter;
+import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.webservices.converters.TrialRegisterationWebServiceDTOConverter;
@@ -30,7 +33,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -306,5 +311,24 @@ public class TrialRegisterationWebServiceDTOConverterTest {
         assertTrue(dtos.size() == 2);
         assertEquals(dtos.get(0).getValue().getHigh().getPrecision().toString(),"1");
         assertEquals(dtos.get(1).getValue().getHigh().getPrecision().toString(),"2");
+    }
+    
+    @Test
+    public void convertSPSecondaryIdsTest() throws ParseException {
+        gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO secIdsSP = new gov.nih.nci.pa.iso
+        .dto.InterventionalStudyProtocolDTO();
+        Set<Ii> secondaryIds = new LinkedHashSet<Ii>();
+        secondaryIds.add(IiConverter.convertToOtherIdentifierIi("NCI-2000-000110"));
+        secIdsSP.setSecondaryIdentifiers(DSetConverter
+                .convertIiSetToDset(secondaryIds));
+        gov.nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO inspdDTO = (gov
+                .nih.nci.pa.iso.dto.InterventionalStudyProtocolDTO) converter
+                .convertToStudyProtocolDTO(setUpInterventionalStudyWSDTO(), secIdsSP);
+        assertTrue(inspdDTO != null);
+        assertEquals(DSetConverter
+                .convertDsetToIiSet(inspdDTO.getSecondaryIdentifiers()).iterator().next().getExtension().toString(),
+                "NCI-2000-000110");
+        assertEquals(StConverter.convertToString(inspdDTO.getPublicDescription()), "publicDescription");
+        assertEquals(CdConverter.convertCdToString(inspdDTO.getAllocationCode()), "Randomized Controlled Trial");
     }
 }
