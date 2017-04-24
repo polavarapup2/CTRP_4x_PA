@@ -99,7 +99,6 @@ import gov.nih.nci.pa.enums.StudySiteFunctionalCode;
 import gov.nih.nci.pa.iso.dto.StratumGroupDTO;
 import gov.nih.nci.pa.iso.dto.StudyContactDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
-import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
@@ -113,8 +112,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import gov.nih.nci.pa.util.MockTrialInfoHelperUtil;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
@@ -124,7 +123,6 @@ import com.fiveamsolutions.nci.commons.util.UsernameHolder;
  * @author mshestopalov
  *
  */
-@Ignore
 public class PDQXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
     private final PDQXmlGeneratorServiceBean pdqBean = new PDQXmlGeneratorServiceBean();
@@ -138,6 +136,7 @@ public class PDQXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
     public void init() throws Exception {
         CSMUserService.setInstance(new MockCSMUserService());
         UsernameHolder.setUserCaseSensitive("user1@mail.nih.gov");
+        pdqBean.setTrialInfoHelperUtil(new MockTrialInfoHelperUtil());
     }
     
 
@@ -230,14 +229,6 @@ public class PDQXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
             }
             return false;
         }
-    }
-
-    @Test
-    public void testExpAccIndFalse() throws PAException {
-        studySiteIndIdeDto.setExpandedAccessIndicator(BlConverter.convertToBl(false));
-        final String xml = getBean().generateCTGovXml(spId);
-        assertTrue(xml.contains("<expanded_access_status>No longer available</expanded_access_status>"));        
-        studySiteIndIdeDto.setExpandedAccessIndicator(BlConverter.convertToBl(true));
     }
 
     @Test

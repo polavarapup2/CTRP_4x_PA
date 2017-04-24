@@ -134,12 +134,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-@Ignore
 public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
 
     private final CTGovXmlGeneratorServiceBeanLocal bean = new CTGovXmlGeneratorServiceBeanLocal();
@@ -455,19 +453,19 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
     public void testOutComeMeasureOrder() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
     	 String newXML = createUnformattedXML(xml);
-    	         assertTrue(newXML.contains
+    	  assertTrue(newXML.contains
         		("<primary_outcome><outcome_measure>A name</outcome_measure>"
-        	     +"<outcome_safety_issue>Yes</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
+        	     +"<outcome_time_frame>some time</outcome_time_frame>"
         		 +"</primary_outcome><primary_outcome><outcome_measure>some name</outcome_measure>"));
 
-    	         assertTrue(newXML.contains
+    	  assertTrue(newXML.contains
     	         		("<secondary_outcome><outcome_measure>A name</outcome_measure>"
-    	         		+"<outcome_safety_issue>Yes</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
+    	         		+"<outcome_time_frame>some time</outcome_time_frame>"
     	         		+"</secondary_outcome><secondary_outcome><outcome_measure>some name</outcome_measure>"));
 
-    	         assertTrue(newXML.contains
+    	  assertTrue(newXML.contains
      	         		("<other_outcome><outcome_measure>A name</outcome_measure>"
-     	         		+"<outcome_safety_issue>No</outcome_safety_issue><outcome_time_frame>some time</outcome_time_frame>"
+     	         		+"<outcome_time_frame>some time</outcome_time_frame>"
      	         	    +"</other_outcome><other_outcome><outcome_measure>some name</outcome_measure>"));
     }
 
@@ -475,7 +473,7 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
     public void testLongInterventionName() throws PAException {
     	 String xml  = getBean().generateCTGovXml(spId);
     	 String newXML = createUnformattedXML(xml);
-    	         assertTrue(newXML.contains
+    	 assertTrue(newXML.contains
         		("<intervention_name>This is to test if name is more than 160 characters hence adding very "
         		+"long name to check. Also this string should contains very long name full 200 length string "
         		+ "to check we are setting this string 123</intervention_name>"));
@@ -494,7 +492,6 @@ public class CTGovXmlGeneratorServiceTest extends AbstractXmlGeneratorTest {
     public void testPhoneWithExt() throws PAException {
          String xml  = getBean().generateCTGovXml(spId);
          String newXML = createUnformattedXML(xml);
-         System.out.println(newXML);
                  assertTrue(newXML.contains
                 ("<location><facility><name>some name</name><address/></facility>"
                  + "<status>Not yet recruiting</status>"
