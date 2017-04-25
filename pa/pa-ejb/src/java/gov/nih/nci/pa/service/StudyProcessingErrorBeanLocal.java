@@ -135,6 +135,7 @@ public class StudyProcessingErrorBeanLocal extends
     private static final String IMAP_SERVER = "imap.server";
     private static final String IMAP_PORT = "imap.port";
     private static final String IMAP_FOLDER = "imap.folder";
+    private static final String IMAP_PASSWORD = "imap.password";
     private static final String CTGOV_UPLOAD_ERROR_EMAIL_ACCOUNT = "ctgov.upload.errorEmail.account";
     private static final String CTGOV_UPLOAD_ERROR_EMAIL_SUBJECT = "ctgov.upload.errorEmail.subject";
     private static final String CTGOV_UPLOAD_ERROR_REGEX = "ctgov.upload.error.regex";
@@ -225,12 +226,10 @@ public class StudyProcessingErrorBeanLocal extends
             List<MailMessage> newCTGovMails = mailManagerSerivceLocal
                     .getNewEmails(lookUpTableService
                             .getPropertyValue(IMAP_SERVER), Integer
-                            .valueOf(lookUpTableService
-                                    .getPropertyValue(IMAP_PORT)),
+                            .valueOf(lookUpTableService.getPropertyValue(IMAP_PORT)),
                             ctGovemailAcc.getUsername(),
-                            ctGovemailAcc.getDecryptedPassword(),
-                            lookUpTableService
-                                    .getPropertyValue(IMAP_FOLDER));
+                            lookUpTableService.getPropertyValue(IMAP_PASSWORD),
+                            lookUpTableService.getPropertyValue(IMAP_FOLDER));
             LOG.info("Got " + newCTGovMails.size() + " emails to process");
             if (newCTGovMails.size() > 0) {
                 String ctGovMailSubject = lookUpTableService
