@@ -218,6 +218,7 @@ public class AbstractEjbTestCase extends AbstractHibernateTestCase {
         addPaProperty("imap.port",
                 String.valueOf(ServerSetupTest.IMAPS.getPort()));
         addPaProperty("imap.folder", "INBOX");
+        addPaProperty("imap.password", "password");
         addPaProperty("ctgov.upload.errorEmail.subject",
                 "PRS Protocol Upload Notification");
         addPaProperty("ctgov.upload.errorEmail.account",

@@ -2092,5 +2092,9 @@
         <comment>execute updateGrantsDbUrl.sql</comment>
         <sqlFile path="@db-upgrade.run.dir@/grantsDbUpdate/updateGrantsDbUrl.sql"/>
     </changeSet>
-    
+    <changeSet id="new_property_pa_properties" author="bnorris">
+        <comment>execute addImapPropertyToPaProperties.sql</comment>
+        <sqlFile path="/db/postgresql/addImapPropertyToPaProperties.sql"/>
+    </changeSet>
+
 </databaseChangeLog>
