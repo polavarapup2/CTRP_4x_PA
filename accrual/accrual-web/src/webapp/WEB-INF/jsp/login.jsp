@@ -125,7 +125,7 @@
 							<h4 class="heading">
 								<span>Resetting Your Password</span>
 							</h4>
-							<p>If you forgot your password or simply want to reset it, please visit the CTRP Password Self Service Station at <a href="http://password.nci.nih.gov" target="_blank">http://password.nci.nih.gov</a> and follow the instructions there.</p>
+							<p>If you forgot your password or simply want to reset it, please visit the CTRP Password Self Service Station <a href="/ctrp-password/">HERE</a> and follow the instructions there.</p>
 							<p>If you need additional assistance or have questions, send an email to <a href="mailto:ctrp_support@nih.gov">ctrp_support@nih.gov</a>.</p>
 						</div>
 					</div>
