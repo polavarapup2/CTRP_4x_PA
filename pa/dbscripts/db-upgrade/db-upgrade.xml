@@ -2094,7 +2094,7 @@
     </changeSet>
     <changeSet id="new_property_pa_properties" author="bnorris" runOnChange="false"><validCheckSum>ANY</validCheckSum>
         <comment>execute addImapPropertyToPaProperties.sql</comment>
-        <sqlFile path="/db/postgresql/addImapPropertyToPaProperties.sql"/>
+        <sqlFile path="@db-upgrade.run.dir@/addImapPropertyToPaProperties.sql"/>
     </changeSet>
 
 </databaseChangeLog>
