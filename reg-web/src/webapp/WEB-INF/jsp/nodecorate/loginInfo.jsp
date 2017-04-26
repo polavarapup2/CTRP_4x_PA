@@ -5,5 +5,5 @@
         <li>Register clinical trials</li>
         <li>Search registered trials by Title, Phase, Trial Identifiers and Organizations</li>
 	</ul>
-	<p>Want to learn more about the Reporting Program? Visit the <a href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/main/" target="_blank">NCI Clinical Trials Reporting Program</a> website. You can also email NCICB Application Support at <a href="mailto:cbiit@mail.nih.gov">cbiit@mail.nih.gov</a> if you have questions or need assistance.</p>
+	<p>Want to learn more about the Reporting Program? Visit the <a href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/main/" target="_blank">NCI Clinical Trials Reporting Program</a> website. If you have questions or want to report any issues, send an email to <a href="mailto:crtp_support@nih.gov">crtp_support@nih.gov</a></p>
 </div>
