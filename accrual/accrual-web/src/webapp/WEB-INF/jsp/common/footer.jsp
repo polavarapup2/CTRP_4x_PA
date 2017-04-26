@@ -9,25 +9,16 @@
 				<h4 class="modal-title" id="myModalLabel">Contact Us</h4>
 			</div>
 			<div class="modal-body">
-				<h5>Thank you for using the NCI's Clinical Trials Reporting
-					Program.</h5>
-				<p>
-					If you are experiencing problems with the application, please
-					contact NCI CBIIT Applications Support at <a
-						href="mailto:ncicbiit@mail.nih.gov">ncicbiit@mail.nih.gov</a> or
-					by phone at <strong>888.478.4423</strong> (for Toll Free) or <strong>240.276.5541</strong>
-					(for local calls).
-				</p>
-				<p>Alternatively, you can submit a request for help at the
-					following URL:</p>
-				<p>
-					<a target="_blank" href="http://cbiit.nci.nih.gov/support"><font
-						size="3">http://cbiit.nci.nih.gov/support</font></a>
-				</p>
-				<p class="disclaimer">
-					<em>NCI CBIIT Application Support is available Mon-Fri 8am-8pm
-						EST, excluding Federal Government Holidays. </em>
-				</p>
+				<h5>CTRP Application Support</h5>
+				<p>If you are experiencing technical issues with the CTRP web application, please contact us at <a href="mailto:ctrp_support@nih.gov">ctrp_support@nih.gov</a>.</p>
+				<p>When submitting a support request, please include: </p>
+					<li>Your contact information, including your telephone number</li>
+					<li>The name of the application/tool you are using</li>
+					<li>The URL if it is a Web-based application</li>
+					<li>A description of the problem and steps to recreate it</li>
+					<li>The text of any error messages you have received</li>
+				<h5>Contacting the Clinical Trials Reporting Office</h5>
+				<p>For other CTRP topics, contact the Clinical Trials Reporting Office (CTRO) at <a href="mailto:ncictro@mail.nih.gov">ncictro@mail.nih.gov</a>.</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
