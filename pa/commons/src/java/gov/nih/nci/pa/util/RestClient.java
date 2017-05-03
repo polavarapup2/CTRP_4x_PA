@@ -8,9 +8,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 /**
  * @author Purnima, Reshma
@@ -138,7 +142,12 @@ public class RestClient {
      */
     HttpURLConnection makeUrlConnection(URL url, String method, String postBody)
             throws IOException {
+        SSLContext context = getSslContext();
+
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        if (context != null && urlConnection instanceof HttpsURLConnection) {
+            ((HttpsURLConnection) urlConnection).setSSLSocketFactory(context.getSocketFactory());
+        }
         urlConnection.setConnectTimeout(HTTP_TIME_OUT);
         urlConnection.setReadTimeout(HTTP_TIME_OUT);
         urlConnection.setRequestMethod(method);
@@ -153,6 +162,23 @@ public class RestClient {
             setPostBody(urlConnection, postBody);
         } 
         return urlConnection;
+    }
+
+
+    /**
+     * Initialize SSLContext instance and returns
+     *
+     * @return SSLContext and NUll upon error
+     */
+    SSLContext getSslContext() {
+        try {
+            SSLContext context = SSLContext.getInstance("TLSv1.2");
+            context.init(null, null, new SecureRandom());
+            return context;
+        } catch (Exception e) {
+            LOG.info("Error creating SSLContext", e);
+            return null;
+        }
     }
 
     /**
