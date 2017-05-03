@@ -199,7 +199,7 @@ public class SearchTrialActionTest extends AbstractHibernateTestCase {
         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
         dto.setNciTrialID("NCI-2017-1234");
         dto.setPaTrialID("1234");
-        when(helper.insertNctId(any(String.class))).thenReturn(dto);
+        when(helper.insertNctId(any(String.class), any(String.class))).thenReturn(dto);
         
         StudyProtocolDTO spDTO = new StudyProtocolDTO();
         Bl propInd = new Bl();

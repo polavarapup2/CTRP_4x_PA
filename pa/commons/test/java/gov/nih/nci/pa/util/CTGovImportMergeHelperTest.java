@@ -39,8 +39,8 @@ public class CTGovImportMergeHelperTest {
         String response = "[{\"paTrialID\":\"176578\",\"nciTrialID\":\"NCI-2017-00420\"}]";
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(response);
         helper.setClient(client);
-        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678");
-        verify(client).sendHTTPRequest(url,"PUT", null);
+        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678", "testuser");
+        verify(client).sendHTTPRequest(url,"PUT", "testuser");
         assertNotNull(dtos);
         assertEquals(1, dtos.size());
         assertEquals("NCI-2017-00420", dtos.get(0).getNciTrialID());
@@ -50,7 +50,7 @@ public class CTGovImportMergeHelperTest {
     public void updateNctIdNullTest() throws PAException {
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(null);
         helper.setClient(client);
-        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678");
+        List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId("NCT12345678", null);
         verify(client).sendHTTPRequest(url,"PUT", null);
         assertNull(dtos);
     }
@@ -60,13 +60,13 @@ public class CTGovImportMergeHelperTest {
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenThrow(new PAException("TEST"));
         helper.setClient(client);
         try {
-            helper.updateNctId("NCT12345678");
+            helper.updateNctId("NCT12345678", "testuser");
             fail("Expected exception");
         } catch (Exception e) {
             assertTrue(e instanceof PAException);
             assertEquals("TEST", e.getMessage());
         }
-        verify(client).sendHTTPRequest(url, "PUT", null);
+        verify(client).sendHTTPRequest(url, "PUT", "testuser");
     }
 
     
@@ -75,8 +75,8 @@ public class CTGovImportMergeHelperTest {
         String response = "{\"paTrialID\":\"176578\",\"nciTrialID\":\"NCI-2017-00420\"}";
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(response);
         helper.setClient(client);
-        TrialRegistrationConfirmationDTO dto = helper.insertNctId("NCT12345678");
-        verify(client).sendHTTPRequest(url, "POST", null);
+        TrialRegistrationConfirmationDTO dto = helper.insertNctId("NCT12345678", "testuser");
+        verify(client).sendHTTPRequest(url, "POST", "testuser");
         assertNotNull(dto);
         assertEquals("176578", dto.getPaTrialID());
         assertEquals("NCI-2017-00420", dto.getNciTrialID());
@@ -87,11 +87,11 @@ public class CTGovImportMergeHelperTest {
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenReturn(null);
         helper.setClient(client);
         // TODO: should this throw an exception?
-        TrialRegistrationConfirmationDTO dto = helper.insertNctId("NCT12345678");
+        TrialRegistrationConfirmationDTO dto = helper.insertNctId("NCT12345678", "testuser");
         assertNotNull(dto);
         assertNull(dto.getNciTrialID());
         assertNull(dto.getPaTrialID());
-        verify(client).sendHTTPRequest(url, "POST", null);
+        verify(client).sendHTTPRequest(url, "POST", "testuser");
     }
 
     @Test
@@ -99,12 +99,12 @@ public class CTGovImportMergeHelperTest {
         when(client.sendHTTPRequest(anyString(), anyString(), anyString())).thenThrow(new PAException("TEST"));
         helper.setClient(client);
         try {
-            helper.insertNctId("NCT12345678");
+            helper.insertNctId("NCT12345678", "testuser");
             fail("Expected exception");
         } catch (Exception e) {
             assertTrue(e instanceof PAException);
             assertEquals("TEST", e.getMessage());
         }
-        verify(client).sendHTTPRequest(url, "POST", null);
+        verify(client).sendHTTPRequest(url, "POST", "testuser");
     }
 }

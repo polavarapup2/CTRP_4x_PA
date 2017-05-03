@@ -1,17 +1,22 @@
 package gov.nih.nci.pa.action;
 
+import gov.nih.nci.pa.domain.RegistryUser;
 import gov.nih.nci.pa.dto.StudyProtocolQueryCriteria;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolService;
+import gov.nih.nci.pa.service.util.CSMUserService;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
 import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
+import gov.nih.nci.pa.service.util.RegistryUserServiceLocal;
 import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.Constants;
+import gov.nih.nci.pa.util.CsmUserUtil;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.security.authorization.domainobjects.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +29,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
-
+import com.fiveamsolutions.nci.commons.util.UsernameHolder;
 /**
  * ImportCtGovAction
  * 
@@ -51,7 +56,7 @@ public final class ImportCtGovAction extends ActionSupport implements
     private StudyProtocolQueryDTO potentialMatch;
     private CTGovImportMergeHelper helper = new CTGovImportMergeHelper();
     private HttpServletRequest request;
-
+    private RegistryUserServiceLocal registryUserService;
     /**
      * @return res
      * 
@@ -110,7 +115,20 @@ public final class ImportCtGovAction extends ActionSupport implements
             throws PAException {
         return studyProtocolService.getStudyProtocolsByNctId(nct);
     }
-
+    /**
+     * @return
+     * @throws PAException
+     */
+    private String getCurrentUser() throws PAException {
+        User csmUser = CSMUserService.getInstance().getCSMUser(
+                UsernameHolder.getUser());
+        RegistryUser ru = registryUserService.getUser(csmUser.getLoginName());
+        if (ru != null) {
+            return ru.getFullName();
+        } else {
+            return CsmUserUtil.getDisplayUsername(csmUser);
+        }
+    }
     /**
      * @return string
      */
@@ -123,7 +141,7 @@ public final class ImportCtGovAction extends ActionSupport implements
             //glue code
             StringBuffer nciIds = new StringBuffer();
             if (studyExists) {
-                List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId(getNctIdToImport());
+                List<TrialRegistrationConfirmationDTO> dtos = helper.updateNctId(getNctIdToImport(), getCurrentUser());
                 if (dtos != null && !dtos.isEmpty()) {
                     for (TrialRegistrationConfirmationDTO nciId : dtos) {
                         if (dtos.size() > 1) {
@@ -138,7 +156,7 @@ public final class ImportCtGovAction extends ActionSupport implements
                                     getNctIdToImport()));
                 }
             } else {
-                TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
+                TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport(), getCurrentUser());
                 if (dto != null) {
                     nciIds.append(dto.getNciTrialID());
                 } else {
@@ -224,6 +242,7 @@ public final class ImportCtGovAction extends ActionSupport implements
         studyProtocolService = PaRegistry.getStudyProtocolService();
         protocolQueryService = PaRegistry.getProtocolQueryService();
         request = ServletActionContext.getRequest();
+        registryUserService = PaRegistry.getRegistryUserService();
     }
 
     /**
@@ -318,5 +337,12 @@ public final class ImportCtGovAction extends ActionSupport implements
     public void setHelper(CTGovImportMergeHelper helper) {
         this.helper = helper;
     }
-
+    /**
+     * @param registryUserService
+     *            the registryUserService to set
+     */
+    public void setRegistryUserService(
+            RegistryUserServiceLocal registryUserService) {
+        this.registryUserService = registryUserService;
+    }
 }

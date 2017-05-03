@@ -1,7 +1,6 @@
 package gov.nih.nci.pa.action;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
@@ -18,6 +18,7 @@ import gov.nih.nci.pa.service.ctgov.ClinicalStudy;
 import gov.nih.nci.pa.service.util.CTGovStudyAdapter;
 import gov.nih.nci.pa.service.util.CTGovSyncServiceLocal;
 import gov.nih.nci.pa.service.util.ProtocolQueryServiceLocal;
+import gov.nih.nci.pa.service.util.RegistryUserServiceLocal;
 import gov.nih.nci.pa.util.CTGovImportMergeHelper;
 import gov.nih.nci.pa.util.Constants;
 /**
@@ -30,6 +31,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
      private CTGovSyncServiceLocal ctGovSyncService;
      private StudyProtocolService studyProtocolService;
      private ProtocolQueryServiceLocal protocolQueryService;
+     private RegistryUserServiceLocal registryUserService;
      
      /**
       * Initialization method.
@@ -41,9 +43,11 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          ctGovSyncService = mock(CTGovSyncServiceLocal.class);
          studyProtocolService = mock(StudyProtocolService.class);
          protocolQueryService = mock(ProtocolQueryServiceLocal.class);
+         registryUserService = mock(RegistryUserServiceLocal.class);
          action.setCtGovSyncService(ctGovSyncService);
          action.setStudyProtocolService(studyProtocolService);
          action.setProtocolQueryService(protocolQueryService);
+         action.setRegistryUserService(registryUserService);
      }
      
      @Test
@@ -88,7 +92,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          dto.setPaTrialID("1");
          dto.setNciTrialID("NCI-2017-1234");
          
-         when(helper.insertNctId(any(String.class))).thenReturn(dto);
+         when(helper.insertNctId(any(String.class), any(String.class))).thenReturn(dto);
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
          String expected = "importctgov.import.new.success";
@@ -102,7 +106,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
          action.setHelper(helper);
          
-         when(helper.insertNctId(any(String.class))).thenReturn(null);
+         when(helper.insertNctId(any(String.class), any(String.class))).thenReturn(null);
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
          assertTrue(StringUtils.isNotBlank(msg));
@@ -120,7 +124,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          List<TrialRegistrationConfirmationDTO> list = new ArrayList<TrialRegistrationConfirmationDTO>();
          list.add(dto);
          
-         when(helper.updateNctId(any(String.class))).thenReturn(list);
+         when(helper.updateNctId(any(String.class), any(String.class))).thenReturn(list);
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
          String expected = "importctgov.import.update.success";
@@ -143,7 +147,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          list.add(dto);
          list.add(dto1);
          
-         when(helper.updateNctId(any(String.class))).thenReturn(list);
+         when(helper.updateNctId(any(String.class), any(String.class))).thenReturn(list);
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.SUCCESS_MESSAGE);
          String expected = "importctgov.import.update.success";
@@ -157,7 +161,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          CTGovImportMergeHelper helper = mock(CTGovImportMergeHelper.class);
          action.setHelper(helper);
 
-         when(helper.updateNctId(any(String.class))).thenReturn(null);
+         when(helper.updateNctId(any(String.class), any(String.class))).thenReturn(null);
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
          assertTrue(StringUtils.isNotBlank(msg));
@@ -175,7 +179,7 @@ public class ImportCtGovActionTest extends AbstractPaActionTest {
          List<TrialRegistrationConfirmationDTO> list = new ArrayList<TrialRegistrationConfirmationDTO>();
          list.add(dto);
          
-         when(helper.updateNctId(any(String.class))).thenThrow(new PAException("Error in call to import trial."));
+         when(helper.updateNctId(any(String.class), any(String.class))).thenThrow(new PAException("Error in call to import trial."));
          action.importTrial();
          String msg = (String) getRequest().getAttribute(Constants.FAILURE_MESSAGE);
          assertTrue(StringUtils.isNotBlank(msg));

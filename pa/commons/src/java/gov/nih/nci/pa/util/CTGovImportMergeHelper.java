@@ -4,7 +4,6 @@ import java.util.List;
 
 import gov.nih.nci.pa.noniso.dto.TrialRegistrationConfirmationDTO;
 import gov.nih.nci.pa.service.PAException;
-
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -45,17 +44,18 @@ public class CTGovImportMergeHelper {
      * 
      * @param nctID
      *            the nctID
+     * @param currentUser currentUser
      * @return TrialRegistrationConfirmationDTOs
      * @throws PAException
      *             PAException
      */
-    public List<TrialRegistrationConfirmationDTO> updateNctId(String nctID)
+    public List<TrialRegistrationConfirmationDTO> updateNctId(String nctID, String currentUser)
             throws PAException {
         List<TrialRegistrationConfirmationDTO> dtos = null;
         try {
             String response = client.sendHTTPRequest(
                     PaEarPropertyReader.getCtrpImportCtApiUrl() + "/" + nctID,
-                    PUT, null);
+                    PUT, currentUser);
             if (response != null) {
                 dtos = (List<TrialRegistrationConfirmationDTO>) PAJsonUtil.unmarshallJSON(
                         response, new TypeReference<List<TrialRegistrationConfirmationDTO>>() { });
@@ -71,17 +71,18 @@ public class CTGovImportMergeHelper {
      * 
      * @param nctID
      *            the nctID
+     * @param currentUser currentUser
      * @return TrialRegistrationConfirmationDTO
      * @throws PAException
      *             PAException
      */
-    public TrialRegistrationConfirmationDTO insertNctId(String nctID)
+    public TrialRegistrationConfirmationDTO insertNctId(String nctID, String currentUser)
             throws PAException {
         TrialRegistrationConfirmationDTO dto = new TrialRegistrationConfirmationDTO();
         try {
             String response = client.sendHTTPRequest(
                     PaEarPropertyReader.getCtrpImportCtApiUrl() + "/" + nctID,
-                    POST, null);
+                    POST, currentUser);
             if (response != null) {
                 dto = PAJsonUtil.unmarshallJSON(response,
                         TrialRegistrationConfirmationDTO.class);

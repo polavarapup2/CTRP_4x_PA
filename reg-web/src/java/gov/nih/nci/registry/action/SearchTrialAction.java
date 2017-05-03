@@ -250,7 +250,7 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
             
             // Proceed with import otherwise.
             // call the glue code
-            TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport());
+            TrialRegistrationConfirmationDTO dto = helper.insertNctId(getNctIdToImport(), currentUser);
             //String nciID = ctGovSyncService.importTrial(nctID);      
             String nciID = dto.getNciTrialID();
             /*final Long newTrialId = IiConverter

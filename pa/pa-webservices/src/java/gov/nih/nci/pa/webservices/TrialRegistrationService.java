@@ -70,7 +70,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
-
+import com.fiveamsolutions.nci.commons.util.UsernameHolder;
 /**
  * @author dkrylov
  * 
@@ -384,7 +384,8 @@ public class TrialRegistrationService extends BaseRestService {
             response = validateNctId(nct);
             if (response == null) {
                 // add glue code 
-                TrialRegistrationConfirmationDTO dto = helper.insertNctId(nct);
+               
+                TrialRegistrationConfirmationDTO dto = helper.insertNctId(nct, UsernameHolder.getUser());
                 String nciID = dto.getNciTrialID();
                // String nciID = ctGovSyncService.importTrial(nct);
                 final Long newTrialId = IiConverter
