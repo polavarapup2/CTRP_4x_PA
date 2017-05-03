@@ -14,7 +14,7 @@ before_install:
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
   - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
-  - export DOCKER_IMAGE="ctrp/ctrp_4x_pa"
+  - export DOCKER_IMAGE="fnlcr/ctrp_4x_pa"
   - echo "TravisBuild=$TRAVIS_BUILD_NUMBER" > build_number.html &&
         echo "Commit=$TRAVIS_COMMIT" >> build_number.html       &&
         echo "TravisBuildID=$TRAVIS_BUILD_ID" >> build_number.html    &&
@@ -61,12 +61,12 @@ after_success:
   - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
     --cluster CTRP-IntTest-Backend --service-name CTRP-ctrp_4x_pa-INTTEST
-    -i $DOCKER_IMAGE:$DATE
+    -i $DOCKER_IMAGE:$DATE --timeout 900 --max-definitions 25
   #Deploy to AWS IntTest-2
   - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
     --cluster CTRP-IntTest-2-Backend --service-name CTRP-ctrp_4x_pa-INTTEST-2
-    -i $DOCKER_IMAGE:$DATE
+    -i $DOCKER_IMAGE:$DATE --timeout 900 --max-definitions 25
   
   #Trigger Travis bdd tests
   - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json"
