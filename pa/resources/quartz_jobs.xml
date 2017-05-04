@@ -223,7 +223,7 @@
                 <misfire-instruction>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</misfire-instruction>
                 <job-name>caDSRSyncJob</job-name>
                 <job-group>DEFAULT</job-group>                
-                  <cron-expression>0 40 23 ? * MON-FRI</cron-expression>
+                  <cron-expression>0 0 0/1 * * ?</cron-expression>
             </cron>
         </trigger>
     </job>   
@@ -245,7 +245,7 @@
                 <misfire-instruction>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</misfire-instruction>
                 <job-name>caDSRSyncPermissibleValueJob</job-name>
                 <job-group>DEFAULT</job-group>                
-                  <cron-expression>0 0 23 ? * MON-FRI</cron-expression>
+                  <<cron-expression>0 0 0/1 * * ?</cron-expression>
             </cron>
         </trigger>
     </job>  
@@ -282,7 +282,7 @@
                 <misfire-instruction>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</misfire-instruction>
                 <job-name>verifyTrialDataJob</job-name>
                 <job-group>DEFAULT</job-group>                
-                  <cron-expression>0 0 22 ? * MON-FRI</cron-expression>
+                  <cron-expression>0 0 0/1 * * ?</cron-expression>
             </cron>
         </trigger>
     </job>
