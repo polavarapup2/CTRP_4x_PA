@@ -456,7 +456,7 @@
             <result name="error">/WEB-INF/jsp/administrative/participatingSites/participatingOrganizationscreate.jsp</result>
             <result name="error_edit">/WEB-INF/jsp/nodecorate/nodecororgdetails.jsp</result>
             <result name="displayPerson">/WEB-INF/jsp/nodecorate/sitePrincipalInvestigator.jsp</result>
-            <result name="refreshPrimaryContact" type="redirectAction">ajaxptpOrgrefreshPrimaryContact.action</result>
+            <result name="refreshPrimaryContact" type="redirectAction">/protected/ajaxptpOrgrefreshPrimaryContact.action</result>
         </action>
         <!-- needs to be refactored -->
         <action name="ajaxgetAuthOrgs*" class="gov.nih.nci.pa.action.RegulatoryInformationAction" method="{1}">
