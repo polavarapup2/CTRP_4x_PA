@@ -187,7 +187,7 @@ a.last {
 								<li>
 									<s:if test="%{#attr.row.currentUserCanAddSite}">
 				                        <s:url id="addMySiteUrl" action="addSitepopupview"><s:param name="studyProtocolId" value="%{#attr.row.studyProtocolId}" /></s:url>
-				                        <a href="javascript:void(0);" onclick="showPopup('${addMySiteUrl}', '', 'Add Participating Site');" 
+				                        <a href="javascript:void(0);" onclick="showPopup('${addMySiteUrl}', '', 'asdfhkashdfkjhdsaf');"
 				                           onkeypress="showPopup('${addMySiteUrl}', '', 'Add Participating Site');">Add My Site</a>
 				                    </s:if>
 								</li>

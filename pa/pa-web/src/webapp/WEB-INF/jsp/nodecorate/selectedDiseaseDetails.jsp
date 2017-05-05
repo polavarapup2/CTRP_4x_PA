@@ -25,7 +25,7 @@
         </td>
     </tr>
     <tr>
-        <td class="label"><s:label>Menu Display Name:</s:label></td>
+        <td class="label"><s:label>Display Name:</s:label></td>
         <td class="value">
             <s:textfield readonly="true" name="disease.menuDisplayName" cssStyle="width:280px;float:left" cssClass="readonly"/> 
         </td>

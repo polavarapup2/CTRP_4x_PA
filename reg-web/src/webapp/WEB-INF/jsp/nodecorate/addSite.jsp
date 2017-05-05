@@ -623,7 +623,7 @@ li.select2-selection__choice > span.select2-selection__choice__remove {
 										</tr>
 										<tr>
 											<td><span class="info">Please refer to the <a
-													href="https://wiki.nci.nih.gov/x/zYLpDw" target="newPage">Site
+													href="https://wiki.nci.nih.gov/x/r4LWDw" target="newPage">Site
 														Status Transition Rules</a>.
 											</span></td>
 											<td colspan="2"><span class="info">Note: Site

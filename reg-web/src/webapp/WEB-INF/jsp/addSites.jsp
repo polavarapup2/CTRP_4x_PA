@@ -867,7 +867,7 @@ th#th3 {
                                                                 <tr>
                                                                   <td colspan="3" align="left">
                                                                   <span class="info">Please refer to the <a
-                                                                        href="https://wiki.nci.nih.gov/x/zYLpDw" target="newPage">Site
+                                                                        href="https://wiki.nci.nih.gov/x/r4LWDw" target="newPage">Site
                                                                             Status Transition Rules</a>.
                                                                     </span>
                                                                   </td>
