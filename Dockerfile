@@ -7,7 +7,7 @@ ENV TZ=America/New_York
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
 # Install packages necessary to run EAP
-RUN yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
+RUN yum makecache && yum update -y && yum -y install xmlstarlet saxon augeas bsdtar unzip postgresql && yum clean all
 
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
