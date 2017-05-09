@@ -82,11 +82,13 @@ function callOnloadFunctions(){
 function checkAllonLoad() {
 	 if ($('gender').value == '' | $('gender').value == 'All') {
          hideRow($('genderNewRow'));
-         $('genderNew').value == '';
+         $('genderNew').value='';
+         hideRow($('genderDescriptionRow'));
+         $('genderDescription').value='';
      } 
 	 if($('genderNew').value =='' | $('genderNew').value =='false') {
 		 hideRow($('genderDescriptionRow'));
-		 $(genderDescription).value='';
+		 $('genderDescription').value='';
 	 }
 }
 function handleAction(){
@@ -109,8 +111,8 @@ function checkGenderDropDown(){
 	 if ($('gender').value == '' | $('gender').value == 'All') {
          hideRow($('genderNewRow'));
          hideRow($('genderDescriptionRow'));
-         $(genderDescription).value='';
-         $('genderNew').value = '';
+         $('genderDescription').value='';
+         $('genderNew').value='';
      } else {
     	 showRow($('genderNewRow'));
      }
@@ -119,7 +121,7 @@ function checkGenderDropDown(){
 function checkGenderDesc(){
     if ($('genderNew').value == '' | $('genderNew').value == 'false') {
         hideRow($('genderDescriptionRow'));
-        $(genderDescription).value='';
+        $('genderDescription').value='';
     } else {
         showRow($('genderDescriptionRow'));
     }
