@@ -11,7 +11,7 @@
           <li id="diseaseSearch"><a href="diseaseSearch.action">Disease Search</a></li>
           <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Quick Links <b class="caret"></b></a>
             <ul class="dropdown-menu external-links">
-            <li><a href="https://wiki.nci.nih.gov/display/CTRPdoc/NCI+Clinical+Trials+Reporting+Program+%28CTRP%29+User%27s+Guides" class="external" target="new0">Accrual User's Guide</a></li>
+            <li><a href="https://wiki.nci.nih.gov/x/4g9WF" class="external" target="new0">Accrual User's Guide</a></li>
               <li><a href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/main" target="new0">Clinical Trials Reporting Program (CTRP)</a></li>
               <li><a href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/resources" target="new1">Useful Templates and Documentation</a></li>
               <li><a target="_blank" href="/registry/home.action"> NCI CTRP Registration Application</a></li>

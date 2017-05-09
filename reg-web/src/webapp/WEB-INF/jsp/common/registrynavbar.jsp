@@ -90,7 +90,7 @@
           </c:if>
           <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Quick Links <b class="caret"></b></a>
             <ul class="dropdown-menu external-links">
-            <li><a href="https://wiki.nci.nih.gov/display/CTRPdoc/NCI+Clinical+Trials+Reporting+Program+%28CTRP%29+User%27s+Guides" class="external" target="new0">Registration User's Guide</a></li>
+            <li><a href="https://wiki.nci.nih.gov/x/wg9WF" class="external" target="new0">Registration User's Guide</a></li>
               <li><a target="_blank" href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/main">Clinical Trials Reporting Program (CTRP)</a></li>
               <li><a target="_blank" href="http://www.cancer.gov/clinicaltrials/conducting/ncictrp/resources">Useful Templates and Documentation</a></li>
               <li><a target="_blank" href="/accrual/home.action">NCI CTRP Accrual Application</a></li>
