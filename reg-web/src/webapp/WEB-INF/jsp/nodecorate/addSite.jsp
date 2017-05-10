@@ -626,11 +626,18 @@ li.select2-selection__choice > span.select2-selection__choice__remove {
 													href="https://wiki.nci.nih.gov/x/r4LWDw" target="newPage">Site
 														Status Transition Rules</a>.
 											</span></td>
-											<td colspan="2"><span class="info">Note: Site
+											<td colspan="2"><span class="info"><b>Notes:</b></br>- Site
 													Recruitment Status of Active or Enrolling by Invitation
 													indicates that the Site is Open for Patient Accruals.
 													Closed to Accrual Site Status indicates that the Site is
-													Closed to Patient Accruals. </span></td>
+													&nbsp;&nbsp;Closed to Patient Accruals. </span></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td colspan="2"><span class="info">- Because
+												your organization belongs to a family, you can add
+												to this trial any site within that family. Please select
+												the site you would like to add below: </span></td>
 										</tr>
 									</tbody>
 								</table>

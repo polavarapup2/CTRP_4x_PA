@@ -670,6 +670,11 @@ th#th3 {
                             your sites to each of the trials, scroll to the bottom of the
                             page and click <b>Save.</b>
                         </p>
+                        <p class="mb20">
+                            <b>Note:</b> Because your organization belongs to a family, you can add
+                            to this trial any site within that family. Please select
+                            the site you would like to add below:
+                        </p>
                     </div>
 
                 </div>
