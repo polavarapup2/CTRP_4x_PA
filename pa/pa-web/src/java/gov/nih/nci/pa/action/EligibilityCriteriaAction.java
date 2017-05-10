@@ -274,14 +274,12 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
             spDTO = PaRegistry.getStudyProtocolService().updateStudyProtocol(spDTO);
             
             try {
-                if (gender != null) {
                     ISDesignDetailsWebDTO genderwebDto = new ISDesignDetailsWebDTO();
                     genderwebDto.setGender(gender);
                     genderwebDto.setGenderEligibilityDescription(genderEligibilityDescription);
                     genderwebDto.setLastUpdatedDate(lastUpdatedDate);
                     genderwebDto.setId(msId);
                     helper.mergeEligibilityCriteriaUpdate(studyProtocolIi, spqDTO.getNciIdentifier(), genderwebDto);
-                }
             } catch (PAException e) {
                 ServletActionContext.getRequest().setAttribute(Constants.FAILURE_MESSAGE, e.getMessage());
             }
