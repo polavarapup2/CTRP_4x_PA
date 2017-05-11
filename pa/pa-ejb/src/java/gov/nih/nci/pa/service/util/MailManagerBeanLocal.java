@@ -3029,9 +3029,9 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
             mailFolder.open(Folder.READ_WRITE);
             
             List<MailMessage> result = new ArrayList<MailManagerService.MailMessage>();
-            int newMailCount = mailFolder.getNewMessageCount();
+            int newMailCount = mailFolder.getUnreadMessageCount();
             if (newMailCount > 0) {
-                int mailCount = mailFolder.getMessageCount(); 
+                int mailCount = mailFolder.getMessageCount();
                 int start = mailCount - newMailCount + 1;
                 Message[] messages = mailFolder.getMessages(start, mailCount);
                 for (int i = 0; i < messages.length; i++) {
