@@ -80,8 +80,10 @@ package gov.nih.nci.pa.action;
 
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.StudyIndldeWebDTO;
+import gov.nih.nci.pa.enums.ExpandedAccessStatusCode;
 import gov.nih.nci.pa.enums.HolderTypeCode;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
+import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
@@ -220,19 +222,20 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
         Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
                 Constants.STUDY_PROTOCOL_II);
         studyIndldeDTO.setStudyProtocolIdentifier(studyProtocolIi);
-        /*if (studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase(
-                "Yes")
-                || studyIndldeWebDTO.getExpandedAccessIndicator()
-                        .equalsIgnoreCase("true")) {
-            studyIndldeWebDTO.setExpandedAccessIndicator("true");
+        if (studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase("Yes")
+           || studyIndldeWebDTO.getExpandedAccessIndicator().equalsIgnoreCase("true")) {
+            //studyIndldeWebDTO.setExpandedAccessIndicator("true");
+            studyIndldeDTO.setExpandedAccessIndicator(
+                    BlConverter.convertToBl(Boolean.valueOf("true")));
+            studyIndldeDTO.setExpandedAccessStatusCode(
+                    CdConverter.convertToCd(ExpandedAccessStatusCode.NO_LONGER_AVAILABLE));
         } else {
-            studyIndldeWebDTO.setExpandedAccessIndicator("false");
-            studyIndldeWebDTO.setExpandedAccessStatus(null);
+            studyIndldeDTO.setExpandedAccessIndicator(
+                    BlConverter.convertToBl(Boolean.valueOf("false")));
+            //studyIndldeWebDTO.setExpandedAccessStatus(null);
+            studyIndldeDTO.setExpandedAccessStatusCode(CdConverter.convertStringToCd(null));
         }
-        studyIndldeDTO.setExpandedAccessIndicator(BlConverter.convertToBl(Boolean.valueOf(
-            studyIndldeWebDTO.getExpandedAccessIndicator())));
-        studyIndldeDTO.setExpandedAccessStatusCode(CdConverter.convertStringToCd(
-            studyIndldeWebDTO.getExpandedAccessStatus()));*/
+        
         studyIndldeDTO.setGrantorCode(CdConverter.convertStringToCd(studyIndldeWebDTO.getGrantor()));
         studyIndldeDTO.setHolderTypeCode(CdConverter.convertStringToCd(studyIndldeWebDTO.getHolderType()));
         studyIndldeDTO.setIndldeNumber(StConverter.convertToSt(studyIndldeWebDTO.getIndldeNumber()));
