@@ -186,13 +186,13 @@ public class EligibilityCriteriaAction extends AbstractMultiObjectDeleteAction {
             StudyProtocolQueryDTO spqDTO = (StudyProtocolQueryDTO) ServletActionContext.getRequest().getSession()
                     .getAttribute(Constants.TRIAL_SUMMARY);
        //     setFdaaaFieldsRequired(studyProtocolIi);
+            ISDesignDetailsWebDTO microServiceDto = setMicroServiceDataDTO(studyProtocolIi, spqDTO
+                    .getNciIdentifier());
             if (CollectionUtils.isNotEmpty(pecList)) {
                 list = new ArrayList<ISDesignDetailsWebDTO>();
                 for (PlannedEligibilityCriterionDTO dto : pecList) {
                     list.add(setEligibilityDetailsDTO(dto));
                 }
-                ISDesignDetailsWebDTO microServiceDto = setMicroServiceDataDTO(studyProtocolIi, spqDTO
-                        .getNciIdentifier());
                 if (microServiceDto != null && microServiceDto.getGender() != null) {
                     list.add(microServiceDto);
                 }

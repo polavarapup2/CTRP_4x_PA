@@ -97,6 +97,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import gov.nih.nci.pa.util.TrialInfoMergeHelper;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 /**
@@ -262,9 +263,26 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
      */
     public String delete() {
         try {
-            //call glue code to delete info in data clinical trial microservice
+            String[] idsToDelete = new String[0];
+            try {
+                idsToDelete = getObjectsToDelete();
+            } catch (Exception e) {
+                //do nothing
+            }
             deleteSelectedObjects();
-            helper.deleteTrialIndIdeInfo(studyIndldeWebDTO.getMsId());
+            //call glue code to delete info in data clinical trial microservice
+            //getObjectsToDelete() will never throw a NullPtrException for this 
+            //instance of the call since if no objects were selected for deletion then the 
+            //previous method would have already thrown the Exception and the control 
+            //would have gone to the catch block 
+            Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().
+                    getAttribute(Constants.STUDY_PROTOCOL_II);
+            for (String id : idsToDelete) {
+                StudyIndldeWebDTO tempWebDTO = new StudyIndldeWebDTO();
+                tempWebDTO.setId(id);
+                helper.mergeTrialIndIdeInfoRead(studyProtocolIi, tempWebDTO);
+                helper.deleteTrialIndIdeInfo(tempWebDTO.getMsId());
+            }
             ServletActionContext.getRequest().setAttribute(
                     Constants.SUCCESS_MESSAGE, Constants.MULTI_DELETE_MESSAGE);
         } catch (Exception e) {
