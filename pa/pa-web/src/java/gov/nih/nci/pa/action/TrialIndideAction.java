@@ -83,6 +83,7 @@ import gov.nih.nci.pa.dto.StudyIndldeWebDTO;
 import gov.nih.nci.pa.enums.ExpandedAccessStatusCode;
 import gov.nih.nci.pa.enums.HolderTypeCode;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
+import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
@@ -98,6 +99,7 @@ import java.util.regex.Pattern;
 
 import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 /**
@@ -352,7 +354,6 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
               studyIndldeWebDTO.setNciDivProgHolder(null);
           }
       }
-      /*if (BooleanUtils.isFalse(studyIndldeWebDTO.getExemptIndicator())) {
          Ii studyProtocolIi = (Ii) ServletActionContext.getRequest().getSession().getAttribute(
                 Constants.STUDY_PROTOCOL_II);
          StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(studyProtocolIi);
@@ -362,20 +363,19 @@ public class TrialIndideAction extends AbstractMultiObjectDeleteAction {
                  + " set to 'No', "
                  + " Please update Regulatory Information from Administrative Data menu and try again");
          }
-       }*/
     }
 
     /**
      * @param studyProtocolDTO
      * @return
      */
-    /*private boolean isCorrelationRuleRequired(StudyProtocolDTO studyProtocolDTO) {
+    private boolean isCorrelationRuleRequired(StudyProtocolDTO studyProtocolDTO) {
         Boolean ctGovIndicator = BlConverter.convertToBoolean(studyProtocolDTO.getCtgovXmlRequiredIndicator());
         return BooleanUtils.isTrue(ctGovIndicator) && (studyProtocolDTO.getIdentifier() != null
                 && studyProtocolDTO.getFdaRegulatedIndicator() != null)
                 && (studyProtocolDTO.getFdaRegulatedIndicator().getValue() != null)
                 && (!Boolean.valueOf(studyProtocolDTO.getFdaRegulatedIndicator().getValue()));
-    }*/
+    }
 
     /**
      *

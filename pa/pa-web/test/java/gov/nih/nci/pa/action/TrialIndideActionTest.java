@@ -16,12 +16,14 @@ import gov.nih.nci.pa.enums.GrantorCode;
 import gov.nih.nci.pa.enums.HolderTypeCode;
 import gov.nih.nci.pa.enums.IndldeTypeCode;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
+import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.CdConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyIndldeServiceLocal;
+import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
 import gov.nih.nci.pa.util.Constants;
 import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PaEarPropertyReader;
@@ -34,6 +36,7 @@ import gov.nih.nci.pa.util.TrialInfoMergeHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,6 +53,7 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
     private TrialInfoMergeHelper helper = new TrialInfoMergeHelper();
     private TrialInfoHelperUtil helperUtil = new TrialInfoHelperUtil();
     private StudyIndldeServiceLocal studyIndldeServiceLocal = mock(StudyIndldeServiceLocal.class);
+    private StudyProtocolServiceLocal protocolService = mock(StudyProtocolServiceLocal.class);
     
 	@Before
 	public void setUp() throws PAException, IOException {
@@ -60,6 +64,11 @@ public class TrialIndideActionTest extends AbstractPaActionTest {
         ServiceLocator paRegSvcLoc = mock(ServiceLocator.class);
         PaRegistry.getInstance().setServiceLocator(paRegSvcLoc);
         when(paRegSvcLoc.getStudyIndldeService()).thenReturn(studyIndldeServiceLocal);
+        StudyProtocolDTO spDTO = new StudyProtocolDTO();
+        spDTO.setIdentifier(IiConverter.convertToIi(1L));
+        spDTO.setFdaRegulatedIndicator(BlConverter.convertToBl(false));
+        when(paRegSvcLoc.getStudyProtocolService()).thenReturn(protocolService);
+        when(protocolService.getStudyProtocol(any(Ii.class))).thenReturn(spDTO);
         additionalTrialIndIdeDTO.setStudyProtocolId("1");
         additionalTrialIndIdeDTO.setTrialIndIdeId("123");
         additionalTrialIndIdeDTO.setExpandedAccessIndicator("Yes");
