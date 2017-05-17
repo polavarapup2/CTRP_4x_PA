@@ -4,6 +4,7 @@ import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.ClinicalResearchStaff;
 import gov.nih.nci.pa.domain.Organization;
 import gov.nih.nci.pa.domain.Person;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.PaOrganizationDTO;
 import gov.nih.nci.pa.dto.PaPersonDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
@@ -33,16 +34,16 @@ import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.service.StudyRegulatoryAuthorityServiceLocal;
 import gov.nih.nci.pa.service.correlation.CorrelationUtils;
 import gov.nih.nci.pa.service.correlation.CorrelationUtilsRemote;
-import gov.nih.nci.pa.service.util.RegulatoryInformationServiceLocal;
 import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAAttributeMaxLen;
 import gov.nih.nci.pa.util.PAConstants;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 import gov.nih.nci.registry.dto.BaseTrialDTO;
 import gov.nih.nci.registry.dto.ProprietaryTrialDTO;
 import gov.nih.nci.registry.dto.SubmittedOrganizationDTO;
@@ -75,6 +76,9 @@ import org.apache.struts2.ServletActionContext;
 public class TrialUtil extends TrialConvertUtils {
 
     private CorrelationUtilsRemote correlationUtils;
+    
+    private TrialInfoHelperUtil trialInfoHelperUtil = new TrialInfoHelperUtil();
+    
     /**
      * Session Attribute of Trial DTO.
      */
@@ -547,35 +551,30 @@ public class TrialUtil extends TrialConvertUtils {
      * @throws PAException the PA exception
      */
     private void copyRegulatoryInformation(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
-        RegulatoryInformationServiceLocal regInfoSvc = PaRegistry.getRegulatoryInformationService();
-        //trialDTO.setCountryList(regInfoSvc.getDistinctCountryNames());
-        trialDTO.setCountryList(regInfoSvc.getDistinctCountryNamesStartWithUSA());
-        StudyRegulatoryAuthorityServiceLocal studyRegAuthSvc = PaRegistry.getStudyRegulatoryAuthorityService();
-        StudyRegulatoryAuthorityDTO authorityDTO = studyRegAuthSvc.getCurrentByStudyProtocol(studyProtocolIi);
-        if (authorityDTO != null) { // load values from database
-            setRegulatoryIndicatorInfo(studyProtocolIi, trialDTO);
-            setRegulatoryAuthorityInfo(studyProtocolIi, trialDTO);
-            setOversgtInfo(trialDTO);
-        }
-    }
-
-    private void setRegulatoryAuthorityInfo(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
-        RegulatoryInformationServiceLocal regInfoSvc = PaRegistry.getRegulatoryInformationService();
-        StudyRegulatoryAuthorityServiceLocal studyRegAuthSvc = PaRegistry.getStudyRegulatoryAuthorityService();
-        StudyRegulatoryAuthorityDTO sraFromDatabaseDTO = studyRegAuthSvc.getCurrentByStudyProtocol(studyProtocolIi);
-        if (sraFromDatabaseDTO != null) {
-            Long sraId = Long.valueOf(sraFromDatabaseDTO.getRegulatoryAuthorityIdentifier().getExtension());
-            List<Long> regInfo = regInfoSvc.getRegulatoryAuthorityInfo(sraId);
-            trialDTO.setLst(regInfo.get(1).toString());
-            // set selected the name of the regulatory authority chosen
-            trialDTO.setRegIdAuthOrgList(regInfoSvc.getRegulatoryAuthorityNameId(Long
-                    .valueOf(regInfo.get(1).toString())));
-            trialDTO.setSelectedRegAuth(regInfo.get(0).toString());
-        }
-    }
-
-    private void setRegulatoryIndicatorInfo(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
         StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(studyProtocolIi);
+        
+        AdditionalRegulatoryInfoDTO regulatoryDto =
+                trialInfoHelperUtil.retrieveRegulatoryInfo(studyProtocolIi, trialDTO.getAssignedIdentifier());
+        if (regulatoryDto != null) {
+            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getFda_regulated_drug())) {
+                trialDTO.setFdaRegulatedDrug(regulatoryDto.getFda_regulated_drug());
+            }
+            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getFda_regulated_device())) {
+                trialDTO.setFdaRegulatedDevice(regulatoryDto.getFda_regulated_device());
+            }
+            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getPed_postmarket_surv())) {
+                trialDTO.setPedPostmarketSurv(regulatoryDto.getPed_postmarket_surv());
+            }
+            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getExported_from_us())) {
+                trialDTO.setExportedFromUs(regulatoryDto.getExported_from_us());
+            }
+            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getPost_prior_to_approval())) {
+                trialDTO.setPostPriorToApproval(regulatoryDto.getPost_prior_to_approval());
+            }
+            trialDTO.setLastUpdatedDate(regulatoryDto.getDate_updated());
+            trialDTO.setMsId(regulatoryDto.getId());
+        }
+        
         if (spDTO.getSection801Indicator().getValue() != null) {
             trialDTO.setSection801Indicator(BlConverter.convertBlToYesNoString(spDTO.getSection801Indicator()));
         }
@@ -591,7 +590,6 @@ public class TrialUtil extends TrialConvertUtils {
                     .getDataMonitoringCommitteeAppointedIndicator())));
         }
     }
-
 
     /**
      * Copy Status data from the source to the destination Trial.
@@ -1045,6 +1043,21 @@ public class TrialUtil extends TrialConvertUtils {
         this.correlationUtils = correlationUtils;
     }
 
-    
+    /**
+     *
+     * @return TrialInfoHelperUtil
+     */
+    public TrialInfoHelperUtil getTrialInfoHelperUtil() {
+        return trialInfoHelperUtil;
+    }
+
+    /**
+     *
+     * @param trialInfoHelperUtil
+     *            the TrialInfoHelperUtil
+     */
+    public void setTrialInfoHelperUtil(TrialInfoHelperUtil trialInfoHelperUtil) {
+        this.trialInfoHelperUtil = trialInfoHelperUtil;
+    }
     
 }
