@@ -245,7 +245,7 @@
                 <misfire-instruction>MISFIRE_INSTRUCTION_FIRE_ONCE_NOW</misfire-instruction>
                 <job-name>caDSRSyncPermissibleValueJob</job-name>
                 <job-group>DEFAULT</job-group>                
-                  <<cron-expression>0 0 23 ? * MON-FRI</cron-expression>
+                  <cron-expression>0 0 23 ? * MON-FRI</cron-expression>
             </cron>
         </trigger>
     </job>  
