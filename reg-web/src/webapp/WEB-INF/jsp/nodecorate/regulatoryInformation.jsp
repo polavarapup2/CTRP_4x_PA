@@ -35,20 +35,20 @@
                         <span style="color:gray">To modify this indicator's value please submit a request to the CTRO at <a href="mailto:ncictro@mail.nih.gov">ncictro@mail.nih.gov</a></span>
                     </div>
                 </div>
-                <!--
+
             <div class="form-group" id="approvalRow">
                 <label for="trialDTO.postPriorToApproval"  class="col-xs-4 control-label"> <fmt:message key="regulatory.approval.clearance"/><span class="required">*</span></label>
                 <div class="col-xs-8">
-                    <s:select id="approval" name="trialDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkApprovalDropDown();"/>
+                    <s:select id="approval" name="trialDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
                     <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.postPriorToApproval"/>" data-placement="top" data-trigger="hover"></i>
                     <span class="alert-danger"><s:fielderror><s:param>trialDTO.postPriorToApproval</s:param></s:fielderror></span>
                 </div>
             </div>
--->
+
                 <div class="form-group" id="survRow" style="display: none">
                     <label for="trialDTO.pedPostmarketSurv"  class="col-xs-4 control-label"> <fmt:message key="regulatory.market.surveillance"/><span class="required">*</span></label>
                     <div class="col-xs-8">
-                        <s:select id="approval" name="trialDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
+                        <s:select id="surveillance" name="trialDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.pedPostmarketSurv"/>" data-placement="top" data-trigger="hover"></i>
                         <span class="alert-danger"><s:fielderror><s:param>trialDTO.pedPostmarketSurv</s:param></s:fielderror></span>
                     </div>
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <label for="trialDTO.exportedFromUs"  class="col-xs-4 control-label"> <fmt:message key="regulatory.usa.export"/><span class="required">*</span></label>
                     <div class="col-xs-8">
-                        <s:select id="approval" name="trialDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
+                        <s:select id="export" name="trialDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
 
                         <span class="alert-danger"><s:fielderror><s:param>trialDTO.exportedFromUs</s:param></s:fielderror></span>
                     </div>

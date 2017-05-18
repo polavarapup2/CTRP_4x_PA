@@ -272,6 +272,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             
             List<StudyIndldeDTO> studyIndldeDTOs = util.convertISOINDIDEList(trialDTO.getIndIdeDtos(), null);
             List<StudyResourcingDTO> studyResourcingDTOs = util.convertISOGrantsList(trialDTO.getFundingDtos());
+            //helper class
             StudyRegulatoryAuthorityDTO studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
             
             //set program code text to null sometimes this is populated in case 
@@ -352,29 +353,33 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
                 ServletActionContext.getRequest().setAttribute("failureMessage", getText("error.fieldErrors"));
                 TrialSessionUtil.addSessionAttributes(trialDTO);
                 // have to call the usa country list
+                //fdaaa2 Changes
                 //trialUtil.populateRegulatoryList(trialDTO);
-                trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+               // trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
                 return ERROR;
             }
             trialDTO.setPropritaryTrialIndicator(CommonsConstant.NO);
             trialDTO.setDocDtos(getTrialDocuments());
             addIndIdesToTrialDto();
             addSecondaryIdsToTrialDto();
-            String section801 = trialDTO.getSection801Indicator();
-            if (section801 != null && section801.equalsIgnoreCase("YES") 
-                 && StringUtils.isEmpty(trialDTO.getDelayedPostingIndicator())) {
+            //fdaaa2 Changes
+           // String section801 = trialDTO.getSection801Indicator();
+            if (StringUtils.isEmpty(trialDTO.getDelayedPostingIndicator())) {
                 trialDTO.setDelayedPostingIndicator(CommonsConstant.NO);
             }
-            trialUtil.setOversgtInfo(trialDTO);
+            //fdaaa2 Changes
+           // trialUtil.setOversgtInfo(trialDTO);
 
         } catch (IOException e) {
             LOG.error(e);
             return ERROR;
-        } catch (PAException e) {
-            LOG.error(e);
-            addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
-            return ERROR;
         }
+        //fdaaa2 Changes
+//        catch (PAException e) {
+//            LOG.error(e);
+//            addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
+//            return ERROR;
+//        }
         TrialSessionUtil.removeSessionAttributes();
         ServletActionContext.getRequest().getSession().setAttribute(TrialUtil.SESSION_TRIAL_ATTRIBUTE, trialDTO);
         return "review";
