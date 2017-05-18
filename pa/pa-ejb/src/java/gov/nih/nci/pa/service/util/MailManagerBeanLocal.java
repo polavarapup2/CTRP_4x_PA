@@ -567,6 +567,7 @@ public class MailManagerBeanLocal implements MailManagerServiceLocal, TemplateLo
                             lookUpTableService.getPropertyValue("smtp.auth.username"),
                             lookUpTableService.getPropertyValue("smtp.auth.password"));
                     transport.sendMessage(message, message.getAllRecipients());
+                    logEmail(message, null, postDeletes);
                     LOG.info("e-mail sent successfully.");
                 } catch (Exception e) {
                     LOG.error(SEND_MAIL_ERROR, e);
