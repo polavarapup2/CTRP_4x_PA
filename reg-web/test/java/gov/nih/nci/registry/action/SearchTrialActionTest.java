@@ -20,6 +20,7 @@ import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.Organization;
 import gov.nih.nci.pa.domain.Person;
 import gov.nih.nci.pa.domain.RegistryUser;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.PAContactDTO;
 import gov.nih.nci.pa.dto.PaOrganizationDTO;
 import gov.nih.nci.pa.dto.PaPersonDTO;
@@ -49,6 +50,7 @@ import gov.nih.nci.pa.util.CacheUtils;
 import gov.nih.nci.pa.util.MockCSMUserService;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PAUtil;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 import gov.nih.nci.registry.dto.ProprietaryTrialDTO;
 import gov.nih.nci.registry.dto.SearchProtocolCriteria;
 import gov.nih.nci.registry.service.MockPAOrganizationService;
@@ -313,6 +315,13 @@ public class SearchTrialActionTest extends AbstractHibernateTestCase {
 
     @Test
     public void testExecute() throws PAException {
+        TrialUtil trialUtil = mock(TrialUtil.class);
+        action.setTrialUtils(trialUtil);
+        TrialInfoHelperUtil trialInfoHelperUtil = mock(TrialInfoHelperUtil.class);
+        trialUtil.setTrialInfoHelperUtil(trialInfoHelperUtil);
+        when(trialInfoHelperUtil.retrieveRegulatoryInfo(any(Ii.class), any(String.class)))
+        .thenReturn(new AdditionalRegulatoryInfoDTO());
+        
         action.setTrialAction("");
         assertEquals("success", action.execute());
 
@@ -345,6 +354,12 @@ public class SearchTrialActionTest extends AbstractHibernateTestCase {
 
     @Test
     public void testView() throws PAException {
+        TrialUtil trialUtil = mock(TrialUtil.class);
+        action.setTrialUtils(trialUtil);
+        TrialInfoHelperUtil trialInfoHelperUtil = mock(TrialInfoHelperUtil.class);
+        trialUtil.setTrialInfoHelperUtil(trialInfoHelperUtil);
+        when(trialInfoHelperUtil.retrieveRegulatoryInfo(any(Ii.class), any(String.class)))
+        .thenReturn(new AdditionalRegulatoryInfoDTO());
         action.setStudyProtocolId(1L);
         registryUserService = mock(RegistryUserServiceLocal.class);
         action.setRegistryUserService(registryUserService);
