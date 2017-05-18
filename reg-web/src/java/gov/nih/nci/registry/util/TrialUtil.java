@@ -776,23 +776,27 @@ public class TrialUtil extends TrialConvertUtils {
         return saveDraft(trialDTO, fundingDTOS, indDTOS);
     }
 
-    private BaseTrialDTO saveDraft(BaseTrialDTO trialDTO, List<StudyFundingStageDTO> fundingDTOS,
-            List<StudyIndIdeStageDTO> indDTOS) throws PAException {
+    private BaseTrialDTO saveDraft(BaseTrialDTO trialDTO, 
+            List<StudyFundingStageDTO> fundingDTOS, List<StudyIndIdeStageDTO> indDTOS) 
+            throws PAException {
         StudyProtocolStageDTO spStageDto = convertToStudyProtocolStageDTO(trialDTO);
         List<DocumentDTO> docDTOS = convertToISODocumentList(trialDTO.getDocDtos());
         Ii tempStudyProtocolIi = null;
         if (StringUtils.isNotEmpty(trialDTO.getStudyProtocolId())) {
-            StudyProtocolStageDTO dto = PaRegistry.getStudyProtocolStageService().update(spStageDto, fundingDTOS,
-                    indDTOS, docDTOS);
+            StudyProtocolStageDTO dto = PaRegistry.getStudyProtocolStageService().update(
+                    spStageDto, fundingDTOS, indDTOS, docDTOS);
             tempStudyProtocolIi = dto.getIdentifier();
         } else {
-            tempStudyProtocolIi = PaRegistry.getStudyProtocolStageService().create(spStageDto, fundingDTOS, indDTOS,
-                    docDTOS);
+            tempStudyProtocolIi = PaRegistry.getStudyProtocolStageService().create(
+                    spStageDto, fundingDTOS, indDTOS, docDTOS);
         }
         if (trialDTO instanceof TrialDTO) {
             setOversgtInfo((TrialDTO) trialDTO);
         }
         trialDTO.setStudyProtocolId(tempStudyProtocolIi.getExtension());
+        if (trialDTO instanceof TrialDTO) {
+            saveAdditionalRegulatoryInfo((TrialDTO) trialDTO);
+        }
         return trialDTO;
     }
 
@@ -1027,6 +1031,27 @@ public class TrialUtil extends TrialConvertUtils {
                  }
                  
              }
+    }
+    
+    /**
+     * Save regulatory info to microservice
+     * @param trialDTO trialDTO
+     * @return AdditionalRegulatoryInfoDTO AdditionalRegulatoryInfoDTO
+     * @throws PAException PAException
+     */
+    public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(TrialDTO trialDTO) throws PAException {
+        AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
+        regulatoryDto.setExported_from_us(trialDTO.getExportedFromUs());
+        regulatoryDto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
+        regulatoryDto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
+        regulatoryDto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
+        regulatoryDto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
+        regulatoryDto.setDate_updated(trialDTO.getLastUpdatedDate());
+        regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        regulatoryDto.setNci_id(trialDTO.getNctIdentifier());
+        regulatoryDto.setId(trialDTO.getMsId());
+        return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
+                trialDTO.getStudyProtocolId(), trialDTO.getNctIdentifier(), regulatoryDto);
     }
 
     /**
