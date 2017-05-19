@@ -795,7 +795,11 @@ public class TrialUtil extends TrialConvertUtils {
         }
         trialDTO.setStudyProtocolId(tempStudyProtocolIi.getExtension());
         if (trialDTO instanceof TrialDTO) {
-            saveAdditionalRegulatoryInfo((TrialDTO) trialDTO);
+            AdditionalRegulatoryInfoDTO ariDto =  saveAdditionalRegulatoryInfo((TrialDTO) trialDTO);
+            if (ariDto != null) {
+                ((TrialDTO) trialDTO).setMsId(ariDto.getId());
+                ((TrialDTO) trialDTO).setLastUpdatedDate(ariDto.getDate_updated());
+            }
         }
         return trialDTO;
     }
@@ -1040,18 +1044,13 @@ public class TrialUtil extends TrialConvertUtils {
      * @throws PAException PAException
      */
     public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(TrialDTO trialDTO) throws PAException {
-        AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
-        regulatoryDto.setExported_from_us(trialDTO.getExportedFromUs());
-        regulatoryDto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
-        regulatoryDto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
-        regulatoryDto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
-        regulatoryDto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
-        regulatoryDto.setDate_updated(trialDTO.getLastUpdatedDate());
-        regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
-        regulatoryDto.setNci_id(trialDTO.getNctIdentifier());
-        regulatoryDto.setId(trialDTO.getMsId());
+        if (StringUtils.isEmpty(trialDTO.getStudyProtocolId())) {
+            throw new PAException("StudyProtocolId is required to save Trial to Microservice");
+        }
+        
+        AdditionalRegulatoryInfoDTO regulatoryDto = convertToAdditionalRegulatoryInfoDTO(trialDTO, null);
         return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
-                trialDTO.getStudyProtocolId(), trialDTO.getNctIdentifier(), regulatoryDto);
+                trialDTO.getStudyProtocolId(), null, regulatoryDto);
     }
 
     /**

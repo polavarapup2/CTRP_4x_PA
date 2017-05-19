@@ -91,6 +91,7 @@ import static org.mockito.Mockito.when;
 import gov.nih.nci.coppa.services.LimitOffset;
 import gov.nih.nci.coppa.services.TooManyResultsException;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.enums.ExpandedAccessStatusCode;
 import gov.nih.nci.pa.enums.GrantorCode;
 import gov.nih.nci.pa.enums.HolderTypeCode;
@@ -199,6 +200,50 @@ public class TrialConvertUtilsTest extends AbstractRegWebTest {
         assertEquals(trialDTO.getExpandedAccess(), "Yes");
         assertEquals(trialDTO.getExpandedAccessType(), "Available");
         assertEquals(trialDTO.getExemptIndicator(), CommonsConstant.NO);
+    }
+    
+    @Test
+    public void testConvertToAdditionalRegulatoryInfoDTO() throws Exception {
+        TrialDTO trialDTO = new TrialDTO();
+        trialDTO.setExportedFromUs("Yes");
+        trialDTO.setFdaRegulatedDevice("Yes");
+        trialDTO.setFdaRegulatedDrug("Yes");
+        trialDTO.setPedPostmarketSurv("Yes");
+        trialDTO.setPostPriorToApproval("Yes");
+        trialDTO.setLastUpdatedDate("11-27-2016");
+        trialDTO.setStudyProtocolId("12345");
+        trialDTO.setMsId("987654321");
+        
+        AdditionalRegulatoryInfoDTO additionalRegulatoryInfoDTO = tCu.convertToAdditionalRegulatoryInfoDTO(trialDTO, "NCI-123");
+        assertEquals("Yes", additionalRegulatoryInfoDTO.getExported_from_us());
+        assertEquals("Yes", additionalRegulatoryInfoDTO.getFda_regulated_device());
+        assertEquals("Yes", additionalRegulatoryInfoDTO.getFda_regulated_drug());
+        assertEquals("Yes", additionalRegulatoryInfoDTO.getPed_postmarket_surv());
+        assertEquals("Yes", additionalRegulatoryInfoDTO.getPost_prior_to_approval());
+        assertEquals("11-27-2016", additionalRegulatoryInfoDTO.getDate_updated());
+        assertEquals("12345", additionalRegulatoryInfoDTO.getStudy_protocol_id());
+        assertEquals("NCI-123", additionalRegulatoryInfoDTO.getNci_id());
+        assertEquals("987654321", additionalRegulatoryInfoDTO.getId());
+        
+        trialDTO.setExportedFromUs("No");
+        trialDTO.setFdaRegulatedDevice("No");
+        trialDTO.setFdaRegulatedDrug("No");
+        trialDTO.setPedPostmarketSurv("No");
+        trialDTO.setPostPriorToApproval("No");
+        trialDTO.setLastUpdatedDate("11-28-2016");
+        trialDTO.setStudyProtocolId("22345");
+        trialDTO.setMsId("887654321");
+        
+        additionalRegulatoryInfoDTO = tCu.convertToAdditionalRegulatoryInfoDTO(trialDTO, "NCI-234");
+        assertEquals("No", additionalRegulatoryInfoDTO.getExported_from_us());
+        assertEquals("No", additionalRegulatoryInfoDTO.getFda_regulated_device());
+        assertEquals("No", additionalRegulatoryInfoDTO.getFda_regulated_drug());
+        assertEquals("No", additionalRegulatoryInfoDTO.getPed_postmarket_surv());
+        assertEquals("No", additionalRegulatoryInfoDTO.getPost_prior_to_approval());
+        assertEquals("11-28-2016", additionalRegulatoryInfoDTO.getDate_updated());
+        assertEquals("22345", additionalRegulatoryInfoDTO.getStudy_protocol_id());
+        assertEquals("NCI-234", additionalRegulatoryInfoDTO.getNci_id());
+        assertEquals("887654321", additionalRegulatoryInfoDTO.getId());
     }
 
 }

@@ -86,6 +86,7 @@ import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_PI;
 import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_SI;
 import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_SPONSOR;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO.ResponsiblePartyType;
 import gov.nih.nci.pa.enums.ActualAnticipatedTypeCode;
@@ -1565,6 +1566,26 @@ public StudyProtocolStageDTO convertToStudyProtocolStageDTO(BaseTrialDTO trialDt
        return EnOnConverter.convertEnOnToString(
                orgDto.getName());
    }
+   
+
+    /**
+     * @param trialDTO trialDTO
+     * @param nciId nciId
+     * @return AdditionalRegulatoryInfoDTO
+     */
+    public AdditionalRegulatoryInfoDTO convertToAdditionalRegulatoryInfoDTO(TrialDTO trialDTO, String nciId) {
+        AdditionalRegulatoryInfoDTO dto = new AdditionalRegulatoryInfoDTO();
+        dto.setExported_from_us(trialDTO.getExportedFromUs());
+        dto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
+        dto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
+        dto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
+        dto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
+        dto.setDate_updated(trialDTO.getLastUpdatedDate());
+        dto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        dto.setId(trialDTO.getMsId());
+        dto.setNci_id(nciId);
+        return dto;
+    }
 
     /**
      * @return the paServiceUtil
