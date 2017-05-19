@@ -7,7 +7,7 @@
             <div class="form-group">
 
                 <div class="form-group">
-                    <label for="trialDTO.fdaRegulatedDrug"  class="col-xs-4 control-label"> <fmt:message key="regulatory.drug.product"/><span class="required">*</span></label>
+                    <label for="trialDTO.fdaRegulatedDrug"  class="col-xs-4 control-label"> <fmt:message key="regulatory.drug.product"/></label>
                     <div class="col-xs-8">
                         <s:select id="drug" name="trialDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
 
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="trialDTO.fdaRegulatedDevice"  class="col-xs-4 control-label"> <fmt:message key="regulatory.device.product"/><span class="required">*</span></label>
+                    <label for="trialDTO.fdaRegulatedDevice"  class="col-xs-4 control-label"> <fmt:message key="regulatory.device.product"/></label>
                     <div class="col-xs-8">
                         <s:select id="device" name="trialDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
 
@@ -26,7 +26,7 @@
                 </div>
                 <!--   Delayed Posting Indicator-->
                 <div class="form-group" id="delpostindrow" style="display: none">
-                    <label for="trialDTO.delayedPostingIndicator"  class="col-xs-4 control-label"> <fmt:message key="regulatory.delayed.posting.ind"/><span class="required">*</span></label>
+                    <label for="trialDTO.delayedPostingIndicator"  class="col-xs-4 control-label"> <fmt:message key="regulatory.delayed.posting.ind"/></label>
                     <div class="col-xs-8">
                         <s:hidden name="trialDTO.delayedPostingIndicator" value="false"/>
                         <c:out value="No"/>
@@ -36,8 +36,8 @@
                     </div>
                 </div>
 
-            <div class="form-group" id="approvalRow">
-                <label for="trialDTO.postPriorToApproval"  class="col-xs-4 control-label"> <fmt:message key="regulatory.approval.clearance"/><span class="required">*</span></label>
+            <div class="form-group" id="approvalRow" style="display: none">
+                <label for="trialDTO.postPriorToApproval"  class="col-xs-4 control-label"> <fmt:message key="regulatory.approval.clearance"/></label>
                 <div class="col-xs-8">
                     <s:select id="approval" name="trialDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
                     <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.postPriorToApproval"/>" data-placement="top" data-trigger="hover"></i>
@@ -46,7 +46,7 @@
             </div>
 
                 <div class="form-group" id="survRow" style="display: none">
-                    <label for="trialDTO.pedPostmarketSurv"  class="col-xs-4 control-label"> <fmt:message key="regulatory.market.surveillance"/><span class="required">*</span></label>
+                    <label for="trialDTO.pedPostmarketSurv"  class="col-xs-4 control-label"> <fmt:message key="regulatory.market.surveillance"/></label>
                     <div class="col-xs-8">
                         <s:select id="surveillance" name="trialDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.pedPostmarketSurv"/>" data-placement="top" data-trigger="hover"></i>
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="trialDTO.exportedFromUs"  class="col-xs-4 control-label"> <fmt:message key="regulatory.usa.export"/><span class="required">*</span></label>
+                    <label for="trialDTO.exportedFromUs"  class="col-xs-4 control-label"> <fmt:message key="regulatory.usa.export"/></label>
                     <div class="col-xs-8">
                         <s:select id="export" name="trialDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
 

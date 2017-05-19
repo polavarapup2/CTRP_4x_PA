@@ -248,13 +248,14 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("error", action.create());
     }
     
-   // @Test
+   @Test
     public void testCreateWithDupliTrial(){
         TrialDTO dto = getMockTrialDTO();
         dto.setLeadOrganizationIdentifier("2");
         dto.setLeadOrgTrialIdentifier("DupTestinglocalStudyProtocolId");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     @Test
@@ -266,30 +267,33 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("error", action.create());
     }
     
-    //@Test
+    @Test
     public void testCreateWithShortLeadOrgIdentifier(){
         TrialDTO dto = getMockTrialDTO();
         dto.setLeadOrgTrialIdentifier("localleadOrgTrialIdentifier");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     
-   // @Test
+   @Test
     public void testCreateWithRespPartyAsPi(){
         TrialDTO dto = getMockTrialDTO();
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     
-   // @Test
+    @Test
     public void testCreateWithRespPartyAsSponsor(){
         TrialDTO dto = getMockTrialDTO();
         dto.setResponsiblePartyType(TrialDTO.RESPONSIBLE_PARTY_TYPE_SPONSOR);
         dto.setResponsiblePersonIdentifier("3");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
         assertEquals(StudySourceCode.REGISTRY, dto.getStudySource());
     }
