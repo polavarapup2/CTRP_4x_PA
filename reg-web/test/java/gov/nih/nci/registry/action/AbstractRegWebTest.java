@@ -211,8 +211,6 @@ public abstract class AbstractRegWebTest {
         trialDTO.setLeadOrganizationName("leadOrganizationName");
         trialDTO.setPiName("piName");
         trialDTO.setSponsorName("sponsorName");
-        trialDTO.setLst("1");
-        trialDTO.setSelectedRegAuth("1");
         trialDTO.setXmlRequired(true);
         trialDTO.setNciGrant(Boolean.TRUE);
         trialDTO.setAccrualDiseaseCodeSystem("SDC");
