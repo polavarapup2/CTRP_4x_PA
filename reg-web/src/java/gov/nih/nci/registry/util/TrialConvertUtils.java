@@ -126,6 +126,7 @@ import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PADomainUtils;
+import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.registry.dto.BaseTrialDTO;
@@ -1581,10 +1582,34 @@ public StudyProtocolStageDTO convertToStudyProtocolStageDTO(BaseTrialDTO trialDt
         dto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
         dto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
         dto.setDate_updated(trialDTO.getLastUpdatedDate());
-        dto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
         dto.setId(trialDTO.getMsId());
+        dto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
         dto.setNci_id(nciId);
         return dto;
+    }
+    
+    /**
+     * @param trialDTO trialDTO
+     * @param dto dto
+     */
+    public void loadAdditionalRegulatoryInfoFromDto(TrialDTO trialDTO, AdditionalRegulatoryInfoDTO dto) {
+        if (PAJsonUtil.isValidBooleanString(dto.getExported_from_us())) {
+            trialDTO.setExportedFromUs(dto.getExported_from_us());
+        }
+        if (PAJsonUtil.isValidBooleanString(dto.getFda_regulated_device())) {
+            trialDTO.setFdaRegulatedDevice(dto.getFda_regulated_device());
+        }
+        if (PAJsonUtil.isValidBooleanString(dto.getFda_regulated_drug())) {
+            trialDTO.setFdaRegulatedDrug(dto.getFda_regulated_drug());
+        }
+        if (PAJsonUtil.isValidBooleanString(dto.getPed_postmarket_surv())) {
+            trialDTO.setPedPostmarketSurv(dto.getPed_postmarket_surv());
+        }
+        if (PAJsonUtil.isValidBooleanString(dto.getPost_prior_to_approval())) {
+            trialDTO.setPostPriorToApproval(dto.getPost_prior_to_approval());
+        }
+        trialDTO.setLastUpdatedDate(dto.getDate_updated());
+        trialDTO.setMsId(dto.getId());
     }
 
     /**

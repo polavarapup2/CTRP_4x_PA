@@ -40,7 +40,6 @@ import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAAttributeMaxLen;
 import gov.nih.nci.pa.util.PAConstants;
-import gov.nih.nci.pa.util.PAJsonUtil;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.TrialInfoHelperUtil;
@@ -417,7 +416,6 @@ public class TrialUtil extends TrialConvertUtils {
             }
             trialDTO.setProgramCodesList(programCodesList);
         }
-        
     }
 
     /**
@@ -556,23 +554,7 @@ public class TrialUtil extends TrialConvertUtils {
         AdditionalRegulatoryInfoDTO regulatoryDto =
                 trialInfoHelperUtil.retrieveRegulatoryInfo(studyProtocolIi, trialDTO.getAssignedIdentifier());
         if (regulatoryDto != null) {
-            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getFda_regulated_drug())) {
-                trialDTO.setFdaRegulatedDrug(regulatoryDto.getFda_regulated_drug());
-            }
-            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getFda_regulated_device())) {
-                trialDTO.setFdaRegulatedDevice(regulatoryDto.getFda_regulated_device());
-            }
-            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getPed_postmarket_surv())) {
-                trialDTO.setPedPostmarketSurv(regulatoryDto.getPed_postmarket_surv());
-            }
-            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getExported_from_us())) {
-                trialDTO.setExportedFromUs(regulatoryDto.getExported_from_us());
-            }
-            if (PAJsonUtil.isValidBooleanString(regulatoryDto.getPost_prior_to_approval())) {
-                trialDTO.setPostPriorToApproval(regulatoryDto.getPost_prior_to_approval());
-            }
-            trialDTO.setLastUpdatedDate(regulatoryDto.getDate_updated());
-            trialDTO.setMsId(regulatoryDto.getId());
+            loadAdditionalRegulatoryInfoFromDto(trialDTO, regulatoryDto);
         }
         
         if (spDTO.getSection801Indicator().getValue() != null) {
@@ -701,8 +683,7 @@ public class TrialUtil extends TrialConvertUtils {
     @SuppressWarnings("deprecation")
     public BaseTrialDTO getTrialDTOForPartiallySumbissionById(String tempStudyProtocolId)
             throws NullifiedRoleException, PAException {
-        BaseTrialDTO trialDTO = convertToTrialDTO(PaRegistry
-                .getStudyProtocolStageService().get(
+        BaseTrialDTO trialDTO = convertToTrialDTO(PaRegistry.getStudyProtocolStageService().get(
                         IiConverter.convertToIi(tempStudyProtocolId)));
         List<StudyFundingStageDTO> fundingIsoDtos = PaRegistry.getStudyProtocolStageService()
                 .getGrantsByStudyProtocolStage(IiConverter.convertToIi(trialDTO.getStudyProtocolId()));
@@ -723,6 +704,13 @@ public class TrialUtil extends TrialConvertUtils {
             populateRegulatoryListStartWithUSA((TrialDTO) trialDTO);
         }
         populateStageTrialDocuments(trialDTO);
+        if (trialDTO instanceof TrialDTO) {
+            AdditionalRegulatoryInfoDTO regulatoryDto = trialInfoHelperUtil.retrieveRegulatoryInfo(
+                            trialDTO.getStudyProtocolId(), trialDTO.getAssignedIdentifier());
+            if (regulatoryDto != null) {
+                loadAdditionalRegulatoryInfoFromDto(((TrialDTO) trialDTO), regulatoryDto);
+            }
+        }
         return trialDTO;
     }
 
