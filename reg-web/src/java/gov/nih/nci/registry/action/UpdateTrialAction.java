@@ -503,7 +503,7 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
             LOG.error("Exception occured while updating trial", e);
             TrialSessionUtil.addSessionAttributes(trialDTO);
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             synchActionWithDTO();
             ServletActionContext.getRequest().getSession().removeAttribute("secondaryIdentifiersList");
             trialDTO.setSecondaryIdentifierAddList(null);
