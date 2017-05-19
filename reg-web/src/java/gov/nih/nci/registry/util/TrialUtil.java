@@ -1036,7 +1036,29 @@ public class TrialUtil extends TrialConvertUtils {
                  
              }
     }
-    
+
+    /**
+     * Save regulatory info to FDAAA MS
+     * @param trialDTO trialDTO
+     * @param nciId nciId
+     * @return AdditionalRegulatoryInfoDTO
+     * @throws PAException PAException
+     */
+    public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(
+            TrialDTO trialDTO, String nciId) throws PAException {
+        AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
+        regulatoryDto.setExported_from_us(trialDTO.getExportedFromUs());
+        regulatoryDto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
+        regulatoryDto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
+        regulatoryDto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
+        regulatoryDto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
+        regulatoryDto.setDate_updated(trialDTO.getLastUpdatedDate());
+        regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        regulatoryDto.setNci_id(nciId);
+        regulatoryDto.setId(trialDTO.getMsId());
+        return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
+                trialDTO.getStudyProtocolId(), nciId, regulatoryDto);
+    }
     /**
      * Save regulatory info to microservice
      * @param trialDTO trialDTO

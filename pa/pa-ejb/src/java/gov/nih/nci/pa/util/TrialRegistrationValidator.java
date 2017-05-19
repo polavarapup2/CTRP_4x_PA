@@ -877,7 +877,7 @@ public class TrialRegistrationValidator {
     void validateRegulatoryInfo(StudyProtocolDTO studyProtocolDTO, StudyRegulatoryAuthorityDTO studyRegAuthDTO,
             List<StudyIndldeDTO> studyIndldeDTOs, StringBuilder errorMsg, String operation) throws PAException {
         if (studyProtocolDTO.getCtgovXmlRequiredIndicator().getValue().booleanValue()) {
-            check(studyRegAuthDTO == null, "Regulatory Information fields must be Entered.\n", errorMsg);
+          //  check(studyRegAuthDTO == null, "Regulatory Information fields must be Entered.\n", errorMsg);
 
             check(ISOUtil.isBlNull(studyProtocolDTO.getFdaRegulatedIndicator()),
                   "FDA Regulated Intervention Indicator is required field.\n", errorMsg);
@@ -887,8 +887,8 @@ public class TrialRegistrationValidator {
                   "Section 801 is required if FDA Regulated indicator is true.\n", errorMsg);
 
             validateDelayedPostingInd(studyProtocolDTO, operation);
-
-            validateRegAuthorityExistence(studyRegAuthDTO, errorMsg);
+            //FDAAA2 Change
+           // validateRegAuthorityExistence(studyRegAuthDTO, errorMsg);
             
             if (containsNonExemptInds(studyIndldeDTOs)) {
                 check(!fdaRegulated
@@ -896,17 +896,19 @@ public class TrialRegistrationValidator {
                                 .indexOf(FDA_REGULATED_INTERVENTION_INDICATOR_ERR_MSG) == -1,
                         FDA_REGULATED_INTERVENTION_INDICATOR_ERR_MSG + "\n",
                         errorMsg);
-
-                if (studyRegAuthDTO != null && !ISOUtil.isIiNull(studyRegAuthDTO.getRegulatoryAuthorityIdentifier())) {
-                    Long sraId = Long.valueOf(studyRegAuthDTO.getRegulatoryAuthorityIdentifier().getExtension());
-                    // doing this just to load the country since its lazy loaded.
-                    boolean isUSA = regulatoryInfoBean.getRegulatoryAuthorityCountry(sraId).getAlpha3().equals("USA");
-                    String regAuthName = regulatoryInfoBean.getCountryOrOrgName(sraId, "RegulatoryAuthority");
-                    check(!(isUSA && regAuthName.equalsIgnoreCase("Food and Drug Administration")),
-                          "For IND protocols, Oversight Authorities must include United States: "
-                                  + "Food and Drug Administration.\n", errorMsg);
-
-                }
+                // FDAAA2 Changes
+//                if (studyRegAuthDTO != null
+//                        && !ISOUtil.isIiNull(studyRegAuthDTO.getRegulatoryAuthorityIdentifier())) {
+//                    Long sraId = Long.valueOf(studyRegAuthDTO.getRegulatoryAuthorityIdentifier().getExtension());
+//                    // doing this just to load the country since its lazy loaded.
+//                   boolean isUSA = regulatoryInfoBean.getRegulatoryAuthorityCountry(sraId).getAlpha3().equals("USA");
+//                    String regAuthName = regulatoryInfoBean
+//                            .getCountryOrOrgName(sraId, "RegulatoryAuthority");
+//                    check(!(isUSA && regAuthName.equalsIgnoreCase("Food and Drug Administration")),
+//                          "For IND protocols, Oversight Authorities must include United States: "
+//                                  + "Food and Drug Administration.\n", errorMsg);
+//
+//                }
             }
         }
     }
@@ -925,12 +927,12 @@ public class TrialRegistrationValidator {
                 studyProtocolDTO.setDelayedpostingIndicator(spDTO.getDelayedpostingIndicator());
                 studyProtocolDTO.setDelayedPostingIndicatorChanged(BlConverter.convertToBl(true));
              }
-         } else if (section801 && (ISOUtil.isBlNull(studyProtocolDTO.getDelayedpostingIndicator()) 
-             || (BlConverter.convertToBool(studyProtocolDTO.getDelayedpostingIndicator())))) {
+         } else if (ISOUtil.isBlNull(studyProtocolDTO.getDelayedpostingIndicator()) // removed sec801
+             || (BlConverter.convertToBool(studyProtocolDTO.getDelayedpostingIndicator()))) {
                  studyProtocolDTO.setDelayedpostingIndicator(BlConverter.convertToBl(false));
                  studyProtocolDTO.setDelayedPostingIndicatorChanged(BlConverter.convertToBl(true));
          }
-         
+         // FDAAA2 change
 //         check(section801 && ISOUtil.isBlNull(studyProtocolDTO.getDelayedpostingIndicator()),
 //               "Delayed posting Indicator is required if Section 801 is true.So setting it to no\n", errorMsg);
     }
