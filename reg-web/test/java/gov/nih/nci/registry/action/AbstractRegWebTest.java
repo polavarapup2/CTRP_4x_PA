@@ -211,13 +211,20 @@ public abstract class AbstractRegWebTest {
         trialDTO.setLeadOrganizationName("leadOrganizationName");
         trialDTO.setPiName("piName");
         trialDTO.setSponsorName("sponsorName");
-        trialDTO.setLst("1");
-        trialDTO.setSelectedRegAuth("1");
         trialDTO.setXmlRequired(true);
         trialDTO.setNciGrant(Boolean.TRUE);
         trialDTO.setAccrualDiseaseCodeSystem("SDC");
+        
+        trialDTO.setFdaRegulatedDrug("Yes");
+        trialDTO.setFdaRegulatedDevice("Yes");
+        trialDTO.setPostPriorToApproval("Yes");
+        trialDTO.setPedPostmarketSurv("Yes");
+        trialDTO.setExportedFromUs("Yes");
+        trialDTO.setLastUpdatedDate("05/18/2017");
+        
         return trialDTO;
     }
+    
     protected List<TrialFundingWebDTO> getfundingDtos(){
         TrialFundingWebDTO grantDto = new TrialFundingWebDTO();
         grantDto.setFundingMechanismCode("B09");

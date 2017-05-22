@@ -10,6 +10,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.eq;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.FamilyDTO;
 import gov.nih.nci.pa.enums.ActualAnticipatedTypeCode;
 import gov.nih.nci.pa.enums.PrimaryPurposeAdditionalQualifierCode;
@@ -18,6 +21,8 @@ import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
 import gov.nih.nci.pa.service.util.FamilyProgramCodeServiceLocal;
 import gov.nih.nci.pa.util.CommonsConstant;
+import gov.nih.nci.pa.util.RestClient;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 import gov.nih.nci.registry.dto.TrialDTO;
 import gov.nih.nci.registry.util.Constants;
 import gov.nih.nci.registry.util.TrialUtil;
@@ -39,6 +44,10 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.StreamResult;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -50,6 +59,7 @@ import com.mockrunner.mock.web.MockHttpServletRequest;
 public class SubmitTrialActionTest extends AbstractHibernateTestCase{
     private static final String FILE_NAME = "ProtocolDoc.doc";
     private SubmitTrialAction action = new SubmitTrialAction();
+    private TrialInfoHelperUtil mockTrialInfoHelperUtil = Mockito.mock(TrialInfoHelperUtil.class);
     /**
      * Initialization method.
      */
@@ -238,13 +248,14 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("error", action.create());
     }
     
-    @Test
+   @Test
     public void testCreateWithDupliTrial(){
         TrialDTO dto = getMockTrialDTO();
         dto.setLeadOrganizationIdentifier("2");
         dto.setLeadOrgTrialIdentifier("DupTestinglocalStudyProtocolId");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     @Test
@@ -262,14 +273,16 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         dto.setLeadOrgTrialIdentifier("localleadOrgTrialIdentifier");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     
-    @Test
+   @Test
     public void testCreateWithRespPartyAsPi(){
         TrialDTO dto = getMockTrialDTO();
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
     }
     
@@ -280,6 +293,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         dto.setResponsiblePersonIdentifier("3");
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute("trialDTO", dto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("redirect_to_search", action.create());
         assertEquals(StudySourceCode.REGISTRY, dto.getStudySource());
     }
@@ -603,7 +617,30 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
     }
     
     @Test
-    public void testPartialSave() {
+    public void testPartialSaveAdditionalRegulatoryInfo() throws Exception {
+        TrialInfoHelperUtil mockHelperUtil = mock(TrialInfoHelperUtil.class);
+        when(mockHelperUtil.mergeRegulatoryInfoUpdate(
+                any(String.class), any(String.class), any(AdditionalRegulatoryInfoDTO.class)))
+                .thenAnswer(new Answer<AdditionalRegulatoryInfoDTO>() {
+                    @Override
+                    public AdditionalRegulatoryInfoDTO answer(InvocationOnMock invocation) throws Throwable {
+                        AdditionalRegulatoryInfoDTO dto = (AdditionalRegulatoryInfoDTO) invocation.getArguments()[2];
+                        dto.setId("123");
+                        return dto;
+                    }
+                });
+        
+        SubmitTrialAction action = new SubmitTrialAction();
+        action.setServletRequest(ServletActionContext.getRequest());
+        action.setTrialDTO(getMockTrialDTO());
+        action.getTrialUtil().setTrialInfoHelperUtil(mockHelperUtil);
+        assertEquals("review", action.partialSave());
+        verify(mockHelperUtil).mergeRegulatoryInfoUpdate(Matchers.anyString(), Matchers.isNull(String.class), Matchers.any(AdditionalRegulatoryInfoDTO.class));
+        assertEquals("123", action.getTrialDTO().getMsId());
+    }
+
+    @Test
+    public void testPartialSave() throws Exception {
         action.setTrialDTO(new TrialDTO());
         assertEquals("error", action.partialSave());
 
@@ -617,6 +654,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         action = new SubmitTrialAction();
         action.setServletRequest(ServletActionContext.getRequest());
         action.setTrialDTO(getMockTrialDTO());
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("review", action.partialSave());
 
         action = new SubmitTrialAction();
@@ -628,6 +666,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.NO);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.NO);
         action.setTrialDTO(trialDto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("review", action.partialSave());
 
         action = new SubmitTrialAction();
@@ -639,6 +678,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.YES);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.YES);
         action.setTrialDTO(trialDto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute(Constants.GRANT_LIST, getfundingDtos());
         assertEquals("review", action.partialSave());
@@ -653,6 +693,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.YES);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.YES);
         action.setTrialDTO(trialDto);
+        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         session.setAttribute(Constants.INDIDE_LIST, getIndDtos());
         assertEquals("review", action.partialSave());
     }

@@ -4,6 +4,7 @@ import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.domain.ClinicalResearchStaff;
 import gov.nih.nci.pa.domain.Organization;
 import gov.nih.nci.pa.domain.Person;
+import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.PaOrganizationDTO;
 import gov.nih.nci.pa.dto.PaPersonDTO;
 import gov.nih.nci.pa.dto.StudyProtocolQueryDTO;
@@ -33,16 +34,15 @@ import gov.nih.nci.pa.iso.util.IvlConverter;
 import gov.nih.nci.pa.iso.util.StConverter;
 import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.pa.service.StudyRegulatoryAuthorityServiceLocal;
 import gov.nih.nci.pa.service.correlation.CorrelationUtils;
 import gov.nih.nci.pa.service.correlation.CorrelationUtilsRemote;
-import gov.nih.nci.pa.service.util.RegulatoryInformationServiceLocal;
 import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAAttributeMaxLen;
 import gov.nih.nci.pa.util.PAConstants;
 import gov.nih.nci.pa.util.PAUtil;
 import gov.nih.nci.pa.util.PaRegistry;
+import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 import gov.nih.nci.registry.dto.BaseTrialDTO;
 import gov.nih.nci.registry.dto.ProprietaryTrialDTO;
 import gov.nih.nci.registry.dto.SubmittedOrganizationDTO;
@@ -75,6 +75,9 @@ import org.apache.struts2.ServletActionContext;
 public class TrialUtil extends TrialConvertUtils {
 
     private CorrelationUtilsRemote correlationUtils;
+    
+    private TrialInfoHelperUtil trialInfoHelperUtil = new TrialInfoHelperUtil();
+    
     /**
      * Session Attribute of Trial DTO.
      */
@@ -413,7 +416,6 @@ public class TrialUtil extends TrialConvertUtils {
             }
             trialDTO.setProgramCodesList(programCodesList);
         }
-        
     }
 
     /**
@@ -546,36 +548,15 @@ public class TrialUtil extends TrialConvertUtils {
      * @param trialDTO the trial dto
      * @throws PAException the PA exception
      */
-    private void copyRegulatoryInformation(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
-        RegulatoryInformationServiceLocal regInfoSvc = PaRegistry.getRegulatoryInformationService();
-        //trialDTO.setCountryList(regInfoSvc.getDistinctCountryNames());
-        trialDTO.setCountryList(regInfoSvc.getDistinctCountryNamesStartWithUSA());
-        StudyRegulatoryAuthorityServiceLocal studyRegAuthSvc = PaRegistry.getStudyRegulatoryAuthorityService();
-        StudyRegulatoryAuthorityDTO authorityDTO = studyRegAuthSvc.getCurrentByStudyProtocol(studyProtocolIi);
-        if (authorityDTO != null) { // load values from database
-            setRegulatoryIndicatorInfo(studyProtocolIi, trialDTO);
-            setRegulatoryAuthorityInfo(studyProtocolIi, trialDTO);
-            setOversgtInfo(trialDTO);
-        }
-    }
-
-    private void setRegulatoryAuthorityInfo(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
-        RegulatoryInformationServiceLocal regInfoSvc = PaRegistry.getRegulatoryInformationService();
-        StudyRegulatoryAuthorityServiceLocal studyRegAuthSvc = PaRegistry.getStudyRegulatoryAuthorityService();
-        StudyRegulatoryAuthorityDTO sraFromDatabaseDTO = studyRegAuthSvc.getCurrentByStudyProtocol(studyProtocolIi);
-        if (sraFromDatabaseDTO != null) {
-            Long sraId = Long.valueOf(sraFromDatabaseDTO.getRegulatoryAuthorityIdentifier().getExtension());
-            List<Long> regInfo = regInfoSvc.getRegulatoryAuthorityInfo(sraId);
-            trialDTO.setLst(regInfo.get(1).toString());
-            // set selected the name of the regulatory authority chosen
-            trialDTO.setRegIdAuthOrgList(regInfoSvc.getRegulatoryAuthorityNameId(Long
-                    .valueOf(regInfo.get(1).toString())));
-            trialDTO.setSelectedRegAuth(regInfo.get(0).toString());
-        }
-    }
-
-    private void setRegulatoryIndicatorInfo(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
+    public void copyRegulatoryInformation(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
         StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(studyProtocolIi);
+        
+        AdditionalRegulatoryInfoDTO regulatoryDto =
+                trialInfoHelperUtil.retrieveRegulatoryInfo(studyProtocolIi, trialDTO.getAssignedIdentifier());
+        if (regulatoryDto != null) {
+            loadAdditionalRegulatoryInfoFromDto(trialDTO, regulatoryDto);
+        }
+        
         if (spDTO.getSection801Indicator().getValue() != null) {
             trialDTO.setSection801Indicator(BlConverter.convertBlToYesNoString(spDTO.getSection801Indicator()));
         }
@@ -591,7 +572,6 @@ public class TrialUtil extends TrialConvertUtils {
                     .getDataMonitoringCommitteeAppointedIndicator())));
         }
     }
-
 
     /**
      * Copy Status data from the source to the destination Trial.
@@ -703,8 +683,7 @@ public class TrialUtil extends TrialConvertUtils {
     @SuppressWarnings("deprecation")
     public BaseTrialDTO getTrialDTOForPartiallySumbissionById(String tempStudyProtocolId)
             throws NullifiedRoleException, PAException {
-        BaseTrialDTO trialDTO = convertToTrialDTO(PaRegistry
-                .getStudyProtocolStageService().get(
+        BaseTrialDTO trialDTO = convertToTrialDTO(PaRegistry.getStudyProtocolStageService().get(
                         IiConverter.convertToIi(tempStudyProtocolId)));
         List<StudyFundingStageDTO> fundingIsoDtos = PaRegistry.getStudyProtocolStageService()
                 .getGrantsByStudyProtocolStage(IiConverter.convertToIi(trialDTO.getStudyProtocolId()));
@@ -725,6 +704,13 @@ public class TrialUtil extends TrialConvertUtils {
             populateRegulatoryListStartWithUSA((TrialDTO) trialDTO);
         }
         populateStageTrialDocuments(trialDTO);
+        if (trialDTO instanceof TrialDTO) {
+            AdditionalRegulatoryInfoDTO regulatoryDto = trialInfoHelperUtil.retrieveRegulatoryInfo(
+                            trialDTO.getStudyProtocolId(), trialDTO.getAssignedIdentifier());
+            if (regulatoryDto != null) {
+                loadAdditionalRegulatoryInfoFromDto(((TrialDTO) trialDTO), regulatoryDto);
+            }
+        }
         return trialDTO;
     }
 
@@ -778,23 +764,31 @@ public class TrialUtil extends TrialConvertUtils {
         return saveDraft(trialDTO, fundingDTOS, indDTOS);
     }
 
-    private BaseTrialDTO saveDraft(BaseTrialDTO trialDTO, List<StudyFundingStageDTO> fundingDTOS,
-            List<StudyIndIdeStageDTO> indDTOS) throws PAException {
+    private BaseTrialDTO saveDraft(BaseTrialDTO trialDTO, 
+            List<StudyFundingStageDTO> fundingDTOS, List<StudyIndIdeStageDTO> indDTOS) 
+            throws PAException {
         StudyProtocolStageDTO spStageDto = convertToStudyProtocolStageDTO(trialDTO);
         List<DocumentDTO> docDTOS = convertToISODocumentList(trialDTO.getDocDtos());
         Ii tempStudyProtocolIi = null;
         if (StringUtils.isNotEmpty(trialDTO.getStudyProtocolId())) {
-            StudyProtocolStageDTO dto = PaRegistry.getStudyProtocolStageService().update(spStageDto, fundingDTOS,
-                    indDTOS, docDTOS);
+            StudyProtocolStageDTO dto = PaRegistry.getStudyProtocolStageService().update(
+                    spStageDto, fundingDTOS, indDTOS, docDTOS);
             tempStudyProtocolIi = dto.getIdentifier();
         } else {
-            tempStudyProtocolIi = PaRegistry.getStudyProtocolStageService().create(spStageDto, fundingDTOS, indDTOS,
-                    docDTOS);
+            tempStudyProtocolIi = PaRegistry.getStudyProtocolStageService().create(
+                    spStageDto, fundingDTOS, indDTOS, docDTOS);
         }
         if (trialDTO instanceof TrialDTO) {
             setOversgtInfo((TrialDTO) trialDTO);
         }
         trialDTO.setStudyProtocolId(tempStudyProtocolIi.getExtension());
+        if (trialDTO instanceof TrialDTO) {
+            AdditionalRegulatoryInfoDTO ariDto =  saveAdditionalRegulatoryInfo((TrialDTO) trialDTO);
+            if (ariDto != null) {
+                ((TrialDTO) trialDTO).setMsId(ariDto.getId());
+                ((TrialDTO) trialDTO).setLastUpdatedDate(ariDto.getDate_updated());
+            }
+        }
         return trialDTO;
     }
 
@@ -1032,6 +1026,44 @@ public class TrialUtil extends TrialConvertUtils {
     }
 
     /**
+     * Save regulatory info to FDAAA MS
+     * @param trialDTO trialDTO
+     * @param nciId nciId
+     * @return AdditionalRegulatoryInfoDTO
+     * @throws PAException PAException
+     */
+    public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(
+            TrialDTO trialDTO, String nciId) throws PAException {
+        AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
+        regulatoryDto.setExported_from_us(trialDTO.getExportedFromUs());
+        regulatoryDto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
+        regulatoryDto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
+        regulatoryDto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
+        regulatoryDto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
+        regulatoryDto.setDate_updated(trialDTO.getLastUpdatedDate());
+        regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        regulatoryDto.setNci_id(nciId);
+        regulatoryDto.setId(trialDTO.getMsId());
+        return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
+                trialDTO.getStudyProtocolId(), nciId, regulatoryDto);
+    }
+    /**
+     * Save regulatory info to microservice
+     * @param trialDTO trialDTO
+     * @return AdditionalRegulatoryInfoDTO AdditionalRegulatoryInfoDTO
+     * @throws PAException PAException
+     */
+    public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(TrialDTO trialDTO) throws PAException {
+        if (StringUtils.isEmpty(trialDTO.getStudyProtocolId())) {
+            throw new PAException("StudyProtocolId is required to save Trial to Microservice");
+        }
+        
+        AdditionalRegulatoryInfoDTO regulatoryDto = convertToAdditionalRegulatoryInfoDTO(trialDTO, null);
+        return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
+                trialDTO.getStudyProtocolId(), null, regulatoryDto);
+    }
+
+    /**
      * @return the correlationUtils
      */
     public CorrelationUtilsRemote getCorrelationUtils() {
@@ -1045,6 +1077,21 @@ public class TrialUtil extends TrialConvertUtils {
         this.correlationUtils = correlationUtils;
     }
 
-    
+    /**
+     *
+     * @return TrialInfoHelperUtil
+     */
+    public TrialInfoHelperUtil getTrialInfoHelperUtil() {
+        return trialInfoHelperUtil;
+    }
+
+    /**
+     *
+     * @param trialInfoHelperUtil
+     *            the TrialInfoHelperUtil
+     */
+    public void setTrialInfoHelperUtil(TrialInfoHelperUtil trialInfoHelperUtil) {
+        this.trialInfoHelperUtil = trialInfoHelperUtil;
+    }
     
 }

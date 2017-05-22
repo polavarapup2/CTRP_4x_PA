@@ -426,9 +426,9 @@ public class SearchTrialAction extends BaseSearchTrialAction implements Preparab
     private void loadNonPropTrial(Ii studyProtocolIi, boolean maskFields) throws PAException, NullifiedRoleException {
         TrialDTO trialDTO = new TrialDTO();
         trialUtils.getTrialDTOFromDb(studyProtocolIi, trialDTO);
-        if (trialDTO.getTrialType().equals("InterventionalStudyProtocol")) {
+        if ("InterventionalStudyProtocol".equals(trialDTO.getTrialType())) {
             trialDTO.setTrialType("Interventional");
-        } else if (trialDTO.getTrialType().equals("NonInterventionalStudyProtocol")) {
+        } else if ("NonInterventionalStudyProtocol".equals(trialDTO.getTrialType())) {
             trialDTO.setTrialType("NonInterventional");
         }
         final HttpServletRequest request = ServletActionContext.getRequest();

@@ -89,7 +89,6 @@ import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
-import gov.nih.nci.pa.iso.dto.StudyRegulatoryAuthorityDTO;
 import gov.nih.nci.pa.iso.dto.StudyResourcingDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
@@ -154,7 +153,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
     private RegulatoryInformationServiceLocal regulatoryInformationService;
     private StudyProtocolStageServiceLocal studyProtocolStageService;
     private TrialRegistrationServiceLocal trialRegistrationService;
-    private final TrialUtil  trialUtil = new TrialUtil();
+    private TrialUtil trialUtil = new TrialUtil();
     
     private Long cbValue;
     private String page;
@@ -272,7 +271,8 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             
             List<StudyIndldeDTO> studyIndldeDTOs = util.convertISOINDIDEList(trialDTO.getIndIdeDtos(), null);
             List<StudyResourcingDTO> studyResourcingDTOs = util.convertISOGrantsList(trialDTO.getFundingDtos());
-            StudyRegulatoryAuthorityDTO studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
+            //FDAAA2 changes
+            //StudyRegulatoryAuthorityDTO studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
             
             //set program code text to null sometimes this is populated in case 
             //where user is saved trial as draft make sure this value is never saved
@@ -287,12 +287,27 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
                             leadOrgDTO, principalInvestigatorDTO,
                             sponsorOrgDTO, partyDTO, leadOrgSiteIdDTO,
                             studyIdentifierDTOs, summary4orgDTO,
-                            summary4studyResourcingDTO, studyRegAuthDTO,
+                            summary4studyResourcingDTO, null,
                             BlConverter.convertToBl(Boolean.FALSE));
              TrialSessionUtil.removeSessionAttributes();
-             ServletActionContext.getRequest().getSession().setAttribute("spidfromviewresults", studyProtocolIi);
-             ServletActionContext.getRequest().getSession().setAttribute("protocolId", studyProtocolIi.getExtension());
+            // FDAAAA deletion of draft data
              deleteSavedDraft();
+             // FDAAA2 glue code
+            List<Long> identifiersList = new ArrayList<Long>();
+            Long spId = IiConverter.convertToLong(studyProtocolIi);
+            identifiersList.add(spId);
+            Map<Long, String> identifierMap = PaRegistry
+                    .getStudyProtocolService().getTrialNciId(identifiersList);
+            trialDTO.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
+            try {
+                trialUtil.saveAdditionalRegulatoryInfo(trialDTO, identifierMap.get(spId));
+            } catch (PAException e) {
+                TrialSessionUtil.addSessionAttributes(trialDTO);
+                addActionError("Error occurred. Please try again." + e.getMessage());
+                return ERROR;
+            }
+            ServletActionContext.getRequest().getSession().setAttribute("spidfromviewresults", studyProtocolIi);
+            ServletActionContext.getRequest().getSession().setAttribute("protocolId", studyProtocolIi.getExtension());
         } catch (Exception e) {
             final TrialDTO trialDTO = getTrialDTO();
             TrialSessionUtil.addSessionAttributes(trialDTO);
@@ -302,7 +317,8 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             LOG.error("Exception occured while submitting trial", e);
             // have to call the usa country list
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //FDAAA2 change
+           // trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             setDocumentsInSession(trialDTO);
             return ERROR;
         }
@@ -352,29 +368,33 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
                 ServletActionContext.getRequest().setAttribute("failureMessage", getText("error.fieldErrors"));
                 TrialSessionUtil.addSessionAttributes(trialDTO);
                 // have to call the usa country list
+                //fdaaa2 Changes
                 //trialUtil.populateRegulatoryList(trialDTO);
-                trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+               // trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
                 return ERROR;
             }
             trialDTO.setPropritaryTrialIndicator(CommonsConstant.NO);
             trialDTO.setDocDtos(getTrialDocuments());
             addIndIdesToTrialDto();
             addSecondaryIdsToTrialDto();
-            String section801 = trialDTO.getSection801Indicator();
-            if (section801 != null && section801.equalsIgnoreCase("YES") 
-                 && StringUtils.isEmpty(trialDTO.getDelayedPostingIndicator())) {
+            //fdaaa2 Changes
+           // String section801 = trialDTO.getSection801Indicator();
+            if (StringUtils.isEmpty(trialDTO.getDelayedPostingIndicator())) {
                 trialDTO.setDelayedPostingIndicator(CommonsConstant.NO);
             }
-            trialUtil.setOversgtInfo(trialDTO);
+            //fdaaa2 Changes
+           // trialUtil.setOversgtInfo(trialDTO);
 
         } catch (IOException e) {
             LOG.error(e);
             return ERROR;
-        } catch (PAException e) {
-            LOG.error(e);
-            addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
-            return ERROR;
         }
+        //fdaaa2 Changes
+//        catch (PAException e) {
+//            LOG.error(e);
+//            addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
+//            return ERROR;
+//        }
         TrialSessionUtil.removeSessionAttributes();
         ServletActionContext.getRequest().getSession().setAttribute(TrialUtil.SESSION_TRIAL_ATTRIBUTE, trialDTO);
         return "review";
@@ -530,12 +550,11 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
         try {
             trialDTO.setStatusHistory(getStatusHistoryFromSession());
             addSecondaryIdsToTrialDto();
-            validateDocuments();          
+            validateDocuments();
             trialDTO.setDocDtos(getTrialDocuments());  
             
-          //set program codes values in program codes text
-            if (trialDTO.getProgramCodesList() != null 
-                    && trialDTO.getProgramCodesList().size() > 0) {
+            //set program codes values in program codes text
+            if (trialDTO.getProgramCodesList() != null && trialDTO.getProgramCodesList().size() > 0) {
                 StringBuffer programCodesText = new StringBuffer();
                 for (int i = 0; i < trialDTO.getProgramCodesList().size(); i++) {
                     if (i == 0) {
@@ -553,9 +572,6 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             ServletActionContext.getRequest().setAttribute("partialSubmission", "submit");
             ServletActionContext.getRequest().setAttribute(TrialUtil.SESSION_TRIAL_ATTRIBUTE, trialDTO);
             ServletActionContext.getRequest().getSession().removeAttribute(Constants.SECONDARY_IDENTIFIERS_LIST);
-            
-            
-            
         } catch (PAException e) {
             LOG.error(e.getMessage());
             addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
@@ -767,6 +783,20 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
     public void setFamilyProgramCodeService(
             FamilyProgramCodeService familyProgramCodeService) {
         this.familyProgramCodeService = familyProgramCodeService;
+    }
+
+    /**
+     * @return the trialUtil
+     */
+    public TrialUtil getTrialUtil() {
+        return trialUtil;
+    }
+
+    /**
+     * @param trialUtil the trialUtil to set
+     */
+    public void setTrialUtil(TrialUtil trialUtil) {
+        this.trialUtil = trialUtil;
     }
 
 }

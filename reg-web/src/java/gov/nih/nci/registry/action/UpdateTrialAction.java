@@ -302,19 +302,28 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
 
                 TrialSessionUtil.addSessionAttributes(trialDTO);
                 //trialUtil.populateRegulatoryList(trialDTO);
-                trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+                
+                //FDAAA2 - Regulatory Info Country and Org name deprecated  
+                //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+                
                 synchActionWithDTO();
                 this.fieldErrors.clearTrackedKeys();
                 return ERROR;
             }
-            if (trialDTO.isXmlRequired()) {
+            
+            //FDAAA2 - Regulatory Info Country and Org name deprecated  
+            /*if (trialDTO.isXmlRequired()) {
                 trialUtil.setOversgtInfo(trialDTO);
-            }
+            }*/
+            
             if (hasActionErrors()) {
                 TrialSessionUtil.addSessionAttributes(trialDTO);
                 synchActionWithDTO();
                 //trialUtil.populateRegulatoryList(trialDTO);
-                trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+                
+                //FDAAA2 - Regulatory Info Country and Org name deprecated
+                //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+                
                 return ERROR;
             }
             
@@ -322,13 +331,13 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
             LOG.error(e.getMessage());
             synchActionWithDTO();
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             return ERROR;
         } catch (PAException e) {
             LOG.error(e.getMessage());
             synchActionWithDTO();
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             return ERROR;
         }        
         TrialSessionUtil.removeSessionAttributes();
@@ -388,7 +397,7 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
         setDocumentsInSession(trialDTO);
         synchActionWithDTO();
         //trialUtil.populateRegulatoryList(trialDTO);
-        trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+        //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
         existingDocuments = trialUtil.getTrialDocuments(trialDTO);
         TrialSessionUtil.addSessionAttributes(trialDTO);
         return "edit";
@@ -418,8 +427,7 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
             
             final List<StudyOverallStatusDTO> statusHistory = new ArrayList<StudyOverallStatusDTO>();
             statusHistory.addAll(util.convertStatusHistory(trialDTO));
-            statusHistory
-                    .addAll(util
+            statusHistory.addAll(util
                             .convertStatusHistory(getDeletedStatusHistoryFromSession()));
             
                   
@@ -478,8 +486,6 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
             
             //retain program codes from different family as it is
             util.assignAdditionalProgramCodes(oldProgramCodesList, spDTO);
-            
-            
           
             // call the service to invoke the update method
             trialRegistrationService.update(spDTO, statusHistory, studyIdentifierDTOs, null, 
@@ -497,7 +503,7 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
             LOG.error("Exception occured while updating trial", e);
             TrialSessionUtil.addSessionAttributes(trialDTO);
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             synchActionWithDTO();
             ServletActionContext.getRequest().getSession().removeAttribute("secondaryIdentifiersList");
             trialDTO.setSecondaryIdentifierAddList(null);
@@ -673,11 +679,9 @@ public class UpdateTrialAction extends ManageFileAction implements Preparable {
                 List<StatusDto> statusDtos = statusTransitionService.validateStatusTransition(
                         AppName.REGISTRATION, TrialType.COMPLETE, TransitionFor.SITE_STATUS, 
                         CodedEnumHelper.getByClassAndCode(RecruitmentStatusCode.class, 
-                                prevps.getRecruitmentStatus()).name(),
-                        prevDt, 
+                                prevps.getRecruitmentStatus()).name(), prevDt, 
                         CodedEnumHelper.getByClassAndCode(RecruitmentStatusCode.class, 
-                                currps.getRecruitmentStatus()).name(),
-                        currDt);
+                                currps.getRecruitmentStatus()).name(), currDt);
                 if (statusDtos.get(0).hasErrorOfType(ErrorType.ERROR)) {
                     
                     String errMsg = String.format(STATUS_CHANGE_ERR_MSG, 
