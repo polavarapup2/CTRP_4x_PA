@@ -300,13 +300,13 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
                     "The form has errors and could not be submitted, please check the fields highlighted below");
             TrialSessionUtil.addSessionAttributes(trialDTO);
            // trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             return ERROR;
         }
         if (hasActionErrors()) {
             TrialSessionUtil.addSessionAttributes(trialDTO);
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             return ERROR;
         }
         return null;
@@ -320,7 +320,7 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
         setTrialDTO((TrialDTO) ServletActionContext.getRequest().getSession()
                 .getAttribute(TrialUtil.SESSION_TRIAL_ATTRIBUTE));
         //trialUtil.populateRegulatoryList(getTrialDTO());
-        trialUtil.populateRegulatoryListStartWithUSA(getTrialDTO());
+        //trialUtil.populateRegulatoryListStartWithUSA(getTrialDTO());
         TrialSessionUtil.addSessionAttributes(getTrialDTO());
         setInitialStatusHistory(getTrialDTO().getStatusHistory());
         setDocumentsInSession(getTrialDTO());
@@ -425,7 +425,7 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
             trialDTO.setSecondaryIdentifierAddList(null);
             trialUtil.removeAssignedIdentifierFromSecondaryIds(trialDTO);
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             setDocumentsInSession(trialDTO);
             return ERROR;
         }

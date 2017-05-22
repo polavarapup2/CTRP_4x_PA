@@ -73,6 +73,8 @@ public class TrialUtilTest extends AbstractHibernateTestCase {
         assertEquals(trialDTO.getSection801Indicator(), "Yes");
         assertEquals(trialDTO.getFdaRegulatoryInformationIndicator(), "No");
         assertEquals(trialDTO.getDataMonitoringCommitteeAppointedIndicator(), "Yes");
+        
+        verify(trialInfoHelperUtil).retrieveRegulatoryInfo(eq(studyProtocolIi), eq(nciId));
     }
     
     @Test(expected=PAException.class)
