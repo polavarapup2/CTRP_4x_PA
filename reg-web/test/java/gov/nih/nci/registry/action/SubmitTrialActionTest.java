@@ -248,7 +248,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("error", action.create());
     }
     
-   // @Test
+    @Test
     public void testCreateWithDupliTrial(){
         TrialDTO dto = getMockTrialDTO();
         dto.setLeadOrganizationIdentifier("2");
@@ -266,7 +266,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("error", action.create());
     }
     
-    //@Test
+    @Test
     public void testCreateWithShortLeadOrgIdentifier(){
         TrialDTO dto = getMockTrialDTO();
         dto.setLeadOrgTrialIdentifier("localleadOrgTrialIdentifier");
@@ -275,7 +275,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("redirect_to_search", action.create());
     }
     
-   // @Test
+    @Test
     public void testCreateWithRespPartyAsPi(){
         TrialDTO dto = getMockTrialDTO();
         HttpSession session = ServletActionContext.getRequest().getSession();
@@ -283,7 +283,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         assertEquals("redirect_to_search", action.create());
     }
     
-   // @Test
+    @Test
     public void testCreateWithRespPartyAsSponsor(){
         TrialDTO dto = getMockTrialDTO();
         dto.setResponsiblePartyType(TrialDTO.RESPONSIBLE_PARTY_TYPE_SPONSOR);

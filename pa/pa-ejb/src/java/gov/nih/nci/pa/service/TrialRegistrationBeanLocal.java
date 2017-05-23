@@ -1007,12 +1007,11 @@ public class TrialRegistrationBeanLocal extends AbstractTrialRegistrationBean //
             // list of study identifiers like NCT,DCP, CTEP
             updateStudyIdentifiers(spIi, studyIdentifierDTOs);
             addNciOrgAsCollaborator(studyProtocolDTO, spIi);
-            //FDAAA2
-//            if (ctgovXmlRequired && studyRegAuthDTO != null) {
-//                studyRegAuthDTO.setStudyProtocolIdentifier(spIi);
-//                paServiceUtils.createOrUpdate(Arrays.asList(studyRegAuthDTO), IiConverter
-//                    .convertToStudyRegulatoryAuthorityIi(null), spIi);
-//            }
+            if (ctgovXmlRequired && studyRegAuthDTO != null) {
+                studyRegAuthDTO.setStudyProtocolIdentifier(spIi);
+                paServiceUtils.createOrUpdate(Arrays.asList(studyRegAuthDTO), IiConverter
+                    .convertToStudyRegulatoryAuthorityIi(null), spIi);
+            }
             assignOwnership(studyProtocolDTO, spIi);
             paServiceUtils.addNciIdentifierToTrial(spIi);
             List<DocumentDTO> savedDocs = saveDocuments(documentDTOs, spIi);

@@ -89,6 +89,7 @@ import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
 import gov.nih.nci.pa.iso.dto.StudyIndldeDTO;
 import gov.nih.nci.pa.iso.dto.StudyOverallStatusDTO;
 import gov.nih.nci.pa.iso.dto.StudyProtocolDTO;
+import gov.nih.nci.pa.iso.dto.StudyRegulatoryAuthorityDTO;
 import gov.nih.nci.pa.iso.dto.StudyResourcingDTO;
 import gov.nih.nci.pa.iso.dto.StudySiteDTO;
 import gov.nih.nci.pa.iso.util.BlConverter;
@@ -271,8 +272,8 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             
             List<StudyIndldeDTO> studyIndldeDTOs = util.convertISOINDIDEList(trialDTO.getIndIdeDtos(), null);
             List<StudyResourcingDTO> studyResourcingDTOs = util.convertISOGrantsList(trialDTO.getFundingDtos());
-            //FDAAA2 changes
-            //StudyRegulatoryAuthorityDTO studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
+            //helper class
+            StudyRegulatoryAuthorityDTO studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
             
             //set program code text to null sometimes this is populated in case 
             //where user is saved trial as draft make sure this value is never saved
@@ -287,27 +288,12 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
                             leadOrgDTO, principalInvestigatorDTO,
                             sponsorOrgDTO, partyDTO, leadOrgSiteIdDTO,
                             studyIdentifierDTOs, summary4orgDTO,
-                            summary4studyResourcingDTO, null,
+                            summary4studyResourcingDTO, studyRegAuthDTO,
                             BlConverter.convertToBl(Boolean.FALSE));
              TrialSessionUtil.removeSessionAttributes();
-            // FDAAAA deletion of draft data
+             ServletActionContext.getRequest().getSession().setAttribute("spidfromviewresults", studyProtocolIi);
+             ServletActionContext.getRequest().getSession().setAttribute("protocolId", studyProtocolIi.getExtension());
              deleteSavedDraft();
-             // FDAAA2 glue code
-            List<Long> identifiersList = new ArrayList<Long>();
-            Long spId = IiConverter.convertToLong(studyProtocolIi);
-            identifiersList.add(spId);
-            Map<Long, String> identifierMap = PaRegistry
-                    .getStudyProtocolService().getTrialNciId(identifiersList);
-            trialDTO.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
-            try {
-                util.saveAdditionalRegulatoryInfo(trialDTO, identifierMap.get(spId));
-            } catch (PAException e) {
-                TrialSessionUtil.addSessionAttributes(trialDTO);
-                addActionError("Error occurred. Please try again." + e.getMessage());
-                return ERROR;
-            }
-            ServletActionContext.getRequest().getSession().setAttribute("spidfromviewresults", studyProtocolIi);
-            ServletActionContext.getRequest().getSession().setAttribute("protocolId", studyProtocolIi.getExtension());
         } catch (Exception e) {
             final TrialDTO trialDTO = getTrialDTO();
             TrialSessionUtil.addSessionAttributes(trialDTO);
@@ -317,8 +303,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             LOG.error("Exception occured while submitting trial", e);
             // have to call the usa country list
             //trialUtil.populateRegulatoryList(trialDTO);
-            //FDAAA2 change
-           // trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             setDocumentsInSession(trialDTO);
             return ERROR;
         }
