@@ -21,7 +21,7 @@
     </div>
 </div> --%>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.drug.product"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.drug.product"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.fdaRegulatedDrug"/>
@@ -29,7 +29,7 @@
    </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.device.product"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.device.product"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.fdaRegulatedDevice"/>
@@ -37,7 +37,7 @@
    </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.delayed.posting.ind"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.delayed.posting.ind"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.delayedPostingIndicator"/>
@@ -45,7 +45,7 @@
   </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.approval.clearance"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.approval.clearance"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.postPriorToApproval"/>
@@ -53,7 +53,7 @@
    </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.market.surveillance"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.market.surveillance"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.pedPostmarketSurv"/>
@@ -61,7 +61,7 @@
    </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.usa.export"/>
+    <label class="col-xs-4 control-label ro-field-label"><fmt:message key="regulatory.usa.export"/><span class="required">*</span>
     </label>
     <div class="col-xs-4">
         <s:hidden name="trialDTO.exportedFromUs"/>

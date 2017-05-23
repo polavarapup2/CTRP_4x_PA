@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AdditionalDesignDetailsDTO;
 import gov.nih.nci.pa.dto.AdditionalEligibilityCriteriaDTO;
@@ -32,7 +31,6 @@ public class TrialInfoHelperUtilTest {
     private String url;
     private Ii studyId;
     private Long studyprotocolId = 1L;
-    
     @Before
     public void setUp() throws PAException {
        url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl();
@@ -71,8 +69,8 @@ public class TrialInfoHelperUtilTest {
 
     @Test(expected=PAException.class)
     public void retrieveRegulatoryInfoExceptionTest() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.retrieveRegulatoryInfo(studyId, "NCI-2000-12222");
     }
     
@@ -108,8 +106,8 @@ public class TrialInfoHelperUtilTest {
     
     @Test(expected=PAException.class)
     public void mergeRegulatoryInfoUpdateErrorTest() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.mergeRegulatoryInfoUpdate(studyId, "NCI-2000-12222", new AdditionalRegulatoryInfoDTO());
     }
     
@@ -136,8 +134,8 @@ public class TrialInfoHelperUtilTest {
     
     @Test(expected=PAException.class)
     public void retrieveEligibilityCriteriaErrorTest() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.retrieveEligibilityCriteria(studyId, "NCI-2000-12222");
     }
     @Test
@@ -162,8 +160,8 @@ public class TrialInfoHelperUtilTest {
     
     @Test(expected=PAException.class)
     public void mergeEligibilityCriteriaErrorUpdate() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.mergeEligibilityCriteriaUpdate(studyId, "NCI-2000-12222", new AdditionalEligibilityCriteriaDTO());
     }
     
@@ -192,8 +190,8 @@ public class TrialInfoHelperUtilTest {
 
     @Test(expected=PAException.class)
     public void retrieveTrialIndIdeByIdErrorTest() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.retrieveTrialIndIdeById(studyId, "123");
     }
     
@@ -216,11 +214,10 @@ public class TrialInfoHelperUtilTest {
         assertTrue(StringUtils.equals(dtos.get(1).getExpandedAccessIndicator(), "No"));
         assertTrue(StringUtils.equals(dtos.get(1).getExpandedAccessNctId(), "NCT22345678"));
     }
-    
     @Test(expected=PAException.class)
     public void retrieveAllTrialIndIdeByErrorStudyIdTest() throws PAException, IOException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.retrieveAllTrialIndIdeByStudyId(studyId);
     }
     
@@ -239,19 +236,18 @@ public class TrialInfoHelperUtilTest {
         assertEquals(dto.getStudyProtocolId(), "1");
         assertEquals(dto.getTrialIndIdeId(), "123");
     }
-    
     @Test(expected=PAException.class)
     public void mergeTrialIndIdeInfoUpdateTestError() throws PAException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.mergeTrialIndIdeInfoUpdate(studyId, new AdditionalTrialIndIdeDTO());
         
     }
     
     @Test(expected=PAException.class)
     public void deleteTrialIndIdeInfoTest() throws PAException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.deleteTrialIndIdeInfo("1");
     }
     
@@ -281,8 +277,8 @@ public class TrialInfoHelperUtilTest {
     
     @Test(expected=PAException.class)
     public void retrieveDesignDetailsErrorTest() throws PAException {
-        when(client.sendHTTPRequest(any(String.class), any(String.class), any(String.class)))
-        .thenThrow(new PAException()); 
+        RestClient client1 = new RestClient();
+        helper.setClient(client1);
         helper.retrieveDesignDetails(studyId, "NCI-2000-12222");
     }
     
