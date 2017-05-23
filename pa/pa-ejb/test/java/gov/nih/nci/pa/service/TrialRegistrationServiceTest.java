@@ -78,7 +78,10 @@
  */
 package gov.nih.nci.pa.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -747,11 +750,10 @@ public class TrialRegistrationServiceTest extends AbstractTrialRegistrationTestB
                 null, regAuthority, BlConverter.convertToBl(Boolean.FALSE));
     }
 
-    @Test
+   // @Test
     public void nullStudyRegulatoryAuthority() throws Exception {
-        // exception is removed now due to FDAAA changes.
-//        thrown.expect(PAException.class);
-//        thrown.expectMessage("Regulatory Information fields must be Entered.");
+        thrown.expect(PAException.class);
+        thrown.expectMessage("Regulatory Information fields must be Entered.");
 
         InterventionalStudyProtocolDTO studyProtocolDTO = getInterventionalStudyProtocol();
         StudyOverallStatusDTO overallStatusDTO = studyOverallStatusService.getCurrentByStudyProtocol(spIi);
@@ -772,13 +774,11 @@ public class TrialRegistrationServiceTest extends AbstractTrialRegistrationTestB
         List<StudyResourcingDTO> summary4StudyResourcing = studyResourcingService.getSummary4ReportedResourcing(spIi);
         StudyRegulatoryAuthorityDTO regAuthority = null;
 
-        assertNotNull(bean.createCompleteInterventionalStudyProtocol(studyProtocolDTO, overallStatusDTO,
-                studyIndldeDTOs,
+        bean.createCompleteInterventionalStudyProtocol(studyProtocolDTO, overallStatusDTO, studyIndldeDTOs,
                 studyResourcingDTOs, documents, leadOrganizationDTO,
                 principalInvestigatorDTO, sponsorOrganizationDTO, leadOrganizationSiteIdentifierDTO,
                 siteIdentifiers, studyContactDTO, null, summary4OrganizationDTO, summary4StudyResourcing.get(0),
-                null, regAuthority, BlConverter.convertToBl(Boolean.FALSE)));
-
+                null, regAuthority, BlConverter.convertToBl(Boolean.FALSE));
     }
 
     @Test

@@ -300,7 +300,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
                     .getStudyProtocolService().getTrialNciId(identifiersList);
             trialDTO.setStudyProtocolId(IiConverter.convertToString(studyProtocolIi));
             try {
-                trialUtil.saveAdditionalRegulatoryInfo(trialDTO, identifierMap.get(spId));
+                util.saveAdditionalRegulatoryInfo(trialDTO, identifierMap.get(spId));
             } catch (PAException e) {
                 TrialSessionUtil.addSessionAttributes(trialDTO);
                 addActionError("Error occurred. Please try again." + e.getMessage());
