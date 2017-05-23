@@ -154,7 +154,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
     private RegulatoryInformationServiceLocal regulatoryInformationService;
     private StudyProtocolStageServiceLocal studyProtocolStageService;
     private TrialRegistrationServiceLocal trialRegistrationService;
-    private TrialUtil trialUtil = new TrialUtil();
+    private final TrialUtil  trialUtil = new TrialUtil();
     
     private Long cbValue;
     private String page;
@@ -530,11 +530,12 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
         try {
             trialDTO.setStatusHistory(getStatusHistoryFromSession());
             addSecondaryIdsToTrialDto();
-            validateDocuments();
+            validateDocuments();          
             trialDTO.setDocDtos(getTrialDocuments());  
             
-            //set program codes values in program codes text
-            if (trialDTO.getProgramCodesList() != null && trialDTO.getProgramCodesList().size() > 0) {
+          //set program codes values in program codes text
+            if (trialDTO.getProgramCodesList() != null 
+                    && trialDTO.getProgramCodesList().size() > 0) {
                 StringBuffer programCodesText = new StringBuffer();
                 for (int i = 0; i < trialDTO.getProgramCodesList().size(); i++) {
                     if (i == 0) {
@@ -552,6 +553,9 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             ServletActionContext.getRequest().setAttribute("partialSubmission", "submit");
             ServletActionContext.getRequest().setAttribute(TrialUtil.SESSION_TRIAL_ATTRIBUTE, trialDTO);
             ServletActionContext.getRequest().getSession().removeAttribute(Constants.SECONDARY_IDENTIFIERS_LIST);
+            
+            
+            
         } catch (PAException e) {
             LOG.error(e.getMessage());
             addActionError(RegistryUtil.removeExceptionFromErrMsg(e.getMessage()));
@@ -763,20 +767,6 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
     public void setFamilyProgramCodeService(
             FamilyProgramCodeService familyProgramCodeService) {
         this.familyProgramCodeService = familyProgramCodeService;
-    }
-
-    /**
-     * @return the trialUtil
-     */
-    public TrialUtil getTrialUtil() {
-        return trialUtil;
-    }
-
-    /**
-     * @param trialUtil the trialUtil to set
-     */
-    public void setTrialUtil(TrialUtil trialUtil) {
-        this.trialUtil = trialUtil;
     }
 
 }

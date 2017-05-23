@@ -18,8 +18,6 @@ import gov.nih.nci.pa.enums.StudyStatusCode;
 import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
 import gov.nih.nci.pa.service.util.FamilyProgramCodeServiceLocal;
 import gov.nih.nci.pa.util.CommonsConstant;
-import gov.nih.nci.pa.util.RestClient;
-import gov.nih.nci.pa.util.TrialInfoHelperUtil;
 import gov.nih.nci.registry.dto.TrialDTO;
 import gov.nih.nci.registry.util.Constants;
 import gov.nih.nci.registry.util.TrialUtil;
@@ -41,7 +39,6 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.StreamResult;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.util.ReflectionUtils;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -53,7 +50,6 @@ import com.mockrunner.mock.web.MockHttpServletRequest;
 public class SubmitTrialActionTest extends AbstractHibernateTestCase{
     private static final String FILE_NAME = "ProtocolDoc.doc";
     private SubmitTrialAction action = new SubmitTrialAction();
-    private TrialInfoHelperUtil mockTrialInfoHelperUtil = Mockito.mock(TrialInfoHelperUtil.class);
     /**
      * Initialization method.
      */
@@ -621,7 +617,6 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         action = new SubmitTrialAction();
         action.setServletRequest(ServletActionContext.getRequest());
         action.setTrialDTO(getMockTrialDTO());
-        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("review", action.partialSave());
 
         action = new SubmitTrialAction();
@@ -633,7 +628,6 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.NO);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.NO);
         action.setTrialDTO(trialDto);
-        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         assertEquals("review", action.partialSave());
 
         action = new SubmitTrialAction();
@@ -645,7 +639,6 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.YES);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.YES);
         action.setTrialDTO(trialDto);
-        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         HttpSession session = ServletActionContext.getRequest().getSession();
         session.setAttribute(Constants.GRANT_LIST, getfundingDtos());
         assertEquals("review", action.partialSave());
@@ -660,7 +653,6 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
         trialDto.setDelayedPostingIndicator(CommonsConstant.YES);
         trialDto.setDataMonitoringCommitteeAppointedIndicator(CommonsConstant.YES);
         action.setTrialDTO(trialDto);
-        action.getTrialUtil().setTrialInfoHelperUtil(mockTrialInfoHelperUtil);
         session.setAttribute(Constants.INDIDE_LIST, getIndDtos());
         assertEquals("review", action.partialSave());
     }

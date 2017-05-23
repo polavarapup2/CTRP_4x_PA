@@ -18,7 +18,6 @@ import java.util.List;
  * @author Purnima, Reshma
  *
  */
-@SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessiveClassLength" })
 public class TrialInfoHelperUtil {
 
     private static final Logger LOG = Logger.getLogger(TrialInfoHelperUtil.class);
@@ -100,49 +99,34 @@ public class TrialInfoHelperUtil {
     public AdditionalRegulatoryInfoDTO mergeRegulatoryInfoUpdate(
             Ii studyProtocolIi, String nciId, AdditionalRegulatoryInfoDTO regulatoryDto)
             throws PAException {
-        return mergeRegulatoryInfoUpdate(IiConverter.convertToString(studyProtocolIi), nciId, regulatoryDto);
-    }
-    
-    /**
-    *
-    * @param studyProtocolId
-    *            the studyProtocolId
-    * @param nciId
-    *            the nciId
-    * @param regulatoryDto
-    *            the AdditionalRegulatoryInfoDTO
-    * @return AdditionalRegulatoryInfoDTO
-    * @throws PAException
-    *             PAException
-    */
-   public AdditionalRegulatoryInfoDTO mergeRegulatoryInfoUpdate(
-           String studyProtocolId, String nciId, AdditionalRegulatoryInfoDTO regulatoryDto)
-           throws PAException {
-       LOG.info(String.format("Updating Trial %s RegulatoryInfo service for id %s", nciId, studyProtocolId));
+        LOG.info("Updating Regulatory data info to new DB"
+                + IiConverter.convertToString(studyProtocolIi));
 
-       AdditionalRegulatoryInfoDTO currRegulatoryDto = regulatoryDto;
-       try {
-           String postBody = PAJsonUtil.marshallJSON(regulatoryDto);
-           String response = "";
-           if (regulatoryDto.getId() == null) {
-               response = client.sendHTTPRequest(PaEarPropertyReader
-                       .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
-           } else {
-               response = client.sendHTTPRequest(PaEarPropertyReader
-                       .getFdaaaDataClinicalTrialsUrl() + "/" + regulatoryDto.getId(), PUT, postBody);
-           }
-           if (response != null) {
-               currRegulatoryDto = (AdditionalRegulatoryInfoDTO) PAJsonUtil
-                       .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
-           }
-       } catch (Exception e) {
-           LOG.error("Error in updating additional Regulatory info for the study protocol id: " 
-                   + studyProtocolId, e);
-           throw new PAException("Error in updating additional Regulatory info for the study protocol id: " 
-                   + studyProtocolId, e);
-       }
-       return currRegulatoryDto;
-   }
+        AdditionalRegulatoryInfoDTO currRegulatoryDto = regulatoryDto;
+        try {
+            String postBody = PAJsonUtil.marshallJSON(regulatoryDto);
+            String response = "";
+            if (regulatoryDto.getId() == null) {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl(), POST, postBody);
+            } else {
+                response = client.sendHTTPRequest(PaEarPropertyReader
+                        .getFdaaaDataClinicalTrialsUrl() + "/" + regulatoryDto.getId(), PUT, postBody);
+            }
+            if (response != null) {
+                currRegulatoryDto = (AdditionalRegulatoryInfoDTO) PAJsonUtil
+                        .unmarshallJSON(response, AdditionalRegulatoryInfoDTO.class);
+            }
+        } catch (Exception e) {
+            LOG.error(
+                    "Error in updating additional Regulatory info for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+            throw new PAException(
+                    "Error in updating additional Regulatory info for the study protocol id: "
+                            + IiConverter.convertToString(studyProtocolIi), e);
+        }
+        return currRegulatoryDto;
+    }
 
 
     /**
