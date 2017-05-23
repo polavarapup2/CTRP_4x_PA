@@ -219,7 +219,6 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         ServletActionContext.setRequest(request);
         action.view();
     }
-    
     @Test
     public void testReviewUpdate() throws URISyntaxException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -263,7 +262,6 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         action.setInitialStatusHistory(action.getTrialDTO().getStatusHistory());
         assertEquals("error", action.reviewUpdate());
     }
-    
     @Test
     public void testReviewUpdateNoAccrualDiseaseCodeSystem() throws URISyntaxException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -294,7 +292,6 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         assertEquals("error", action.reviewUpdate());
         assertTrue(action.getFieldErrors().containsKey("trialDTO.accrualDiseaseCodeSystem"));
     }
-    
     @Test
     public void testReviewUpdateWithCollaborators() {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -347,7 +344,6 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         session.setAttribute(Constants.PARTICIPATING_SITES_LIST, paOrgList);
         assertEquals("error", action.reviewUpdate());
     }
-    
     @Test
     public void testReviewUpdateWithFundingDtos() {
         MockHttpServletRequest request = new MockHttpServletRequest();
