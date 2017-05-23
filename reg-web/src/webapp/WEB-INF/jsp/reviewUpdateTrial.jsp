@@ -189,49 +189,25 @@
                     <c:if test="${trialDTO.xmlRequired == true}">
                         <reg-web:titleRowDiv titleKey="regulatory.title"/>
                         	<div class="row form-horizontal details">
-                            <%-- <reg-web:valueRowDiv labelKey="regulatory.oversight.country.name" noLabelTag="true">
+                            <reg-web:valueRowDiv labelKey="regulatory.oversight.country.name" noLabelTag="true">
                                 <s:property value="trialDTO.trialOversgtAuthCountryName"/>
                             </reg-web:valueRowDiv>
                             <!--  Trial Oversight Authority Organization Name -->
                             <reg-web:valueRowDiv labelKey="regulatory.oversight.auth.name" noLabelTag="true">
                                 <s:property value="trialDTO.trialOversgtAuthOrgName"/>
-                            </reg-web:valueRowDiv> --%>
-                            
-                            <reg-web:valueRowDiv labelKey="regulatory.drug.product" noLabelTag="true">
-                                <s:property value="trialDTO.fdaRegulatedDrug"/>
                             </reg-web:valueRowDiv>
-                            
-                            <reg-web:valueRowDiv labelKey="regulatory.device.product" noLabelTag="true">
-                                <s:property value="trialDTO.fdaRegulatedDevice"/>
-                            </reg-web:valueRowDiv>
-                            
-                            <!--   Delayed Posting Indicator-->
-                            <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
-                                <s:property value="trialDTO.delayedPostingIndicator"/>
-                            </reg-web:valueRowDiv>
-                            
-                            <reg-web:valueRowDiv labelKey="regulatory.approval.clearance" noLabelTag="true">
-                                <s:property value="trialDTO.postPriorToApproval"/>
-                            </reg-web:valueRowDiv>
-                            
-                            <reg-web:valueRowDiv labelKey="regulatory.market.surveillance" noLabelTag="true">
-                                <s:property value="trialDTO.pedPostmarketSurv"/>
-                            </reg-web:valueRowDiv>
-                            
-                            <reg-web:valueRowDiv labelKey="regulatory.usa.export" noLabelTag="true">
-                                <s:property value="trialDTO.exportedFromUs"/>
-                            </reg-web:valueRowDiv>
-                            
-                             <!--   FDA Regulated Intervention Indicator-->
+                            <!--   FDA Regulated Intervention Indicator-->
                             <reg-web:valueRowDiv labelKey="regulatory.FDA.regulated.interv.ind" noLabelTag="true">
                                 <s:property value="trialDTO.fdaRegulatoryInformationIndicator"/>
                             </reg-web:valueRowDiv>
-                            
                             <!--   Section 801 Indicator-->
                             <reg-web:valueRowDiv id="sec801row" labelKey="regulatory.section801.ind" noLabelTag="true">
                                 <s:property value="trialDTO.section801Indicator"/>
                             </reg-web:valueRowDiv>
-                           
+                            <!--   Delayed Posting Indicator-->
+                            <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
+                                <s:property value="trialDTO.delayedPostingIndicator"/>
+                            </reg-web:valueRowDiv>
                             <!--   Data Monitoring Committee Appointed Indicator -->
                             <reg-web:valueRowDiv id="datamonrow" labelKey="regulatory.data.monitoring.committee.ind" noLabelTag="true">
                                 <s:property value="trialDTO.dataMonitoringCommitteeAppointedIndicator"/>

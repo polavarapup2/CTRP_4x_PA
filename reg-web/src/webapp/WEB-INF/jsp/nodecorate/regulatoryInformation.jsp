@@ -1,98 +1,76 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/jsp/common/taglibs.jsp" %>
+ <%@ include file="/WEB-INF/jsp/common/taglibs.jsp" %>
 <div class="accordion">
-    <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#parent" href="#section13">Regulatory Information <span class="required">*</span></a></div>
-    <div id="section13" class="accordion-body in">
-        <div class="container">
-            <div class="form-group">
-
-                <div class="form-group">
-                    <label for="trialDTO.fdaRegulatedDrug"  class="col-xs-4 control-label"> <fmt:message key="regulatory.drug.product"/><span class="required">*</span></label>
-                    <div class="col-xs-8">
-                        <s:select id="drug" name="trialDTO.fdaRegulatedDrug" list="#{'':'', 'false':'No', 'true':'Yes'}" />
-
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.fdaRegulatedDrug"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.fdaRegulatedDrug</s:param></s:fielderror></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="trialDTO.fdaRegulatedDevice"  class="col-xs-4 control-label"> <fmt:message key="regulatory.device.product"/><span class="required">*</span></label>
-                    <div class="col-xs-8">
-                        <s:select id="device" name="trialDTO.fdaRegulatedDevice" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkDeviceDropDown();"/>
-
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.fdaRegulatedDevice"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.fdaRegulatedDevice</s:param></s:fielderror></span>
-                    </div>
-                </div>
-                <!--   Delayed Posting Indicator-->
-                <div class="form-group" id="delpostindrow" style="display: none">
-                    <label for="trialDTO.delayedPostingIndicator"  class="col-xs-4 control-label"> <fmt:message key="regulatory.delayed.posting.ind"/><span class="required">*</span></label>
-                    <div class="col-xs-8">
-                        <s:hidden name="trialDTO.delayedPostingIndicator" value="false"/>
-                        <c:out value="No"/>
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.delayed_posting_indicator"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.delayedPostingIndicator</s:param></s:fielderror></span>
-                        <span style="color:gray">To modify this indicator's value please submit a request to the CTRO at <a href="mailto:ncictro@mail.nih.gov">ncictro@mail.nih.gov</a></span>
-                    </div>
-                </div>
-                <!--
-            <div class="form-group" id="approvalRow">
-                <label for="trialDTO.postPriorToApproval"  class="col-xs-4 control-label"> <fmt:message key="regulatory.approval.clearance"/><span class="required">*</span></label>
-                <div class="col-xs-8">
-                    <s:select id="approval" name="trialDTO.postPriorToApproval" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkApprovalDropDown();"/>
-                    <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.postPriorToApproval"/>" data-placement="top" data-trigger="hover"></i>
-                    <span class="alert-danger"><s:fielderror><s:param>trialDTO.postPriorToApproval</s:param></s:fielderror></span>
-                </div>
-            </div>
--->
-                <div class="form-group" id="survRow" style="display: none">
-                    <label for="trialDTO.pedPostmarketSurv"  class="col-xs-4 control-label"> <fmt:message key="regulatory.market.surveillance"/><span class="required">*</span></label>
-                    <div class="col-xs-8">
-                        <s:select id="approval" name="trialDTO.pedPostmarketSurv" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.pedPostmarketSurv"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.pedPostmarketSurv</s:param></s:fielderror></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="trialDTO.exportedFromUs"  class="col-xs-4 control-label"> <fmt:message key="regulatory.usa.export"/><span class="required">*</span></label>
-                    <div class="col-xs-8">
-                        <s:select id="approval" name="trialDTO.exportedFromUs" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
-
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.exportedFromUs</s:param></s:fielderror></span>
-                    </div>
-                </div>
-
-
-                <!--   FDA Regulated Intervention Indicator-->
-
-                <div class="form-group">
-                    <label for="trialDTO.fdaRegulatoryInformationIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.FDA.regulated.interv.ind"/><span class="required">*</span></label>
-                    <div class="col-xs-4">
-                        <s:select id="fdaindid" name="trialDTO.fdaRegulatoryInformationIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkFDADropDown();"/>
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.fda_regulated_intervention_indicator"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.fdaRegulatoryInformationIndicator</s:param></s:fielderror></span>
-                    </div>
-                </div>
-                <!--   Section 801 Indicator-->
-                <div class="form-group" id="sec801row" style="display: none">
-                    <label for="trialDTO.section801Indicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.section801.ind"/><span class="required">*</span></label>
-                    <div class="col-xs-4">
-                        <s:select id="sec801id" name="trialDTO.section801Indicator" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.section_801_indicator"/>" data-placement="top" data-trigger="hover"></i>
-                        <span class="alert-danger"><s:fielderror><s:param>trialDTO.section801Indicator</s:param></s:fielderror></span>
-                    </div>
-                </div>
-
-
-                <!--   Data Monitoring Committee Appointed Indicator -->
-                <div class="form-group" id="datamonrow">
-                    <label for="trialDTO.dataMonitoringCommitteeAppointedIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.data.monitoring.committee.ind"/></label>
-                    <div class="col-xs-4">
-                        <s:select id="datamonid" name="trialDTO.dataMonitoringCommitteeAppointedIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
-                        <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.data_monitoring_committee_appointed_indicator"/>" data-placement="top" data-trigger="hover"></i>
-                    </div>
-                </div>
-            </div>
+  <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#parent" href="#section13">Regulatory Information <span class="required">*</span></a></div>
+  <div id="section13" class="accordion-body in">
+    <div class="container">
+        <div class="form-group">
+           <label for="countries"  class="col-xs-4 control-label"><fmt:message key="regulatory.oversight.country.name"/><span class="required">*</span> </label>
+           <div class="col-xs-4">
+           		<s:select id="countries" headerValue="-Select-" headerKey=""
+                      name="trialDTO.lst"
+                      list="trialDTO.countryList"
+                      listKey="id" listValue="name"
+                      onchange="loadRegAuthoritiesDiv();"
+                      cssClass="form-control"
+                      />
+                    <span class="alert-danger">
+                       <s:fielderror>
+                       <s:param>trialDTO.lst</s:param>
+                      </s:fielderror>
+                    </span>
+           </div>
+           <i class="fa-question-circle help-text" id="popover" rel="popover" data-content="<fmt:message key="tooltip.oversight_authority_organization_country"/>" data-placement="top" data-trigger="hover"></i>
         </div>
-    </div>
+        <div class="form-group">
+           <label for="trialDTO.selectedRegAuth"  class="col-xs-4 control-label"><fmt:message key="regulatory.oversight.auth.name"/><span class="required">*</span></label>
+           <div id="loadAuthField" class="col-xs-4">
+                <%@ include file="/WEB-INF/jsp/nodecorate/oversightAuthInfo.jsp" %>
+                <span class="alert-danger"> 
+			        <s:fielderror>
+			        <s:param>trialDTO.selectedRegAuth</s:param>
+			        </s:fielderror>                            
+			   </span>
+           </div>
+           <i class="fa-question-circle help-text" id="popover" rel="popover" data-content="<fmt:message key="tooltip.oversight_authority_organization_name"/>" data-placement="top" data-trigger="hover"></i>
+     	</div>
+
+ <!--   FDA Regulated Intervention Indicator-->
+     <div class="form-group">
+          <label for="trialDTO.fdaRegulatoryInformationIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.FDA.regulated.interv.ind"/><span class="required">*</span></label>
+          <div class="col-xs-4">
+          	<s:radio cssClass="radio-inline" id ="trialDTO.fdaRegulatoryInformationIndicator" name="trialDTO.fdaRegulatoryInformationIndicator" list="#{'No':'No', 'Yes':'Yes'}" onchange="checkFDADropDown();" value="trialDTO.fdaRegulatoryInformationIndicator"/>
+       		<i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.fda_regulated_intervention_indicator"/>" data-placement="top" data-trigger="hover"></i> 
+     		<span class="alert-danger"><s:fielderror><s:param>trialDTO.fdaRegulatoryInformationIndicator</s:param></s:fielderror></span>
+     	</div>
+      </div>
+     <!--   Section 801 Indicator-->
+     <div class="form-group" id="sec801row">
+        <label for="trialDTO.section801Indicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.section801.ind"/><span class="required">*</span></label>
+        <div class="col-xs-4">
+            <s:radio cssClass="radio-inline" id="trialDTO.section801Indicator" name="trialDTO.section801Indicator" list="#{'No':'No', 'Yes':'Yes'}" onchange="checkSection108DropDown();" value="trialDTO.section801Indicator"/>
+         	<i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.section_801_indicator"/>" data-placement="top" data-trigger="hover"></i>
+     		<span class="alert-danger"><s:fielderror><s:param>trialDTO.section801Indicator</s:param></s:fielderror></span>
+     	</div>
+     </div>
+
+     <!--   Delayed Posting Indicator-->
+     <div class="form-group" id="delpostindrow" style="display: none">
+          <label for="trialDTO.delayedPostingIndicator"  class="col-xs-4 control-label"> <fmt:message key="regulatory.delayed.posting.ind"/><span class="required">*</span></label>
+          <div class="col-xs-8">
+            <s:radio cssClass="radio-inline" id="trialDTO.delayedPostingIndicator" name="trialDTO.delayedPostingIndicator" list="#{'No':'No', 'Yes':'Yes'}" value="trialDTO.delayedPostingIndicator" disabled="true"/>
+         	<i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.delayed_posting_indicator"/>" data-placement="top" data-trigger="hover"></i>
+     		<span class="alert-danger"><s:fielderror><s:param>trialDTO.delayedPostingIndicator</s:param></s:fielderror></span>
+     		<span style="color:gray">To modify this indicator's value please submit a request to the CTRO at <a href="mailto:ncictro@mail.nih.gov">ncictro@mail.nih.gov</a></span>
+     	</div>
+     </div>
+     <!--   Data Monitoring Committee Appointed Indicator -->
+     <div class="form-group" id="datamonrow">
+             <label for="trialDTO.dataMonitoringCommitteeAppointedIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.data.monitoring.committee.ind"/></label>
+         <div class="col-xs-4">
+            <s:radio cssClass="radio-inline" id="trialDTO.dataMonitoringCommitteeAppointedIndicator" name="trialDTO.dataMonitoringCommitteeAppointedIndicator" list="#{'No':'No', 'Yes':'Yes'}" value="trialDTO.dataMonitoringCommitteeAppointedIndicator" />
+        	<i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.data_monitoring_committee_appointed_indicator"/>" data-placement="top" data-trigger="hover"></i>
+        </div>
+      </div>
+	</div>
+  </div>
+</div>
