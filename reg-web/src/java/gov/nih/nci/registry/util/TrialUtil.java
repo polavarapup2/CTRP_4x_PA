@@ -550,7 +550,7 @@ public class TrialUtil extends TrialConvertUtils {
      * @param trialDTO the trial dto
      * @throws PAException the PA exception
      */
-    public void copyRegulatoryInformation(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
+    private void copyRegulatoryInformation(Ii studyProtocolIi, TrialDTO trialDTO) throws PAException {
         StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService().getStudyProtocol(studyProtocolIi);
         
         AdditionalRegulatoryInfoDTO regulatoryDto =

@@ -3,16 +3,23 @@
  */
 package gov.nih.nci.registry.action;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gov.nih.nci.pa.dto.CountryRegAuthorityDTO;
+import gov.nih.nci.pa.dto.PaOrganizationDTO;
+import gov.nih.nci.pa.dto.RegulatoryAuthOrgDTO;
+import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
+import gov.nih.nci.pa.iso.dto.StudySiteDTO;
+import gov.nih.nci.pa.iso.util.IiConverter;
+import gov.nih.nci.pa.service.PAException;
+import gov.nih.nci.registry.dto.SummaryFourSponsorsWebDTO;
+import gov.nih.nci.registry.dto.TrialDTO;
+import gov.nih.nci.registry.dto.TrialFundingWebDTO;
+import gov.nih.nci.registry.dto.TrialIndIdeDTO;
+import gov.nih.nci.registry.util.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,17 +38,6 @@ import org.mockito.InOrder;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpSession;
-
-import gov.nih.nci.pa.dto.PaOrganizationDTO;
-import gov.nih.nci.pa.iso.dto.ProgramCodeDTO;
-import gov.nih.nci.pa.iso.dto.StudySiteDTO;
-import gov.nih.nci.pa.iso.util.IiConverter;
-import gov.nih.nci.pa.service.PAException;
-import gov.nih.nci.registry.dto.SummaryFourSponsorsWebDTO;
-import gov.nih.nci.registry.dto.TrialDTO;
-import gov.nih.nci.registry.dto.TrialFundingWebDTO;
-import gov.nih.nci.registry.dto.TrialIndIdeDTO;
-import gov.nih.nci.registry.util.Constants;
 
 /**
  * @author Vrushali
@@ -184,7 +180,11 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         paOrgList.add(paOrgDto);
         tDto.setCollaborators(paOrgList);
         tDto.setParticipatingSites(paOrgList);
-       
+        tDto.setSelectedRegAuth("selectedRegAuth");
+        tDto.setLst("lst");
+        List<RegulatoryAuthOrgDTO> regIdAuthOrgList = new ArrayList<RegulatoryAuthOrgDTO>();
+        regIdAuthOrgList.add(new RegulatoryAuthOrgDTO());
+        tDto.setRegIdAuthOrgList(regIdAuthOrgList);
         List<TrialIndIdeDTO> indIdeUpdateDtos = new ArrayList<TrialIndIdeDTO>();
         TrialIndIdeDTO indIdeDto = new TrialIndIdeDTO();
         indIdeDto.setIndIde("IND");
@@ -226,10 +226,14 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         request.setSession(session);
         ServletActionContext.setRequest(request);
         action.setTrialDTO(getMockTrialDTO());
+        action.getTrialDTO().setLst("");
+        action.getTrialDTO().setSelectedRegAuth("");
         assertEquals("error", action.reviewUpdate());
 
         request = new MockHttpServletRequest();
         session = new MockHttpSession();
+        session.setAttribute(Constants.COUNTRY_LIST, new ArrayList<CountryRegAuthorityDTO>());
+        session.setAttribute(Constants.REG_AUTH_LIST, new ArrayList<RegulatoryAuthOrgDTO>());
         session.setAttribute(Constants.GRANT_ADD_LIST, new ArrayList<TrialFundingWebDTO>());
         session.setAttribute(Constants.INDIDE_ADD_LIST, new ArrayList<TrialIndIdeDTO>());
        
@@ -239,6 +243,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         action.getTrialDTO().setDelayedPostingIndicator("delayedPostingIndicator");
         action.getTrialDTO().setFdaRegulatoryInformationIndicator("fdaRegulatedInterventionIndicator");
         action.getTrialDTO().setSection801Indicator("section801Indicator");
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setIrbApprovalFileName("ProtocolDoc.doc");
         URL fileUrl = ClassLoader.getSystemClassLoader().getResource("ProtocolDoc.doc");
         File f = new File(fileUrl.toURI());
@@ -251,9 +257,13 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
 
         request = new MockHttpServletRequest();
         session = new MockHttpSession();
+        session.setAttribute(Constants.COUNTRY_LIST, new ArrayList<CountryRegAuthorityDTO>());
+        session.setAttribute(Constants.REG_AUTH_LIST, new ArrayList<RegulatoryAuthOrgDTO>());
         session.setAttribute(Constants.GRANT_ADD_LIST, new ArrayList<TrialFundingWebDTO>());
         session.setAttribute(Constants.INDIDE_ADD_LIST, new ArrayList<TrialIndIdeDTO>());
         request.setSession(session);
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setIrbApprovalFileName("ProtocolDoc.doc");
         action.setIrbApproval(new File("ProtocolDoc.doc"));
         ServletActionContext.setRequest(request);
@@ -271,6 +281,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         action.setServletRequest(request);
         request = new MockHttpServletRequest();
         session = new MockHttpSession();
+        session.setAttribute(Constants.COUNTRY_LIST, new ArrayList<CountryRegAuthorityDTO>());
+        session.setAttribute(Constants.REG_AUTH_LIST, new ArrayList<RegulatoryAuthOrgDTO>());
         session.setAttribute(Constants.GRANT_ADD_LIST, new ArrayList<TrialFundingWebDTO>());
         session.setAttribute(Constants.INDIDE_ADD_LIST, new ArrayList<TrialIndIdeDTO>());
         action.setTrialDTO(getMockTrialDTO());
@@ -278,6 +290,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         action.getTrialDTO().setDelayedPostingIndicator("delayedPostingIndicator");
         action.getTrialDTO().setFdaRegulatoryInformationIndicator("fdaRegulatedInterventionIndicator");
         action.getTrialDTO().setSection801Indicator("section801Indicator");
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setIrbApprovalFileName("ProtocolDoc.doc");
         URL fileUrl = ClassLoader.getSystemClassLoader().getResource("ProtocolDoc.doc");
         File f = new File(fileUrl.toURI());
@@ -298,6 +312,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         MockHttpSession session = new MockHttpSession();
         request.setSession(session);
         ServletActionContext.setRequest(request);
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setTrialDTO(getMockTrialDTO());
         List<PaOrganizationDTO> paOrgList = new ArrayList<PaOrganizationDTO>();
         PaOrganizationDTO paOrgDto = new PaOrganizationDTO();
@@ -318,6 +334,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         request.setSession(session);
         ServletActionContext.setRequest(request);
 
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setTrialDTO(getMockTrialDTO());
         List<PaOrganizationDTO> paOrgList = new ArrayList<PaOrganizationDTO>();
         PaOrganizationDTO paOrgDto = new PaOrganizationDTO();
@@ -350,7 +368,9 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         MockHttpSession session = new MockHttpSession();
         request.setSession(session);
         ServletActionContext.setRequest(request);
-        
+
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setTrialDTO(getMockTrialDTO());
         List<TrialFundingWebDTO> fundingDtos = getfundingDtos();
         TrialFundingWebDTO dto = new TrialFundingWebDTO();
@@ -389,7 +409,8 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         MockHttpSession session = new MockHttpSession();
         request.setSession(session);
         ServletActionContext.setRequest(request);
-
+        action.getTrialDTO().setSelectedRegAuth("2");
+        action.getTrialDTO().setLst("3");
         action.setTrialDTO(getMockTrialDTO());
         List<TrialIndIdeDTO> indIdeDtos = new ArrayList<TrialIndIdeDTO>();
         indIdeDtos.add(new TrialIndIdeDTO());
@@ -578,7 +599,6 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         action.setInitialStatusHistory(action.getTrialDTO().getStatusHistory());
         assertEquals("redirect_to_search", action.update());
     }
-    
     @Test
     public void testUpdateWithCollaborator() {
         List<PaOrganizationDTO> paOrgList = new ArrayList<PaOrganizationDTO>();
@@ -725,6 +745,7 @@ public class UpdateTrialActionTest extends AbstractRegWebTest {
         iterator = action.getFlattenedRemainingFieldErrors().iterator();        
         assertEquals("error2", iterator.next());
                 
-    }  
+    }
+    
      
 }

@@ -186,6 +186,8 @@ public class TrialSessionUtil {
         TrialSessionUtil.addToSession(tDTO.getIndIdeAddDtos(), Constants.INDIDE_ADD_LIST);
         TrialSessionUtil.addToSession(tDTO.getFundingAddDtos(), Constants.GRANT_ADD_LIST);
         TrialSessionUtil.addToSession(tDTO.getCollaborators(), Constants.COLLABORATORS_LIST);
+        TrialSessionUtil.addToSession(tDTO.getCountryList(), Constants.COUNTRY_LIST);
+        TrialSessionUtil.addToSession(tDTO.getRegIdAuthOrgList(), Constants.REG_AUTH_LIST);
         TrialSessionUtil.addToSession(tDTO.getParticipatingSites(), Constants.PARTICIPATING_SITES_LIST);
         TrialSessionUtil.addToSession(tDTO.getSecondaryIdentifierAddList(), Constants.SECONDARY_IDENTIFIERS_LIST);
         List<DocumentDTO> documentISOList;
