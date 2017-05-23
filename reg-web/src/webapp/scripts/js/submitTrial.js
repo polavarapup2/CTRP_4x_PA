@@ -263,6 +263,14 @@ function addIndIde(indIde, number, grantor, holderType, programCode, expandedAcc
     resetValues();
 }
 
+function loadRegAuthoritiesDiv() {
+    var url = '/registry/protected/ajaxgetOAuthOrgsgetTrialOversightAuthorityOrganizationNameList.action';
+    var params = { countryid: $('countries').value };
+    var div = $('loadAuthField');
+    div.innerHTML = '<div align="left"><img  src="../images/loading.gif"/>&nbsp;Loading...</div>';
+    var aj = callAjaxPost(div, url, params);
+    return false;
+}
 function checkFDADropDown() {
     if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
         input_box=confirm("Section 801 will be NULLIFIED? \nPlease Click OK to continue or Cancel");
