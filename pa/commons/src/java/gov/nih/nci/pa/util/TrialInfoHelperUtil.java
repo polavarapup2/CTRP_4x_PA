@@ -44,7 +44,7 @@ public class TrialInfoHelperUtil {
     /**
      * ERROR_MESSAGE
      */
-    private static final String ERROR_MESSAGE = "Error in getting regulatory information: ";
+    private static final String ERROR_MESSAGE = "Error in getting additional information.";
     private RestClient client;
 
     /**
@@ -56,24 +56,19 @@ public class TrialInfoHelperUtil {
     }
 
     /**
-     * @param studyProtocolIi studyProtocolIi
-     * @param nciId nciId
+     * 
+     * @param studyProtocolIi
+     *            studyProtocolIi
+     * @param nciId the nciId
      * @return AdditionalRegulatoryInfoDTO
-     * @throws PAException PAException
+     * @throws PAException
+     *             PAException
      */
     public AdditionalRegulatoryInfoDTO retrieveRegulatoryInfo(Ii studyProtocolIi, String nciId) throws PAException {
-        return retrieveRegulatoryInfo(IiConverter.convertToString(studyProtocolIi), nciId);
-    }
-    
-    /**
-     * @param studyProtocolId studyProtocolId
-     * @param nciId nciId
-     * @return AdditionalRegulatoryInfoDTO
-     * @throws PAException PAException
-     */
-    public AdditionalRegulatoryInfoDTO retrieveRegulatoryInfo(String studyProtocolId, String nciId) throws PAException {
-        LOG.info(String.format("Getting Trial %s RegulatoryInfo for %s", studyProtocolId, nciId));
+        LOG.info("Getting Regulatory data info from new DB"
+                + IiConverter.convertToString(studyProtocolIi));
 
+        String studyProtocolId = IiConverter.convertToString(studyProtocolIi);
         AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
         try {
             String response = getHTTPResponseForStudyProtocol(studyProtocolId, nciId);
@@ -85,8 +80,8 @@ public class TrialInfoHelperUtil {
                 }
             }
         } catch (Exception e) {
-            LOG.error(ERROR_MESSAGE + studyProtocolId, e);
-            throw new PAException(ERROR_MESSAGE + studyProtocolId, e);
+            LOG.error(ERROR_MESSAGE + studyProtocolId);
+            throw new PAException(ERROR_MESSAGE + e.getMessage(), e);
         }
 
         return regulatoryDto;
