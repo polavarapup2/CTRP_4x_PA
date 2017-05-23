@@ -7,8 +7,6 @@ import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.AdditionalTrialIndIdeDTO;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -120,11 +118,7 @@ public class TrialInfoHelperUtil {
    public AdditionalRegulatoryInfoDTO mergeRegulatoryInfoUpdate(
            String studyProtocolId, String nciId, AdditionalRegulatoryInfoDTO regulatoryDto)
            throws PAException {
-       LOG.info(String.format("Updating Trial %s RegulatoryInfo service for %s", studyProtocolId, nciId));
-       
-       if (StringUtils.isEmpty(regulatoryDto.getNci_id())) {
-           regulatoryDto.setNci_id(nciId);
-       }
+       LOG.info(String.format("Updating Trial %s RegulatoryInfo service for id %s", nciId, studyProtocolId));
 
        AdditionalRegulatoryInfoDTO currRegulatoryDto = regulatoryDto;
        try {

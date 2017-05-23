@@ -10,9 +10,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Matchers.eq;
-import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.FamilyDTO;
 import gov.nih.nci.pa.enums.ActualAnticipatedTypeCode;
 import gov.nih.nci.pa.enums.PrimaryPurposeAdditionalQualifierCode;
@@ -44,10 +41,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.StreamResult;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
@@ -613,30 +607,7 @@ public class SubmitTrialActionTest extends AbstractHibernateTestCase{
     }
     
     @Test
-    public void testPartialSaveAdditionalRegulatoryInfo() throws Exception {
-        TrialInfoHelperUtil mockHelperUtil = mock(TrialInfoHelperUtil.class);
-        when(mockHelperUtil.mergeRegulatoryInfoUpdate(
-                any(String.class), any(String.class), any(AdditionalRegulatoryInfoDTO.class)))
-                .thenAnswer(new Answer<AdditionalRegulatoryInfoDTO>() {
-                    @Override
-                    public AdditionalRegulatoryInfoDTO answer(InvocationOnMock invocation) throws Throwable {
-                        AdditionalRegulatoryInfoDTO dto = (AdditionalRegulatoryInfoDTO) invocation.getArguments()[2];
-                        dto.setId("123");
-                        return dto;
-                    }
-                });
-        
-        SubmitTrialAction action = new SubmitTrialAction();
-        action.setServletRequest(ServletActionContext.getRequest());
-        action.setTrialDTO(getMockTrialDTO());
-        action.getTrialUtil().setTrialInfoHelperUtil(mockHelperUtil);
-        assertEquals("review", action.partialSave());
-        verify(mockHelperUtil).mergeRegulatoryInfoUpdate(Matchers.anyString(), Matchers.isNull(String.class), Matchers.any(AdditionalRegulatoryInfoDTO.class));
-        assertEquals("123", action.getTrialDTO().getMsId());
-    }
-
-    @Test
-    public void testPartialSave() throws Exception {
+    public void testPartialSave() {
         action.setTrialDTO(new TrialDTO());
         assertEquals("error", action.partialSave());
 
