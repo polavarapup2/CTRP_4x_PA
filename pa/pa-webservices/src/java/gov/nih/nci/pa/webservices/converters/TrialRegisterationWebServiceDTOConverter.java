@@ -378,6 +378,7 @@ public class TrialRegisterationWebServiceDTOConverter {
                 PlannedEligibilityCriterionDTO dto = new PlannedEligibilityCriterionDTO();
                 dto.setInclusionIndicator(BlConverter.convertToBl(eligibility
                         .isInclusionIndicator()));
+                dto.setCategoryCode(CdConverter.convertStringToCd(eligibility.getCategoryCode()));
                 dto.setCriterionName(StConverter.convertToSt(eligibility
                         .getCriterionName()));
                 dto.setOperator(StConverter.convertToSt(eligibility

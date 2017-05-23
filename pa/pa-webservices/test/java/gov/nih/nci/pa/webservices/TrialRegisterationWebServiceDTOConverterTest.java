@@ -311,6 +311,7 @@ public class TrialRegisterationWebServiceDTOConverterTest {
         assertTrue(dtos.size() == 2);
         assertEquals(dtos.get(0).getValue().getHigh().getPrecision().toString(),"1");
         assertEquals(dtos.get(1).getValue().getHigh().getPrecision().toString(),"2");
+        assertEquals(dtos.get(0).getCategoryCode().getCode(),"Course");
     }
     
     @Test
