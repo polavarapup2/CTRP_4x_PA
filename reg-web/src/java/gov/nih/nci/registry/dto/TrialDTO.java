@@ -25,10 +25,6 @@ import org.hibernate.validator.NotEmpty;
  * @author Vrushali
  *
  */
-/**
- * @author Reshma
- *
- */
 public class TrialDTO extends BaseTrialDTO {
     private static final long serialVersionUID = 6941373311604699414L;
 
@@ -41,7 +37,7 @@ public class TrialDTO extends BaseTrialDTO {
      * Sponsor responsible party type.
      */
     public static final String RESPONSIBLE_PARTY_TYPE_SPONSOR = "sponsor";
-
+    
     /**
      * Si responsible party type.
      */
@@ -55,7 +51,7 @@ public class TrialDTO extends BaseTrialDTO {
     private String responsiblePartyType;
     private String responsiblePersonName;
     private String responsiblePersonIdentifier;
-    private String responsiblePersonTitle;
+    private String responsiblePersonTitle;   
     private String responsiblePersonAffiliationOrgName;
     private String responsiblePersonAffiliationOrgId;
     private String responsibleGenericContactIdentifier;
@@ -87,13 +83,6 @@ public class TrialDTO extends BaseTrialDTO {
     private String fdaRegulatoryInformationIndicator;
     private String section801Indicator;
     private String delayedPostingIndicator;
-    private String fdaRegulatedDrug;
-    private String fdaRegulatedDevice;
-    private String postPriorToApproval;
-    private String pedPostmarketSurv;
-    private String exportedFromUs;
-    private String lastUpdatedDate;
-    private String msId;
     private String dataMonitoringCommitteeAppointedIndicator;
     private String ctepIdentifier;
     private String dcpIdentifier;
@@ -107,10 +96,10 @@ public class TrialDTO extends BaseTrialDTO {
     private List<Ii> secondaryIdentifierAddList;
     private String assignedIdentifier;
     private Map<String, String> programCodesMap = new HashMap<String, String>();
-
+    
     private Collection<StatusDto> statusHistory = new ArrayList<StatusDto>();
-
-
+  
+     
 
     /**
      * Constructor.
@@ -207,7 +196,7 @@ public class TrialDTO extends BaseTrialDTO {
     public String getResponsiblePartyType() {
         return responsiblePartyType;
     }
-
+    
     /**
      * @return the responsiblePartyType
      */
@@ -287,7 +276,7 @@ public class TrialDTO extends BaseTrialDTO {
                 getLatestStatus().getStatusCode()).getCode();
     }
 
-
+   
 
     /**
      * @param statusCode the statusCode to set
@@ -840,10 +829,10 @@ public class TrialDTO extends BaseTrialDTO {
             String responsibleGenericContactIdentifier) {
         this.responsibleGenericContactIdentifier = responsibleGenericContactIdentifier;
     }
-
+    
     /**
      * Includes phone number and extension, if present.
-     *
+     * 
      * @return String
      */
     public String getFullContactPhone() {
@@ -895,7 +884,7 @@ public class TrialDTO extends BaseTrialDTO {
             String responsiblePersonAffiliationOrgId) {
         this.responsiblePersonAffiliationOrgId = responsiblePersonAffiliationOrgId;
     }
-
+    
     /**
      * @return the statuses
      */
@@ -909,7 +898,7 @@ public class TrialDTO extends BaseTrialDTO {
     public void setStatusHistory(Collection<StatusDto> statuses) {
         this.statusHistory = statuses;
     }
-
+   
     /**
      * @return
      */
@@ -941,122 +930,11 @@ public class TrialDTO extends BaseTrialDTO {
 
     /**
      * @param programCodesList programCodesList
-     */
+     */ 
     public void setProgramCodesList(List<String> programCodesList) {
         this.programCodesList = programCodesList;
     }
 
-    /**
-     *
-     * @return fdaRegulatedDrug
-     */
-    public String getFdaRegulatedDrug() {
-        return fdaRegulatedDrug;
-    }
 
-    /**
-     *
-     * @param fdaRegulatedDrug
-     *            the fdaRegulatedDrug
-     */
-    public void setFdaRegulatedDrug(String fdaRegulatedDrug) {
-        this.fdaRegulatedDrug = fdaRegulatedDrug;
-    }
-
-    /**
-     *
-     * @return fdaRegulatedDevice
-     */
-    public String getFdaRegulatedDevice() {
-        return fdaRegulatedDevice;
-    }
-
-    /**
-     *
-     * @param fdaRegulatedDevice
-     *            the fdaRegulatedDevice
-     */
-    public void setFdaRegulatedDevice(String fdaRegulatedDevice) {
-        this.fdaRegulatedDevice = fdaRegulatedDevice;
-    }
-
-    /**
-     *
-     * @return postPriorToApproval
-     */
-    public String getPostPriorToApproval() {
-        return postPriorToApproval;
-    }
-
-    /**
-     *
-     * @param postPriorToApproval
-     *            the postPriorToApproval
-     */
-    public void setPostPriorToApproval(String postPriorToApproval) {
-        this.postPriorToApproval = postPriorToApproval;
-    }
-
-    /**
-     *
-     * @return pedPostmarketSurv
-     */
-    public String getPedPostmarketSurv() {
-        return pedPostmarketSurv;
-    }
-
-    /**
-     *
-     * @param pedPostmarketSurv
-     *            the pedPostmarketSurv
-     */
-    public void setPedPostmarketSurv(String pedPostmarketSurv) {
-        this.pedPostmarketSurv = pedPostmarketSurv;
-    }
-
-    /**
-     *
-     * @return exportedFromUs
-     */
-    public String getExportedFromUs() {
-        return exportedFromUs;
-    }
-
-    /**
-     *
-     * @param exportedFromUs
-     *            the exportedFromUs
-     */
-    public void setExportedFromUs(String exportedFromUs) {
-        this.exportedFromUs = exportedFromUs;
-    }
-    /**
-     *
-     * @return lastUpdatedDate
-     */
-    public String getLastUpdatedDate() {
-        return lastUpdatedDate;
-    }
-    /**
-     *
-     * @param lastUpdatedDate the lastUpdatedDate
-     */
-    public void setLastUpdatedDate(String lastUpdatedDate) {
-        this.lastUpdatedDate = lastUpdatedDate;
-    }
-
-    /**
-     * @return the msId
-     */
-    public String getMsId() {
-        return msId;
-    }
-
-    /**
-     * @param msId the msId to set
-     */
-    public void setMsId(String msId) {
-        this.msId = msId;
-    }
-
+   
 }
