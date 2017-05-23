@@ -378,12 +378,12 @@ public class TrialValidator {
         }
     }
 
-	private void validateXMLReqElement(TrialDTO trialDto, Map<String, String> fieldErrorMap) {
+    private void validateXMLReqElement(TrialDTO trialDto, Map<String, String> fieldErrorMap) {
         if (trialDto.isXmlRequired()) {
             validateRespPartyInfo(trialDto, fieldErrorMap);
-//            addErrors(trialDto.getSelectedRegAuth(), "regulatory.oversight.auth.name", "error.oversight.orgName",
-//                      fieldErrorMap);
-//            addErrors(trialDto.getLst(), "trialDTO.lst", "error.oversight.countryName", fieldErrorMap);
+            addErrors(trialDto.getSelectedRegAuth(), "regulatory.oversight.auth.name", "error.oversight.orgName",
+                      fieldErrorMap);
+            addErrors(trialDto.getLst(), "trialDTO.lst", "error.oversight.countryName", fieldErrorMap);
         }
     }
 
