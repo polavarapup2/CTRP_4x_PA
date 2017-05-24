@@ -380,14 +380,28 @@
                         
                             <reg-web:titleRowDiv titleKey="regulatory.title"/>
                             <div class="row form-horizontal details">
-                            <!--  Trial Oversight Authority Country -->
-                            <reg-web:valueRowDiv labelKey="regulatory.oversight.country.name" noLabelTag="true">
-                                <c:out value="${requestScope.trialDTO.trialOversgtAuthCountryName}"/>
-                            </reg-web:valueRowDiv>
-                            <!--  Trial Oversight Authority Organization Name -->
-                            <reg-web:valueRowDiv labelKey="regulatory.oversight.auth.name" noLabelTag="true">
-                                <c:out value="${requestScope.trialDTO.trialOversgtAuthOrgName}"/>
-                            </reg-web:valueRowDiv>
+                                <reg-web:valueRowDiv labelKey="regulatory.drug.product" noLabelTag="true">
+                                    <c:out value="${requestScope.trialDTO.fdaRegulatedDrug}" />
+                                </reg-web:valueRowDiv>
+                                <reg-web:valueRowDiv labelKey="regulatory.device.product" noLabelTag="true">
+                                    <c:out value="${requestScope.trialDTO.fdaRegulatedDevice}" />
+                                </reg-web:valueRowDiv>
+                                <!--   Delayed Posting Indicator-->
+                                <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
+                                    <c:out value="${requestScope.trialDTO.delayedPostingIndicator}" />
+                                </reg-web:valueRowDiv>
+                                <c:if test="${requestScope.trialDTO.delayedPostingIndicator != 'No'}">
+                                    <reg-web:valueRowDiv labelKey="regulatory.approval.clearance" noLabelTag="true">
+                                         <c:out value="${requestScope.trialDTO.postPriorToApproval}" />
+                                     </reg-web:valueRowDiv>
+                                 </c:if>
+                                <reg-web:valueRowDiv labelKey="regulatory.market.surveillance" noLabelTag="true">
+                                    <c:out value="${requestScope.trialDTO.pedPostmarketSurv}" />
+                                </reg-web:valueRowDiv>
+                                <reg-web:valueRowDiv labelKey="regulatory.usa.export" noLabelTag="true">
+                                    <c:out value="${requestScope.trialDTO.exportedFromUs}" />
+                                </reg-web:valueRowDiv>
+
                             <!--   FDA Regulated Intervention Indicator-->
                             <reg-web:valueRowDiv labelKey="regulatory.FDA.regulated.interv.ind" noLabelTag="true">
                                 <c:out value="${requestScope.trialDTO.fdaRegulatoryInformationIndicator}" /> 
@@ -396,10 +410,7 @@
                             <reg-web:valueRowDiv id="sec801row" labelKey="regulatory.section801.ind" noLabelTag="true">
                                 <c:out value="${requestScope.trialDTO.section801Indicator}" />
                             </reg-web:valueRowDiv>
-                            <!--   Delayed Posting Indicator-->
-                            <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
-                                <c:out value="${requestScope.trialDTO.delayedPostingIndicator}" />
-                            </reg-web:valueRowDiv>
+
                             <!--   Data Monitoring Committee Appointed Indicator -->
                             <reg-web:valueRowDiv id="datamonrow" labelKey="regulatory.data.monitoring.committee.ind" noLabelTag="true">
                                 <c:out value="${requestScope.trialDTO.dataMonitoringCommitteeAppointedIndicator}" />

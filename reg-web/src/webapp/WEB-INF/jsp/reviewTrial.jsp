@@ -322,9 +322,11 @@
                                     <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
                                         <c:out value="${trialDTO.delayedPostingIndicator}" />
                                     </reg-web:valueRowDiv>
+                                    <c:if test="${trialDTO.delayedPostingIndicator != 'false'}">
                                     <reg-web:valueRowDiv labelKey="regulatory.approval.clearance" noLabelTag="true">
                                         <c:out value="${trialDTO.postPriorToApproval}" />
                                     </reg-web:valueRowDiv>
+                                    </c:if>
                                     <reg-web:valueRowDiv labelKey="regulatory.market.surveillance" noLabelTag="true">
                                         <c:out value="${trialDTO.pedPostmarketSurv}" />
                                     </reg-web:valueRowDiv>

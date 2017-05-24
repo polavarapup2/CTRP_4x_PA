@@ -118,7 +118,8 @@
                                         	 programCodeText);
                                         	 
                                          }
-                                        
+                                        checkDeviceDropDown();
+                                        checkFDADropDown();
                                          
                                      });
       

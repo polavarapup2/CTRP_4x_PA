@@ -69,7 +69,7 @@
                 <div class="form-group">
                     <label for="trialDTO.fdaRegulatoryInformationIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.FDA.regulated.interv.ind"/><span class="required">*</span></label>
                     <div class="col-xs-4">
-                        <s:select id="fdaindid" name="trialDTO.fdaRegulatoryInformationIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}" onchange="checkFDADropDown();"/>
+                        <s:select id="fdaindid" name="trialDTO.fdaRegulatoryInformationIndicator" list="#{'':'', 'No':'No', 'Yes':'Yes'}" onchange="checkFDADropDown();"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.fda_regulated_intervention_indicator"/>" data-placement="top" data-trigger="hover"></i>
                         <span class="alert-danger"><s:fielderror><s:param>trialDTO.fdaRegulatoryInformationIndicator</s:param></s:fielderror></span>
                     </div>
@@ -78,7 +78,7 @@
                 <div class="form-group" id="sec801row" style="display: none">
                     <label for="trialDTO.section801Indicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.section801.ind"/><span class="required">*</span></label>
                     <div class="col-xs-4">
-                        <s:select id="sec801id" name="trialDTO.section801Indicator" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
+                        <s:select id="sec801id" name="trialDTO.section801Indicator" list="#{'':'', 'No':'No', 'Yes':'Yes'}"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.section_801_indicator"/>" data-placement="top" data-trigger="hover"></i>
                         <span class="alert-danger"><s:fielderror><s:param>trialDTO.section801Indicator</s:param></s:fielderror></span>
                     </div>
@@ -89,7 +89,7 @@
                 <div class="form-group" id="datamonrow">
                     <label for="trialDTO.dataMonitoringCommitteeAppointedIndicator"  class="col-xs-4 control-label"><fmt:message key="regulatory.data.monitoring.committee.ind"/></label>
                     <div class="col-xs-4">
-                        <s:select id="datamonid" name="trialDTO.dataMonitoringCommitteeAppointedIndicator" list="#{'':'', 'false':'No', 'true':'Yes'}"/>
+                        <s:select id="datamonid" name="trialDTO.dataMonitoringCommitteeAppointedIndicator" list="#{'':'', 'No':'No', 'Yes':'Yes'}"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.data_monitoring_committee_appointed_indicator"/>" data-placement="top" data-trigger="hover"></i>
                     </div>
                 </div>
