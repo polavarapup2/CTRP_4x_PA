@@ -27,14 +27,27 @@ import javax.servlet.http.HttpServletResponse;
  */
 /** @deprecated */
 public class CustomStruts2ActionContextCleanup implements Filter {
-    private static final Logger LOG = LoggerFactory.getLogger(CustomStruts2ActionContextCleanup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(gov.nih.nci.accrual.accweb.util.CustomStruts2ActionContextCleanup.class);
+    private static final String COUNTER = "__cleanup_recursion_counter";
 
-    public CustomStruts2ActionContextCleanup() {
+    /**
+     *  CustomStruts2ActionContextCleanup
+     */
+    public CustomStruts2ActionContextCleanup() { // NOPMD
     }
 
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)res;
+    /**
+     * doFilter method
+     * @param req req
+     * @param res res
+     * @param chain chain
+     * @throws IOException IOException
+     * @throws ServletException ServletException
+     */
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
+            ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
         String timerKey = "ActionContextCleanUp_doFilter: ";
 
         try {
@@ -43,28 +56,28 @@ public class CustomStruts2ActionContextCleanup implements Filter {
 
             try {
                 var15 = true;
-                Integer count = (Integer)request.getAttribute("__cleanup_recursion_counter");
-                if(count == null) {
+                Integer count = (Integer) request.getAttribute(COUNTER);
+                if (count == null) {
                     count = Integer.valueOf(1);
                 } else {
                     count = Integer.valueOf(count.intValue() + 1);
                 }
 
-                request.setAttribute("__cleanup_recursion_counter", count);
+                request.setAttribute(COUNTER, count);
                 chain.doFilter(request, response);
                 var15 = false;
             } finally {
-                if(var15) {
-                    int counterVal = ((Integer)request.getAttribute("__cleanup_recursion_counter")).intValue();
+                if (var15) {
+                    int counterVal = ((Integer) request.getAttribute(COUNTER)).intValue();
                     --counterVal;
-                    request.setAttribute("__cleanup_recursion_counter", Integer.valueOf(counterVal));
+                    request.setAttribute(COUNTER, Integer.valueOf(counterVal));
                     cleanUp(request);
                 }
             }
 
-            int counterVal = ((Integer)request.getAttribute("__cleanup_recursion_counter")).intValue();
+            int counterVal = ((Integer) request.getAttribute(COUNTER)).intValue();
             --counterVal;
-            request.setAttribute("__cleanup_recursion_counter", Integer.valueOf(counterVal));
+            request.setAttribute(COUNTER, Integer.valueOf(counterVal));
             cleanUp(request);
         } finally {
             UtilTimerStack.pop(timerKey);
@@ -72,23 +85,34 @@ public class CustomStruts2ActionContextCleanup implements Filter {
 
     }
 
+    /**
+     * cleanUp method
+     * @param req req
+     */
     protected static void cleanUp(ServletRequest req) {
-        Integer count = (Integer)req.getAttribute("__cleanup_recursion_counter");
-        if(count != null && count.intValue() > 0) {
-            if(LOG.isDebugEnabled()) {
+        Integer count = (Integer) req.getAttribute(COUNTER);
+        if (count != null && count.intValue() > 0) {
+            if (LOG.isDebugEnabled()) {
                 LOG.debug("skipping cleanup counter=" + count, new String[0]);
             }
 
         } else {
-            ActionContext.setContext((ActionContext)null);
-            Dispatcher.setInstance((Dispatcher)null);
+            ActionContext.setContext((ActionContext) null);
+            Dispatcher.setInstance((Dispatcher) null);
         }
     }
 
-    public void destroy() {
+    /**
+     * Destroy method
+     */
+    public void destroy() { // NOPMD
     }
 
+    /**
+     * init method
+     * @param arg0 arg0
+     * @throws ServletException ServletException
+     */
     public void init(FilterConfig arg0) throws ServletException {
     }
 }
-
