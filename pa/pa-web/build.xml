@@ -680,6 +680,7 @@
                               toDir="${pa-web.build.coberturaOutputDir}" ignoreTrivial="true">
             <fileset dir="${pa-web.build.outputDir}">
                 <include name="**/*.class" />
+                <exclude name="**/CustomStruts2ActionContextCleanup.class" />
             </fileset>
         	<auxClasspath>
                  <path refid="ejb.package.classpath"/>

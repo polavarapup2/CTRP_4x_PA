@@ -113,6 +113,6 @@ public class CustomStruts2ActionContextCleanup implements Filter {
      * @param arg0 arg0
      * @throws ServletException ServletException
      */
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig arg0) throws ServletException { // NOPMD
     }
 }

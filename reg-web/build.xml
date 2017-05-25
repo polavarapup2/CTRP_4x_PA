@@ -641,6 +641,7 @@
         <cobertura-instrument datafile="${reg-web.build.dir}/cobertura.ser" toDir="${reg-web.build.coberturaOutputDir}" ignoreTrivial="true">
             <fileset dir="${reg-web.build.outputDir}">
                 <include name="**/*.class" />
+                <exclude name="**/CustomStruts2ActionContextCleanup.class" />
             </fileset>
             <auxClasspath>
                   <path refid="ejb.package.classpath"/>
