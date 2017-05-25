@@ -34,7 +34,7 @@ public class PaJsonUtilMarshallJsonRunnerTest {
         String result = "{\"study_protocol_id\":null,\"nci_id\":null,\"fda_regulated_drug\":\"true\","
                 + "\"fda_regulated_device\":\"true\""
                 + ",\"post_prior_to_approval\":\"true\""
-                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\",\"id\":\"1\"}";
+                + ",\"ped_postmarket_surv\":\"true\",\"exported_from_us\":\"true\",\"date_updated\":\"1234455\",\"id\":\"1\",\"study_protocol_stage_id\":null}";
         
         String result2 = "{\"id\":\"1\",\"study_protocol_id\":\"1\",\"trial_ide_ind_id\":\"123\",\"expanded_access_indicator\":\"Yes\","
                 + "\"expanded_access_nct_id\":\"NCT12345678\",\"date_updated\":null}";

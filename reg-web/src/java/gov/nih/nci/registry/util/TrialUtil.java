@@ -36,7 +36,6 @@ import gov.nih.nci.pa.iso.util.TsConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.correlation.CorrelationUtils;
 import gov.nih.nci.pa.service.correlation.CorrelationUtilsRemote;
-import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.ISOUtil;
 import gov.nih.nci.pa.util.PAAttributeMaxLen;
 import gov.nih.nci.pa.util.PAConstants;
@@ -699,14 +698,14 @@ public class TrialUtil extends TrialConvertUtils {
             webIndDtos.add(convertToTrialIndIdeDTO(isoIndDto));
         }
         trialDTO.setIndIdeDtos(webIndDtos);
-        if (StringUtils.isEmpty(trialDTO.getPropritaryTrialIndicator())
+        /*if (StringUtils.isEmpty(trialDTO.getPropritaryTrialIndicator())
                 || trialDTO.getPropritaryTrialIndicator().equalsIgnoreCase(CommonsConstant.NO)) {
             populateRegulatoryListStartWithUSA((TrialDTO) trialDTO);
-        }
+        }*/
         populateStageTrialDocuments(trialDTO);
         if (trialDTO instanceof TrialDTO) {
-            AdditionalRegulatoryInfoDTO regulatoryDto = trialInfoHelperUtil.retrieveRegulatoryInfo(
-                            trialDTO.getStudyProtocolId(), trialDTO.getAssignedIdentifier());
+            AdditionalRegulatoryInfoDTO regulatoryDto = trialInfoHelperUtil.retrieveStageRegulatoryInfo(
+                            trialDTO.getStudyProtocolId());
             if (regulatoryDto != null) {
                 loadAdditionalRegulatoryInfoFromDto(((TrialDTO) trialDTO), regulatoryDto);
             }
@@ -783,7 +782,7 @@ public class TrialUtil extends TrialConvertUtils {
         }
         trialDTO.setStudyProtocolId(tempStudyProtocolIi.getExtension());
         if (trialDTO instanceof TrialDTO) {
-            AdditionalRegulatoryInfoDTO ariDto =  saveAdditionalRegulatoryInfo((TrialDTO) trialDTO);
+            AdditionalRegulatoryInfoDTO ariDto =  saveAdditionalRegulatoryInfo((TrialDTO) trialDTO, null);
             if (ariDto != null) {
                 ((TrialDTO) trialDTO).setMsId(ariDto.getId());
                 ((TrialDTO) trialDTO).setLastUpdatedDate(ariDto.getDate_updated());
@@ -1034,6 +1033,10 @@ public class TrialUtil extends TrialConvertUtils {
      */
     public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(
             TrialDTO trialDTO, String nciId) throws PAException {
+        if (StringUtils.isEmpty(trialDTO.getStudyProtocolId())) {
+            throw new PAException("StudyProtocolId is required to save Trial to Microservice");
+        }
+
         AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
         regulatoryDto.setExported_from_us(trialDTO.getExportedFromUs());
         regulatoryDto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
@@ -1041,26 +1044,15 @@ public class TrialUtil extends TrialConvertUtils {
         regulatoryDto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
         regulatoryDto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
         regulatoryDto.setDate_updated(trialDTO.getLastUpdatedDate());
-        regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        if (StringUtils.isEmpty(nciId)) {
+            regulatoryDto.setStudy_protocol_stage_id(trialDTO.getStudyProtocolId());
+        } else {
+            regulatoryDto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
+        }
         regulatoryDto.setNci_id(nciId);
         regulatoryDto.setId(trialDTO.getMsId());
         return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
                 trialDTO.getStudyProtocolId(), nciId, regulatoryDto);
-    }
-    /**
-     * Save regulatory info to microservice
-     * @param trialDTO trialDTO
-     * @return AdditionalRegulatoryInfoDTO AdditionalRegulatoryInfoDTO
-     * @throws PAException PAException
-     */
-    public AdditionalRegulatoryInfoDTO saveAdditionalRegulatoryInfo(TrialDTO trialDTO) throws PAException {
-        if (StringUtils.isEmpty(trialDTO.getStudyProtocolId())) {
-            throw new PAException("StudyProtocolId is required to save Trial to Microservice");
-        }
-        
-        AdditionalRegulatoryInfoDTO regulatoryDto = convertToAdditionalRegulatoryInfoDTO(trialDTO, null);
-        return trialInfoHelperUtil.mergeRegulatoryInfoUpdate(
-                trialDTO.getStudyProtocolId(), null, regulatoryDto);
     }
 
     /**

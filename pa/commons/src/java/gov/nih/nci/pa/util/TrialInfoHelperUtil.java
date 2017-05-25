@@ -93,6 +93,32 @@ public class TrialInfoHelperUtil {
     }
 
     /**
+     * @param studyProtocolStageId studyProtocolStageId
+     * @return AdditionalRegulatoryInfoDTO
+     * @throws PAException PAException
+     */
+    public AdditionalRegulatoryInfoDTO retrieveStageRegulatoryInfo(String studyProtocolStageId) throws PAException {
+        LOG.info(String.format("Getting Trial Stage RegulatoryInfo for %s", studyProtocolStageId));
+
+        AdditionalRegulatoryInfoDTO regulatoryDto = new AdditionalRegulatoryInfoDTO();
+        try {
+            String response = getHTTPResponseWithSPStageID(studyProtocolStageId);
+            if (response != null) {
+                List<AdditionalRegulatoryInfoDTO> regulatoryDtoList = (List<AdditionalRegulatoryInfoDTO>) PAJsonUtil
+                        .unmarshallJSON(response, new TypeReference<List<AdditionalRegulatoryInfoDTO>>() { });
+                if (regulatoryDtoList != null && regulatoryDtoList.size() == 1) {
+                    regulatoryDto = regulatoryDtoList.get(0);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error(ERROR_MESSAGE + studyProtocolStageId, e);
+            throw new PAException(ERROR_MESSAGE + studyProtocolStageId, e);
+        }
+
+        return regulatoryDto;
+    }
+
+    /**
      *
      * @param studyProtocolIi
      *            the studyProtocolIi
@@ -438,6 +464,18 @@ public class TrialInfoHelperUtil {
     public String getHTTPResponseWithSPID(String studyProtocolId) throws PAException {
         String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl()
                 + "?study_protocol_id=" + studyProtocolId;
+        return (client.sendHTTPRequest(url, GET, null));
+    }
+
+    /**
+     *
+     * @param studyProtocolStageId the studyProtocolStageId
+     * @return String response
+     * @throws PAException exception
+     */
+    public String getHTTPResponseWithSPStageID(String studyProtocolStageId) throws PAException {
+        String url = PaEarPropertyReader.getFdaaaDataClinicalTrialsUrl()
+                + "?study_protocol_stage_id=" + studyProtocolStageId;
         return (client.sendHTTPRequest(url, GET, null));
     }
     

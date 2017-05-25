@@ -578,7 +578,7 @@ public class SubmitTrialAction extends AbstractBaseTrialAction implements Prepar
             TrialSessionUtil.addSessionAttributes(trialDTO);
             // have to call the usa country list
             //trialUtil.populateRegulatoryList(trialDTO);
-            trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
+            //trialUtil.populateRegulatoryListStartWithUSA(trialDTO);
             return ERROR;
         } catch (IOException e) {
             LOG.error(e.getMessage());

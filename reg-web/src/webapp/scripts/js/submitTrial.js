@@ -294,6 +294,7 @@ function checkDeviceDropDown() {
         showRow($('survRow'));
     }
 }
+
 function checkSection108DropDown() {
     if ($('trialDTO.section801IndicatorNo').checked) {
         input_box = confirm("Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");

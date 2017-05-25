@@ -1566,26 +1566,6 @@ public StudyProtocolStageDTO convertToStudyProtocolStageDTO(BaseTrialDTO trialDt
        }
        return EnOnConverter.convertEnOnToString(
                orgDto.getName());
-   }
-   
-
-    /**
-     * @param trialDTO trialDTO
-     * @param nciId nciId
-     * @return AdditionalRegulatoryInfoDTO
-     */
-    public AdditionalRegulatoryInfoDTO convertToAdditionalRegulatoryInfoDTO(TrialDTO trialDTO, String nciId) {
-        AdditionalRegulatoryInfoDTO dto = new AdditionalRegulatoryInfoDTO();
-        dto.setExported_from_us(trialDTO.getExportedFromUs());
-        dto.setFda_regulated_device(trialDTO.getFdaRegulatedDevice());
-        dto.setFda_regulated_drug(trialDTO.getFdaRegulatedDrug());
-        dto.setPed_postmarket_surv(trialDTO.getPedPostmarketSurv());
-        dto.setPost_prior_to_approval(trialDTO.getPostPriorToApproval());
-        dto.setDate_updated(trialDTO.getLastUpdatedDate());
-        dto.setId(trialDTO.getMsId());
-        dto.setStudy_protocol_id(trialDTO.getStudyProtocolId());
-        dto.setNci_id(nciId);
-        return dto;
     }
     
     /**

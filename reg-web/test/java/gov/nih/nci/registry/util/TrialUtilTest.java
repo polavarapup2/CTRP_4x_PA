@@ -131,14 +131,14 @@ public class TrialUtilTest extends AbstractHibernateTestCase {
         trialDTO.setMsId("987654321");
         
         AdditionalRegulatoryInfoDTO additionalRegulatoryInfoDTO = 
-                trialUtil.saveAdditionalRegulatoryInfo(trialDTO);
+                trialUtil.saveAdditionalRegulatoryInfo(trialDTO, null);
         assertEquals("true", additionalRegulatoryInfoDTO.getExported_from_us());
         assertEquals("true", additionalRegulatoryInfoDTO.getFda_regulated_device());
         assertEquals("true", additionalRegulatoryInfoDTO.getFda_regulated_drug());
         assertEquals("true", additionalRegulatoryInfoDTO.getPed_postmarket_surv());
         assertEquals("true", additionalRegulatoryInfoDTO.getPost_prior_to_approval());
         assertEquals("11-27-2016", additionalRegulatoryInfoDTO.getDate_updated());
-        assertEquals("12345", additionalRegulatoryInfoDTO.getStudy_protocol_id());
+        assertEquals("12345", additionalRegulatoryInfoDTO.getStudy_protocol_stage_id());
         assertEquals(null, additionalRegulatoryInfoDTO.getNci_id());
         assertEquals("123", additionalRegulatoryInfoDTO.getId());
         
@@ -178,13 +178,12 @@ public class TrialUtilTest extends AbstractHibernateTestCase {
     @Test
     public void getTrialDTOForPartiallySumbissionByIdTest() throws PAException, NullifiedRoleException {
         TrialInfoHelperUtil mockHelperUtil = mock(TrialInfoHelperUtil.class);
-        when(mockHelperUtil.retrieveRegulatoryInfo(anyString(), anyString()))
+        when(mockHelperUtil.retrieveStageRegulatoryInfo(anyString()))
                 .thenAnswer(new Answer<AdditionalRegulatoryInfoDTO>() {
                     @Override
                     public AdditionalRegulatoryInfoDTO answer(InvocationOnMock invocation) throws Throwable {
                         AdditionalRegulatoryInfoDTO dto = new AdditionalRegulatoryInfoDTO();
-                        dto.setStudy_protocol_id((String) invocation.getArguments()[0]);
-                        dto.setNci_id((String) invocation.getArguments()[1]);
+                        dto.setStudy_protocol_stage_id((String) invocation.getArguments()[0]);
                         dto.setId("123");
                         dto.setDate_updated("11-27-2016");
                         dto.setExported_from_us("true");
@@ -201,7 +200,7 @@ public class TrialUtilTest extends AbstractHibernateTestCase {
         
         TrialDTO trialDTO = (TrialDTO) trialUtil.getTrialDTOForPartiallySumbissionById("1");
         
-        verify(mockHelperUtil).retrieveRegulatoryInfo(eq("1"), isNull(String.class));
+        verify(mockHelperUtil).retrieveStageRegulatoryInfo(eq("1"));
         
         assertEquals("123", trialDTO.getMsId());
         

@@ -4,6 +4,8 @@
     <div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#parent" href="#section13">Regulatory Information <span class="required">*</span></a></div>
     <div id="section13" class="accordion-body in">
         <div class="container">
+            <s:hidden id="lastUpdatedDate" name="trialDTO.lastUpdatedDate"> </s:hidden>
+            <s:hidden id="msId" name="trialDTO.id"> </s:hidden>
             <div class="form-group">
 
                 <div class="form-group">

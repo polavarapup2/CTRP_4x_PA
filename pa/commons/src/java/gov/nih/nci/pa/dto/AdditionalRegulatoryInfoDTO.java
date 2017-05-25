@@ -19,6 +19,7 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     private String exported_from_us;
     private String date_updated;
     private String id;
+    private String study_protocol_stage_id;
     
     /**
      * Constructor 
@@ -180,5 +181,21 @@ public class AdditionalRegulatoryInfoDTO { // NOPMD
     public void setId(String id) {
         this.id = id;
     }
-  //CHECKSTYLE:ON
+
+    /**
+     *
+     * @return study_protocol_stage_id
+     */
+    public String getStudy_protocol_stage_id() {
+        return study_protocol_stage_id;
+    }
+
+    /**
+     *
+     * @param study_protocol_stage_id the study_protocol_stage_id
+     */
+    public void setStudy_protocol_stage_id(String study_protocol_stage_id) {
+        this.study_protocol_stage_id = study_protocol_stage_id;
+    }
+    //CHECKSTYLE:ON
 }
