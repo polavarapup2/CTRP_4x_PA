@@ -53,7 +53,7 @@
     </filter>
     <filter>
         <filter-name>action2-cleanup</filter-name>
-        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+        <filter-class>gov.nih.nci.accrual.accweb.util.CustomStruts2ActionContextCleanup</filter-class>
     </filter>
     <filter>
         <filter-name>sitemesh</filter-name>

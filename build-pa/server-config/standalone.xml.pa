@@ -95,7 +95,7 @@
             <console-handler name="CONSOLE">
                 <level name="${env.LOGLEVEL}"/>
                 <formatter>
-                    <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
+                    <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} CTRP_4x_PA %-5p [%c] (%t) %s%E%n"/>
                 </formatter>
             </console-handler>
             <periodic-rotating-file-handler name="FILE" autoflush="true">
