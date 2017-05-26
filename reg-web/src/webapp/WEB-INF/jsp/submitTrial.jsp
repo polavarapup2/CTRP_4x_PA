@@ -118,9 +118,23 @@
                                         	 programCodeText);
                                         	 
                                          }
-                                        checkDeviceDropDown();
-                                        checkFDADropDown();
-                                         
+                                        if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
+                                            $('sec801id').value ='';
+                                            hideRow($('sec801row'));
+                                        } else {
+                                            showRow($('sec801row'));
+                                        }
+                                         if ($('device').value == '' | $('device').value == 'false') {
+
+                                             hideRow($('delpostindrow'));
+                                             hideRow($('survRow'));
+                                            $('delpostindid').value = '';
+                                            $('surveillance').value ='';
+                                         } else {
+                                             showRow($('delpostindrow'));
+                                             showRow($('survRow'));
+                                         }
+
                                      });
       
                  
