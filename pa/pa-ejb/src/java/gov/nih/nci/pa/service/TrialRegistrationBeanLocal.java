@@ -508,8 +508,9 @@ public class TrialRegistrationBeanLocal extends AbstractTrialRegistrationBean //
             Timestamp amendmentCreationDate = new Timestamp(System.currentTimeMillis());
             Timestamp previousProtocolRecordDate = TsConverter
                     .convertToTimestamp(studyProtocolDTO.getDateLastCreated());
-            
-            if (studyRegAuthDTO != null) {
+
+            //FDAAA2 changes - removed reg auth
+            /*if (studyRegAuthDTO != null) {
                 studyRegAuthDTO.setStudyProtocolIdentifier(studyProtocolDTO.getIdentifier());
                 StudyRegulatoryAuthorityDTO tempDTO = studyRegulatoryAuthorityService
                         .getCurrentByStudyProtocol(studyProtocolDTO
@@ -517,7 +518,7 @@ public class TrialRegistrationBeanLocal extends AbstractTrialRegistrationBean //
                 if (tempDTO != null) {
                     studyRegAuthDTO.setIdentifier(tempDTO.getIdentifier());
                 }
-            }
+            }*/
             
             // PO-6172.
             if (BlConverter
@@ -685,17 +686,21 @@ public class TrialRegistrationBeanLocal extends AbstractTrialRegistrationBean //
         PAServiceUtils paServiceUtils = getPAServiceUtils();
         Ii spIi = studyProtocolDTO.getIdentifier();
         if (studyProtocolDTO.getCtgovXmlRequiredIndicator().getValue().booleanValue()) {
-            if (studyRegAuthDTO != null) {
+
+            //FDAAA2 - removed Regulatory Auth fields
+            /*if (studyRegAuthDTO != null) {
                 List<StudyRegulatoryAuthorityDTO> sraDto = new ArrayList<StudyRegulatoryAuthorityDTO>();
                 sraDto.add(studyRegAuthDTO);
                 paServiceUtils.createOrUpdate(sraDto, IiConverter.convertToStudyRegulatoryAuthorityIi(null), spIi);
 
-            }            
+            } */
             paServiceUtils.manageSponsor(spIi, sponsorOrganizationDTO);           
             createResponsibleParty(partyDTO,
                     sponsorOrganizationDTO, spIi);
         } else {
-            paServiceUtils.removeRegulatoryAuthority(spIi);
+            //FDAAA2 - removed Regulatory Auth fields
+            //paServiceUtils.removeRegulatoryAuthority(spIi);
+
             paServiceUtils.removeResponsibleParty(spIi);
             paServiceUtils.removeSponsor(spIi);
         }

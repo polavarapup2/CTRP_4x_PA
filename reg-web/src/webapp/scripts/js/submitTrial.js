@@ -295,7 +295,7 @@ function checkDeviceDropDown() {
     }
 }
 
-function checkSection108DropDown() {
+/*function checkSection108DropDown() {
     if ($('trialDTO.section801IndicatorNo').checked) {
         input_box = confirm("Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");
         if (input_box == true) {
@@ -312,7 +312,7 @@ function checkSection108DropDown() {
         showRow($('delpostindrow'));
 
     }
-}
+}*/
 
 function hideRow(row) {
     row.style.display = 'none';

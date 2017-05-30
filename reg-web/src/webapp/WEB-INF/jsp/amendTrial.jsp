@@ -307,59 +307,36 @@
                 var aj = callAjaxPost(div, url, params);
                 resetValues();
             }
-            
-            function loadRegAuthoritiesDiv() {
-                var url = '/registry/protected/ajaxgetOAuthOrgsgetTrialOversightAuthorityOrganizationNameList.action';
-                var params = { countryid: $('countries').value };
-                var div = $('loadAuthField');
-                div.innerHTML = '<div align="left"><img  src="../images/loading.gif"/>&nbsp;Loading...</div>';
-                var aj = callAjaxPost(div, url, params);
-                return false;
-            }
-            
+
             function checkFDADropDown() {
-                if ($('trialDTO.fdaRegulatoryInformationIndicatorNo').checked) {
-                    input_box = confirm("Section 801 and Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
+                    input_box=confirm("Section 801 will be NULLIFIED? \nPlease Click OK to continue or Cancel");
                     if (input_box == true) {
-                        $('trialDTO.section801IndicatorNo').checked = false;
-                        $('trialDTO.section801IndicatorYes').checked = false;
-                        $('trialDTO.delayedPostingIndicatorNo').checked = false;
-                        $('trialDTO.delayedPostingIndicatorYes').checked = false;
+                        $('sec801id').value ='';
                         hideRow($('sec801row'));
-                        hideRow($('delpostindrow'));
                     } else {
-                      $('trialDTO.fdaRegulatoryInformationIndicatorNo').checked = false;
-                      $('trialDTO.fdaRegulatoryInformationIndicatorYes').checked = true;
+                        $('fdaindid').value = 'true';
                     }
                 } else {
                     showRow($('sec801row'));
                 }
             }
-        
-            function checkSection108DropDown() {
-                if ($('trialDTO.section801IndicatorNo').checked) {
-                    input_box = confirm("Delayed Posting Indicator will be NULLIFIED? \nPlease Click OK to continue or Cancel");
-                    if (input_box == true) {
+
+            function checkDeviceDropDown() {
+                if ($('device').value == '' | $('device').value == 'false') {
+                    input_box = confirm("Unapproved/Uncleared Device and Pediatric Post-market Surveillance will be NULLIFIED? \nPlease Click OK to continue or Cancel");
+                    if (input_box == true){
                         hideRow($('delpostindrow'));
-                        $('trialDTO.delayedPostingIndicatorNo').checked = false;
-                        $('trialDTO.delayedPostingIndicatorYes').checked = false;
+                        hideRow($('survRow'));
+                        $('delpostindid').value = '';
+                        $('surveillance').value ='';
+
                     } else {
-                      $('trialDTO.fdaRegulatoryInformationIndicatorNo').checked = false;
-                      $('trialDTO.fdaRegulatoryInformationIndicatorYes').checked = true;
-                    $('trialDTO.section801IndicatorYes').checked = true;
+                        $('device').value = 'true';
                     }
                 } else {
-                    var value = '${sessionScope.trialDTO.delayedPostingIndicator}';
-                    if (value !=null && value != '') {
-                        if (value == 'Yes') {
-                            $('trialDTO.delayedPostingIndicatorYes').checked = true;
-                        } else {
-                            $('trialDTO.delayedPostingIndicatorNo').checked = true;
-                        }
-                    } else {
-                         $('trialDTO.delayedPostingIndicatorNo').checked = true;
-                    }
                     showRow($('delpostindrow'));
+                    showRow($('survRow'));
                 }
             }
             
@@ -420,22 +397,24 @@
                 if($('trialDTO.sponsorName').value) {
                    $('trialDTO.sponsorNameField').innerHTML = $('trialDTO.sponsorName').value;
                 }
-               
-               
-            });
-            
-            document.observe("dom:loaded", function() {
-             if ($('trialDTO.section801IndicatorYes').checked) {
-                var value = '${sessionScope.trialDTO.delayedPostingIndicator}';
-                if (value !=null && value != '') {
-                   if (value == 'Yes') {
-                       $('trialDTO.delayedPostingIndicatorYes').checked = true;
-                   } else {
-                       $('trialDTO.delayedPostingIndicatorNo').checked = true;
-                   }
+
+                if ($('fdaindid').value == '' | $('fdaindid').value == 'false') {
+                    $('sec801id').value ='';
+                    hideRow($('sec801row'));
+                } else {
+                    showRow($('sec801row'));
                 }
-                showRow($('delpostindrow'));
-              }
+                if ($('device').value == '' | $('device').value == 'false') {
+
+                    hideRow($('delpostindrow'));
+                    hideRow($('survRow'));
+                    $('delpostindid').value = '';
+                    $('surveillance').value ='';
+                } else {
+                    showRow($('delpostindrow'));
+                    showRow($('survRow'));
+                }
+               
             });
             
             Event.observe(window, "load", setDisplayBasedOnTrialType);

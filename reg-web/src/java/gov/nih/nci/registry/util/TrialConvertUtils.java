@@ -721,7 +721,7 @@ public class TrialConvertUtils {
                    isoDTO.setNciDivProgHolderCode(CdConverter.convertStringToCd(dto.getProgramCode()));
                }
            }
-           if (dto.getExpandedAccess().equalsIgnoreCase(CommonsConstant.YES)) {
+           if (CommonsConstant.YES.equalsIgnoreCase(dto.getExpandedAccess())) {
                isoDTO.setExpandedAccessIndicator(BlConverter.convertToBl(Boolean.TRUE));
            } else {
                isoDTO.setExpandedAccessIndicator(BlConverter.convertToBl(Boolean.FALSE));

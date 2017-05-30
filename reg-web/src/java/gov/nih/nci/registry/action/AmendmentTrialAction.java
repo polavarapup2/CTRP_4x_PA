@@ -78,6 +78,7 @@
  */
 package gov.nih.nci.registry.action;
 
+import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.iso.dto.DocumentDTO;
@@ -252,8 +253,8 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
             }
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                    .getStudyProtocol(IiConverter.convertToIi(trialDTO.getIdentifier()));
-            if (!spDTO.getDelayedpostingIndicator().equals(BlConverter
-                      .convertYesNoStringToBl(trialDTO.getDelayedPostingIndicator()))) {
+            Bl delayedPostingIndBl = BlConverter.convertToBl(Boolean.valueOf(trialDTO.getDelayedPostingIndicator()));
+            if (!spDTO.getDelayedpostingIndicator().equals(delayedPostingIndBl)) {
                 trialDTO.setDelayedPostingIndicator(BlConverter.convertBlToYesNoString(spDTO
                       .getDelayedpostingIndicator()));
             }
@@ -388,9 +389,10 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
             studyIdentifierDTOs.add(util.convertToDCPStudySiteDTO(trialDTO, null));
             // updated only if the ctGovXmlRequired is true
             StudyRegulatoryAuthorityDTO studyRegAuthDTO = null;
-            if (studyProtocolDTO.getCtgovXmlRequiredIndicator().getValue().booleanValue()) {
+            //FDAAA2 - remove reg auth info
+            /*if (studyProtocolDTO.getCtgovXmlRequiredIndicator().getValue().booleanValue()) {
                 studyRegAuthDTO = util.getStudyRegAuth(null, trialDTO);
-            }
+            }*/
             
             List<ProgramCodeDTO> oldProgramCodesList = new ArrayList<ProgramCodeDTO>();
             oldProgramCodesList = studyProtocolDTO.getProgramCodes();
@@ -409,8 +411,19 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
                                                    principalInvestigatorDTO, sponsorOrgDTO, partyDTO, leadOrgSiteIdDTO,
                                                    studyIdentifierDTOs, 
                                                    summary4orgDTO, summary4studyResourcingDTO,
-                                                   studyRegAuthDTO,
+                                                   null,
                                                    BlConverter.convertToBl(Boolean.FALSE));
+
+            //FDAAA2 glue code - call Data clinical service to save additional reg info fields
+            try {
+                trialDTO.setStudyProtocolId(IiConverter.convertToString(amendId));
+                trialUtil.saveAdditionalRegulatoryInfo(trialDTO, trialDTO.getAssignedIdentifier());
+            } catch (PAException e) {
+                TrialSessionUtil.addSessionAttributes(trialDTO);
+                addActionError("Error occurred. Please try again." + e.getMessage());
+                return ERROR;
+            }
+
             TrialSessionUtil.removeSessionAttributes();
             ServletActionContext.getRequest().getSession().setAttribute("protocolId", amendId.getExtension());
             ServletActionContext.getRequest().getSession().setAttribute("spidfromviewresults", amendId);
