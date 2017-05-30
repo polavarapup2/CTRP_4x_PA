@@ -313,25 +313,70 @@
                                 <!--FDAAA field values-->
 
                                     <reg-web:valueRowDiv labelKey="regulatory.drug.product" noLabelTag="true">
-                                        <c:out value="${trialDTO.fdaRegulatedDrug}" />
+                                        <c:choose>
+                                            <c:when test="${trialDTO.fdaRegulatedDrug == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                     <reg-web:valueRowDiv labelKey="regulatory.device.product" noLabelTag="true">
-                                        <c:out value="${trialDTO.fdaRegulatedDevice}" />
+
+                                        <c:choose>
+                                            <c:when test="${trialDTO.fdaRegulatedDevice == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                     <!--   Delayed Posting Indicator-->
                                     <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
-                                        <c:out value="${trialDTO.delayedPostingIndicator}" />
+
+                                        <c:choose>
+                                            <c:when test="${trialDTO.delayedPostingIndicator == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                     <c:if test="${trialDTO.delayedPostingIndicator != 'false'}">
                                     <reg-web:valueRowDiv labelKey="regulatory.approval.clearance" noLabelTag="true">
-                                        <c:out value="${trialDTO.postPriorToApproval}" />
+                                        <c:choose>
+                                            <c:when test="${trialDTO.postPriorToApproval == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                     </c:if>
                                     <reg-web:valueRowDiv labelKey="regulatory.market.surveillance" noLabelTag="true">
-                                        <c:out value="${trialDTO.pedPostmarketSurv}" />
+                                        <c:choose>
+                                            <c:when test="${trialDTO.pedPostmarketSurv == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                     <reg-web:valueRowDiv labelKey="regulatory.usa.export" noLabelTag="true">
-                                        <c:out value="${trialDTO.exportedFromUs}" />
+
+                                        <c:choose>
+                                            <c:when test="${trialDTO.exportedFromUs == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </reg-web:valueRowDiv>
                                 <!--   FDA Regulated Intervention Indicator-->
                                 <reg-web:valueRowDiv labelKey="regulatory.FDA.regulated.interv.ind" noLabelTag="true">

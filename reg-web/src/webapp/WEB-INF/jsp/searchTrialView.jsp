@@ -381,10 +381,24 @@
                             <reg-web:titleRowDiv titleKey="regulatory.title"/>
                             <div class="row form-horizontal details">
                                 <reg-web:valueRowDiv labelKey="regulatory.drug.product" noLabelTag="true">
-                                    <c:out value="${requestScope.trialDTO.fdaRegulatedDrug}" />
+                                    <c:choose>
+                                    <c:when test="${requestScope.trialDTO.fdaRegulatedDrug == 'true'}">
+                                        <c:out value="Yes" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:out value="No" />
+                                    </c:otherwise>
+                                    </c:choose>
                                 </reg-web:valueRowDiv>
                                 <reg-web:valueRowDiv labelKey="regulatory.device.product" noLabelTag="true">
-                                    <c:out value="${requestScope.trialDTO.fdaRegulatedDevice}" />
+                                    <c:choose>
+                                        <c:when test="${requestScope.trialDTO.fdaRegulatedDevice == 'true'}">
+                                            <c:out value="Yes" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="No" />
+                                        </c:otherwise>
+                                    </c:choose>
                                 </reg-web:valueRowDiv>
                                 <!--   Delayed Posting Indicator-->
                                 <reg-web:valueRowDiv id="delpostindrow" labelKey="regulatory.delayed.posting.ind" noLabelTag="true">
@@ -392,14 +406,36 @@
                                 </reg-web:valueRowDiv>
                                 <c:if test="${requestScope.trialDTO.delayedPostingIndicator != 'No'}">
                                     <reg-web:valueRowDiv labelKey="regulatory.approval.clearance" noLabelTag="true">
-                                         <c:out value="${requestScope.trialDTO.postPriorToApproval}" />
+
+                                        <c:choose>
+                                            <c:when test="${requestScope.trialDTO.postPriorToApproval == 'true'}">
+                                                <c:out value="Yes" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="No" />
+                                            </c:otherwise>
+                                        </c:choose>
                                      </reg-web:valueRowDiv>
                                  </c:if>
                                 <reg-web:valueRowDiv labelKey="regulatory.market.surveillance" noLabelTag="true">
-                                    <c:out value="${requestScope.trialDTO.pedPostmarketSurv}" />
+                                    <c:choose>
+                                        <c:when test="${requestScope.trialDTO.pedPostmarketSurv == 'true'}">
+                                            <c:out value="Yes" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="No" />
+                                        </c:otherwise>
+                                    </c:choose>
                                 </reg-web:valueRowDiv>
                                 <reg-web:valueRowDiv labelKey="regulatory.usa.export" noLabelTag="true">
-                                    <c:out value="${requestScope.trialDTO.exportedFromUs}" />
+                                    <c:choose>
+                                        <c:when test="${requestScope.trialDTO.exportedFromUs == 'true'}">
+                                            <c:out value="Yes" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="No" />
+                                        </c:otherwise>
+                                    </c:choose>
                                 </reg-web:valueRowDiv>
 
                             <!--   FDA Regulated Intervention Indicator-->
