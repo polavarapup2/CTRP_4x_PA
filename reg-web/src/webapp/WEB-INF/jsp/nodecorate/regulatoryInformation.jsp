@@ -30,7 +30,7 @@
                 <div class="form-group" id="delpostindrow" style="display: none">
                     <label for="trialDTO.delayedPostingIndicator"  class="col-xs-4 control-label"> <fmt:message key="regulatory.delayed.posting.ind"/></label>
                     <div class="col-xs-8">
-                        <s:hidden name="trialDTO.delayedPostingIndicator" value="false"/>
+                        <s:hidden name="trialDTO.delayedPostingIndicator" value="No"/>
                         <c:out value="No"/>
                         <i class="fa-question-circle help-text inside" id="popover" rel="popover" data-content="<fmt:message key="tooltip.delayed_posting_indicator"/>" data-placement="top" data-trigger="hover"></i>
                         <span class="alert-danger"><s:fielderror><s:param>trialDTO.delayedPostingIndicator</s:param></s:fielderror></span>

@@ -78,7 +78,6 @@
  */
 package gov.nih.nci.registry.action;
 
-import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
 import gov.nih.nci.pa.iso.dto.DocumentDTO;
@@ -253,11 +252,14 @@ public class AmendmentTrialAction extends AbstractBaseTrialAction implements Pre
             }
             StudyProtocolDTO spDTO = PaRegistry.getStudyProtocolService()
                    .getStudyProtocol(IiConverter.convertToIi(trialDTO.getIdentifier()));
-            Bl delayedPostingIndBl = BlConverter.convertToBl(Boolean.valueOf(trialDTO.getDelayedPostingIndicator()));
-            if (!spDTO.getDelayedpostingIndicator().equals(delayedPostingIndBl)) {
+
+            if (StringUtils.isEmpty(trialDTO.getDelayedPostingIndicator())) {
+                trialDTO.setDelayedPostingIndicator(CommonsConstant.NO);
+            }
+            /*if (!spDTO.getDelayedpostingIndicator().equals(delayedPostingIndBl)) {
                 trialDTO.setDelayedPostingIndicator(BlConverter.convertBlToYesNoString(spDTO
                       .getDelayedpostingIndicator()));
-            }
+            }*/
             
         } catch (IOException e) {
             LOG.error(e.getMessage());

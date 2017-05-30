@@ -666,7 +666,7 @@ public class AmendmentTrialActionTest extends AbstractRegWebTest {
         assertEquals("error", trialAction.review());
     }
     
-    @Test
+    //@Test
     public void testReviewWithDSPChange() throws Exception {
         TrialDTO dto = getMockTrialDTO();
         dto.setFdaRegulatoryInformationIndicator("Yes");
