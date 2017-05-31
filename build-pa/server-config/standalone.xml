@@ -157,25 +157,25 @@
             <logger category="jacorb.config">
                 <level name="ERROR"/>
             </logger>
-            <logger category="com.arjuna" use-parent-handlers="false">
+            <logger category="com.arjuna" use-parent-handlers="true">
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="ARJUNA"/>
                 </handlers>
             </logger>
-            <logger category="Twitter" use-parent-handlers="false">
+            <logger category="Twitter" use-parent-handlers="true">
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="Twitter"/>
                 </handlers>
             </logger>
-            <logger category="WebServiceAccessLog" use-parent-handlers="false">
+            <logger category="WebServiceAccessLog" use-parent-handlers="true">
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="WebServiceAccessLog"/>
                 </handlers>
             </logger>
-            <logger category="gov.nih.nci.coppa.services.ldap" use-parent-handlers="false">
+            <logger category="gov.nih.nci.coppa.services.ldap" use-parent-handlers="true">
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="LDAP"/>
