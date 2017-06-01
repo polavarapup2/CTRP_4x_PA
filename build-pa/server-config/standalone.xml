@@ -169,7 +169,7 @@
                     <handler name="Twitter"/>
                 </handlers>
             </logger>
-            <logger category="WebServiceAccessLog" use-parent-handlers="true">
+            <logger category="WebServiceAccessLog" use-parent-handlers="false">
                 <level name="@log.level@"/>
                 <handlers>
                     <handler name="WebServiceAccessLog"/>
