@@ -85,6 +85,8 @@ package gov.nih.nci.registry.util;
 import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_PI;
 import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_SI;
 import static gov.nih.nci.registry.dto.TrialDTO.RESPONSIBLE_PARTY_TYPE_SPONSOR;
+
+import gov.nih.nci.iso21090.Bl;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.pa.dto.AdditionalRegulatoryInfoDTO;
 import gov.nih.nci.pa.dto.ResponsiblePartyDTO;
@@ -1190,7 +1192,6 @@ public StudyProtocolStageDTO convertToStudyProtocolStageDTO(BaseTrialDTO trialDt
 
    /**
     * @param spStageDTO
-    * @param trialDto
     * @throws PAException
     */
     @SuppressWarnings("unchecked")
@@ -1573,23 +1574,28 @@ public StudyProtocolStageDTO convertToStudyProtocolStageDTO(BaseTrialDTO trialDt
      * @param dto dto
      */
     public void loadAdditionalRegulatoryInfoFromDto(TrialDTO trialDTO, AdditionalRegulatoryInfoDTO dto) {
-        if (PAJsonUtil.isValidBooleanString(dto.getExported_from_us())) {
-            trialDTO.setExportedFromUs(dto.getExported_from_us());
-        }
-        if (PAJsonUtil.isValidBooleanString(dto.getFda_regulated_device())) {
-            trialDTO.setFdaRegulatedDevice(dto.getFda_regulated_device());
-        }
-        if (PAJsonUtil.isValidBooleanString(dto.getFda_regulated_drug())) {
-            trialDTO.setFdaRegulatedDrug(dto.getFda_regulated_drug());
-        }
-        if (PAJsonUtil.isValidBooleanString(dto.getPed_postmarket_surv())) {
-            trialDTO.setPedPostmarketSurv(dto.getPed_postmarket_surv());
-        }
-        if (PAJsonUtil.isValidBooleanString(dto.getPost_prior_to_approval())) {
-            trialDTO.setPostPriorToApproval(dto.getPost_prior_to_approval());
-        }
+        trialDTO.setExportedFromUs(convertBoolStrToYesNo(dto.getExported_from_us()));
+        trialDTO.setFdaRegulatedDevice(convertBoolStrToYesNo(dto.getFda_regulated_device()));
+        trialDTO.setFdaRegulatedDrug(convertBoolStrToYesNo(dto.getFda_regulated_drug()));
+        trialDTO.setPedPostmarketSurv(convertBoolStrToYesNo(dto.getPed_postmarket_surv()));
+        trialDTO.setPostPriorToApproval(convertBoolStrToYesNo(dto.getPost_prior_to_approval()));
+
         trialDTO.setLastUpdatedDate(dto.getDate_updated());
         trialDTO.setMsId(dto.getId());
+    }
+
+    /**
+     *
+     * @param boolStr String containing true/false
+     * @return Yes/no
+     */
+    public String convertBoolStrToYesNo(String boolStr) {
+        String yesNoStr = null;
+        if (PAJsonUtil.isValidBooleanString(boolStr) && !StringUtils.equals(boolStr, "null")) {
+            Bl bl = BlConverter.convertToBl(Boolean.valueOf(boolStr));
+            yesNoStr = BlConverter.convertBlToYesNoString(bl);
+        }
+        return yesNoStr;
     }
 
     /**

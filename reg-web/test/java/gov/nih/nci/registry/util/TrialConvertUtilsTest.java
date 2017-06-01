@@ -217,11 +217,11 @@ public class TrialConvertUtilsTest extends AbstractRegWebTest {
         TrialDTO trialDTO = new TrialDTO();
         tCu.loadAdditionalRegulatoryInfoFromDto(trialDTO, additionalRegulatoryInfoDTO);
         
-        assertEquals("true", trialDTO.getExportedFromUs());
-        assertEquals("true", trialDTO.getFdaRegulatedDevice());
-        assertEquals("true", trialDTO.getFdaRegulatedDrug());
-        assertEquals("true", trialDTO.getPedPostmarketSurv());
-        assertEquals("true", trialDTO.getPostPriorToApproval());
+        assertEquals("Yes", trialDTO.getExportedFromUs());
+        assertEquals("Yes", trialDTO.getFdaRegulatedDevice());
+        assertEquals("Yes", trialDTO.getFdaRegulatedDrug());
+        assertEquals("Yes", trialDTO.getPedPostmarketSurv());
+        assertEquals("Yes", trialDTO.getPostPriorToApproval());
         assertEquals("11-27-2016", trialDTO.getLastUpdatedDate());
         assertEquals("987654321", trialDTO.getMsId());
         assertEquals(null, trialDTO.getStudyProtocolId());

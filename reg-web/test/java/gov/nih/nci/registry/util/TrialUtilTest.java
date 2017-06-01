@@ -15,6 +15,7 @@ import gov.nih.nci.pa.iso.util.BlConverter;
 import gov.nih.nci.pa.iso.util.IiConverter;
 import gov.nih.nci.pa.service.PAException;
 import gov.nih.nci.pa.service.StudyProtocolServiceLocal;
+import gov.nih.nci.pa.util.CommonsConstant;
 import gov.nih.nci.pa.util.PaRegistry;
 import gov.nih.nci.pa.util.ServiceLocator;
 import gov.nih.nci.pa.util.TrialInfoHelperUtil;
@@ -63,12 +64,11 @@ public class TrialUtilTest extends AbstractHibernateTestCase {
         
         trialUtil.copyRegulatoryInformation(studyProtocolIi, trialDTO);
         
-        assertEquals(trialDTO.getFdaRegulatedDevice(), addRegInfoDTO.getFda_regulated_device());
-        assertEquals(trialDTO.getFdaRegulatedDrug(), addRegInfoDTO.getFda_regulated_drug());
-        assertEquals(trialDTO.getExportedFromUs(), addRegInfoDTO.getExported_from_us());
-        assertEquals(trialDTO.getPedPostmarketSurv(), addRegInfoDTO.getPed_postmarket_surv());
-        assertEquals(trialDTO.getPostPriorToApproval(), addRegInfoDTO.getPost_prior_to_approval());
-        assertEquals(trialDTO.getFdaRegulatedDevice(), addRegInfoDTO.getFda_regulated_device());
+        assertEquals(trialDTO.getFdaRegulatedDevice(), CommonsConstant.YES);
+        assertEquals(trialDTO.getFdaRegulatedDrug(), CommonsConstant.NO);
+        assertEquals(trialDTO.getExportedFromUs(), CommonsConstant.YES);
+        assertEquals(trialDTO.getPedPostmarketSurv(), CommonsConstant.YES);
+        assertEquals(trialDTO.getPostPriorToApproval(), null);
         
         assertEquals(trialDTO.getSection801Indicator(), "Yes");
         assertEquals(trialDTO.getFdaRegulatoryInformationIndicator(), "No");
