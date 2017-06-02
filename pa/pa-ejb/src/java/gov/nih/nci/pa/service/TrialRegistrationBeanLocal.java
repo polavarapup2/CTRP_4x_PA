@@ -603,15 +603,18 @@ public class TrialRegistrationBeanLocal extends AbstractTrialRegistrationBean //
                         studyProtocolDTO, leadOrganizationDTO);
             }
 
-            if ((StudySourceInterceptor.STUDY_SOURCE_CONTEXT.get() == StudySourceCode.GRID_SERVICE 
+            //Do not send out warning emails for Delayed Posting Ind change in amendment
+            /*if ((StudySourceInterceptor.STUDY_SOURCE_CONTEXT.get() == StudySourceCode.GRID_SERVICE
                     || StudySourceInterceptor.STUDY_SOURCE_CONTEXT
                     .get() == StudySourceCode.REST_SERVICE) 
                     && !ISOUtil.isBlNull(studyProtocolDTO.getDelayedPostingIndicatorChanged()) 
                     && BlConverter.convertToBool(studyProtocolDTO.getDelayedPostingIndicatorChanged())) {
                  mailManagerSerivceLocal.sendAmendDSPWarningNotificationMail(spIi);
-            } else {
-                sendMail(AMENDMENT, isBatchMode, spIi, new ArrayList<String>(), EMPTY_STR);
-            }
+            } else {*/
+
+            sendMail(AMENDMENT, isBatchMode, spIi, new ArrayList<String>(), EMPTY_STR);
+
+            //}
             return studyProtocolDTO.getIdentifier();
         } catch (PAException e) { 
             LOG.error(e, e);
